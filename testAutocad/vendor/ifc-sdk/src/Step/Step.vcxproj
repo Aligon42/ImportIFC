@@ -1,0 +1,390 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D7023610-E730-3D9F-A5D1-16C76F30DA9B}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>Library Step</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">F:\Dev\C++\ifc-sdk\bin\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Step.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Step_debug</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">F:\Dev\C++\ifc-sdk\bin\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Step.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Step</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">F:\Dev\C++\ifc-sdk\bin\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Step.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Step</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">F:\Dev\C++\ifc-sdk\bin\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Step.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Step</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\Dev\C++\ifc-sdk\include;F:\Dev\C++\ifc-sdk\src\Step;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /bigobj /Zm377</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4800;4996;4311;4312;4505;4267;4512;4245;4127;4251</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <TreatSpecificWarningsAsErrors>4101</TreatSpecificWarningsAsErrors>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_UNICODE;MSVC_IDE;CMAKE_INTDIR="Debug";Step_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_UNICODE;MSVC_IDE;CMAKE_INTDIR=\"Debug\";Step_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>F:\Dev\C++\ifc-sdk\include;F:\Dev\C++\ifc-sdk\src\Step;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>F:\Dev\C++\ifc-sdk\include;F:\Dev\C++\ifc-sdk\src\Step;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>F:/Dev/C++/ifc-sdk/bin/Debug/Step_debug.lib</ImportLibrary>
+      <ProgramDataBaseFile>F:/Dev/C++/ifc-sdk/bin/Debug/Step_debug.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\Dev\C++\ifc-sdk\include;F:\Dev\C++\ifc-sdk\src\Step;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /bigobj /Zm377</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DisableSpecificWarnings>4800;4996;4311;4312;4505;4267;4512;4245;4127;4251</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <TreatSpecificWarningsAsErrors>4101</TreatSpecificWarningsAsErrors>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_UNICODE;MSVC_IDE;CMAKE_INTDIR="Release";Step_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_UNICODE;MSVC_IDE;CMAKE_INTDIR=\"Release\";Step_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>F:\Dev\C++\ifc-sdk\include;F:\Dev\C++\ifc-sdk\src\Step;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>F:\Dev\C++\ifc-sdk\include;F:\Dev\C++\ifc-sdk\src\Step;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>F:/Dev/C++/ifc-sdk/bin/Release/Step.lib</ImportLibrary>
+      <ProgramDataBaseFile>F:/Dev/C++/ifc-sdk/bin/Release/Step.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\Dev\C++\ifc-sdk\include;F:\Dev\C++\ifc-sdk\src\Step;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /bigobj /Zm377</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DisableSpecificWarnings>4800;4996;4311;4312;4505;4267;4512;4245;4127;4251</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <TreatSpecificWarningsAsErrors>4101</TreatSpecificWarningsAsErrors>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_UNICODE;MSVC_IDE;CMAKE_INTDIR="MinSizeRel";Step_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_UNICODE;MSVC_IDE;CMAKE_INTDIR=\"MinSizeRel\";Step_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>F:\Dev\C++\ifc-sdk\include;F:\Dev\C++\ifc-sdk\src\Step;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>F:\Dev\C++\ifc-sdk\include;F:\Dev\C++\ifc-sdk\src\Step;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>F:/Dev/C++/ifc-sdk/bin/MinSizeRel/Step.lib</ImportLibrary>
+      <ProgramDataBaseFile>F:/Dev/C++/ifc-sdk/bin/MinSizeRel/Step.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\Dev\C++\ifc-sdk\include;F:\Dev\C++\ifc-sdk\src\Step;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /bigobj /Zm377</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_UNICODE;MSVC_IDE;CMAKE_INTDIR="RelWithDebInfo";Step_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_UNICODE;MSVC_IDE;CMAKE_INTDIR=\"RelWithDebInfo\";Step_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>F:\Dev\C++\ifc-sdk\include;F:\Dev\C++\ifc-sdk\src\Step;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>F:\Dev\C++\ifc-sdk\include;F:\Dev\C++\ifc-sdk\src\Step;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>F:/Dev/C++/ifc-sdk/bin/RelWithDebInfo/Step.lib</ImportLibrary>
+      <ProgramDataBaseFile>F:/Dev/C++/ifc-sdk/bin/RelWithDebInfo/Step.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="F:\Dev\C++\ifc-sdk\src\Step\CMakeLists.txt">
+      <StdOutEncoding>UTF-8</StdOutEncoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule F:/Dev/C++/ifc-sdk/src/Step/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+D:\Logiciel\CMake\bin\cmake.exe -SF:/Dev/C++/ifc-sdk -BF:/Dev/C++/ifc-sdk --check-stamp-file F:/Dev/C++/ifc-sdk/src/Step/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\Logiciel\CMake\share\cmake-3.19\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\CheckCCompilerFlag.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\CheckCSourceCompiles.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\CheckCXXCompilerFlag.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\CheckCXXSourceCompiles.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\GenerateExportHeader.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\Internal\CheckCompilerFlag.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\Internal\CheckSourceCompiles.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\exportheader.cmake.in;F:\Dev\C++\ifc-sdk\src\Step\Config.h.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">F:\Dev\C++\ifc-sdk\src\Step\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule F:/Dev/C++/ifc-sdk/src/Step/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+D:\Logiciel\CMake\bin\cmake.exe -SF:/Dev/C++/ifc-sdk -BF:/Dev/C++/ifc-sdk --check-stamp-file F:/Dev/C++/ifc-sdk/src/Step/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\Logiciel\CMake\share\cmake-3.19\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\CheckCCompilerFlag.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\CheckCSourceCompiles.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\CheckCXXCompilerFlag.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\CheckCXXSourceCompiles.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\GenerateExportHeader.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\Internal\CheckCompilerFlag.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\Internal\CheckSourceCompiles.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\exportheader.cmake.in;F:\Dev\C++\ifc-sdk\src\Step\Config.h.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">F:\Dev\C++\ifc-sdk\src\Step\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule F:/Dev/C++/ifc-sdk/src/Step/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+D:\Logiciel\CMake\bin\cmake.exe -SF:/Dev/C++/ifc-sdk -BF:/Dev/C++/ifc-sdk --check-stamp-file F:/Dev/C++/ifc-sdk/src/Step/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\Logiciel\CMake\share\cmake-3.19\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\CheckCCompilerFlag.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\CheckCSourceCompiles.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\CheckCXXCompilerFlag.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\CheckCXXSourceCompiles.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\GenerateExportHeader.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\Internal\CheckCompilerFlag.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\Internal\CheckSourceCompiles.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\exportheader.cmake.in;F:\Dev\C++\ifc-sdk\src\Step\Config.h.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">F:\Dev\C++\ifc-sdk\src\Step\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule F:/Dev/C++/ifc-sdk/src/Step/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+D:\Logiciel\CMake\bin\cmake.exe -SF:/Dev/C++/ifc-sdk -BF:/Dev/C++/ifc-sdk --check-stamp-file F:/Dev/C++/ifc-sdk/src/Step/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\Logiciel\CMake\share\cmake-3.19\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\CheckCCompilerFlag.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\CheckCSourceCompiles.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\CheckCXXCompilerFlag.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\CheckCXXSourceCompiles.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\GenerateExportHeader.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\Internal\CheckCompilerFlag.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\Internal\CheckSourceCompiles.cmake;D:\Logiciel\CMake\share\cmake-3.19\Modules\exportheader.cmake.in;F:\Dev\C++\ifc-sdk\src\Step\Config.h.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">F:\Dev\C++\ifc-sdk\src\Step\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\BaseCopyOp.cpp" />
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\BaseEntity.cpp" />
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\BaseExpressDataSet.cpp" />
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\BaseObject.cpp" />
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\BaseSPFObject.cpp" />
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\BaseSPFReader.cpp" />
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\BaseSPFWriter.cpp" />
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\BaseVisitor.cpp" />
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\ClassType.cpp" />
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\ClientData.cpp" />
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\ClientDataHandler.cpp" />
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\Referenced.cpp" />
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\SPFData.cpp" />
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\SPFFunctions.cpp" />
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\SPFHeader.cpp" />
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\StepLogger.cpp" />
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\Step\String.cpp" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\ASCII_codes.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\Aggregation.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\Array.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\Bag.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\BaseCopyOp.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\BaseEntity.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\BaseExpressDataSet.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\BaseObject.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\BaseSPFObject.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\BaseSPFReader.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\BaseSPFWriter.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\BaseVisitor.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\Binary.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\CallBack.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\ClassType.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\ClientData.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\ClientDataHandler.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\IntegerTypes.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\List.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\RefLinkedList.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\Referenced.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\SPFData.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\SPFFunctions.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\SPFHeader.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\Set.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\SimpleTypes.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\StepLogger.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\String.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\Step\Types.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\src\Step\Step\Export.h" />
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\src\Step\Step\Config.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="F:\Dev\C++\ifc-sdk\ZERO_CHECK.vcxproj">
+      <Project>{402F1CC0-DD13-3D38-AF76-6AF116DB054E}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

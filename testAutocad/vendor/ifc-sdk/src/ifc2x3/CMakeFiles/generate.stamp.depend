@@ -1,0 +1,6 @@
+# CMake generation dependency list for this directory.
+D:/Logiciel/CMake/share/cmake-3.19/Modules/CheckCCompilerFlag.cmake
+D:/Logiciel/CMake/share/cmake-3.19/Modules/CheckCXXCompilerFlag.cmake
+D:/Logiciel/CMake/share/cmake-3.19/Modules/GenerateExportHeader.cmake
+D:/Logiciel/CMake/share/cmake-3.19/Modules/exportheader.cmake.in
+F:/Dev/C++/ifc-sdk/src/ifc2x3/CMakeLists.txt

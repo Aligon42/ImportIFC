@@ -1,0 +1,4281 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\CopyOp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\Derived.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\ExpressDataSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\ExpressDataSet_1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\ExpressDataSet_2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\ExpressDataSet_3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\FalseVisitor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\Ifc2DCompositeCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcActionRequest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcActor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcActorRole.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcActorSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcActuatorType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAddress.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAirTerminalBoxType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAirTerminalType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAirToAirHeatRecoveryType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAlarmType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAngularDimension.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAnnotation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAnnotationCurveOccurrence.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAnnotationFillArea.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAnnotationFillAreaOccurrence.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAnnotationOccurrence.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAnnotationSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAnnotationSurfaceOccurrence.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAnnotationSymbolOccurrence.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAnnotationTextOccurrence.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcApplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAppliedValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAppliedValueRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAppliedValueSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcApproval.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcApprovalActorRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcApprovalPropertyRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcApprovalRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcArbitraryClosedProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcArbitraryOpenProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcArbitraryProfileDefWithVoids.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAsset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAsymmetricIShapeProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAxis1Placement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAxis2Placement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAxis2Placement2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcAxis2Placement3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBSplineCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBeam.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBeamType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBezierCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBlobTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBlock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBoilerType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBooleanClippingResult.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBooleanOperand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBooleanResult.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBoundaryCondition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBoundaryEdgeCondition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBoundaryFaceCondition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBoundaryNodeCondition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBoundaryNodeConditionWarping.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBoundedCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBoundedSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBoundingBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBoxedHalfSpace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBuilding.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBuildingElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBuildingElementComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBuildingElementPart.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBuildingElementProxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBuildingElementProxyType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBuildingElementType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcBuildingStorey.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCShapeProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCableCarrierFittingType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCableCarrierSegmentType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCableSegmentType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCalendarDate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCartesianPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCartesianTransformationOperator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCartesianTransformationOperator2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCartesianTransformationOperator2DnonUniform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCartesianTransformationOperator3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCartesianTransformationOperator3DnonUniform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCenterLineProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcChamferEdgeFeature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCharacterStyleSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcChillerType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCircle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCircleHollowProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCircleProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcClassification.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcClassificationItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcClassificationItemRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcClassificationNotation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcClassificationNotationFacet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcClassificationNotationSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcClassificationReference.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcClosedShell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCoilType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcColour.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcColourOrFactor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcColourRgb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcColourSpecification.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcColumn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcColumnType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcComplexProperty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCompositeCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCompositeCurveSegment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCompositeProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCompressorType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCondenserType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCondition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConditionCriterion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConditionCriterionSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConnectedFaceSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConnectionCurveGeometry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConnectionGeometry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConnectionPointEccentricity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConnectionPointGeometry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConnectionPortGeometry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConnectionSurfaceGeometry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConstraintAggregationRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConstraintClassificationRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConstraintRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConstructionEquipmentResource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConstructionMaterialResource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConstructionProductResource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConstructionResource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcContextDependentUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcControllerType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcConversionBasedUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCooledBeamType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCoolingTowerType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCoordinatedUniversalTimeOffset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCostItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCostSchedule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCostValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCovering.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCoveringType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCraneRailAShapeProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCraneRailFShapeProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCrewResource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCsgPrimitive3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCsgSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCsgSolid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCurrencyRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCurtainWall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCurtainWallType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCurveBoundedPlane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCurveFontOrScaledCurveFontSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCurveOrEdgeCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCurveStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCurveStyleFont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCurveStyleFontAndScaling.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCurveStyleFontPattern.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcCurveStyleFontSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDamperType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDateAndTime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDateTimeSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDefinedSymbol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDefinedSymbolSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDerivedMeasureValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDerivedProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDerivedUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDerivedUnitElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDiameterDimension.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDimensionCalloutRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDimensionCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDimensionCurveDirectedCallout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDimensionCurveTerminator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDimensionPair.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDimensionalExponents.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDirection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDiscreteAccessory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDiscreteAccessoryType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDistributionChamberElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDistributionChamberElementType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDistributionControlElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDistributionControlElementType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDistributionElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDistributionElementType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDistributionFlowElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDistributionFlowElementType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDistributionPort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDocumentElectronicFormat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDocumentInformation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDocumentInformationRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDocumentReference.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDocumentSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDoor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDoorLiningProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDoorPanelProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDoorStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDraughtingCallout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDraughtingCalloutElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDraughtingCalloutRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDraughtingPreDefinedColour.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDraughtingPreDefinedCurveFont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDraughtingPreDefinedTextFont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDuctFittingType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDuctSegmentType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcDuctSilencerType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcEdge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcEdgeCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcEdgeFeature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcEdgeLoop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElectricApplianceType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElectricDistributionPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElectricFlowStorageDeviceType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElectricGeneratorType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElectricHeaterType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElectricMotorType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElectricTimeControlType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElectricalBaseProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElectricalCircuit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElectricalElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElementAssembly.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElementComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElementComponentType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElementQuantity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElementType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcElementarySurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcEllipse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcEllipseProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcEnergyConversionDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcEnergyConversionDeviceType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcEnergyProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcEnvironmentalImpactValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcEquipmentElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcEquipmentStandard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcEvaporativeCoolerType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcEvaporatorType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcExtendedMaterialProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcExternalReference.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcExternallyDefinedHatchStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcExternallyDefinedSurfaceStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcExternallyDefinedSymbol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcExternallyDefinedTextFont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcExtrudedAreaSolid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFaceBasedSurfaceModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFaceBound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFaceOuterBound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFaceSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFacetedBrep.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFacetedBrepWithVoids.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFailureConnectionCondition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFanType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFastener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFastenerType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFeatureElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFeatureElementAddition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFeatureElementSubtraction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFillAreaStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFillAreaStyleHatching.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFillAreaStyleTileShapeSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFillAreaStyleTileSymbolWithStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFillAreaStyleTiles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFillStyleSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFilterType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFireSuppressionTerminalType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFlowController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFlowControllerType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFlowFitting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFlowFittingType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFlowInstrumentType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFlowMeterType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFlowMovingDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFlowMovingDeviceType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFlowSegment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFlowSegmentType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFlowStorageDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFlowStorageDeviceType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFlowTerminal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFlowTerminalType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFlowTreatmentDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFlowTreatmentDeviceType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFluidFlowProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFooting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFuelProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFurnishingElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFurnishingElementType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFurnitureStandard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcFurnitureType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcGasTerminalType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcGeneralMaterialProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcGeneralProfileProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcGeometricCurveSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcGeometricRepresentationContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcGeometricRepresentationItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcGeometricRepresentationSubContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcGeometricSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcGeometricSetSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcGrid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcGridAxis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcGridPlacement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcGroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcHalfSpaceSolid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcHatchLineDistanceSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcHeatExchangerType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcHumidifierType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcHygroscopicMaterialProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcIShapeProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcImageTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcInventory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcIrregularTimeSeries.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcIrregularTimeSeriesValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcJunctionBoxType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLShapeProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLaborResource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLampType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLayeredItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLibraryInformation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLibraryReference.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLibrarySelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLightDistributionData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLightDistributionDataSourceSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLightFixtureType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLightIntensityDistribution.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLightSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLightSourceAmbient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLightSourceDirectional.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLightSourceGoniometric.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLightSourcePositional.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLightSourceSpot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLinearDimension.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLocalPlacement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLocalTime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcLoop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcManifoldSolidBrep.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMappedItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMaterial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMaterialClassificationRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMaterialDefinitionRepresentation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMaterialLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMaterialLayerSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMaterialLayerSetUsage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMaterialList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMaterialProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMaterialSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMeasureValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMeasureWithUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMechanicalConcreteMaterialProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMechanicalFastener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMechanicalFastenerType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMechanicalMaterialProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMechanicalSteelMaterialProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMember.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMemberType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMetric.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMetricValueSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMonetaryUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMotorConnectionType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcMove.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcNamedUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcObjectDefinition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcObjectPlacement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcObjectReferenceSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcObjective.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcOccupant.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcOffsetCurve2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcOffsetCurve3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcOneDirectionRepeatFactor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcOpenShell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcOpeningElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcOpticalMaterialProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcOrderAction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcOrganization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcOrganizationRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcOrientationSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcOrientedEdge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcOutletType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcOwnerHistory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcParameterizedProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPerformanceHistory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPermeableCoveringProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPermit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPerson.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPersonAndOrganization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPhysicalComplexQuantity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPhysicalQuantity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPhysicalSimpleQuantity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPipeFittingType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPipeSegmentType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPixelTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPlacement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPlanarBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPlanarExtent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPlane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPlate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPlateType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPointOnCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPointOnSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPointOrVertexPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPolyLoop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPolygonalBoundedHalfSpace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPolyline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPostalAddress.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPreDefinedColour.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPreDefinedCurveFont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPreDefinedDimensionSymbol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPreDefinedItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPreDefinedPointMarkerSymbol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPreDefinedSymbol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPreDefinedTerminatorSymbol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPreDefinedTextFont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPresentationLayerAssignment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPresentationLayerWithStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPresentationStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPresentationStyleAssignment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPresentationStyleSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcProcedure.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcProcess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcProduct.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcProductDefinitionShape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcProductRepresentation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcProductsOfCombustionProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcProfileProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcProject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcProjectOrder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcProjectOrderRecord.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcProjectionCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcProjectionElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcProperty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPropertyBoundedValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPropertyConstraintRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPropertyDefinition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPropertyDependencyRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPropertyEnumeratedValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPropertyEnumeration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPropertyListValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPropertyReferenceValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPropertySet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPropertySetDefinition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPropertySingleValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPropertyTableValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcProtectiveDeviceType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcProxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcPumpType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcQuantityArea.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcQuantityCount.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcQuantityLength.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcQuantityTime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcQuantityVolume.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcQuantityWeight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRadiusDimension.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRailing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRailingType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRamp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRampFlight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRampFlightType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRationalBezierCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRectangleHollowProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRectangleProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRectangularPyramid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRectangularTrimmedSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcReferencesValueDocument.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRegularTimeSeries.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcReinforcementBarProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcReinforcementDefinitionProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcReinforcingBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcReinforcingElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcReinforcingMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAggregates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssigns.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssignsTasks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssignsToActor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssignsToControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssignsToGroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssignsToProcess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssignsToProduct.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssignsToProjectOrder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssignsToResource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssociates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssociatesAppliedValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssociatesApproval.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssociatesClassification.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssociatesConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssociatesDocument.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssociatesLibrary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssociatesMaterial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelAssociatesProfileProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelConnects.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelConnectsElements.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelConnectsPathElements.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelConnectsPortToElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelConnectsPorts.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelConnectsStructuralActivity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelConnectsStructuralElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelConnectsStructuralMember.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelConnectsWithEccentricity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelConnectsWithRealizingElements.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelContainedInSpatialStructure.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelCoversBldgElements.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelCoversSpaces.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelDecomposes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelDefines.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelDefinesByProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelDefinesByType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelFillsElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelFlowControlElements.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelInteractionRequirements.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelNests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelOccupiesSpaces.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelOverridesProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelProjectsElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelReferencedInSpatialStructure.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelSchedulesCostItems.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelSequence.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelServicesBuildings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelSpaceBoundary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelVoidsElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRelaxation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRepresentation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRepresentationContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRepresentationItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRepresentationMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcResource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRevolvedAreaSolid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRibPlateProfileProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRightCircularCone.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRightCircularCylinder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRoof.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRoot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRoundedEdgeFeature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcRoundedRectangleProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSIUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSanitaryTerminalType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcScheduleTimeControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSectionProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSectionReinforcementProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSectionedSpine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSensorType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcServiceLife.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcServiceLifeFactor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcShapeAspect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcShapeModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcShapeRepresentation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcShell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcShellBasedSurfaceModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSimpleProperty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSimpleValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSizeSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSlab.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSlabType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSlippageConnectionCondition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSolidModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSoundProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSoundValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSpace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSpaceHeaterType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSpaceProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSpaceThermalLoadProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSpaceType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSpatialStructureElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSpatialStructureElementType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSpecularHighlightSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSphere.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStackTerminalType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStair.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStairFlight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStairFlightType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralAction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralActivity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralActivityAssignmentSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralAnalysisModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralConnection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralConnectionCondition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralCurveConnection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralCurveMember.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralCurveMemberVarying.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralLinearAction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralLinearActionVarying.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralLoad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralLoadGroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralLoadLinearForce.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralLoadPlanarForce.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralLoadSingleDisplacement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralLoadSingleDisplacementDistortion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralLoadSingleForce.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralLoadSingleForceWarping.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralLoadStatic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralLoadTemperature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralMember.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralPlanarAction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralPlanarActionVarying.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralPointAction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralPointConnection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralPointReaction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralProfileProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralReaction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralResultGroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralSteelProfileProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralSurfaceConnection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralSurfaceMember.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuralSurfaceMemberVarying.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStructuredDimensionCallout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStyleModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStyledItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcStyledRepresentation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSubContractResource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSubedge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSurfaceCurveSweptAreaSolid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSurfaceOfLinearExtrusion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSurfaceOfRevolution.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSurfaceOrFaceSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSurfaceStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSurfaceStyleElementSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSurfaceStyleLighting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSurfaceStyleRefraction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSurfaceStyleRendering.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSurfaceStyleShading.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSurfaceStyleWithTextures.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSurfaceTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSweptAreaSolid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSweptDiskSolid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSweptSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSwitchingDeviceType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSymbolStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSymbolStyleSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcSystemFurnitureElementType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTShapeProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTableRow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTankType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTask.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTelecomAddress.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTendon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTendonAnchor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTerminatorSymbol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTextFontSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTextLiteral.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTextLiteralWithExtent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTextStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTextStyleFontModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTextStyleForDefinedFont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTextStyleSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTextStyleTextModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTextStyleWithBoxCharacteristics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTextureCoordinate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTextureCoordinateGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTextureMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTextureVertex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcThermalMaterialProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTimeSeries.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTimeSeriesReferenceRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTimeSeriesSchedule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTimeSeriesValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTopologicalRepresentationItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTopologyRepresentation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTransformerType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTransportElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTransportElementType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTrapeziumProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTrimmedCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTrimmingSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTubeBundleType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTwoDirectionRepeatFactor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTypeObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcTypeProduct.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcUShapeProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcUnitAssignment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcUnitaryEquipmentType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcValveType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcVector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcVectorOrDirection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcVertex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcVertexBasedTextureMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcVertexLoop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcVertexPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcVibrationIsolatorType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcVirtualElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcVirtualGridIntersection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcWall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcWallStandardCase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcWallType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcWasteTerminalType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcWaterProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcWindowLiningProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcWindowPanelProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcWindowStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcWorkControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcWorkPlan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcWorkSchedule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcZShapeProfileDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\IfcZone.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\InheritVisitor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\SPFReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\SPFWriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\Visitor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\ifc2x3_pch.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\CopyOp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\DefinedTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\ExpressDataSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\FalseVisitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\Ifc2DCompositeCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcActionRequest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcActor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcActorRole.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcActorSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcActuatorType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAddress.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAirTerminalBoxType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAirTerminalType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAirToAirHeatRecoveryType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAlarmType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAngularDimension.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAnnotation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAnnotationCurveOccurrence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAnnotationFillArea.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAnnotationFillAreaOccurrence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAnnotationOccurrence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAnnotationSurface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAnnotationSurfaceOccurrence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAnnotationSymbolOccurrence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAnnotationTextOccurrence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcApplication.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAppliedValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAppliedValueRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAppliedValueSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcApproval.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcApprovalActorRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcApprovalPropertyRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcApprovalRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcArbitraryClosedProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcArbitraryOpenProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcArbitraryProfileDefWithVoids.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAsset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAsymmetricIShapeProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAxis1Placement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAxis2Placement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAxis2Placement2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcAxis2Placement3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBSplineCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBeam.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBeamType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBezierCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBlobTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBlock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBoilerType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBooleanClippingResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBooleanOperand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBooleanResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBoundaryCondition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBoundaryEdgeCondition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBoundaryFaceCondition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBoundaryNodeCondition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBoundaryNodeConditionWarping.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBoundedCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBoundedSurface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBoundingBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBoxedHalfSpace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBuilding.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBuildingElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBuildingElementComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBuildingElementPart.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBuildingElementProxy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBuildingElementProxyType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBuildingElementType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcBuildingStorey.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCShapeProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCableCarrierFittingType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCableCarrierSegmentType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCableSegmentType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCalendarDate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCartesianPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCartesianTransformationOperator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCartesianTransformationOperator2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCartesianTransformationOperator2DnonUniform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCartesianTransformationOperator3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCartesianTransformationOperator3DnonUniform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCenterLineProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcChamferEdgeFeature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCharacterStyleSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcChillerType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCircle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCircleHollowProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCircleProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcClassification.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcClassificationItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcClassificationItemRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcClassificationNotation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcClassificationNotationFacet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcClassificationNotationSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcClassificationReference.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcClosedShell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCoilType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcColour.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcColourOrFactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcColourRgb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcColourSpecification.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcColumn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcColumnType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcComplexProperty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCompositeCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCompositeCurveSegment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCompositeProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCompressorType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCondenserType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCondition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConditionCriterion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConditionCriterionSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConnectedFaceSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConnectionCurveGeometry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConnectionGeometry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConnectionPointEccentricity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConnectionPointGeometry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConnectionPortGeometry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConnectionSurfaceGeometry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConstraintAggregationRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConstraintClassificationRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConstraintRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConstructionEquipmentResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConstructionMaterialResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConstructionProductResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConstructionResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcContextDependentUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcControllerType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcConversionBasedUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCooledBeamType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCoolingTowerType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCoordinatedUniversalTimeOffset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCostItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCostSchedule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCostValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCovering.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCoveringType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCraneRailAShapeProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCraneRailFShapeProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCrewResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCsgPrimitive3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCsgSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCsgSolid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCurrencyRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCurtainWall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCurtainWallType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCurveBoundedPlane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCurveFontOrScaledCurveFontSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCurveOrEdgeCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCurveStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCurveStyleFont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCurveStyleFontAndScaling.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCurveStyleFontPattern.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcCurveStyleFontSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDamperType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDateAndTime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDateTimeSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDefinedSymbol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDefinedSymbolSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDerivedMeasureValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDerivedProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDerivedUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDerivedUnitElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDiameterDimension.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDimensionCalloutRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDimensionCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDimensionCurveDirectedCallout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDimensionCurveTerminator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDimensionPair.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDimensionalExponents.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDirection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDiscreteAccessory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDiscreteAccessoryType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDistributionChamberElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDistributionChamberElementType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDistributionControlElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDistributionControlElementType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDistributionElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDistributionElementType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDistributionFlowElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDistributionFlowElementType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDistributionPort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDocumentElectronicFormat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDocumentInformation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDocumentInformationRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDocumentReference.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDocumentSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDoor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDoorLiningProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDoorPanelProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDoorStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDraughtingCallout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDraughtingCalloutElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDraughtingCalloutRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDraughtingPreDefinedColour.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDraughtingPreDefinedCurveFont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDraughtingPreDefinedTextFont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDuctFittingType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDuctSegmentType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcDuctSilencerType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcEdge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcEdgeCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcEdgeFeature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcEdgeLoop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElectricApplianceType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElectricDistributionPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElectricFlowStorageDeviceType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElectricGeneratorType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElectricHeaterType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElectricMotorType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElectricTimeControlType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElectricalBaseProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElectricalCircuit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElectricalElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElementAssembly.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElementComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElementComponentType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElementQuantity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElementType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcElementarySurface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcEllipse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcEllipseProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcEnergyConversionDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcEnergyConversionDeviceType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcEnergyProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcEnvironmentalImpactValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcEquipmentElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcEquipmentStandard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcEvaporativeCoolerType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcEvaporatorType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcExtendedMaterialProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcExternalReference.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcExternallyDefinedHatchStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcExternallyDefinedSurfaceStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcExternallyDefinedSymbol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcExternallyDefinedTextFont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcExtrudedAreaSolid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFaceBasedSurfaceModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFaceBound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFaceOuterBound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFaceSurface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFacetedBrep.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFacetedBrepWithVoids.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFailureConnectionCondition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFanType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFastener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFastenerType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFeatureElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFeatureElementAddition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFeatureElementSubtraction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFillAreaStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFillAreaStyleHatching.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFillAreaStyleTileShapeSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFillAreaStyleTileSymbolWithStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFillAreaStyleTiles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFillStyleSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFilterType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFireSuppressionTerminalType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFlowController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFlowControllerType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFlowFitting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFlowFittingType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFlowInstrumentType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFlowMeterType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFlowMovingDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFlowMovingDeviceType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFlowSegment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFlowSegmentType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFlowStorageDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFlowStorageDeviceType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFlowTerminal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFlowTerminalType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFlowTreatmentDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFlowTreatmentDeviceType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFluidFlowProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFooting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFuelProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFurnishingElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFurnishingElementType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFurnitureStandard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcFurnitureType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcGasTerminalType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcGeneralMaterialProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcGeneralProfileProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcGeometricCurveSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcGeometricRepresentationContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcGeometricRepresentationItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcGeometricRepresentationSubContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcGeometricSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcGeometricSetSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcGrid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcGridAxis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcGridPlacement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcGroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcHalfSpaceSolid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcHatchLineDistanceSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcHeatExchangerType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcHumidifierType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcHygroscopicMaterialProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcIShapeProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcImageTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcInventory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcIrregularTimeSeries.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcIrregularTimeSeriesValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcJunctionBoxType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLShapeProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLaborResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLampType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLayeredItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLibraryInformation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLibraryReference.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLibrarySelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLightDistributionData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLightDistributionDataSourceSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLightFixtureType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLightIntensityDistribution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLightSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLightSourceAmbient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLightSourceDirectional.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLightSourceGoniometric.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLightSourcePositional.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLightSourceSpot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLinearDimension.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLocalPlacement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLocalTime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcLoop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcManifoldSolidBrep.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMappedItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMaterialClassificationRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMaterialDefinitionRepresentation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMaterialLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMaterialLayerSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMaterialLayerSetUsage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMaterialList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMaterialProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMaterialSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMeasureValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMeasureWithUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMechanicalConcreteMaterialProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMechanicalFastener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMechanicalFastenerType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMechanicalMaterialProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMechanicalSteelMaterialProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMember.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMemberType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMetric.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMetricValueSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMonetaryUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMotorConnectionType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcMove.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcNamedUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcObjectDefinition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcObjectPlacement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcObjectReferenceSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcObjective.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcOccupant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcOffsetCurve2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcOffsetCurve3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcOneDirectionRepeatFactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcOpenShell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcOpeningElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcOpticalMaterialProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcOrderAction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcOrganization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcOrganizationRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcOrientationSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcOrientedEdge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcOutletType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcOwnerHistory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcParameterizedProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPerformanceHistory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPermeableCoveringProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPermit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPerson.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPersonAndOrganization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPhysicalComplexQuantity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPhysicalQuantity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPhysicalSimpleQuantity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPipeFittingType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPipeSegmentType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPixelTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPlacement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPlanarBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPlanarExtent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPlane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPlate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPlateType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPointOnCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPointOnSurface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPointOrVertexPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPolyLoop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPolygonalBoundedHalfSpace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPolyline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPostalAddress.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPreDefinedColour.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPreDefinedCurveFont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPreDefinedDimensionSymbol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPreDefinedItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPreDefinedPointMarkerSymbol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPreDefinedSymbol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPreDefinedTerminatorSymbol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPreDefinedTextFont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPresentationLayerAssignment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPresentationLayerWithStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPresentationStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPresentationStyleAssignment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPresentationStyleSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcProcedure.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcProcess.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcProduct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcProductDefinitionShape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcProductRepresentation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcProductsOfCombustionProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcProfileProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcProject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcProjectOrder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcProjectOrderRecord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcProjectionCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcProjectionElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcProperty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPropertyBoundedValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPropertyConstraintRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPropertyDefinition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPropertyDependencyRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPropertyEnumeratedValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPropertyEnumeration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPropertyListValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPropertyReferenceValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPropertySet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPropertySetDefinition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPropertySingleValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPropertyTableValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcProtectiveDeviceType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcProxy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcPumpType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcQuantityArea.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcQuantityCount.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcQuantityLength.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcQuantityTime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcQuantityVolume.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcQuantityWeight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRadiusDimension.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRailing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRailingType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRamp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRampFlight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRampFlightType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRationalBezierCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRectangleHollowProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRectangleProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRectangularPyramid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRectangularTrimmedSurface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcReferencesValueDocument.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRegularTimeSeries.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcReinforcementBarProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcReinforcementDefinitionProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcReinforcingBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcReinforcingElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcReinforcingMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAggregates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssigns.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssignsTasks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssignsToActor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssignsToControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssignsToGroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssignsToProcess.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssignsToProduct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssignsToProjectOrder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssignsToResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssociates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssociatesAppliedValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssociatesApproval.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssociatesClassification.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssociatesConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssociatesDocument.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssociatesLibrary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssociatesMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelAssociatesProfileProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelConnects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelConnectsElements.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelConnectsPathElements.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelConnectsPortToElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelConnectsPorts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelConnectsStructuralActivity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelConnectsStructuralElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelConnectsStructuralMember.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelConnectsWithEccentricity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelConnectsWithRealizingElements.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelContainedInSpatialStructure.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelCoversBldgElements.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelCoversSpaces.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelDecomposes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelDefines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelDefinesByProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelDefinesByType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelFillsElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelFlowControlElements.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelInteractionRequirements.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelNests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelOccupiesSpaces.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelOverridesProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelProjectsElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelReferencedInSpatialStructure.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelSchedulesCostItems.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelSequence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelServicesBuildings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelSpaceBoundary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelVoidsElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRelaxation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRepresentation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRepresentationContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRepresentationItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRepresentationMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRevolvedAreaSolid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRibPlateProfileProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRightCircularCone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRightCircularCylinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRoof.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRoot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRoundedEdgeFeature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcRoundedRectangleProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSIUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSanitaryTerminalType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcScheduleTimeControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSectionProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSectionReinforcementProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSectionedSpine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSensorType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcServiceLife.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcServiceLifeFactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcShapeAspect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcShapeModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcShapeRepresentation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcShell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcShellBasedSurfaceModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSimpleProperty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSimpleValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSizeSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSlab.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSlabType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSlippageConnectionCondition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSolidModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSoundProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSoundValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSpace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSpaceHeaterType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSpaceProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSpaceThermalLoadProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSpaceType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSpatialStructureElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSpatialStructureElementType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSpecularHighlightSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStackTerminalType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStair.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStairFlight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStairFlightType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralAction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralActivity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralActivityAssignmentSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralAnalysisModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralConnection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralConnectionCondition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralCurveConnection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralCurveMember.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralCurveMemberVarying.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralLinearAction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralLinearActionVarying.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralLoad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralLoadGroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralLoadLinearForce.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralLoadPlanarForce.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralLoadSingleDisplacement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralLoadSingleDisplacementDistortion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralLoadSingleForce.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralLoadSingleForceWarping.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralLoadStatic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralLoadTemperature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralMember.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralPlanarAction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralPlanarActionVarying.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralPointAction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralPointConnection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralPointReaction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralProfileProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralReaction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralResultGroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralSteelProfileProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralSurfaceConnection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralSurfaceMember.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuralSurfaceMemberVarying.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStructuredDimensionCallout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStyleModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStyledItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcStyledRepresentation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSubContractResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSubedge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSurface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSurfaceCurveSweptAreaSolid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSurfaceOfLinearExtrusion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSurfaceOfRevolution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSurfaceOrFaceSurface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSurfaceStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSurfaceStyleElementSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSurfaceStyleLighting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSurfaceStyleRefraction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSurfaceStyleRendering.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSurfaceStyleShading.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSurfaceStyleWithTextures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSurfaceTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSweptAreaSolid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSweptDiskSolid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSweptSurface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSwitchingDeviceType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSymbolStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSymbolStyleSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcSystemFurnitureElementType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTShapeProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTableRow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTankType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTask.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTelecomAddress.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTendon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTendonAnchor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTerminatorSymbol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTextFontSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTextLiteral.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTextLiteralWithExtent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTextStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTextStyleFontModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTextStyleForDefinedFont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTextStyleSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTextStyleTextModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTextStyleWithBoxCharacteristics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTextureCoordinate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTextureCoordinateGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTextureMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTextureVertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcThermalMaterialProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTimeSeries.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTimeSeriesReferenceRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTimeSeriesSchedule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTimeSeriesValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTopologicalRepresentationItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTopologyRepresentation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTransformerType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTransportElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTransportElementType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTrapeziumProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTrimmedCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTrimmingSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTubeBundleType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTwoDirectionRepeatFactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTypeObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcTypeProduct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcUShapeProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcUnitAssignment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcUnitaryEquipmentType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcValveType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcVector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcVectorOrDirection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcVertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcVertexBasedTextureMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcVertexLoop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcVertexPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcVibrationIsolatorType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcVirtualElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcVirtualGridIntersection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcWall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcWallStandardCase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcWallType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcWasteTerminalType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcWaterProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcWindowLiningProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcWindowPanelProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcWindowStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcWorkControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcWorkPlan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcWorkSchedule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcZShapeProfileDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\IfcZone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\InheritVisitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\SPFReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\SPFWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\Visitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\all.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\include\ifc2x3\fwDecl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\ifc2x3\Export.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="F:\Dev\C++\ifc-sdk\src\ifc2x3\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{A822BD0C-AB6C-3EF8-A0CA-52A6397B47BD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{477CD7B0-E059-3F76-BEAE-B526CBD398A5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
