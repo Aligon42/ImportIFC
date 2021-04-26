@@ -43,7 +43,7 @@
     <ClInclude Include="tests.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="MethodeConstructionr.h">
+    <ClInclude Include="MethodeConstruction.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

@@ -164,7 +164,7 @@
   <ItemGroup>
     <ClInclude Include="ComputePlacementVisitor.h" />
     <ClInclude Include="CreateConstructionPointVisitor.h" />
-    <ClInclude Include="MethodeConstructionr.h" />
+    <ClInclude Include="MethodeConstruction.h" />
     <ClInclude Include="tests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

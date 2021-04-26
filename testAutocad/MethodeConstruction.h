@@ -20,4 +20,5 @@
 #include <mathfu/matrix_4x4.h>
 #include "CreateConstructionPointVisitor.h"
 
-void createSolid3d(std::list<Vec3> points1, Vec3 VecteurExtrusion);
+void createSolid3d(std::list<Vec3> points1, Vec3 VecteurExtrusion, Matrix4 tranform1);
+static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1);
