@@ -60,6 +60,75 @@ bool CreateConstructionPointVisitor::visitIfcShapeRepresentation(
     return false;
 }
 
+bool CreateConstructionPointVisitor::visitIfcRepresentationMap(
+    ifc2x3::IfcRepresentationMap* value)
+{
+    if (value->testMappedRepresentation())
+    {
+        if (value->getMappedRepresentation()->acceptVisitor(this))
+        {
+            if (value->testMappingOrigin()
+                && value->getMappingOrigin()->currentType() ==
+                ifc2x3::IfcAxis2Placement::IFCAXIS2PLACEMENT3D)
+            {
+                Matrix4 transformation = ComputePlacementVisitor::getTransformation(
+                    value->getMappingOrigin()->getIfcAxis2Placement3D());
+
+                transformPoints(transformation);
+            }
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool CreateConstructionPointVisitor::visitIfcMappedItem(
+    ifc2x3::IfcMappedItem* value)
+{
+    if (value->testMappingSource())
+    {
+        if (value->getMappingSource()->acceptVisitor(this))
+        {
+            if (value->testMappingTarget())
+            {
+                Matrix4 transform = ComputePlacementVisitor::getTransformation(
+                    value->getMappingTarget());
+
+                transformPoints(transform);
+            }
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool CreateConstructionPointVisitor::visitIfcPolygonalBoundedHalfSpace(
+    ifc2x3::IfcPolygonalBoundedHalfSpace* value)
+{
+    if (value->testPolygonalBoundary())
+    {
+        if (value->getPolygonalBoundary()->acceptVisitor(this))
+        {
+            if (value->testPosition())
+            {
+                Matrix4 transform = ComputePlacementVisitor::getTransformation(value->getPosition());
+                transformPoints(transform);
+            }
+
+            // TODO
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 Vec3 extrusionVector(0., 0., 1.);
 
 bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(

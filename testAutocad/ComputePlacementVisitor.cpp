@@ -114,6 +114,45 @@ Vec3 ComputePlacementVisitor::getPoint(ifc2x3::IfcCartesianPoint* point)
     return vector;
 }
 
+
+Matrix4 ComputePlacementVisitor::getTransformation(
+    ifc2x3::IfcCartesianTransformationOperator* value)
+{
+    Vec3 location(0.f);
+
+    if (value->testLocalOrigin())
+    {
+        location = getPoint(value->getLocalOrigin());
+    }
+
+    Vec3 xAxis(1.0f, 0.0f, 0.0f);
+
+    if (value->testAxis1())
+    {
+        xAxis = getDirection(value->getAxis1());
+        xAxis.Normalize();
+    }
+
+    Vec3 yAxis(0.0f, 1.0f, 0.0f);
+
+    if (value->testAxis2())
+    {
+        yAxis = getDirection(value->getAxis2());
+        yAxis.Normalize();
+    }
+
+    Vec3 zAxis = Vec3::CrossProduct(xAxis, yAxis);
+
+    Matrix4 transformation(
+        xAxis.x(), xAxis.y(), xAxis.z(), 0.0f,
+        yAxis.x(), yAxis.y(), yAxis.z(), 0.0f,
+        zAxis.x(), zAxis.y(), zAxis.z(), 0.0f,
+        location.x(), location.y(), location.z(), 1.0f
+    );
+
+    return transformation;
+}
+
 Vec3 ComputePlacementVisitor::getDirection(ifc2x3::IfcDirection* direction)
 {
     ifc2x3::List_Real_2_3& dir = direction->getDirectionRatios();

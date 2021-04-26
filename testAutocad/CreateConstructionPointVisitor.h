@@ -32,6 +32,9 @@ public:
     bool visitIfcFace(ifc2x3::IfcFace* value) override;
     bool visitIfcFaceOuterBound(ifc2x3::IfcFaceOuterBound* value) override;
     bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value) override;
+    bool visitIfcMappedItem(ifc2x3::IfcMappedItem* value) override;
+    bool visitIfcPolygonalBoundedHalfSpace(ifc2x3::IfcPolygonalBoundedHalfSpace* value) override;
+    bool visitIfcRepresentationMap(ifc2x3::IfcRepresentationMap* value) override;
 
     std::list<Vec3> getPoints() const;
     Vec3 getVectorDirection() const;
