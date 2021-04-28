@@ -174,22 +174,21 @@ void test()
 
         acutPrintf(_T("    => Wall %d\n"), count);
         CreateConstructionPointVisitor visitor1;
-
         wall.acceptVisitor(&visitor1);
 
         std::list<Vec3> points1 = visitor1.getPoints();
-
         for (const auto& point : points1)
         {
             acutPrintf(_T("[ %f, %f, %f ]\n"),  point.x(), point.y(), point.z());
         }
 
         Vec3 VecteurExtrusion = visitor1.getVectorDirection();
-
         acutPrintf(_T("Vecteur extrusion : [ %f, %f , %f]\n"), VecteurExtrusion.x(), VecteurExtrusion.y(), VecteurExtrusion.z());
        
         wall.acceptVisitor(&placementVisitor);
         Matrix4 transform1 = placementVisitor.getTransformation();
+
+        
 
         createSolid3d(points1, VecteurExtrusion, transform1);
     }

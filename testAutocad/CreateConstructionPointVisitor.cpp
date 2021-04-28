@@ -60,6 +60,16 @@ bool CreateConstructionPointVisitor::visitIfcShapeRepresentation(
     return false;
 }
 
+bool CreateConstructionPointVisitor::visitIfcBooleanClippingResult(
+    ifc2x3::IfcBooleanClippingResult* value)
+{
+    if (value->testSecondOperand())
+    {
+        return value->getSecondOperand()->acceptVisitor(this);
+    }
+    return true;
+}
+
 bool CreateConstructionPointVisitor::visitIfcRepresentationMap(
     ifc2x3::IfcRepresentationMap* value)
 {

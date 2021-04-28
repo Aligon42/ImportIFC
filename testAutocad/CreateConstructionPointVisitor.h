@@ -24,6 +24,10 @@ public:
     bool visitIfcProductRepresentation(ifc2x3::IfcProductRepresentation* value) override;
     bool visitIfcProductDefinitionShape(ifc2x3::IfcProductDefinitionShape* value) override;
     bool visitIfcShapeRepresentation(ifc2x3::IfcShapeRepresentation* value) override;
+    bool visitIfcBooleanClippingResult(ifc2x3::IfcBooleanClippingResult* value) override;
+    bool visitIfcMappedItem(ifc2x3::IfcMappedItem* value) override;
+    bool visitIfcPolygonalBoundedHalfSpace(ifc2x3::IfcPolygonalBoundedHalfSpace* value) override;
+    bool visitIfcRepresentationMap(ifc2x3::IfcRepresentationMap* value) override;
     bool visitIfcExtrudedAreaSolid(ifc2x3::IfcExtrudedAreaSolid* value) override;
     bool visitIfcArbitraryClosedProfileDef(ifc2x3::IfcArbitraryClosedProfileDef* value) override;
     bool visitIfcPolyline(ifc2x3::IfcPolyline* value) override;
@@ -32,9 +36,6 @@ public:
     bool visitIfcFace(ifc2x3::IfcFace* value) override;
     bool visitIfcFaceOuterBound(ifc2x3::IfcFaceOuterBound* value) override;
     bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value) override;
-    bool visitIfcMappedItem(ifc2x3::IfcMappedItem* value) override;
-    bool visitIfcPolygonalBoundedHalfSpace(ifc2x3::IfcPolygonalBoundedHalfSpace* value) override;
-    bool visitIfcRepresentationMap(ifc2x3::IfcRepresentationMap* value) override;
 
     std::list<Vec3> getPoints() const;
     Vec3 getVectorDirection() const;
