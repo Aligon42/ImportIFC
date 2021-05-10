@@ -1,5 +1,5 @@
 #pragma once
-
+#include <string>
 #include <ifc2x3/InheritVisitor.h>
 
 #include <vectorial/config.h>
@@ -28,6 +28,7 @@ public:
     bool visitIfcMappedItem(ifc2x3::IfcMappedItem* value) override;
     bool visitIfcPolygonalBoundedHalfSpace(ifc2x3::IfcPolygonalBoundedHalfSpace* value) override;
     bool visitIfcRepresentationMap(ifc2x3::IfcRepresentationMap* value) override;
+    bool visitIfcPlane(ifc2x3::IfcPlane* value) override;
     bool visitIfcExtrudedAreaSolid(ifc2x3::IfcExtrudedAreaSolid* value) override;
     bool visitIfcArbitraryClosedProfileDef(ifc2x3::IfcArbitraryClosedProfileDef* value) override;
     bool visitIfcPolyline(ifc2x3::IfcPolyline* value) override;
@@ -39,5 +40,12 @@ public:
 
     std::list<Vec3> getPoints() const;
     Vec3 getVectorDirection() const;
+    std::string getAgreementBool() const;
+    Vec3 getOriginePlan() const;
+    Vec3 getDirection1Plan() const;
+    Vec3 SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value);
+
+    Vec3 SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value);
+    Vec3 getDirection2Plan() const;
     void transformPoints(const Matrix4& transform);
 };

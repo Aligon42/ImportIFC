@@ -184,11 +184,16 @@ void test()
 
         Vec3 VecteurExtrusion = visitor1.getVectorDirection();
         acutPrintf(_T("Vecteur extrusion : [ %f, %f , %f]\n"), VecteurExtrusion.x(), VecteurExtrusion.y(), VecteurExtrusion.z());
+        
+        Vec3 Origine = visitor1.getOriginePlan();
+        Vec3 Direction1 = visitor1.getDirection1Plan();
+        Vec3 Direction2 = visitor1.getDirection2Plan();
+        acutPrintf(_T("Origne du plan : [ %f, %f , %f]\n"), Origine.x(), Origine.y(), Origine.z());
+        acutPrintf(_T("Direction1Plan : [ %f, %f , %f]\n"), Direction1.x(), Direction1.y(), Direction1.z());
+        acutPrintf(_T("Direction2Plan : [ %f, %f , %f]\n"), Direction2.x(), Direction2.y(), Direction2.z());
        
         wall.acceptVisitor(&placementVisitor);
         Matrix4 transform1 = placementVisitor.getTransformation();
-
-        
 
         createSolid3d(points1, VecteurExtrusion, transform1);
     }
