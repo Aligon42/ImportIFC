@@ -13,6 +13,12 @@
 
 #include <Step/CallBack.h>
 
+#include <vectorial/config.h>
+#include <vectorial/vectorial.h>
+#include <vectorial/simd4f.h>
+#include <mathfu/vector_3.h>
+#include <mathfu/matrix_4x4.h>
+
 #include "CreateConstructionPointVisitor.h"
 #include "ComputePlacementVisitor.h"
 #include "MethodeConstruction.h"
@@ -182,20 +188,22 @@ void test()
             acutPrintf(_T("[ %f, %f, %f ]\n"),  point.x(), point.y(), point.z());
         }
 
+        std::vector<int> ListNbArg = visitor1.getNbArgPolyline();
+
         Vec3 VecteurExtrusion = visitor1.getVectorDirection();
         acutPrintf(_T("Vecteur extrusion : [ %f, %f , %f]\n"), VecteurExtrusion.x(), VecteurExtrusion.y(), VecteurExtrusion.z());
         
-        Vec3 Origine = visitor1.getOriginePlan();
-        Vec3 Direction1 = visitor1.getDirection1Plan();
-        Vec3 Direction2 = visitor1.getDirection2Plan();
-        acutPrintf(_T("Origne du plan : [ %f, %f , %f]\n"), Origine.x(), Origine.y(), Origine.z());
-        acutPrintf(_T("Direction1Plan : [ %f, %f , %f]\n"), Direction1.x(), Direction1.y(), Direction1.z());
-        acutPrintf(_T("Direction2Plan : [ %f, %f , %f]\n"), Direction2.x(), Direction2.y(), Direction2.z());
-       
+        std::list<Matrix4> listPlan = visitor1.getPlanPolygonal();
+
+        std::list<Matrix4> listLocationPolygonal = visitor1.getLocationPolygonal();
+
+        bool Agreement = visitor1.getAgreementBool();
+        acutPrintf(_T("Agreement : %b\n"), Agreement);
+
         wall.acceptVisitor(&placementVisitor);
         Matrix4 transform1 = placementVisitor.getTransformation();
 
-        createSolid3d(points1, VecteurExtrusion, transform1);
+        createSolid3d(points1, ListNbArg,  VecteurExtrusion, transform1, listPlan, listLocationPolygonal, Agreement );
     }
 
     acutPrintf(_T("\nFailure : %d\nSuccess : %d\n"), failure_results, success_results);

@@ -13,8 +13,17 @@ typedef mathfu::Matrix<float, 4> Matrix4;
 
 class CreateConstructionPointVisitor : public ifc2x3::InheritVisitor
 {
+private:
+
     std::list<Vec3> _points;
-    Vec3 VecteurExtrusion;
+    Vec3 extrusionVector;
+    bool Agreement;
+    Matrix4 transform;
+    std::list<Matrix4> listPlan;
+    std::list<Matrix4> listLocationPolygonal;
+    Matrix4 _transformation{ Matrix4::Identity() };
+    int nbArg;
+    std::vector<int> listNbArgPolyline;
 
 public:
     //! Constructor
@@ -40,12 +49,11 @@ public:
 
     std::list<Vec3> getPoints() const;
     Vec3 getVectorDirection() const;
-    std::string getAgreementBool() const;
-    Vec3 getOriginePlan() const;
-    Vec3 getDirection1Plan() const;
-    Vec3 SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value);
-
-    Vec3 SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value);
-    Vec3 getDirection2Plan() const;
+    bool getAgreementBool() const;
+    std::list<Matrix4> getPlanPolygonal();
+    std::list<Matrix4> getLocationPolygonal() const;
+    std::vector<int> getNbArgPolyline() const;
+    void SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);
+    void SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);
     void transformPoints(const Matrix4& transform);
 };

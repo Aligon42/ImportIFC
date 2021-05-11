@@ -155,8 +155,6 @@ bool CreateConstructionPointVisitor::visitIfcMappedItem(
     return false;
 }
 
-std::string Agreement;
-
 bool CreateConstructionPointVisitor::visitIfcPolygonalBoundedHalfSpace(
     ifc2x3::IfcPolygonalBoundedHalfSpace* value)
 {
@@ -166,25 +164,28 @@ bool CreateConstructionPointVisitor::visitIfcPolygonalBoundedHalfSpace(
         {
             if (value->testPosition())
             {
-                Matrix4 transform = ComputePlacementVisitor::getTransformation(value->getPosition());
+                transform = ComputePlacementVisitor::getTransformation(value->getPosition());
                 transformPoints(transform);
+
+                listLocationPolygonal.push_back(transform);
             }
 
             if (value->testAgreementFlag())
             {
                 Agreement = value->getAgreementFlag();
             }
+
+            if (value->testBaseSurface())
+            {
+                value->getBaseSurface()->acceptVisitor(this);
+            }
+
             
             return true;
         }
     }
     return false;
 }
-
-Vec3 originePlan(0.f, 0.f, 0.f);
-Vec3 direction1Plan(0.f, 0.f, 0.f);
-Vec3 direction2Plan(0.f, 0.f, 0.f);
-
 
 bool CreateConstructionPointVisitor::visitIfcPlane(
     ifc2x3::IfcPlane* value)
@@ -193,30 +194,39 @@ bool CreateConstructionPointVisitor::visitIfcPlane(
     {
         auto axisPlacement = value->getPosition();
 
+        Vec3 originePlan(0.0f, 0.0f, 0.0f);
+        Vec3 direction1Plan(1.0f, 0.0f, 0.0f);
+        Vec3 direction2Plan(0.0f, 0.0f, 1.0f);
+
         if (axisPlacement->testLocation())
         {
-            originePlan = SwitchIfcCartesianPointToVecteur3D(axisPlacement->getLocation());
+            SwitchIfcCartesianPointToVecteur3D(axisPlacement->getLocation(), originePlan);
         }
 
         if (axisPlacement->testAxis())
         {
-            direction1Plan = SwitchIfcDirectionToVecteur3D(axisPlacement->getAxis());
-            direction1Plan.Normalize();
+            SwitchIfcDirectionToVecteur3D(axisPlacement->getAxis(), direction1Plan);
         }
 
         if (axisPlacement->testRefDirection())
         {
-            direction2Plan = SwitchIfcDirectionToVecteur3D(axisPlacement->getRefDirection());
-            direction2Plan.Normalize();
+            SwitchIfcDirectionToVecteur3D(axisPlacement->getRefDirection(), direction2Plan);
         }
+
+        Matrix4 plan(
+            direction2Plan.x(), direction2Plan.y(), direction2Plan.z(), 0.0f,
+            0.0f, 0.0f, 0.0f, 0.0f,
+            direction1Plan.x(), direction1Plan.y(), direction1Plan.z(), 0.0f,
+            originePlan.x(), originePlan.y(), originePlan.z(), 0.0f
+            );
+
+        listPlan.push_back(plan);
 
         return true;
     }
     
     return false;
 }
-
-Vec3 extrusionVector(0., 0., 1.);
 
 bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
     ifc2x3::IfcExtrudedAreaSolid* value)
@@ -264,8 +274,13 @@ bool CreateConstructionPointVisitor::visitIfcPolyline(ifc2x3::IfcPolyline*
     {
         _points.push_back(ComputePlacementVisitor::getPoint(point.get()));
     }
+    
 
     _points.pop_back();
+
+    nbArg = _points.size();
+
+    listNbArgPolyline.push_back(nbArg);
 
     return _points.empty() == false;
 }
@@ -335,26 +350,22 @@ bool CreateConstructionPointVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value
     return _points.empty() == false;
 }
 
-Vec3 CreateConstructionPointVisitor::SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value)
+void CreateConstructionPointVisitor::SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine)
 {
     auto listPoint = value->getCoordinates();
 
-    originePlan.x() = listPoint.at(0);
-    originePlan.y() = listPoint.at(1);
-    originePlan.z() = listPoint.at(2);
-
-    return originePlan;
+    outOrigine.x() = (float) listPoint.at(0);
+    outOrigine.y() = (float) listPoint.at(1);
+    outOrigine.z() = (float) listPoint.at(2);
 }
 
-Vec3 CreateConstructionPointVisitor::SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value)
+void CreateConstructionPointVisitor::SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur)
 {
     auto listPoint = value->getDirectionRatios();
 
-    originePlan.x() = listPoint.at(0);
-    originePlan.y() = listPoint.at(1);
-    originePlan.z() = listPoint.at(2);
-
-    return originePlan;
+    outVecteur.x() = (float) listPoint.at(0);
+    outVecteur.y() = (float) listPoint.at(1);
+    outVecteur.z() = (float) listPoint.at(2);
 }
 
 std::list<Vec3> CreateConstructionPointVisitor::getPoints() const
@@ -367,24 +378,24 @@ Vec3 CreateConstructionPointVisitor::getVectorDirection() const
     return extrusionVector;
 }
 
-std::string CreateConstructionPointVisitor::getAgreementBool() const
+bool CreateConstructionPointVisitor::getAgreementBool() const
 {
     return Agreement;
 }
 
-Vec3 CreateConstructionPointVisitor::getOriginePlan() const
+std::list<Matrix4> CreateConstructionPointVisitor::getPlanPolygonal()
 {
-    return originePlan;
+    return listPlan;
 }
 
-Vec3 CreateConstructionPointVisitor::getDirection1Plan() const
+std::list<Matrix4> CreateConstructionPointVisitor::getLocationPolygonal() const
 {
-    return direction1Plan;
+    return listLocationPolygonal;
 }
 
-Vec3 CreateConstructionPointVisitor::getDirection2Plan() const
+std::vector<int> CreateConstructionPointVisitor::getNbArgPolyline() const
 {
-    return direction2Plan;
+    return listNbArgPolyline;
 }
 
 void CreateConstructionPointVisitor::transformPoints(const Matrix4& transform)
