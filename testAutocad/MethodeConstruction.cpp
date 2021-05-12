@@ -81,7 +81,7 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
         delete (AcRxObject*)regions[ii];
     }
 
-	for (size_t i = 0; i < listPlan.size(); i++)
+	for (int a = 0; a <= listPlan.size(); a++)
 	{
 		CreationSection(pSolid, VecteurExtrusion, points1, newlistArg, listPlan, listLocationPolygonal, Agreement);
 
@@ -251,23 +251,12 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 			break;
 		}
 
-		ptArr[i].set(point.x(), point.y(), point.z());
-
+		ptArr[i].set(point.x() * -1, point.y() * -1, point.z() * -1);
+		acutPrintf(_T("point : [%f, %f, %f]\n"), point.x() * -1, point.y() * -1, point.z() * -1);
 		i++;
 	}
 
-	std::vector<int> interList;
-
-	if (nbArg.size() > 2)
-	{
-		for (size_t x = 1; x <= nbArg.size(); x++)
-		{
-			interList.push_back(nbArg[x]);
-		}
-
-		nbArg = interList;
-		
-	}
+	
 
 	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
@@ -310,28 +299,24 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 		delete (AcRxObject*)regions[ii];
 	}
 
-	DeplacementObjet3D(pSolid, listLocationPolygonal.front());
+	//DeplacementObjet3D(pSolid, listLocationPolygonal.front());
+	acutPrintf(_T("Matrice : \n{ %f, %f, %f, %f,\n %f, %f, %f, %f,\n %f, %f, %f, %f,\n %f, %f, %f, %f,\n"),
+		listLocationPolygonal.front()[0], listLocationPolygonal.front()[1], listLocationPolygonal.front()[2], listLocationPolygonal.front()[3],
+		listLocationPolygonal.front()[4], listLocationPolygonal.front()[5], listLocationPolygonal.front()[6], listLocationPolygonal.front()[7],
+		listLocationPolygonal.front()[8], listLocationPolygonal.front()[9], listLocationPolygonal.front()[10], listLocationPolygonal.front()[11],
+		listLocationPolygonal.front()[12], listLocationPolygonal.front()[13], listLocationPolygonal.front()[14], listLocationPolygonal.front()[15]);
 
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
-	if (Acad::eOk == es)
-	{
-		AcDbDatabase* pDb = curDoc()->database();
-		AcDbObjectId modelId;
-		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
-		AcDbBlockTableRecord* pBlockTableRecord;
-		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
-		pBlockTableRecord->appendAcDbEntity(pSolid);
-		pBlockTableRecord->close();
-		pSolid->close();
-	}
-
-	else
-	{
-		delete pSolid;
-		acutPrintf(_T("Je ne fais rien du tout"));
-		return;
-	}
+	AcDbDatabase* pDb = curDoc()->database();
+	AcDbObjectId modelId;
+	modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+	AcDbBlockTableRecord* pBlockTableRecord;
+	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+	pBlockTableRecord->appendAcDbEntity(pSolid);
+	pBlockTableRecord->close();
+	pSolid->close();
+	
 
 	////Coordonnées du repère du plan
 	//p0x = float.Parse(PLanDeSection.ElementAt(i).ifcCoordonneesReperePlane[0]); 
@@ -342,6 +327,8 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	p0z = listPlan.front()[14]; //z
 
 	p0 = AcGePoint3d::AcGePoint3d(p0x, p0y, p0z);
+	acutPrintf(_T("Coordonnées du repère du plan : [ %f, %f, %f]\n"), listPlan.front()[12], listPlan.front()[13], listPlan.front()[14]);
+
 
 	///Direction1 plan
 	//p1x = float.Parse(PLanDeSection.ElementAt(i).list_Direction1_Plane[0]);
@@ -354,6 +341,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	V1 = AcGeVector3d::AcGeVector3d(p1x, p1y, p1z);
 	V2 = V1.normal();
 	p3 = AcGePoint3d::AcGePoint3d(V2.x + p0x, V2.y + p0y, V2.z + p0z);
+	acutPrintf(_T("Direction1 plan : [ %f, %f, %f]\n"), listPlan.front()[8], listPlan.front()[9], listPlan.front()[10]);
 
 	///Direction2 plan
 	//p2x = float.Parse(PLanDeSection.ElementAt(i).list_Direction2_Plane[0]);
@@ -363,6 +351,8 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	//p2z = float.Parse(PLanDeSection.ElementAt(i).list_Direction2_Plane[2]);
 	p2z = listPlan.front()[2]; //z
 	//Vector3d p2 = new Vector3d(p0x + p2x, p0y + p2y, p0z + p2z);
+
+	acutPrintf(_T("Direction2 plan : [ %f, %f, %f]\n"), listPlan.front()[0], listPlan.front()[1], listPlan.front()[2]);
 
 	p1xx = p0x + p1x;
 	p1yy = p0x + p1x;

@@ -155,6 +155,8 @@ bool CreateConstructionPointVisitor::visitIfcMappedItem(
     return false;
 }
 
+
+
 bool CreateConstructionPointVisitor::visitIfcPolygonalBoundedHalfSpace(
     ifc2x3::IfcPolygonalBoundedHalfSpace* value)
 {
@@ -186,6 +188,7 @@ bool CreateConstructionPointVisitor::visitIfcPolygonalBoundedHalfSpace(
     }
     return false;
 }
+
 
 bool CreateConstructionPointVisitor::visitIfcPlane(
     ifc2x3::IfcPlane* value)

@@ -179,7 +179,9 @@ void test()
         count++;
 
         acutPrintf(_T("    => Wall %d\n"), count);
+        
         CreateConstructionPointVisitor visitor1;
+        acutPrintf(_T("Index : %i\n"), (int)(wall.getKey()));
         wall.acceptVisitor(&visitor1);
 
         std::list<Vec3> points1 = visitor1.getPoints();
@@ -204,6 +206,7 @@ void test()
         Matrix4 transform1 = placementVisitor.getTransformation();
 
         createSolid3d(points1, ListNbArg,  VecteurExtrusion, transform1, listPlan, listLocationPolygonal, Agreement );
+        
     }
 
     acutPrintf(_T("\nFailure : %d\nSuccess : %d\n"), failure_results, success_results);
