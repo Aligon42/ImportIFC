@@ -155,7 +155,16 @@ bool CreateConstructionPointVisitor::visitIfcMappedItem(
     return false;
 }
 
+bool CreateConstructionPointVisitor::visitIfcHalfSpaceSolid(
+    ifc2x3::IfcHalfSpaceSolid* value)
+{
+    if (value->testBaseSurface())
+    {
+        value->getBaseSurface()->acceptVisitor(this);
+    }
 
+    return true;
+}
 
 bool CreateConstructionPointVisitor::visitIfcPolygonalBoundedHalfSpace(
     ifc2x3::IfcPolygonalBoundedHalfSpace* value)
@@ -257,6 +266,68 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
     }
 
     return false;
+}
+
+bool CreateConstructionPointVisitor::visitIfcIShapeProfileDef(
+    ifc2x3::IfcIShapeProfileDef* value)
+{
+    if (value->testPosition())
+    {
+        value->getPosition()->acceptVisitor(this);
+    }
+
+    I_profilDef IprofilDef;
+    IprofilDef.I_OverallWidth = (float) value->getOverallWidth();
+    IprofilDef.OverallDepth = (float)value->getOverallDepth();
+    IprofilDef.webThickness = (float)value->getWebThickness();
+    IprofilDef.flangeThickness = (float)value->getFlangeThickness();
+    IprofilDef.filletRadius = (float)value->getFilletRadius();
+
+    return true;
+}
+
+bool CreateConstructionPointVisitor::visitIfcLShapeProfileDef(
+    ifc2x3::IfcLShapeProfileDef* value)
+{
+    if (value->testPosition())
+    {
+        value->getPosition()->acceptVisitor(this);
+    }
+
+    L_profilDef LprofilDef;
+    LprofilDef.Depth = (float)value->getDepth();
+    LprofilDef.Width = (float)value->getWidth();
+    LprofilDef.Thickness = (float)value->getThickness();
+    LprofilDef.FilletRadius = (float)value->getFilletRadius();
+    LprofilDef.EdgeRadius = (float)value->getEdgeRadius();
+    LprofilDef.LegSlope = (float)value->getLegSlope();
+    LprofilDef.CentreOfGravityInx = (float)value->getCentreOfGravityInX();
+    LprofilDef.CentreOfGravityInY = (float)value->getCentreOfGravityInY();
+
+    return true;
+}
+
+bool CreateConstructionPointVisitor::visitIfcTShapeProfileDef(
+    ifc2x3::IfcTShapeProfileDef* value)
+{
+    if (value->testPosition())
+    {
+        value->getPosition()->acceptVisitor(this);
+    }
+
+    T_profilDef TprofilDef;
+    TprofilDef.Depth = (float)value->getDepth();
+    TprofilDef.FlangeWidth = (float)value->getFlangeWidth();
+    TprofilDef.WebThickness = (float)value->getWebThickness();
+    TprofilDef.FlangeThickness = (float)value->getFlangeThickness();
+    TprofilDef.FilletRadius = (float)value->getFilletRadius();
+    TprofilDef.FlangeEdgeRadius = (float)value->getFlangeEdgeRadius();
+    TprofilDef.WebEdgeRadius = (float)value->getWebEdgeRadius();
+    TprofilDef.WebSlope = (float)value->getWebSlope();
+    TprofilDef.FlangeSlope = (float)value->getFlangeSlope();
+    TprofilDef.CentreOfGravityInY = (float)value->getCentreOfGravityInY();
+
+    return true;
 }
 
 bool CreateConstructionPointVisitor::visitIfcArbitraryClosedProfileDef(

@@ -235,7 +235,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	AcGePoint3dArray ptArr;
 	ptArr.setLogicalLength((int)((nbArg.front()) - 1));
 
-	Vec3 pointOrigine = *points1.begin();
+	Vec3 pointOrigine = points1.front();
 
 	for (size_t i = 1; i < nbArg[0]; i++)
 	{
