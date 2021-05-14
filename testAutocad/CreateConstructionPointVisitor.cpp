@@ -278,7 +278,6 @@ bool CreateConstructionPointVisitor::visitIfcPolyline(ifc2x3::IfcPolyline*
         _points.push_back(ComputePlacementVisitor::getPoint(point.get()));
     }
     
-
     _points.pop_back();
 
     nbArg = _points.size();
@@ -405,11 +404,19 @@ void CreateConstructionPointVisitor::transformPoints(const Matrix4& transform)
 {
     std::list<Vec3> tmpPoints = _points;
 
+    auto size = listNbArgPolyline.size() > 2 ? listNbArgPolyline[listNbArgPolyline.size() - 2] - 1 : 0;
+
     _points.clear();
 
+    int count = 0;
     for(const auto& point : tmpPoints)
     {
-        _points.push_back(transform * point);
+        if (count > size)
+            _points.push_back(transform * point);
+        else
+            _points.push_back(point);
+
+        count++;
     }
 }
 

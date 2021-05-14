@@ -179,22 +179,23 @@ void test()
         count++;
 
         acutPrintf(_T("    => Wall %d\n"), count);
-        
+
         CreateConstructionPointVisitor visitor1;
-        acutPrintf(_T("Index : %i\n"), (int)(wall.getKey()));
+        int key = (int)wall.getKey();
+        acutPrintf(_T("Index : %i\n"), key);
         wall.acceptVisitor(&visitor1);
 
         std::list<Vec3> points1 = visitor1.getPoints();
         for (const auto& point : points1)
         {
-            acutPrintf(_T("[ %f, %f, %f ]\n"),  point.x(), point.y(), point.z());
+            acutPrintf(_T("[ %f, %f, %f ]\n"), point.x(), point.y(), point.z());
         }
 
         std::vector<int> ListNbArg = visitor1.getNbArgPolyline();
 
         Vec3 VecteurExtrusion = visitor1.getVectorDirection();
         acutPrintf(_T("Vecteur extrusion : [ %f, %f , %f]\n"), VecteurExtrusion.x(), VecteurExtrusion.y(), VecteurExtrusion.z());
-        
+
         std::list<Matrix4> listPlan = visitor1.getPlanPolygonal();
 
         std::list<Matrix4> listLocationPolygonal = visitor1.getLocationPolygonal();
@@ -205,8 +206,7 @@ void test()
         wall.acceptVisitor(&placementVisitor);
         Matrix4 transform1 = placementVisitor.getTransformation();
 
-        createSolid3d(points1, ListNbArg,  VecteurExtrusion, transform1, listPlan, listLocationPolygonal, Agreement );
-        
+        createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, Agreement);
     }
 
     acutPrintf(_T("\nFailure : %d\nSuccess : %d\n"), failure_results, success_results);
