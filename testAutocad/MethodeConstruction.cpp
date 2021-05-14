@@ -315,6 +315,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
 	pBlockTableRecord->appendAcDbEntity(pSolid);
 	pBlockTableRecord->close();
+
 	pSolid->close();
 	
 
@@ -380,11 +381,13 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	AcGePlane Poly_plane = AcGePlane::AcGePlane(p0, p5, p2);
 
 	AcDb3dSolid* negSolid = new AcDb3dSolid();
+
 	
 	extrusion->getSlice(Poly_plane, Agreement, pSolid);
 
 	extrusion->booleanOper(AcDb::kBoolSubtract, pSolid);
 	//extrusion.setColor(2);
 
+	//pSolid->close();
 	listPlan.pop_front();
 }

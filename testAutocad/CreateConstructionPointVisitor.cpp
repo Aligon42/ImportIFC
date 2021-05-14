@@ -277,7 +277,7 @@ bool CreateConstructionPointVisitor::visitIfcIShapeProfileDef(
     }
 
     I_profilDef IprofilDef;
-    IprofilDef.I_OverallWidth = (float) value->getOverallWidth();
+    IprofilDef.OverallWidth = (float) value->getOverallWidth();
     IprofilDef.OverallDepth = (float)value->getOverallDepth();
     IprofilDef.webThickness = (float)value->getWebThickness();
     IprofilDef.flangeThickness = (float)value->getFlangeThickness();

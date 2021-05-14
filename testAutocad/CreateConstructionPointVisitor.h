@@ -13,7 +13,7 @@ typedef mathfu::Matrix<float, 4> Matrix4;
 
 struct I_profilDef
 {
-    float I_OverallWidth;
+    float OverallWidth;
     float OverallDepth;
     float webThickness;
     float flangeThickness;
