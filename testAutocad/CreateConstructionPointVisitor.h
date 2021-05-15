@@ -69,7 +69,6 @@ private:
     std::list<Matrix4> listPlan;
     std::list<Matrix4> listLocationPolygonal;
     Matrix4 _transformation{ Matrix4::Identity() };
-    int nbArg;
     std::vector<int> listNbArgPolyline;
 
     //I_profilDef

@@ -344,6 +344,8 @@ bool CreateConstructionPointVisitor::visitIfcArbitraryClosedProfileDef(
 bool CreateConstructionPointVisitor::visitIfcPolyline(ifc2x3::IfcPolyline*
                                                       value)
 {
+    int size = _points.size();
+
     for(auto point : value->getPoints())
     {
         _points.push_back(ComputePlacementVisitor::getPoint(point.get()));
@@ -351,9 +353,7 @@ bool CreateConstructionPointVisitor::visitIfcPolyline(ifc2x3::IfcPolyline*
     
     _points.pop_back();
 
-    nbArg = _points.size();
-
-    listNbArgPolyline.push_back(nbArg);
+    listNbArgPolyline.push_back(_points.size() - size);
 
     return _points.empty() == false;
 }
@@ -475,11 +475,20 @@ void CreateConstructionPointVisitor::transformPoints(const Matrix4& transform)
 {
     std::list<Vec3> tmpPoints = _points;
 
-    auto size = listNbArgPolyline.size() > 2 ? listNbArgPolyline[listNbArgPolyline.size() - 2] - 1 : 0;
-
+    auto size = -1;
+    
+    if (listNbArgPolyline.size() > 2)
+    {
+        size = 0;
+        for (int i = 0; i < listNbArgPolyline.size() - 1; i++)
+        {
+            size += listNbArgPolyline[i];
+        }
+    }
+    
     _points.clear();
 
-    int count = 0;
+    int count = 1;
     for(const auto& point : tmpPoints)
     {
         if (count > size)

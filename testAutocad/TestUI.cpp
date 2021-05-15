@@ -236,8 +236,7 @@ void initApp()
 }
 void unloadApp()
 {
-    acedRegCmds->removeGroup(_T("TEST_COMMANDS"));
-    acedRegCmds->removeGroup(_T("TESTBUILD_COMMANDS"));
+    acedRegCmds->removeGroup(_T("IMPORT_COMMANDS"));
 }
 
 extern "C" AcRx::AppRetCode

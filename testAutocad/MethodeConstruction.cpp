@@ -9,17 +9,17 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
     ads_point ptres;
 
     AcGePoint3dArray ptArr;
-    ptArr.setLogicalLength((int)((ListNbArg.at(1)) - 1));
+    ptArr.setLogicalLength((int)((ListNbArg.at(1))));
 
     Vec3 pointOrigine = *points1.begin();
     points1.pop_front();
-
+	ListNbArg.erase(ListNbArg.begin());
 
     int i = 0;
 
     for (const auto& point : points1)
     {
-		if (i == ListNbArg.at(1) - 1)
+		if (i == ListNbArg[0])
 		{
 			break;
 		}
@@ -28,19 +28,7 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
 
 		i++;
     }
-	
-	std::vector<int> newlistArg;
-	newlistArg.push_back(ListNbArg[1]);
-
-	if (ListNbArg.size() > 2)
-	{
-		for (size_t y = 2; y < ListNbArg.size(); y++)
-		{
-			int itemList = ListNbArg[y];
-			newlistArg.push_back(itemList);
-		}
-	}
-    
+	    
     AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
         AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
     pNewPline->setColorIndex(3);
@@ -81,14 +69,34 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
         delete (AcRxObject*)regions[ii];
     }
 
-	for (int a = 0; a <= listPlan.size(); a++)
+	for (int a = 0; a < listPlan.size(); a++)
 	{
-		CreationSection(pSolid, VecteurExtrusion, points1, newlistArg, listPlan, listLocationPolygonal, Agreement);
+		for (size_t i = 0; i < ListNbArg[0]; i++)
+		{
+			points1.pop_front();
+		}
 
+		ListNbArg.erase(ListNbArg.begin());
+
+		if (points1.size() > 0 && ListNbArg.size() > 0) 
+		{
+			CreationSection(pSolid, VecteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, Agreement);
+
+			/*AcDbDatabase* pDb = curDoc()->database();
+			AcDbObjectId modelId;
+			modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+			AcDbBlockTableRecord* pBlockTableRecord;
+			acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+			pBlockTableRecord->appendAcDbEntity(pSolid);
+			pBlockTableRecord->close();*/
+		}			
 	}
+
 	DeplacementObjet3D(pSolid, tranform1);
 
-    AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+	//pSolid->close();
+
+   AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
     if (Acad::eOk == es)
     {
         AcDbDatabase* pDb = curDoc()->database();
@@ -233,26 +241,19 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	Acad::ErrorStatus es;
 
 	AcGePoint3dArray ptArr;
-	ptArr.setLogicalLength((int)((nbArg.front()) - 1));
-
-	Vec3 pointOrigine = points1.front();
-
-	for (size_t i = 1; i < nbArg[0]; i++)
-	{
-		points1.pop_front();
-	}
+	ptArr.setLogicalLength((int)((nbArg.front())));
 
 	int i = 0;
 
 	for (const auto& point : points1)
 	{
-		if (i == nbArg[1] - nbArg[0])
+		if (i == nbArg[0])
 		{
 			break;
 		}
 
-		ptArr[i].set(point.x() * -1, point.y() * -1, point.z() * -1);
-		acutPrintf(_T("point : [%f, %f, %f]\n"), point.x() * -1, point.y() * -1, point.z() * -1);
+		ptArr[i].set(point.x() * -1.0f, point.y() * -1.0f, point.z() * -1.0f);
+		acutPrintf(_T("point : [%f, %f, %f]\n"), point.x() * -1.0f, point.y() * -1.0f, point.z() * -1.0f);
 		i++;
 	}
 
@@ -299,7 +300,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 		delete (AcRxObject*)regions[ii];
 	}
 
-	//DeplacementObjet3D(pSolid, listLocationPolygonal.front());
+	DeplacementObjet3D(pSolid, listLocationPolygonal.front());
 	acutPrintf(_T("Matrice : \n{ %f, %f, %f, %f,\n %f, %f, %f, %f,\n %f, %f, %f, %f,\n %f, %f, %f, %f,\n"),
 		listLocationPolygonal.front()[0], listLocationPolygonal.front()[1], listLocationPolygonal.front()[2], listLocationPolygonal.front()[3],
 		listLocationPolygonal.front()[4], listLocationPolygonal.front()[5], listLocationPolygonal.front()[6], listLocationPolygonal.front()[7],
@@ -382,6 +383,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 
 	AcDb3dSolid* negSolid = new AcDb3dSolid();
 
+	Poly_plane.set(Poly_plane.pointOnPlane(), Poly_plane.normal().negate());
 	
 	extrusion->getSlice(Poly_plane, Agreement, pSolid);
 
