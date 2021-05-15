@@ -174,16 +174,16 @@ void test()
     ComputePlacementVisitor placementVisitor;
 
     int count = 0;
-    for (auto& wall : expressDataSet->getAllIfcWall())
+    for (auto& buildingElement : expressDataSet->getAllIfcBuildingElement())
     {
         count++;
+        int key = (int)buildingElement.getKey();
 
         acutPrintf(_T("    => Wall %d\n"), count);
 
         CreateConstructionPointVisitor visitor1;
-        int key = (int)wall.getKey();
         acutPrintf(_T("Index : %i\n"), key);
-        wall.acceptVisitor(&visitor1);
+        buildingElement.acceptVisitor(&visitor1);
 
         std::list<Vec3> points1 = visitor1.getPoints();
         for (const auto& point : points1)
@@ -203,10 +203,11 @@ void test()
         bool Agreement = visitor1.getAgreementBool();
         acutPrintf(_T("Agreement : %b\n"), Agreement);
 
-        wall.acceptVisitor(&placementVisitor);
+        buildingElement.acceptVisitor(&placementVisitor);
         Matrix4 transform1 = placementVisitor.getTransformation();
 
-        createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, Agreement);
+        if (points1.size() > 0 && ListNbArg.size() > 0)
+            createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, Agreement);
     }
 
     acutPrintf(_T("\nFailure : %d\nSuccess : %d\n"), failure_results, success_results);

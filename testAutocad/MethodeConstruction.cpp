@@ -9,11 +9,15 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
     ads_point ptres;
 
     AcGePoint3dArray ptArr;
-    ptArr.setLogicalLength((int)((ListNbArg.at(1))));
 
-    Vec3 pointOrigine = *points1.begin();
-    points1.pop_front();
-	ListNbArg.erase(ListNbArg.begin());
+	if (ListNbArg.size() > 1)
+	{
+		ListNbArg.erase(ListNbArg.begin());
+		points1.pop_front();
+	}
+
+	ptArr.setLogicalLength(ListNbArg[0]);
+	Vec3 pointOrigine = { tranform1[12], tranform1[13] , tranform1[14] };
 
     int i = 0;
 
