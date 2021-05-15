@@ -69,7 +69,9 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
         delete (AcRxObject*)regions[ii];
     }
 
-	for (int a = 0; a < listPlan.size(); a++)
+	int nbPlan = listPlan.size();
+
+	for (int a = 0; a < nbPlan; a++)
 	{
 		for (size_t i = 0; i < ListNbArg[0]; i++)
 		{
@@ -82,6 +84,7 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
 		{
 			CreationSection(pSolid, VecteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, Agreement);
 
+			listPlan.pop_front();
 			/*AcDbDatabase* pDb = curDoc()->database();
 			AcDbObjectId modelId;
 			modelId = acdbSymUtil()->blockModelSpaceId(pDb);
@@ -309,13 +312,13 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
-	AcDbDatabase* pDb = curDoc()->database();
+	/*AcDbDatabase* pDb = curDoc()->database();
 	AcDbObjectId modelId;
 	modelId = acdbSymUtil()->blockModelSpaceId(pDb);
 	AcDbBlockTableRecord* pBlockTableRecord;
 	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
 	pBlockTableRecord->appendAcDbEntity(pSolid);
-	pBlockTableRecord->close();
+	pBlockTableRecord->close();*/
 
 	pSolid->close();
 	
@@ -391,5 +394,4 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	//extrusion.setColor(2);
 
 	//pSolid->close();
-	listPlan.pop_front();
 }

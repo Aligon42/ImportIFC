@@ -162,6 +162,10 @@ bool CreateConstructionPointVisitor::visitIfcHalfSpaceSolid(
     {
         value->getBaseSurface()->acceptVisitor(this);
     }
+    if (value->testAgreementFlag())
+    {
+        Agreement = value->getAgreementFlag();
+    }
 
     return true;
 }
