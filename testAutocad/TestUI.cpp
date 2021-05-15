@@ -174,7 +174,7 @@ void test()
     ComputePlacementVisitor placementVisitor;
 
     int count = 0;
-    for (auto& wall : expressDataSet->getAllIfcWall())
+    for (auto& wall : expressDataSet->getAllIfcProduct())
     {
         count++;
 
@@ -206,7 +206,10 @@ void test()
         wall.acceptVisitor(&placementVisitor);
         Matrix4 transform1 = placementVisitor.getTransformation();
 
-        createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, Agreement);
+        if (ListNbArg.size() > 1)
+        {
+            createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, Agreement);
+        }
     }
 
     acutPrintf(_T("\nFailure : %d\nSuccess : %d\n"), failure_results, success_results);
