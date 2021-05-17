@@ -206,75 +206,75 @@ bool CreateConstructionPointVisitor::visitIfcPolygonalBoundedHalfSpace(
     return false;
 }
 
-//bool CreateConstructionPointVisitor::visitIfcCompositeCurve(
-//    ifc2x3::IfcCompositeCurve* value) 
-//{
-//    if (value->testSelfIntersect())
-//    {
-//        AgreementCompositeCurve.push_back(value->getSelfIntersect());
-//    }
-//
-//    if (value->testSegments())
-//    {
-//        for (auto segment : value->getSegments())
-//        {
-//            if (segment->acceptVisitor(this))
-//            {
-//                return true;
-//            }
-//        }
-//    }
-//
-//    return false;
-//}
-//
-//bool CreateConstructionPointVisitor::visitIfcCompositeCurveSegment(
-//    ifc2x3::IfcCompositeCurveSegment* value)
-//{
-//    if (value->testTransition())
-//    {
-//        transitionCompositeCurveSegment.push_back(value->getTransition());
-//    }
-//    if (value->testSameSense())
-//    {
-//        sameSenseCompositeCurveSegment.push_back(value->getSameSense());
-//    }
-//    if (value->testParentCurve())
-//    {
-//        value->getParentCurve()->acceptVisitor(this);
-//        nameParentCurve = value->getParentCurve()->getClassType().getName();
-//        return true;
-//    }
-//
-//    return false;
-//}
-//
-//bool CreateConstructionPointVisitor::visitIfcTrimmedCurve(
-//    ifc2x3::IfcTrimmedCurve* value)
-//{
-//    if (value->testTrim1())
-//    {
-//       
-//    }
-//    if (value->testTrim2())
-//    {
-//
-//    }
-//    if (value->testSenseAgreement())
-//    {
-//        senseAgreementTrimmedCurve.push_back(value->getSenseAgreement());
-//    }
-//    if (value->testMasterRepresentation())
-//    {
-//
-//    }
-//    if (value->testBasisCurve())
-//    {
-//        value->getBasisCurve()->acceptVisitor(this);
-//    }
-//
-//    return true;
-//}
+bool CreateConstructionPointVisitor::visitIfcCompositeCurve(
+    ifc2x3::IfcCompositeCurve* value) 
+{
+    if (value->testSelfIntersect())
+    {
+        AgreementCompositeCurve.push_back(value->getSelfIntersect());
+    }
+
+    if (value->testSegments())
+    {
+        for (auto segment : value->getSegments())
+        {
+            if (segment->acceptVisitor(this))
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool CreateConstructionPointVisitor::visitIfcCompositeCurveSegment(
+    ifc2x3::IfcCompositeCurveSegment* value)
+{
+    if (value->testTransition())
+    {
+        transitionCompositeCurveSegment.push_back(value->getTransition());
+    }
+    if (value->testSameSense())
+    {
+        sameSenseCompositeCurveSegment.push_back(value->getSameSense());
+    }
+    if (value->testParentCurve())
+    {
+        value->getParentCurve()->acceptVisitor(this);
+        nameParentCurve = value->getParentCurve()->getClassType().getName();
+        return true;
+    }
+
+    return false;
+}
+
+bool CreateConstructionPointVisitor::visitIfcTrimmedCurve(
+    ifc2x3::IfcTrimmedCurve* value)
+{
+    if (value->testTrim1())
+    {
+       
+    }
+    if (value->testTrim2())
+    {
+
+    }
+    if (value->testSenseAgreement())
+    {
+        senseAgreementTrimmedCurve.push_back(value->getSenseAgreement());
+    }
+    if (value->testMasterRepresentation())
+    {
+
+    }
+    if (value->testBasisCurve())
+    {
+        value->getBasisCurve()->acceptVisitor(this);
+    }
+
+    return true;
+}
 
 bool CreateConstructionPointVisitor::visitIfcCircle(
     ifc2x3::IfcCircle* value) 

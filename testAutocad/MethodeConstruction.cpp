@@ -75,25 +75,20 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
 
 	int nbPlan = listPlan.size();
 
+
+	for (size_t i = 0; i < ListNbArg[0]; i++)
+	{
+		points1.pop_front();
+	}
+
+	ListNbArg.erase(ListNbArg.begin());
+
 	for (int a = 0; a < nbPlan; a++)
 	{
-		for (size_t i = 0; i < ListNbArg[0]; i++)
-		{
-			points1.pop_front();
-		}
-
-		ListNbArg.erase(ListNbArg.begin());
-
-		//if (points1.size() > 0 && ListNbArg.size() > 0) 
+		//if (points1.size() > 0 && ListNbArg.size() > 0)
 		//{
 			CreationSection(pSolid, VecteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal);
-
-			if (listEntityHalf.size() > 0)
-			{
-				listEntityHalf.erase(listEntityHalf.begin());
-				AgreementHalf.erase(AgreementHalf.begin());
-			}
-			
+	
 			listPlan.pop_front();
 			/*AcDbDatabase* pDb = curDoc()->database();
 			AcDbObjectId modelId;
@@ -106,6 +101,12 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
 	}
 
 	DeplacementObjet3D(pSolid, tranform1);
+
+	acutPrintf(_T("Matrice : \n{ %f, %f, %f, %f,\n %f, %f, %f, %f,\n %f, %f, %f, %f,\n %f, %f, %f, %f,\n"),
+		listLocationPolygonal.front()[0], listLocationPolygonal.front()[1], listLocationPolygonal.front()[2], listLocationPolygonal.front()[3],
+		listLocationPolygonal.front()[4], listLocationPolygonal.front()[5], listLocationPolygonal.front()[6], listLocationPolygonal.front()[7],
+		listLocationPolygonal.front()[8], listLocationPolygonal.front()[9], listLocationPolygonal.front()[10], listLocationPolygonal.front()[11],
+		listLocationPolygonal.front()[12], listLocationPolygonal.front()[13], listLocationPolygonal.front()[14], listLocationPolygonal.front()[15]);
 
 	//pSolid->close();
 
@@ -186,7 +187,7 @@ static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1) {
 
 }
 
-static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3> points1, std::vector<int> nbArg, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal)
+static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3>& points1, std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal, std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal, std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal)
 {
 
 	AcGeVector3d v1 = AcGeVector3d::AcGeVector3d(0, 0, 0);             // Vector 1 (x,y,z) & Vector 2 (x,y,z)
@@ -302,6 +303,12 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	if (listEntityHalf.size() > 0)
 	{
 		extrusion->getSlice(Poly_plane, AgreementHalf.at(0), negSolid);
+
+		if (listEntityHalf.size() > 0)
+		{
+			listEntityHalf.erase(listEntityHalf.begin());
+			AgreementHalf.erase(AgreementHalf.begin());
+		}
 	}
 	else
 	{
@@ -382,6 +389,13 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 
 		extrusion->getSlice(Poly_plane, AgreementPolygonal.at(0), pSolid);
 		extrusion->booleanOper(AcDb::kBoolSubtract, pSolid);
+
+		for (size_t i = 0; i < nbArg[0]; i++)
+		{
+			points1.pop_front();
+		}
+
+		nbArg.erase(nbArg.begin());
 	}
 	
 }
