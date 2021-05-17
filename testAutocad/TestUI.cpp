@@ -174,12 +174,12 @@ void test()
     ComputePlacementVisitor placementVisitor;
 
     int count = 0;
-    for (auto& buildingElement : expressDataSet->getAllIfcBuildingElement())
+    for (auto& buildingElement : expressDataSet->getAllIfcWall())
     {
         count++;
         int key = (int)buildingElement.getKey();
 
-        acutPrintf(_T("    => Wall %d\n"), count);
+        acutPrintf(_T("    => Element %d\n"), count);
 
         CreateConstructionPointVisitor visitor1;
         acutPrintf(_T("Index : %i\n"), key);
@@ -200,14 +200,17 @@ void test()
 
         std::list<Matrix4> listLocationPolygonal = visitor1.getLocationPolygonal();
 
-        bool Agreement = visitor1.getAgreementBool();
-        acutPrintf(_T("Agreement : %b\n"), Agreement);
+        std::vector<bool> AgreementHalf = visitor1.getAgreementHalfBool();
+        std::vector<bool> AgreementPolygonal = visitor1.getAgreementPolygonalBool();
+
+        std::vector<std::string> listEntityHalf = visitor1.getListEntityHalf();
+        std::vector<std::string> listEntityPolygonal = visitor1.getListEntityPolygonal();
 
         buildingElement.acceptVisitor(&placementVisitor);
         Matrix4 transform1 = placementVisitor.getTransformation();
 
         if (points1.size() > 0 && ListNbArg.size() > 0)
-            createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, Agreement);
+            createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal);
     }
 
     acutPrintf(_T("\nFailure : %d\nSuccess : %d\n"), failure_results, success_results);

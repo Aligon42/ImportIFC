@@ -1,6 +1,6 @@
 #include "MethodeConstruction.h"
 
-void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, Matrix4 tranform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, bool Agreement)
+void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, Matrix4 tranform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal)
 {
     Acad::ErrorStatus es;
 
@@ -84,10 +84,16 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
 
 		ListNbArg.erase(ListNbArg.begin());
 
-		if (points1.size() > 0 && ListNbArg.size() > 0) 
-		{
-			CreationSection(pSolid, VecteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, Agreement);
+		//if (points1.size() > 0 && ListNbArg.size() > 0) 
+		//{
+			CreationSection(pSolid, VecteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal);
 
+			if (listEntityHalf.size() > 0)
+			{
+				listEntityHalf.erase(listEntityHalf.begin());
+				AgreementHalf.erase(AgreementHalf.begin());
+			}
+			
 			listPlan.pop_front();
 			/*AcDbDatabase* pDb = curDoc()->database();
 			AcDbObjectId modelId;
@@ -96,7 +102,7 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
 			acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
 			pBlockTableRecord->appendAcDbEntity(pSolid);
 			pBlockTableRecord->close();*/
-		}			
+		//}			
 	}
 
 	DeplacementObjet3D(pSolid, tranform1);
@@ -180,7 +186,7 @@ static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1) {
 
 }
 
-static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3> points1, std::vector<int> nbArg, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, bool Agreement)
+static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3> points1, std::vector<int> nbArg, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal)
 {
 
 	AcGeVector3d v1 = AcGeVector3d::AcGeVector3d(0, 0, 0);             // Vector 1 (x,y,z) & Vector 2 (x,y,z)
@@ -227,105 +233,6 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	AcGePoint3d p33 = AcGePoint3d::AcGePoint3d();
 
 	AcGePoint3d p5 = AcGePoint3d::AcGePoint3d();
-
-
-
-
-
-	//switch (PLanDeSection.ElementAt(i).s_Entity_second)
-	//{
-
-
-	//case "IFCPOLYGONALBOUNDEDHALFSPACE":
-		//switch (PLanDeSection.ElementAt(i).methode)
-		//{
-		//case "IFCPOLYLINE":
-
-			/*PromptStringOptions pStrOpts = new PromptStringOptions("\nCreation de fonction ");
-			pStrOpts.AllowSpaces = true;
-			PromptResult pStrRes = acDoc.Editor.GetString(pStrOpts);*/
-
-	Acad::ErrorStatus es;
-
-	AcGePoint3dArray ptArr;
-	ptArr.setLogicalLength((int)((nbArg.front())));
-
-	int i = 0;
-
-	for (const auto& point : points1)
-	{
-		if (i == nbArg[0])
-		{
-			break;
-		}
-
-		ptArr[i].set(point.x() * -1.0f, point.y() * -1.0f, point.z() * -1.0f);
-		acutPrintf(_T("point : [%f, %f, %f]\n"), point.x() * -1.0f, point.y() * -1.0f, point.z() * -1.0f);
-		i++;
-	}
-
-	
-
-	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
-		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
-	pNewPline->setColorIndex(3);
-
-	//get the boundary curves of the polyline
-	AcDbEntity* pEntity = NULL;
-	if (pNewPline == NULL)
-	{
-		pEntity->close();
-		return;
-	}
-	AcDbVoidPtrArray lines;
-	pNewPline->explode(lines);
-	pNewPline->close();
-
-	// Create a region from the set of lines.
-	AcDbVoidPtrArray regions;
-	es = AcDbRegion::createFromCurves(lines, regions);
-	if (Acad::eOk != es)
-	{
-		pNewPline->close();
-		acutPrintf(L"\nFailed to create region\n");
-		return;
-	}
-
-	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
-
-
-	// Extrude the region to create a solid.
-	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
-
-	for (int i = 0; i < lines.length(); i++)
-	{
-		delete (AcRxObject*)lines[i];
-	}
-	for (int ii = 0; ii < regions.length(); ii++)
-	{
-		delete (AcRxObject*)regions[ii];
-	}
-
-	DeplacementObjet3D(pSolid, listLocationPolygonal.front());
-	acutPrintf(_T("Matrice : \n{ %f, %f, %f, %f,\n %f, %f, %f, %f,\n %f, %f, %f, %f,\n %f, %f, %f, %f,\n"),
-		listLocationPolygonal.front()[0], listLocationPolygonal.front()[1], listLocationPolygonal.front()[2], listLocationPolygonal.front()[3],
-		listLocationPolygonal.front()[4], listLocationPolygonal.front()[5], listLocationPolygonal.front()[6], listLocationPolygonal.front()[7],
-		listLocationPolygonal.front()[8], listLocationPolygonal.front()[9], listLocationPolygonal.front()[10], listLocationPolygonal.front()[11],
-		listLocationPolygonal.front()[12], listLocationPolygonal.front()[13], listLocationPolygonal.front()[14], listLocationPolygonal.front()[15]);
-
-
-	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
-	/*AcDbDatabase* pDb = curDoc()->database();
-	AcDbObjectId modelId;
-	modelId = acdbSymUtil()->blockModelSpaceId(pDb);
-	AcDbBlockTableRecord* pBlockTableRecord;
-	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
-	pBlockTableRecord->appendAcDbEntity(pSolid);
-	pBlockTableRecord->close();*/
-
-	pSolid->close();
-	
 
 	////Coordonnées du repère du plan
 	//p0x = float.Parse(PLanDeSection.ElementAt(i).ifcCoordonneesReperePlane[0]); 
@@ -392,10 +299,89 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 
 	Poly_plane.set(Poly_plane.pointOnPlane(), Poly_plane.normal().negate());
 	
-	extrusion->getSlice(Poly_plane, Agreement, pSolid);
+	if (listEntityHalf.size() > 0)
+	{
+		extrusion->getSlice(Poly_plane, AgreementHalf.at(0), negSolid);
+	}
+	else
+	{
+		Acad::ErrorStatus es;
 
-	extrusion->booleanOper(AcDb::kBoolSubtract, pSolid);
-	//extrusion.setColor(2);
+		AcGePoint3dArray ptArr;
+		ptArr.setLogicalLength((int)((nbArg.front())));
 
-	//pSolid->close();
+		int i = 0;
+
+		for (const auto& point : points1)
+		{
+			if (i == nbArg[0])
+			{
+				break;
+			}
+
+			ptArr[i].set(point.x() * -1.0f, point.y() * -1.0f, point.z() * -1.0f);
+			acutPrintf(_T("point : [%f, %f, %f]\n"), point.x() * -1.0f, point.y() * -1.0f, point.z() * -1.0f);
+			i++;
+		}
+
+
+
+		AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+			AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+		pNewPline->setColorIndex(3);
+
+		//get the boundary curves of the polyline
+		AcDbEntity* pEntity = NULL;
+		if (pNewPline == NULL)
+		{
+			pEntity->close();
+			return;
+		}
+		AcDbVoidPtrArray lines;
+		pNewPline->explode(lines);
+		pNewPline->close();
+
+		// Create a region from the set of lines.
+		AcDbVoidPtrArray regions;
+		es = AcDbRegion::createFromCurves(lines, regions);
+		if (Acad::eOk != es)
+		{
+			pNewPline->close();
+			acutPrintf(L"\nFailed to create region\n");
+			return;
+		}
+
+		AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
+
+		// Extrude the region to create a solid.
+		AcDb3dSolid* pSolid = new AcDb3dSolid();
+		es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
+
+		for (int i = 0; i < lines.length(); i++)
+		{
+			delete (AcRxObject*)lines[i];
+		}
+		for (int ii = 0; ii < regions.length(); ii++)
+		{
+			delete (AcRxObject*)regions[ii];
+		}
+
+		DeplacementObjet3D(pSolid, listLocationPolygonal.front());
+
+		AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+		/*AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSolid);
+		pBlockTableRecord->close();*/
+
+		pSolid->close();
+
+		extrusion->getSlice(Poly_plane, AgreementPolygonal.at(0), pSolid);
+		extrusion->booleanOper(AcDb::kBoolSubtract, pSolid);
+	}
+	
 }

@@ -18,6 +18,9 @@ struct I_profilDef
     float webThickness;
     float flangeThickness;
     float filletRadius;
+    float flangeEdgeRadius;
+    float FlangeSlope;
+    int nbArg;
 };
 
 struct L_profilDef
@@ -28,8 +31,7 @@ struct L_profilDef
     float FilletRadius;
     float EdgeRadius;
     float LegSlope;
-    float CentreOfGravityInx;
-    float CentreOfGravityInY; 
+    int nbArg;
 };
 
 struct T_profilDef
@@ -43,7 +45,7 @@ struct T_profilDef
     float WebEdgeRadius;
     float WebSlope;
     float FlangeSlope;
-    float CentreOfGravityInY;
+    int nbArg;
 };
 
 struct U_profilDef
@@ -55,7 +57,64 @@ struct U_profilDef
     float FilletRadius;
     float EdgeRadius;
     float FlangeSlope;
-    float CentreOfGravityInY;
+    int nbArg;
+};
+
+struct C_profilDef
+{
+    float Depth;
+    float Width;
+    float WallThickness;
+    float Girth;
+    float InternalFilletRadius;
+};
+
+struct Z_profilDef
+{
+    float Depth;
+    float FlangeWidth;
+    float WebThickness;
+    float FlangeThickness;
+    float FilletRadius;
+    float EdgeRadius;
+};
+
+struct AsymmetricI_profilDef
+{
+    float OverallWidth;
+    float OverallDepth;
+    float WebThickness;
+    float FlangeThickness;
+    float FlangeFilletRadius;
+    float TopFlangeWidth;
+    float TopFlangeThickness;
+    float TopFlangeFilletRadius;
+};
+
+struct CircleHollow_profilDef
+{
+    float Radius;
+    float WallThickness;
+};
+
+struct RectangleHollow_profilDef
+{
+    float XDim;
+    float YDim;
+    float WallThickness;
+    float InnerFilletRadius;
+    float OuteerFilletRadius;
+};
+
+struct Rectangle_profilDef
+{
+    float XDim;
+    float YDim;
+};
+
+struct Circle_profilDef
+{
+    float Radius;
 };
 
 class CreateConstructionPointVisitor : public ifc2x3::InheritVisitor
@@ -64,7 +123,18 @@ private:
 
     std::list<Vec3> _points;
     Vec3 extrusionVector;
-    bool Agreement;
+    std::vector<bool> AgreementHalf;
+    std::vector<std::string> entityHalf;
+    std::vector<bool> AgreementPolygonal;
+    std::vector<std::string> entityPolygonal;
+    std::vector<bool> AgreementCompositeCurve;
+    std::vector<ifc2x3::IfcTransitionCode> transitionCompositeCurveSegment;
+    std::vector<bool> sameSenseCompositeCurveSegment;
+    std::vector<int> trim1TrimmedCurve;
+    std::vector<int> trim2TrimmedCurve;
+    std::vector<bool> senseAgreementTrimmedCurve;
+    std::string nameParentCurve;
+    std::vector<int> radiusCircle;
     Matrix4 transform;
     std::list<Matrix4> listPlan;
     std::list<Matrix4> listLocationPolygonal;
@@ -87,13 +157,26 @@ public:
     bool visitIfcMappedItem(ifc2x3::IfcMappedItem* value) override;
     bool visitIfcHalfSpaceSolid(ifc2x3::IfcHalfSpaceSolid* value) override;
     bool visitIfcPolygonalBoundedHalfSpace(ifc2x3::IfcPolygonalBoundedHalfSpace* value) override;
+    bool visitIfcCompositeCurve(ifc2x3::IfcCompositeCurve* value) override;
+    bool visitIfcCompositeCurveSegment(ifc2x3::IfcCompositeCurveSegment* value) override;
+    bool visitIfcTrimmedCurve(ifc2x3::IfcTrimmedCurve* value) override;
+    bool visitIfcCircle(ifc2x3::IfcCircle* value) override; 
     bool visitIfcRepresentationMap(ifc2x3::IfcRepresentationMap* value) override;
     bool visitIfcPlane(ifc2x3::IfcPlane* value) override;
     bool visitIfcExtrudedAreaSolid(ifc2x3::IfcExtrudedAreaSolid* value) override;
+
     //profilDef
     bool visitIfcIShapeProfileDef(ifc2x3::IfcIShapeProfileDef* value) override;
     bool visitIfcLShapeProfileDef(ifc2x3::IfcLShapeProfileDef* value) override;
     bool visitIfcTShapeProfileDef(ifc2x3::IfcTShapeProfileDef* value) override;
+    bool visitIfcUShapeProfileDef(ifc2x3::IfcUShapeProfileDef* value) override;
+    bool visitIfcCShapeProfileDef(ifc2x3::IfcCShapeProfileDef* value) override;
+    bool visitIfcZShapeProfileDef(ifc2x3::IfcZShapeProfileDef* value) override;
+    bool visitIfcAsymmetricIShapeProfileDef(ifc2x3::IfcAsymmetricIShapeProfileDef* value) override;
+    bool visitIfcCircleHollowProfileDef(ifc2x3::IfcCircleHollowProfileDef* value) override;
+    bool visitIfcRectangleHollowProfileDef(ifc2x3::IfcRectangleHollowProfileDef* value) override;
+    bool visitIfcRectangleProfileDef(ifc2x3::IfcRectangleProfileDef* value) override;
+    bool visitIfcCircleProfileDef(ifc2x3::IfcCircleProfileDef* value) override;
 
     bool visitIfcArbitraryClosedProfileDef(ifc2x3::IfcArbitraryClosedProfileDef* value) override;
     bool visitIfcPolyline(ifc2x3::IfcPolyline* value) override;
@@ -105,10 +188,13 @@ public:
 
     std::list<Vec3> getPoints() const;
     Vec3 getVectorDirection() const;
-    bool getAgreementBool() const;
+    std::vector<bool> getAgreementHalfBool() const;
+    std::vector<bool> getAgreementPolygonalBool() const;
     std::list<Matrix4> getPlanPolygonal();
     std::list<Matrix4> getLocationPolygonal() const;
     std::vector<int> getNbArgPolyline() const;
+    std::vector<std::string> getListEntityHalf() const;
+    std::vector<std::string> getListEntityPolygonal() const;
     void SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);
     void SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);
     void transformPoints(const Matrix4& transform);
