@@ -140,6 +140,7 @@ private:
     std::list<Matrix4> listLocationPolygonal;
     Matrix4 _transformation{ Matrix4::Identity() };
     std::vector<int> listNbArgPolyline;
+    I_profilDef IprofilDef;
 
     //I_profilDef
     
@@ -157,9 +158,9 @@ public:
     bool visitIfcMappedItem(ifc2x3::IfcMappedItem* value) override;
     bool visitIfcHalfSpaceSolid(ifc2x3::IfcHalfSpaceSolid* value) override;
     bool visitIfcPolygonalBoundedHalfSpace(ifc2x3::IfcPolygonalBoundedHalfSpace* value) override;
-    bool visitIfcCompositeCurve(ifc2x3::IfcCompositeCurve* value) override;
-    bool visitIfcCompositeCurveSegment(ifc2x3::IfcCompositeCurveSegment* value) override;
-    bool visitIfcTrimmedCurve(ifc2x3::IfcTrimmedCurve* value) override;
+    //bool visitIfcCompositeCurve(ifc2x3::IfcCompositeCurve* value) override;
+    //bool visitIfcCompositeCurveSegment(ifc2x3::IfcCompositeCurveSegment* value) override;
+   // bool visitIfcTrimmedCurve(ifc2x3::IfcTrimmedCurve* value) override;
     bool visitIfcCircle(ifc2x3::IfcCircle* value) override; 
     bool visitIfcRepresentationMap(ifc2x3::IfcRepresentationMap* value) override;
     bool visitIfcPlane(ifc2x3::IfcPlane* value) override;

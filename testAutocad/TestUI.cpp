@@ -174,7 +174,7 @@ void test()
     ComputePlacementVisitor placementVisitor;
 
     int count = 0;
-    for (auto& buildingElement : expressDataSet->getAllIfcWall())
+    for (auto& buildingElement : expressDataSet->getAllIfcBuildingElement())
     {
         count++;
         int key = (int)buildingElement.getKey();
@@ -183,6 +183,10 @@ void test()
 
         CreateConstructionPointVisitor visitor1;
         acutPrintf(_T("Index : %i\n"), key);
+        if (key == 108852)
+        {
+            int PA = 0;
+        }
         buildingElement.acceptVisitor(&visitor1);
 
         std::list<Vec3> points1 = visitor1.getPoints();
