@@ -85,8 +85,6 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
 
 	for (int a = 0; a < nbPlan; a++)
 	{
-		//if (points1.size() > 0 && ListNbArg.size() > 0)
-		//{
 			CreationSection(pSolid, VecteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal);
 	
 			listPlan.pop_front();
@@ -97,7 +95,7 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
 			acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
 			pBlockTableRecord->appendAcDbEntity(pSolid);
 			pBlockTableRecord->close();*/
-		//}			
+				
 	}
 
 	DeplacementObjet3D(pSolid, tranform1);
