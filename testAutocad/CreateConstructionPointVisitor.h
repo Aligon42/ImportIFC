@@ -121,8 +121,13 @@ class CreateConstructionPointVisitor : public ifc2x3::InheritVisitor
 {
 private:
 
+    Matrix4 _transformation{ Matrix4::Identity() };
+    Matrix4 transform;
+
     std::list<Vec3> _points;
     Vec3 extrusionVector;
+
+    //opération boolean
     std::vector<bool> AgreementHalf;
     std::vector<std::string> entityHalf;
     std::vector<bool> AgreementPolygonal;
@@ -135,15 +140,22 @@ private:
     std::vector<bool> senseAgreementTrimmedCurve;
     std::string nameParentCurve;
     std::vector<int> radiusCircle;
-    Matrix4 transform;
     std::list<Matrix4> listPlan;
     std::list<Matrix4> listLocationPolygonal;
-    Matrix4 _transformation{ Matrix4::Identity() };
     std::vector<int> listNbArgPolyline;
-    I_profilDef IprofilDef;
-
-    //I_profilDef
     
+    //profilDef
+    I_profilDef IprofilDef;
+    L_profilDef LprofilDef;
+    T_profilDef TprofilDef;
+    U_profilDef UprofilDef;
+    C_profilDef CprofilDef;
+    Z_profilDef ZprofilDef;
+    AsymmetricI_profilDef AsymmetricIprofilDef;
+    CircleHollow_profilDef CircleHollowprofilDef;
+    RectangleHollow_profilDef RectangleHollowprofilDef;
+    Circle_profilDef CircleprofilDef;
+    Rectangle_profilDef RectangleprofilDef;
 
 
 public:
@@ -189,6 +201,8 @@ public:
 
     std::list<Vec3> getPoints() const;
     Vec3 getVectorDirection() const;
+
+    //get opération boolean
     std::vector<bool> getAgreementHalfBool() const;
     std::vector<bool> getAgreementPolygonalBool() const;
     std::list<Matrix4> getPlanPolygonal();
@@ -196,7 +210,23 @@ public:
     std::vector<int> getNbArgPolyline() const;
     std::vector<std::string> getListEntityHalf() const;
     std::vector<std::string> getListEntityPolygonal() const;
+
+    //get profilDef
+    I_profilDef getIprofilDef() const;
+    L_profilDef getLprofilDef() const;
+    T_profilDef getTprofilDef() const;
+    U_profilDef getUprofilDef() const;
+    C_profilDef getCprofilDef() const;
+    Z_profilDef getZprofilDef() const;
+    AsymmetricI_profilDef getAsymmetricIprofilDef() const;
+    CircleHollow_profilDef getCircleHollowprofilDef() const;
+    RectangleHollow_profilDef getRectangleHollowprofilDef() const;
+    Circle_profilDef getCircleprofilDef() const;
+    Rectangle_profilDef getRectangleprofilDef() const;
+
+
     void SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);
     void SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);
     void transformPoints(const Matrix4& transform);
+
 };

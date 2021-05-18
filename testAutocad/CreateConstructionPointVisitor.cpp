@@ -732,11 +732,71 @@ std::vector<std::string> CreateConstructionPointVisitor::getListEntityPolygonal(
     return entityPolygonal;
 }
 
-//I_profilDef CreateConstructionPointVisitor::getIprofilDef() const
-//{
-//    
-//    return IprofilDef;
-//}
+I_profilDef CreateConstructionPointVisitor::getIprofilDef() const
+{
+    
+    return IprofilDef;
+}
+
+L_profilDef CreateConstructionPointVisitor::getLprofilDef() const
+{
+
+    return LprofilDef;
+}
+
+T_profilDef CreateConstructionPointVisitor::getTprofilDef() const
+{
+
+    return TprofilDef;
+}
+
+U_profilDef CreateConstructionPointVisitor::getUprofilDef() const
+{
+
+    return UprofilDef;
+}
+
+C_profilDef CreateConstructionPointVisitor::getCprofilDef() const
+{
+
+    return CprofilDef;
+}
+
+Z_profilDef CreateConstructionPointVisitor::getZprofilDef() const
+{
+
+    return ZprofilDef;
+}
+
+AsymmetricI_profilDef CreateConstructionPointVisitor::getAsymmetricIprofilDef() const
+{
+
+    return AsymmetricIprofilDef;
+}
+
+CircleHollow_profilDef CreateConstructionPointVisitor::getCircleHollowprofilDef() const
+{
+
+    return CircleHollowprofilDef;
+}
+
+RectangleHollow_profilDef CreateConstructionPointVisitor::getRectangleHollowprofilDef() const
+{
+
+    return RectangleHollowprofilDef;
+}
+
+Circle_profilDef CreateConstructionPointVisitor::getCircleprofilDef() const
+{
+
+    return CircleprofilDef;
+}
+
+Rectangle_profilDef CreateConstructionPointVisitor::getRectangleprofilDef() const
+{
+
+    return RectangleprofilDef;
+}
 
 void CreateConstructionPointVisitor::transformPoints(const Matrix4& transform)
 {
