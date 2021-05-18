@@ -7,6 +7,11 @@ CreateConstructionPointVisitor::CreateConstructionPointVisitor() :
 
 }
 
+CreateConstructionPointVisitor::~CreateConstructionPointVisitor()
+{
+    delete _profilDef;
+}
+
 bool CreateConstructionPointVisitor::visitIfcProduct(ifc2x3::IfcProduct* value)
 {
     if(value->testRepresentation())
@@ -342,7 +347,7 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
 
             transformPoints(transformation);
 
-            NameProfilDef = value->getSweptArea()->getType().getName();
+            _nameProfilDef = value->getSweptArea()->getType().getName();
 
             if(value->testExtrudedDirection())
             {
@@ -370,12 +375,14 @@ bool CreateConstructionPointVisitor::visitIfcIShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    IprofilDef.OverallWidth = (float) value->getOverallWidth();
-    IprofilDef.OverallDepth = (float)value->getOverallDepth();
-    IprofilDef.webThickness = (float)value->getWebThickness();
-    IprofilDef.flangeThickness = (float)value->getFlangeThickness();
-    IprofilDef.filletRadius = (float)value->getFilletRadius();
-    IprofilDef.nbArg = 5;
+    _profilDef = new I_profilDef(_nameProfilDef.c_str());
+
+    ((I_profilDef*)_profilDef)->OverallWidth = (float) value->getOverallWidth();
+    ((I_profilDef*)_profilDef)->OverallDepth = (float)value->getOverallDepth();
+    ((I_profilDef*)_profilDef)->webThickness = (float)value->getWebThickness();
+    ((I_profilDef*)_profilDef)->flangeThickness = (float)value->getFlangeThickness();
+    ((I_profilDef*)_profilDef)->filletRadius = (float)value->getFilletRadius();
+    ((I_profilDef*)_profilDef)->nbArg = 5;
 
     return true;
 }
@@ -388,17 +395,18 @@ bool CreateConstructionPointVisitor::visitIfcLShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
+    _profilDef = new L_profilDef(_nameProfilDef.c_str());
    
-    LprofilDef.Depth = (float)value->getDepth();
-    LprofilDef.Width = (float)value->getWidth();
-    LprofilDef.Thickness = (float)value->getThickness();
-    LprofilDef.FilletRadius = (float)value->getFilletRadius();
-    LprofilDef.EdgeRadius = (float)value->getEdgeRadius();
-    LprofilDef.nbArg = 5;
+    ((L_profilDef*)_profilDef)->Depth = (float)value->getDepth();
+    ((L_profilDef*)_profilDef)->Width = (float)value->getWidth();
+    ((L_profilDef*)_profilDef)->Thickness = (float)value->getThickness();
+    ((L_profilDef*)_profilDef)->FilletRadius = (float)value->getFilletRadius();
+    ((L_profilDef*)_profilDef)->EdgeRadius = (float)value->getEdgeRadius();
+    ((L_profilDef*)_profilDef)->nbArg = 5;
     if (value->testLegSlope())
     {
-        LprofilDef.LegSlope = (float)value->getLegSlope();
-        LprofilDef.nbArg = 6;
+        ((L_profilDef*)_profilDef)->LegSlope = (float)value->getLegSlope();
+        ((L_profilDef*)_profilDef)->nbArg = 6;
     }
     
 
@@ -413,20 +421,21 @@ bool CreateConstructionPointVisitor::visitIfcTShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
+    _profilDef = new T_profilDef(_nameProfilDef.c_str());
     
-    TprofilDef.Depth = (float)value->getDepth();
-    TprofilDef.FlangeWidth = (float)value->getFlangeWidth();
-    TprofilDef.WebThickness = (float)value->getWebThickness();
-    TprofilDef.FlangeThickness = (float)value->getFlangeThickness();
-    TprofilDef.FilletRadius = (float)value->getFilletRadius();
-    TprofilDef.FlangeEdgeRadius = (float)value->getFlangeEdgeRadius();
-    TprofilDef.WebEdgeRadius = (float)value->getWebEdgeRadius();
-    TprofilDef.nbArg = 7;
+    ((T_profilDef*)_profilDef)->Depth = (float)value->getDepth();
+    ((T_profilDef*)_profilDef)->FlangeWidth = (float)value->getFlangeWidth();
+    ((T_profilDef*)_profilDef)->WebThickness = (float)value->getWebThickness();
+    ((T_profilDef*)_profilDef)->FlangeThickness = (float)value->getFlangeThickness();
+    ((T_profilDef*)_profilDef)->FilletRadius = (float)value->getFilletRadius();
+    ((T_profilDef*)_profilDef)->FlangeEdgeRadius = (float)value->getFlangeEdgeRadius();
+    ((T_profilDef*)_profilDef)->WebEdgeRadius = (float)value->getWebEdgeRadius();
+    ((T_profilDef*)_profilDef)->nbArg = 7;
     if (value->testWebSlope() && value->testFlangeSlope())
     {
-        TprofilDef.WebSlope = (float)value->getWebSlope();
-        TprofilDef.FlangeSlope = (float)value->getFlangeSlope();
-        TprofilDef.nbArg = 9;
+        ((T_profilDef*)_profilDef)->WebSlope = (float)value->getWebSlope();
+        ((T_profilDef*)_profilDef)->FlangeSlope = (float)value->getFlangeSlope();
+        ((T_profilDef*)_profilDef)->nbArg = 9;
     }
 
     return true;
@@ -440,18 +449,19 @@ bool CreateConstructionPointVisitor::visitIfcUShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
+    _profilDef = new U_profilDef(_nameProfilDef.c_str());
     
-    UprofilDef.Depth = (float)value->getDepth();
-    UprofilDef.FlangeWidth = (float)value->getFlangeWidth();
-    UprofilDef.WebThickness = (float)value->getWebThickness();
-    UprofilDef.FlangeThickness = (float)value->getFlangeThickness();
-    UprofilDef.FilletRadius = (float)value->getFilletRadius();
-    UprofilDef.nbArg = 5;
+    ((U_profilDef*)_profilDef)->Depth = (float)value->getDepth();
+    ((U_profilDef*)_profilDef)->FlangeWidth = (float)value->getFlangeWidth();
+    ((U_profilDef*)_profilDef)->WebThickness = (float)value->getWebThickness();
+    ((U_profilDef*)_profilDef)->FlangeThickness = (float)value->getFlangeThickness();
+    ((U_profilDef*)_profilDef)->FilletRadius = (float)value->getFilletRadius();
+    ((U_profilDef*)_profilDef)->nbArg = 5;
     if (value->testEdgeRadius() && value->testFlangeSlope())
     {
-        UprofilDef.EdgeRadius = (float)value->getEdgeRadius();
-        UprofilDef.FlangeSlope = (float)value->getFlangeSlope();
-        UprofilDef.nbArg = 7;
+        ((U_profilDef*)_profilDef)->EdgeRadius = (float)value->getEdgeRadius();
+        ((U_profilDef*)_profilDef)->FlangeSlope = (float)value->getFlangeSlope();
+        ((U_profilDef*)_profilDef)->nbArg = 7;
     }
     
 
@@ -466,12 +476,13 @@ bool CreateConstructionPointVisitor::visitIfcCShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
+    _profilDef = new C_profilDef(_nameProfilDef.c_str());
     
-    CprofilDef.Depth = (float)value->getDepth();
-    CprofilDef.Width = (float)value->getWidth();
-    CprofilDef.WallThickness = (float)value->getWallThickness();
-    CprofilDef.Girth = (float)value->getGirth();
-    CprofilDef.InternalFilletRadius = (float)value->getInternalFilletRadius();
+    ((C_profilDef*)_profilDef)->Depth = (float)value->getDepth();
+    ((C_profilDef*)_profilDef)->Width = (float)value->getWidth();
+    ((C_profilDef*)_profilDef)->WallThickness = (float)value->getWallThickness();
+    ((C_profilDef*)_profilDef)->Girth = (float)value->getGirth();
+    ((C_profilDef*)_profilDef)->InternalFilletRadius = (float)value->getInternalFilletRadius();
 
     return true;
 }
@@ -484,13 +495,14 @@ bool CreateConstructionPointVisitor::visitIfcZShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
+    _profilDef = new Z_profilDef(_nameProfilDef.c_str());
     
-    ZprofilDef.Depth = (float)value->getDepth();
-    ZprofilDef.FlangeWidth = (float)value->getFlangeWidth();
-    ZprofilDef.WebThickness = (float)value->getWebThickness();
-    ZprofilDef.FlangeThickness = (float)value->getFlangeThickness();
-    ZprofilDef.FilletRadius = (float)value->getFilletRadius();
-    ZprofilDef.EdgeRadius = (float)value->getEdgeRadius();
+    ((Z_profilDef*)_profilDef)->Depth = (float)value->getDepth();
+    ((Z_profilDef*)_profilDef)->FlangeWidth = (float)value->getFlangeWidth();
+    ((Z_profilDef*)_profilDef)->WebThickness = (float)value->getWebThickness();
+    ((Z_profilDef*)_profilDef)->FlangeThickness = (float)value->getFlangeThickness();
+    ((Z_profilDef*)_profilDef)->FilletRadius = (float)value->getFilletRadius();
+    ((Z_profilDef*)_profilDef)->EdgeRadius = (float)value->getEdgeRadius();
 
     return true;
 }
@@ -503,15 +515,16 @@ bool CreateConstructionPointVisitor::visitIfcAsymmetricIShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
+    _profilDef = new AsymmetricI_profilDef(_nameProfilDef.c_str());
     
-    AsymmetricIprofilDef.OverallWidth = (float)value->getOverallWidth();
-    AsymmetricIprofilDef.OverallDepth = (float)value->getOverallDepth();
-    AsymmetricIprofilDef.WebThickness = (float)value->getWebThickness();
-    AsymmetricIprofilDef.FlangeThickness = (float)value->getFlangeThickness();
-    AsymmetricIprofilDef.FlangeFilletRadius = (float)value->getTopFlangeFilletRadius();
-    AsymmetricIprofilDef.TopFlangeWidth = (float)value->getTopFlangeWidth();
-    AsymmetricIprofilDef.TopFlangeThickness = (float)value->getTopFlangeThickness();
-    AsymmetricIprofilDef.TopFlangeFilletRadius = (float)value->getTopFlangeFilletRadius();
+    ((AsymmetricI_profilDef*)_profilDef)->OverallWidth = (float)value->getOverallWidth();
+    ((AsymmetricI_profilDef*)_profilDef)->OverallDepth = (float)value->getOverallDepth();
+    ((AsymmetricI_profilDef*)_profilDef)->WebThickness = (float)value->getWebThickness();
+    ((AsymmetricI_profilDef*)_profilDef)->FlangeThickness = (float)value->getFlangeThickness();
+    ((AsymmetricI_profilDef*)_profilDef)->FlangeFilletRadius = (float)value->getTopFlangeFilletRadius();
+    ((AsymmetricI_profilDef*)_profilDef)->TopFlangeWidth = (float)value->getTopFlangeWidth();
+    ((AsymmetricI_profilDef*)_profilDef)->TopFlangeThickness = (float)value->getTopFlangeThickness();
+    ((AsymmetricI_profilDef*)_profilDef)->TopFlangeFilletRadius = (float)value->getTopFlangeFilletRadius();
 
     return true;
 }
@@ -524,9 +537,10 @@ bool CreateConstructionPointVisitor::visitIfcCircleHollowProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
+    _profilDef = new CircleHollow_profilDef(_nameProfilDef.c_str());
     
-    CircleHollowprofilDef.Radius = (float)value->getRadius();
-    CircleHollowprofilDef.WallThickness = (float)value->getWallThickness();
+    ((CircleHollow_profilDef*)_profilDef)->Radius = (float)value->getRadius();
+    ((CircleHollow_profilDef*)_profilDef)->WallThickness = (float)value->getWallThickness();
 
     return true;
 }
@@ -539,12 +553,13 @@ bool CreateConstructionPointVisitor::visitIfcRectangleHollowProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
+    _profilDef = new RectangleHollow_profilDef(_nameProfilDef.c_str());
     
-    RectangleHollowprofilDef.XDim = (float)value->getXDim();
-    RectangleHollowprofilDef.YDim = (float)value->getYDim();
-    RectangleHollowprofilDef.WallThickness = (float)value->getWallThickness();
-    RectangleHollowprofilDef.InnerFilletRadius = (float)value->getInnerFilletRadius();
-    RectangleHollowprofilDef.OuteerFilletRadius = (float)value->getOuterFilletRadius();
+    ((RectangleHollow_profilDef*)_profilDef)->XDim = (float)value->getXDim();
+    ((RectangleHollow_profilDef*)_profilDef)->YDim = (float)value->getYDim();
+    ((RectangleHollow_profilDef*)_profilDef)->WallThickness = (float)value->getWallThickness();
+    ((RectangleHollow_profilDef*)_profilDef)->InnerFilletRadius = (float)value->getInnerFilletRadius();
+    ((RectangleHollow_profilDef*)_profilDef)->OuteerFilletRadius = (float)value->getOuterFilletRadius();
 
     return true;
 }
@@ -557,9 +572,10 @@ bool CreateConstructionPointVisitor::visitIfcRectangleProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
+    _profilDef = new Rectangle_profilDef(_nameProfilDef.c_str());
     
-    RectangleprofilDef.XDim = (float)value->getXDim();
-    RectangleprofilDef.YDim = (float)value->getYDim();
+    ((Rectangle_profilDef*)_profilDef)->XDim = (float)value->getXDim();
+    ((Rectangle_profilDef*)_profilDef)->YDim = (float)value->getYDim();
 
     return true;
 }
@@ -572,8 +588,9 @@ bool CreateConstructionPointVisitor::visitIfcCircleProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
+    _profilDef = new Circle_profilDef(_nameProfilDef.c_str());
     
-    CircleprofilDef.Radius = (float)value->getRadius();
+    ((Circle_profilDef*)_profilDef)->Radius = (float)value->getRadius();
 
     return true;
 }
@@ -745,80 +762,10 @@ std::vector<std::string> CreateConstructionPointVisitor::getListEntityPolygonal(
     return entityPolygonal;
 }
 
-
-//****** PROFILDEF ******
-
-I_profilDef CreateConstructionPointVisitor::getIprofilDef() const
-{
-    
-    return IprofilDef;
-}
-
-L_profilDef CreateConstructionPointVisitor::getLprofilDef() const
-{
-
-    return LprofilDef;
-}
-
-T_profilDef CreateConstructionPointVisitor::getTprofilDef() const
-{
-
-    return TprofilDef;
-}
-
-U_profilDef CreateConstructionPointVisitor::getUprofilDef() const
-{
-
-    return UprofilDef;
-}
-
-C_profilDef CreateConstructionPointVisitor::getCprofilDef() const
-{
-
-    return CprofilDef;
-}
-
-Z_profilDef CreateConstructionPointVisitor::getZprofilDef() const
-{
-
-    return ZprofilDef;
-}
-
-AsymmetricI_profilDef CreateConstructionPointVisitor::getAsymmetricIprofilDef() const
-{
-
-    return AsymmetricIprofilDef;
-}
-
-CircleHollow_profilDef CreateConstructionPointVisitor::getCircleHollowprofilDef() const
-{
-
-    return CircleHollowprofilDef;
-}
-
-RectangleHollow_profilDef CreateConstructionPointVisitor::getRectangleHollowprofilDef() const
-{
-
-    return RectangleHollowprofilDef;
-}
-
-Circle_profilDef CreateConstructionPointVisitor::getCircleprofilDef() const
-{
-
-    return CircleprofilDef;
-}
-
-Rectangle_profilDef CreateConstructionPointVisitor::getRectangleprofilDef() const
-{
-
-    return RectangleprofilDef;
-}
-
 std::string CreateConstructionPointVisitor::getNameProfildef() const
 {
-    return NameProfilDef;
+    return _nameProfilDef;
 }
-
 
 void CreateConstructionPointVisitor::transformPoints(const Matrix4& transform)
 {

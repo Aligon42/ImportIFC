@@ -25,6 +25,7 @@ static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1);
 static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3>& points1, std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal, std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal, std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal);
 
 //profilDef
+void createSolid3dProfil(BaseProfilDef* profilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
 void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
 void createSolid3dProfilIPN(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
 void createSolid3dProfilL8(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);

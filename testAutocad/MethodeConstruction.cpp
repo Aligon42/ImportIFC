@@ -400,6 +400,82 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 }
 
 
+void createSolid3dProfil(BaseProfilDef* profilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
+{
+	if (profilDef->Name == "IfcIShapeProfileDef")
+	{
+		if (((I_profilDef*)profilDef)->nbArg == 5)
+		{
+			createSolid3dProfilIPE(*(I_profilDef*)profilDef, VecteurExtrusion, transform1);
+		}
+		else
+		{
+			//createSolid3dProfilIPN(IprofilDef, VecteurExtrusion, transform1);
+		}
+	}
+	else if (profilDef->Name == "IfcLShapeProfileDef")
+	{
+		if (((L_profilDef*)profilDef)->nbArg == 5)
+		{
+			createSolid3dProfilL8(*(L_profilDef*)profilDef, VecteurExtrusion, transform1);
+		}
+		else
+		{
+			createSolid3dProfilL9(*(L_profilDef*)profilDef, VecteurExtrusion, transform1);
+		}
+	}
+	else if (profilDef->Name == "IfcTShapeProfileDef")
+	{
+		if (((T_profilDef*)profilDef)->nbArg == 7)
+		{
+			createSolid3dProfilT10(*(T_profilDef*)profilDef, VecteurExtrusion, transform1);
+		}
+		else
+		{
+			createSolid3dProfilT12(*(T_profilDef*)profilDef, VecteurExtrusion, transform1);
+		}
+	}
+	else if (profilDef->Name == "IfcUShapeProfileDef")
+	{
+		if (((U_profilDef*)profilDef)->nbArg == 5)
+		{
+			createSolid3dProfilUPE(*(U_profilDef*)profilDef, VecteurExtrusion, transform1);
+		}
+		else
+		{
+			createSolid3dProfilUPN(*(U_profilDef*)profilDef, VecteurExtrusion, transform1);
+		}
+	}
+	else if (profilDef->Name == "IfcCShapeProfileDef")
+	{
+		createSolid3dProfilC(*(C_profilDef*)profilDef, VecteurExtrusion, transform1);
+	}
+	else if (profilDef->Name == "IfcZShapeProfileDef")
+	{
+		createSolid3dProfilZ(*(Z_profilDef*)profilDef, VecteurExtrusion, transform1);
+	}
+	else if (profilDef->Name == "IfcAsymmetricIShapeProfileDef")
+	{
+		createSolid3dProfilAsyI(*(AsymmetricI_profilDef*)profilDef, VecteurExtrusion, transform1);
+	}
+	else if (profilDef->Name == "IfcCircleHollowShapeProfileDef")
+	{
+		createSolid3dProfilCircHollow(*(CircleHollow_profilDef*)profilDef, VecteurExtrusion, transform1);
+	}
+	else if (profilDef->Name == "IfcRectangleHollowShapeProfileDef")
+	{
+		createSolid3dProfilRectHollow(*(RectangleHollow_profilDef*)profilDef, VecteurExtrusion, transform1);
+	}
+	else if (profilDef->Name == "IfcCircleShapeProfileDef")
+	{
+		createSolid3dProfilCircle(*(Circle_profilDef*)profilDef, VecteurExtrusion, transform1);
+	}
+	else if (profilDef->Name == "IfcRectangleShapeProfileDef")
+	{
+		createSolid3dProfilRectangle(*(Rectangle_profilDef*)profilDef, VecteurExtrusion, transform1);
+	}
+}
+
 void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
 {
 

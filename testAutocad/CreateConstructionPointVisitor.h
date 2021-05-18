@@ -8,114 +8,10 @@
 #include <mathfu/vector_3.h>
 #include <mathfu/matrix_4x4.h>
 
+#include "ProfilDef.h"
+
 typedef mathfu::Vector<float, 3> Vec3;
 typedef mathfu::Matrix<float, 4> Matrix4;
-
-struct I_profilDef
-{
-    float OverallWidth;
-    float OverallDepth;
-    float webThickness;
-    float flangeThickness;
-    float filletRadius;
-    float flangeEdgeRadius;
-    float FlangeSlope;
-    int nbArg;
-};
-
-struct L_profilDef
-{
-    float Depth;
-    float Width;
-    float Thickness;
-    float FilletRadius;
-    float EdgeRadius;
-    float LegSlope;
-    int nbArg;
-};
-
-struct T_profilDef
-{
-    float Depth;
-    float FlangeWidth;
-    float WebThickness;
-    float FlangeThickness;
-    float FilletRadius;
-    float FlangeEdgeRadius;
-    float WebEdgeRadius;
-    float WebSlope;
-    float FlangeSlope;
-    int nbArg;
-};
-
-struct U_profilDef
-{
-    float Depth;
-    float FlangeWidth;
-    float WebThickness;
-    float FlangeThickness;
-    float FilletRadius;
-    float EdgeRadius;
-    float FlangeSlope;
-    int nbArg;
-};
-
-struct C_profilDef
-{
-    float Depth;
-    float Width;
-    float WallThickness;
-    float Girth;
-    float InternalFilletRadius;
-};
-
-struct Z_profilDef
-{
-    float Depth;
-    float FlangeWidth;
-    float WebThickness;
-    float FlangeThickness;
-    float FilletRadius;
-    float EdgeRadius;
-};
-
-struct AsymmetricI_profilDef
-{
-    float OverallWidth;
-    float OverallDepth;
-    float WebThickness;
-    float FlangeThickness;
-    float FlangeFilletRadius;
-    float TopFlangeWidth;
-    float TopFlangeThickness;
-    float TopFlangeFilletRadius;
-};
-
-struct CircleHollow_profilDef
-{
-    float Radius;
-    float WallThickness;
-};
-
-struct RectangleHollow_profilDef
-{
-    float XDim;
-    float YDim;
-    float WallThickness;
-    float InnerFilletRadius;
-    float OuteerFilletRadius;
-};
-
-struct Rectangle_profilDef
-{
-    float XDim;
-    float YDim;
-};
-
-struct Circle_profilDef
-{
-    float Radius;
-};
 
 class CreateConstructionPointVisitor : public ifc2x3::InheritVisitor
 {
@@ -146,23 +42,14 @@ private:
     std::vector<int> listNbArgPolyline;
     
     //profilDef
-    std::string NameProfilDef;
-    I_profilDef IprofilDef;
-    L_profilDef LprofilDef;
-    T_profilDef TprofilDef;
-    U_profilDef UprofilDef;
-    C_profilDef CprofilDef;
-    Z_profilDef ZprofilDef;
-    AsymmetricI_profilDef AsymmetricIprofilDef; 
-    CircleHollow_profilDef CircleHollowprofilDef;
-    RectangleHollow_profilDef RectangleHollowprofilDef;
-    Circle_profilDef CircleprofilDef;
-    Rectangle_profilDef RectangleprofilDef;
+    std::string _nameProfilDef;
+    BaseProfilDef* _profilDef;
 
 
 public:
     //! Constructor
     CreateConstructionPointVisitor();
+    ~CreateConstructionPointVisitor();
 
     bool visitIfcProduct(ifc2x3::IfcProduct* value) override;
     bool visitIfcProductRepresentation(ifc2x3::IfcProductRepresentation* value) override;
@@ -215,17 +102,7 @@ public:
     std::vector<std::string> getListEntityPolygonal() const;
 
     //get profilDef
-    I_profilDef getIprofilDef() const;
-    L_profilDef getLprofilDef() const;
-    T_profilDef getTprofilDef() const;
-    U_profilDef getUprofilDef() const;
-    C_profilDef getCprofilDef() const;
-    Z_profilDef getZprofilDef() const;
-    AsymmetricI_profilDef getAsymmetricIprofilDef() const;
-    CircleHollow_profilDef getCircleHollowprofilDef() const;
-    RectangleHollow_profilDef getRectangleHollowprofilDef() const;
-    Circle_profilDef getCircleprofilDef() const;
-    Rectangle_profilDef getRectangleprofilDef() const;
+    BaseProfilDef* GetProfilDef() { return _profilDef; }
     std::string getNameProfildef() const;
     int getnbArgIProfilDef() const;
 
