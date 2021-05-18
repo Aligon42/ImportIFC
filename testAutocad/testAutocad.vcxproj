@@ -80,7 +80,6 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>bin\$(Configuration)\</OutDir>
     <IntDir>bin-int\$(Configuration)\</IntDir>
-    <TargetExt>.arx</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
