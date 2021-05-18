@@ -26,17 +26,17 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 
 //profilDef
 void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-void createSolid3dProfilIPN(I_profilDef IprofilDef, Matrix4 transform1);
-void createSolid3dProfilL8(L_profilDef LprofilDef, Matrix4 transform1);
-void createSolid3dProfilL9(L_profilDef LprofilDef, Matrix4 transform1);
-void createSolid3dProfilT10(T_profilDef TprofilDef, Matrix4 transform1);
-void createSolid3dProfilT12(T_profilDef TprofilDef, Matrix4 transform1);
-void createSolid3dProfilUPE(U_profilDef UprofilDef, Matrix4 transform1);
-void createSolid3dProfilUPN(U_profilDef UprofilDef, Matrix4 transform1);
-void createSolid3dProfilC(C_profilDef CprofilDef, Matrix4 transform1);
-void createSolid3dProfilZ(Z_profilDef ZprofilDef, Matrix4 transform1);
-void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Matrix4 transform1);
-void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, Matrix4 transform1);
-void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Matrix4 transform1);
-void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Matrix4 transform1);
-void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Matrix4 transform1);
+void createSolid3dProfilIPN(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+void createSolid3dProfilL8(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+void createSolid3dProfilL9(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+void createSolid3dProfilT10(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+void createSolid3dProfilT12(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+void createSolid3dProfilUPE(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+void createSolid3dProfilUPN(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+void createSolid3dProfilC(C_profilDef CprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+void createSolid3dProfilZ(Z_profilDef ZprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);

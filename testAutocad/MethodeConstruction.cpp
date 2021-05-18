@@ -496,7 +496,7 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matri
 	}
 }
 
-void createSolid3dProfilIPN(I_profilDef IprofilDef, Matrix4 transform1)
+void createSolid3dProfilIPN(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
 {
 
 	Acad::ErrorStatus es;
@@ -505,11 +505,11 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, Matrix4 transform1)
 
 	AcGePoint3dArray ptArr;
 
-	float Width = 143;
-	float Depth = 360;
-	float WebThickness = 13;
-	float FlangeThickness = 19.5;
-	float FlangeSlope = 0.13962634;
+	float Width = IprofilDef.OverallWidth;
+	float Depth = IprofilDef.OverallDepth;
+	float WebThickness = IprofilDef.webThickness;
+	float FlangeThickness = IprofilDef.flangeThickness;
+	float FlangeSlope = IprofilDef.FlangeSlope;
 
 	float dy = (Width - Width / 4) * tan(FlangeSlope);
 
@@ -566,7 +566,7 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, Matrix4 transform1)
 
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, 10.0, 0.0);
+	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -577,6 +577,9 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, Matrix4 transform1)
 	{
 		delete (AcRxObject*)regions[ii];
 	}
+
+	DeplacementObjet3D(pSolid, transform1);
+
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
 	if (Acad::eOk == es)
@@ -596,7 +599,7 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, Matrix4 transform1)
 	}
 }
 
-void createSolid3dProfilL8(L_profilDef LprofilDef, Matrix4 transform1)
+void createSolid3dProfilL8(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
 {
 
 	Acad::ErrorStatus es;
@@ -605,10 +608,10 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, Matrix4 transform1)
 
 	AcGePoint3dArray ptArr;
 
-	float Depth = 60;
-	float Width = 60;
-	float Thickness = 6;
-	float FilletRadius = 8;
+	float Depth = LprofilDef.Depth;
+	float Width = LprofilDef.Width;
+	float Thickness = LprofilDef.Thickness;
+	float FilletRadius = LprofilDef.FilletRadius;
 
 	ptArr.setLogicalLength(6);
 
@@ -654,7 +657,7 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, Matrix4 transform1)
 
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, 10.0, 0.0);
+	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -665,6 +668,9 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, Matrix4 transform1)
 	{
 		delete (AcRxObject*)regions[ii];
 	}
+
+	DeplacementObjet3D(pSolid, transform1);
+
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
 	if (Acad::eOk == es)
@@ -684,7 +690,7 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, Matrix4 transform1)
 	}
 }
 
-void createSolid3dProfilL9(L_profilDef LprofilDef, Matrix4 transform1)
+void createSolid3dProfilL9(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
 {
 
 	Acad::ErrorStatus es;
@@ -693,11 +699,11 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, Matrix4 transform1)
 
 	AcGePoint3dArray ptArr;
 
-	float Depth = 60;
-	float Width = 40;
-	float Thickness = 6;
-	float FilletRadius = 8;
-	float LegSlope = 2;
+	float Depth = LprofilDef.Depth;
+	float Width = LprofilDef.Width;
+	float Thickness = LprofilDef.Thickness;
+	float FilletRadius = LprofilDef.FilletRadius;
+	float LegSlope = LprofilDef.LegSlope;
 
 	double dy = (Width - Thickness) * tan(LegSlope);
 
@@ -745,7 +751,7 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, Matrix4 transform1)
 
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, 10.0, 0.0);
+	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -756,6 +762,9 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, Matrix4 transform1)
 	{
 		delete (AcRxObject*)regions[ii];
 	}
+
+	DeplacementObjet3D(pSolid, transform1);
+
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
 	if (Acad::eOk == es)
@@ -775,7 +784,7 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, Matrix4 transform1)
 	}
 }
 
-void createSolid3dProfilT10(T_profilDef TprofilDef, Matrix4 transform1)
+void createSolid3dProfilT10(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
 {
 
 	Acad::ErrorStatus es;
@@ -784,11 +793,11 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, Matrix4 transform1)
 
 	AcGePoint3dArray ptArr;
 
-	float Depth = 140;
-	float Width = 140;
-	float WebThickness = 15;
-	float FlangeThickness = 15;
-	float FilletRadius = 15;
+	float Depth = TprofilDef.Depth;
+	float Width = TprofilDef.FlangeWidth;
+	float WebThickness = TprofilDef.WebThickness;
+	float FlangeThickness = TprofilDef.FlangeThickness;
+	float FilletRadius = TprofilDef.FilletRadius;
 
 	ptArr.setLogicalLength(8);
 
@@ -836,7 +845,7 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, Matrix4 transform1)
 
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, 10.0, 0.0);
+	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -847,6 +856,9 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, Matrix4 transform1)
 	{
 		delete (AcRxObject*)regions[ii];
 	}
+
+	DeplacementObjet3D(pSolid, transform1);
+
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
 	if (Acad::eOk == es)
@@ -866,7 +878,7 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, Matrix4 transform1)
 	}
 }
 
-void createSolid3dProfilT12(T_profilDef TprofilDef, Matrix4 transform1)
+void createSolid3dProfilT12(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
 {
 
 	Acad::ErrorStatus es;
@@ -875,13 +887,13 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, Matrix4 transform1)
 
 	AcGePoint3dArray ptArr;
 
-	float Depth = 140;
-	float Width = 140;
-	float WebThickness = 15;
-	float FlangeThickness = 15;
-	float FilletRadius = 15;
-	float WebSlope​ = 2;
-	float FlangeSlope = 2;
+	float Depth = TprofilDef.Depth;
+	float Width = TprofilDef.FlangeWidth;
+	float WebThickness = TprofilDef.WebThickness;
+	float FlangeThickness = TprofilDef.FlangeThickness;
+	float FilletRadius = TprofilDef.FilletRadius;
+	float WebSlope​ = TprofilDef.WebSlope;
+	float FlangeSlope = TprofilDef.FlangeSlope;
 
 	double dy1 = (Width - FlangeThickness) * tan(FlangeSlope);
 	double dy2 = (Depth - WebThickness) * tan(WebSlope​);
@@ -932,7 +944,7 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, Matrix4 transform1)
 
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, 10.0, 0.0);
+	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -943,6 +955,9 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, Matrix4 transform1)
 	{
 		delete (AcRxObject*)regions[ii];
 	}
+
+	DeplacementObjet3D(pSolid, transform1);
+
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
 	if (Acad::eOk == es)
@@ -962,7 +977,7 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, Matrix4 transform1)
 	}
 }
 
-void createSolid3dProfilUPE(U_profilDef UprofilDef, Matrix4 transform1)
+void createSolid3dProfilUPE(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
 {
 
 	Acad::ErrorStatus es;
@@ -971,11 +986,11 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, Matrix4 transform1)
 
 	AcGePoint3dArray ptArr;
 
-	float Depth = 360;
-	float Width = 110;
-	float WebThickness = 12;
-	float FlangeThickness = 17;
-	float FilletRadius = 15;
+	float Depth = UprofilDef.Depth;
+	float Width = UprofilDef.FlangeWidth;
+	float WebThickness = UprofilDef.WebThickness;
+	float FlangeThickness = UprofilDef.FlangeThickness;
+	float FilletRadius = UprofilDef.FilletRadius;
 
 	ptArr.setLogicalLength(8);
 
@@ -1023,7 +1038,7 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, Matrix4 transform1)
 
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, 10.0, 0.0);
+	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -1034,6 +1049,9 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, Matrix4 transform1)
 	{
 		delete (AcRxObject*)regions[ii];
 	}
+
+	DeplacementObjet3D(pSolid, transform1);
+
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
 	if (Acad::eOk == es)
@@ -1053,7 +1071,7 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, Matrix4 transform1)
 	}
 }
 
-void createSolid3dProfilUPN(U_profilDef UprofilDef, Matrix4 transform1)
+void createSolid3dProfilUPN(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
 {
 
 	Acad::ErrorStatus es;
@@ -1062,11 +1080,11 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, Matrix4 transform1)
 
 	AcGePoint3dArray ptArr;
 
-	float Depth = 360;
-	float Width = 110;
-	float WebThickness = 12;
-	float FlangeThickness = 17;
-	float FilletRadius = 15;
+	float Depth = UprofilDef.Depth;
+	float Width = UprofilDef.FlangeWidth;
+	float WebThickness = UprofilDef.WebThickness;
+	float FlangeThickness = UprofilDef.FlangeThickness;
+	float FilletRadius = UprofilDef.FilletRadius;
 
 	ptArr.setLogicalLength(8);
 
@@ -1114,7 +1132,7 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, Matrix4 transform1)
 
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, 10.0, 0.0);
+	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -1125,6 +1143,9 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, Matrix4 transform1)
 	{
 		delete (AcRxObject*)regions[ii];
 	}
+
+	DeplacementObjet3D(pSolid, transform1);
+
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
 	if (Acad::eOk == es)
@@ -1144,7 +1165,7 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, Matrix4 transform1)
 	}
 }
 
-void createSolid3dProfilC(C_profilDef CprofilDef, Matrix4 transform1)
+void createSolid3dProfilC(C_profilDef CprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
 {
 
 	Acad::ErrorStatus es;
@@ -1153,10 +1174,10 @@ void createSolid3dProfilC(C_profilDef CprofilDef, Matrix4 transform1)
 
 	AcGePoint3dArray ptArr;
 
-	float Depth = 24;
-	float Width = 5.2;
-	float WallThickness = 1;
-	float Girth = 3.25;
+	float Depth = CprofilDef.Depth;
+	float Width = CprofilDef.Width;
+	float WallThickness = CprofilDef.WallThickness;
+	float Girth = CprofilDef.Depth;
 	//float FilletRadius = 15;
 
 	ptArr.setLogicalLength(12);
@@ -1209,7 +1230,7 @@ void createSolid3dProfilC(C_profilDef CprofilDef, Matrix4 transform1)
 
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, 10.0, 0.0);
+	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -1220,6 +1241,9 @@ void createSolid3dProfilC(C_profilDef CprofilDef, Matrix4 transform1)
 	{
 		delete (AcRxObject*)regions[ii];
 	}
+
+	DeplacementObjet3D(pSolid, transform1);
+
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
 	if (Acad::eOk == es)
@@ -1239,7 +1263,7 @@ void createSolid3dProfilC(C_profilDef CprofilDef, Matrix4 transform1)
 	}
 }
 
-void createSolid3dProfilZ(Z_profilDef ZprofilDef, Matrix4 transform1)
+void createSolid3dProfilZ(Z_profilDef ZprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
 {
 
 	Acad::ErrorStatus es;
@@ -1248,10 +1272,10 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, Matrix4 transform1)
 
 	AcGePoint3dArray ptArr;
 
-	float Depth = 40;
-	float Width = 30;
-	float WebThickness = 5;
-	float FlangeThickness = 5;
+	float Depth = ZprofilDef.Depth;
+	float Width = ZprofilDef.FlangeWidth;
+	float WebThickness = ZprofilDef.WebThickness;
+	float FlangeThickness = ZprofilDef.FlangeThickness;
 	//float FilletRadius = 15;
 
 	ptArr.setLogicalLength(9);
@@ -1301,7 +1325,7 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, Matrix4 transform1)
 
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, 10.0, 0.0);
+	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -1312,6 +1336,9 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, Matrix4 transform1)
 	{
 		delete (AcRxObject*)regions[ii];
 	}
+
+	DeplacementObjet3D(pSolid, transform1);
+
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
 	if (Acad::eOk == es)
@@ -1331,7 +1358,7 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, Matrix4 transform1)
 	}
 }
 
-void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Matrix4 transform1)
+void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
 {
 
 
@@ -1341,12 +1368,12 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Matrix4
 
 	AcGePoint3dArray ptArr;
 
-	float BottomFlangeWidth = 200;
-	float OverallDepth = 400;
-	float WebThickness = 10;
-	float BottomFlangeThickness = 10;
-	float TopFlangeWidth = 100;
-	float TopFlangeThickness = 5;
+	float BottomFlangeWidth = AsymmetricIprofilDef.OverallWidth;
+	float OverallDepth = AsymmetricIprofilDef.OverallDepth;
+	float WebThickness = AsymmetricIprofilDef.WebThickness;
+	float BottomFlangeThickness = AsymmetricIprofilDef.FlangeThickness;
+	float TopFlangeWidth = AsymmetricIprofilDef.TopFlangeWidth;
+	float TopFlangeThickness = AsymmetricIprofilDef.TopFlangeThickness;
 	float TopMinus = (BottomFlangeWidth - TopFlangeWidth) / 2;
 
 
@@ -1400,7 +1427,7 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Matrix4
 
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, 10.0, 0.0);
+	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -1411,6 +1438,9 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Matrix4
 	{
 		delete (AcRxObject*)regions[ii];
 	}
+
+	DeplacementObjet3D(pSolid, transform1);
+
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
 	if (Acad::eOk == es)
@@ -1430,7 +1460,7 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Matrix4
 	}
 }
 
-void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, Matrix4 transform1) {
+void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1) {
 
 	Acad::ErrorStatus es;
 	ads_name polyName;
@@ -1439,8 +1469,8 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 
 	AcGePoint3dArray ptArr2;
 
-	float Radius = 34;
-	float WallThickness = 4;
+	float Radius = CircleHollowprofilDef.Radius;
+	float WallThickness = CircleHollowprofilDef.WallThickness;
 
 	AcGePoint3d center = AcGePoint3d::AcGePoint3d(Radius, Radius, 0);
 	/// <summary>
@@ -1517,7 +1547,7 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion1, 10.0, 0.0);
+	es = pSolid->extrude(pRegion1, VecteurExtrusion.z(), 0.0);
 
 	for (int i = 0; i < lines1.length(); i++)
 	{
@@ -1528,6 +1558,8 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	{
 		delete (AcRxObject*)regions1[ii];
 	}
+
+	DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -1549,7 +1581,7 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 
 }
 
-void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Matrix4 transform1) {
+void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1) {
 
 	Acad::ErrorStatus es;
 	ads_name polyName;
@@ -1558,9 +1590,9 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 	AcGePoint3dArray ptArr1;
 	AcGePoint3dArray ptArr2;
 
-	float XDim = 100;
-	float YDim = 60;
-	float WallThickness = 2.5;
+	float XDim = RectangleHollowprofilDef.XDim;
+	float YDim = RectangleHollowprofilDef.YDim;
+	float WallThickness = RectangleHollowprofilDef.WallThickness;
 
 	/// <summary>
 	/// Première polyline
@@ -1644,13 +1676,12 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 	AcDbRegion* pRegion2 = AcDbRegion::cast((AcRxObject*)regions2[0]);
 
 
-
 	pRegion1->booleanOper(AcDb::kBoolSubtract, pRegion2);
 
 
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion1, 10.0, 0.0);
+	es = pSolid->extrude(pRegion1, VecteurExtrusion.z(), 0.0);
 
 	for (int i = 0; i < lines1.length(); i++)
 	{
@@ -1672,7 +1703,7 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 		delete (AcRxObject*)regions2[yy];
 	}
 
-
+	DeplacementObjet3D(pSolid, transform1);
 
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -1695,44 +1726,27 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 
 }
 
-void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Matrix4 transform1) {
-
-
+void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1) {
 
 	Acad::ErrorStatus es;
 	ads_name polyName;
 	ads_point ptres;
-
-
-
-
 	AcGePoint3dArray ptArr2;
 
-
-
-	float Radius = 34;
-
-
+	float Radius = CircleprofilDef.Radius;
 
 	AcGePoint3d center = AcGePoint3d::AcGePoint3d(Radius, Radius, 0);
+
 	/// <summary>
 	/// Première polyline
 	/// </summary>
-
-
-
-
 	AcDbCircle* circle1 = new AcDbCircle();
 	circle1->setCenter(center);
 	circle1->setRadius(Radius);
 	circle1->setColorIndex(3);
 
-
-
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity1 = NULL;
-
-
 
 	if (circle1 == NULL)
 	{
@@ -1742,55 +1756,38 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Matrix4 transfo
 	AcDbVoidPtrArray lines1;
 	lines1.append(circle1);
 
-
-
 	//circle1->explode(lines1);
 	circle1->close();
-
-
 
 	// Create a region from the set of lines.
 	AcDbVoidPtrArray regions1;
 	es = AcDbRegion::createFromCurves(lines1, regions1);
-
-
 
 	if (Acad::eOk != es)
 	{
 		circle1->close();
 		acutPrintf(L"\nFailed to create region\n");
 		return;
-
-
-
 	}
 	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
 
-
-
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion1, 10.0, 0.0);
-
-
+	es = pSolid->extrude(pRegion1, VecteurExtrusion.z(), 0.0);
 
 	for (int i = 0; i < lines1.length(); i++)
 	{
 		delete (AcRxObject*)lines1[i];
 	}
 
-
-
 	for (int ii = 0; ii < regions1.length(); ii++)
 	{
 		delete (AcRxObject*)regions1[ii];
 	}
 
-
+	DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
-
-
 
 	if (Acad::eOk == es)
 	{
@@ -1812,7 +1809,7 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Matrix4 transfo
 
 }
 
-void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Matrix4 transform1) {
+void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1) {
 
 
 
@@ -1827,11 +1824,8 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Matrix
 
 
 
-	float XDim = 100;
-	float YDim = 60;
-	float WallThickness = 2.5;
-
-
+	float XDim = RectangleprofilDef.XDim;
+	float YDim = RectangleprofilDef.YDim;
 
 	/// <summary>
 	/// Première polyline
@@ -1891,7 +1885,7 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Matrix
 
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion1, 10.0, 0.0);
+	es = pSolid->extrude(pRegion1, VecteurExtrusion.z(), 0.0);
 
 
 
@@ -1908,7 +1902,7 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Matrix
 	}
 
 
-
+	DeplacementObjet3D(pSolid, transform1);
 
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
