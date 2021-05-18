@@ -216,7 +216,7 @@ void test()
         Matrix4 transformation = visitor1.getTransformation();
 
         transform1 *= transformation;
-       
+
         if (entity == "IfcWallStandardCase" || entity == "IfcSlab")
         {
             if (points1.size() > 0 && ListNbArg.size() > 0)
@@ -224,7 +224,10 @@ void test()
         }
         else if (entity == "IfcColumn" || entity == "IfcBeam")
         {
-            createSolid3dProfil(visitor1.GetProfilDef(), VecteurExtrusion, transform1);
+            auto profilDef = visitor1.GetProfilDef();
+            profilDef->Name = visitor1.getNameProfildef();
+
+            createSolid3dProfil(profilDef, VecteurExtrusion, transform1);
         }
     }
 

@@ -2,9 +2,7 @@
 
 struct BaseProfilDef
 {
-    const char* Name;
-
-    BaseProfilDef(const char* name) : Name(name) {}
+    std::string Name;
 };
 
 struct I_profilDef : public BaseProfilDef
@@ -17,8 +15,6 @@ struct I_profilDef : public BaseProfilDef
     float flangeEdgeRadius;
     float FlangeSlope;
     int nbArg;
-
-    I_profilDef(const char* name) : BaseProfilDef(name) { }
 };
 
 struct L_profilDef : public BaseProfilDef
@@ -30,8 +26,6 @@ struct L_profilDef : public BaseProfilDef
     float EdgeRadius;
     float LegSlope;
     int nbArg;
-
-    L_profilDef(const char* name) : BaseProfilDef(name) { }
 };
 
 struct T_profilDef : public BaseProfilDef
@@ -46,8 +40,6 @@ struct T_profilDef : public BaseProfilDef
     float WebSlope;
     float FlangeSlope;
     int nbArg;
-
-    T_profilDef(const char* name) : BaseProfilDef(name) { }
 };
 
 struct U_profilDef : public BaseProfilDef
@@ -60,8 +52,6 @@ struct U_profilDef : public BaseProfilDef
     float EdgeRadius;
     float FlangeSlope;
     int nbArg;
-
-    U_profilDef(const char* name) : BaseProfilDef(name) { }
 };
 
 struct C_profilDef : public BaseProfilDef
@@ -71,8 +61,6 @@ struct C_profilDef : public BaseProfilDef
     float WallThickness;
     float Girth;
     float InternalFilletRadius;
-
-    C_profilDef(const char* name) : BaseProfilDef(name) { }
 };
 
 struct Z_profilDef : public BaseProfilDef
@@ -83,8 +71,6 @@ struct Z_profilDef : public BaseProfilDef
     float FlangeThickness;
     float FilletRadius;
     float EdgeRadius;
-
-    Z_profilDef(const char* name) : BaseProfilDef(name) { }
 };
 
 struct AsymmetricI_profilDef : public BaseProfilDef
@@ -97,16 +83,12 @@ struct AsymmetricI_profilDef : public BaseProfilDef
     float TopFlangeWidth;
     float TopFlangeThickness;
     float TopFlangeFilletRadius;
-
-    AsymmetricI_profilDef(const char* name) : BaseProfilDef(name) { }
 };
 
 struct CircleHollow_profilDef : public BaseProfilDef
 {
     float Radius;
     float WallThickness;
-
-    CircleHollow_profilDef(const char* name) : BaseProfilDef(name) { }
 };
 
 struct RectangleHollow_profilDef : public BaseProfilDef
@@ -116,21 +98,15 @@ struct RectangleHollow_profilDef : public BaseProfilDef
     float WallThickness;
     float InnerFilletRadius;
     float OuteerFilletRadius;
-
-    RectangleHollow_profilDef(const char* name) : BaseProfilDef(name) { }
 };
 
 struct Rectangle_profilDef : public BaseProfilDef
 {
     float XDim;
     float YDim;
-
-    Rectangle_profilDef(const char* name) : BaseProfilDef(name) { }
 };
 
 struct Circle_profilDef : public BaseProfilDef
 {
     float Radius;
-
-    Circle_profilDef(const char* name) : BaseProfilDef(name) { }
 };

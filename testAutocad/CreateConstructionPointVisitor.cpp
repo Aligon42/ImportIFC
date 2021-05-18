@@ -348,6 +348,7 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
             transformPoints(transformation);
 
             _nameProfilDef = value->getSweptArea()->getType().getName();
+            const char* test = value->getSweptArea()->getType().getName().c_str();
 
             if(value->testExtrudedDirection())
             {
@@ -375,7 +376,7 @@ bool CreateConstructionPointVisitor::visitIfcIShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new I_profilDef(_nameProfilDef.c_str());
+    _profilDef = new I_profilDef();
 
     ((I_profilDef*)_profilDef)->OverallWidth = (float) value->getOverallWidth();
     ((I_profilDef*)_profilDef)->OverallDepth = (float)value->getOverallDepth();
@@ -395,7 +396,7 @@ bool CreateConstructionPointVisitor::visitIfcLShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new L_profilDef(_nameProfilDef.c_str());
+    _profilDef = new L_profilDef();
    
     ((L_profilDef*)_profilDef)->Depth = (float)value->getDepth();
     ((L_profilDef*)_profilDef)->Width = (float)value->getWidth();
@@ -421,7 +422,7 @@ bool CreateConstructionPointVisitor::visitIfcTShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new T_profilDef(_nameProfilDef.c_str());
+    _profilDef = new T_profilDef();
     
     ((T_profilDef*)_profilDef)->Depth = (float)value->getDepth();
     ((T_profilDef*)_profilDef)->FlangeWidth = (float)value->getFlangeWidth();
@@ -449,7 +450,7 @@ bool CreateConstructionPointVisitor::visitIfcUShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new U_profilDef(_nameProfilDef.c_str());
+    _profilDef = new U_profilDef();
     
     ((U_profilDef*)_profilDef)->Depth = (float)value->getDepth();
     ((U_profilDef*)_profilDef)->FlangeWidth = (float)value->getFlangeWidth();
@@ -476,7 +477,7 @@ bool CreateConstructionPointVisitor::visitIfcCShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new C_profilDef(_nameProfilDef.c_str());
+    _profilDef = new C_profilDef();
     
     ((C_profilDef*)_profilDef)->Depth = (float)value->getDepth();
     ((C_profilDef*)_profilDef)->Width = (float)value->getWidth();
@@ -495,7 +496,7 @@ bool CreateConstructionPointVisitor::visitIfcZShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new Z_profilDef(_nameProfilDef.c_str());
+    _profilDef = new Z_profilDef();
     
     ((Z_profilDef*)_profilDef)->Depth = (float)value->getDepth();
     ((Z_profilDef*)_profilDef)->FlangeWidth = (float)value->getFlangeWidth();
@@ -515,7 +516,7 @@ bool CreateConstructionPointVisitor::visitIfcAsymmetricIShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new AsymmetricI_profilDef(_nameProfilDef.c_str());
+    _profilDef = new AsymmetricI_profilDef();
     
     ((AsymmetricI_profilDef*)_profilDef)->OverallWidth = (float)value->getOverallWidth();
     ((AsymmetricI_profilDef*)_profilDef)->OverallDepth = (float)value->getOverallDepth();
@@ -537,7 +538,7 @@ bool CreateConstructionPointVisitor::visitIfcCircleHollowProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new CircleHollow_profilDef(_nameProfilDef.c_str());
+    _profilDef = new CircleHollow_profilDef();
     
     ((CircleHollow_profilDef*)_profilDef)->Radius = (float)value->getRadius();
     ((CircleHollow_profilDef*)_profilDef)->WallThickness = (float)value->getWallThickness();
@@ -553,7 +554,7 @@ bool CreateConstructionPointVisitor::visitIfcRectangleHollowProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new RectangleHollow_profilDef(_nameProfilDef.c_str());
+    _profilDef = new RectangleHollow_profilDef();
     
     ((RectangleHollow_profilDef*)_profilDef)->XDim = (float)value->getXDim();
     ((RectangleHollow_profilDef*)_profilDef)->YDim = (float)value->getYDim();
@@ -572,7 +573,7 @@ bool CreateConstructionPointVisitor::visitIfcRectangleProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new Rectangle_profilDef(_nameProfilDef.c_str());
+    _profilDef = new Rectangle_profilDef();
     
     ((Rectangle_profilDef*)_profilDef)->XDim = (float)value->getXDim();
     ((Rectangle_profilDef*)_profilDef)->YDim = (float)value->getYDim();
@@ -588,7 +589,7 @@ bool CreateConstructionPointVisitor::visitIfcCircleProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new Circle_profilDef(_nameProfilDef.c_str());
+    _profilDef = new Circle_profilDef();
     
     ((Circle_profilDef*)_profilDef)->Radius = (float)value->getRadius();
 
