@@ -225,9 +225,13 @@ void test()
         else if (entity == "IfcColumn" || entity == "IfcBeam")
         {
             auto profilDef = visitor1.GetProfilDef();
-            profilDef->Name = visitor1.getNameProfildef();
 
-            createSolid3dProfil(profilDef, VecteurExtrusion, transform1);
+            if (profilDef != nullptr)
+            {
+                profilDef->Name = visitor1.getNameProfildef();
+
+                createSolid3dProfil(profilDef, VecteurExtrusion, transform1);
+            }
         }
     }
 
