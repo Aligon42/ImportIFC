@@ -58,7 +58,8 @@ bool CreateConstructionPointVisitor::visitIfcShapeRepresentation(
     return false;
 }
 
-bool CreateConstructionPointVisitor::visitIfcBooleanClippingResult(ifc2x3::IfcBooleanClippingResult* value)
+bool CreateConstructionPointVisitor::visitIfcBooleanClippingResult(
+    ifc2x3::IfcBooleanClippingResult* value)
 {
     bool r1 = false, r2 = false;
 
@@ -336,7 +337,7 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
     {
         if(value->getSweptArea()->acceptVisitor(this))
         {
-            Matrix4 transformation = ComputePlacementVisitor::getTransformation(
+            transformation = ComputePlacementVisitor::getTransformation(
                                          value->getPosition());
 
             transformPoints(transformation);
@@ -369,7 +370,6 @@ bool CreateConstructionPointVisitor::visitIfcIShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    
     IprofilDef.OverallWidth = (float) value->getOverallWidth();
     IprofilDef.OverallDepth = (float)value->getOverallDepth();
     IprofilDef.webThickness = (float)value->getWebThickness();
@@ -388,7 +388,7 @@ bool CreateConstructionPointVisitor::visitIfcLShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    L_profilDef LprofilDef;
+   
     LprofilDef.Depth = (float)value->getDepth();
     LprofilDef.Width = (float)value->getWidth();
     LprofilDef.Thickness = (float)value->getThickness();
@@ -413,7 +413,7 @@ bool CreateConstructionPointVisitor::visitIfcTShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    T_profilDef TprofilDef;
+    
     TprofilDef.Depth = (float)value->getDepth();
     TprofilDef.FlangeWidth = (float)value->getFlangeWidth();
     TprofilDef.WebThickness = (float)value->getWebThickness();
@@ -440,7 +440,7 @@ bool CreateConstructionPointVisitor::visitIfcUShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    U_profilDef UprofilDef;
+    
     UprofilDef.Depth = (float)value->getDepth();
     UprofilDef.FlangeWidth = (float)value->getFlangeWidth();
     UprofilDef.WebThickness = (float)value->getWebThickness();
@@ -466,7 +466,7 @@ bool CreateConstructionPointVisitor::visitIfcCShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    C_profilDef CprofilDef;
+    
     CprofilDef.Depth = (float)value->getDepth();
     CprofilDef.Width = (float)value->getWidth();
     CprofilDef.WallThickness = (float)value->getWallThickness();
@@ -484,7 +484,7 @@ bool CreateConstructionPointVisitor::visitIfcZShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    Z_profilDef ZprofilDef;
+    
     ZprofilDef.Depth = (float)value->getDepth();
     ZprofilDef.FlangeWidth = (float)value->getFlangeWidth();
     ZprofilDef.WebThickness = (float)value->getWebThickness();
@@ -503,7 +503,7 @@ bool CreateConstructionPointVisitor::visitIfcAsymmetricIShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    AsymmetricI_profilDef AsymmetricIprofilDef;
+    
     AsymmetricIprofilDef.OverallWidth = (float)value->getOverallWidth();
     AsymmetricIprofilDef.OverallDepth = (float)value->getOverallDepth();
     AsymmetricIprofilDef.WebThickness = (float)value->getWebThickness();
@@ -524,9 +524,9 @@ bool CreateConstructionPointVisitor::visitIfcCircleHollowProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    CircleHollow_profilDef circleHollowProfilDef;
-    circleHollowProfilDef.Radius = (float)value->getRadius();
-    circleHollowProfilDef.WallThickness = (float)value->getWallThickness();
+    
+    CircleHollowprofilDef.Radius = (float)value->getRadius();
+    CircleHollowprofilDef.WallThickness = (float)value->getWallThickness();
 
     return true;
 }
@@ -539,12 +539,12 @@ bool CreateConstructionPointVisitor::visitIfcRectangleHollowProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    RectangleHollow_profilDef rectangleHollowProfilDef;
-    rectangleHollowProfilDef.XDim = (float)value->getXDim();
-    rectangleHollowProfilDef.YDim = (float)value->getYDim();
-    rectangleHollowProfilDef.WallThickness = (float)value->getWallThickness();
-    rectangleHollowProfilDef.InnerFilletRadius = (float)value->getInnerFilletRadius();
-    rectangleHollowProfilDef.OuteerFilletRadius = (float)value->getOuterFilletRadius();
+    
+    RectangleHollowprofilDef.XDim = (float)value->getXDim();
+    RectangleHollowprofilDef.YDim = (float)value->getYDim();
+    RectangleHollowprofilDef.WallThickness = (float)value->getWallThickness();
+    RectangleHollowprofilDef.InnerFilletRadius = (float)value->getInnerFilletRadius();
+    RectangleHollowprofilDef.OuteerFilletRadius = (float)value->getOuterFilletRadius();
 
     return true;
 }
@@ -557,9 +557,9 @@ bool CreateConstructionPointVisitor::visitIfcRectangleProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    Rectangle_profilDef rectangleProfilDef;
-    rectangleProfilDef.XDim = (float)value->getXDim();
-    rectangleProfilDef.YDim = (float)value->getYDim();
+    
+    RectangleprofilDef.XDim = (float)value->getXDim();
+    RectangleprofilDef.YDim = (float)value->getYDim();
 
     return true;
 }
@@ -572,8 +572,8 @@ bool CreateConstructionPointVisitor::visitIfcCircleProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    Circle_profilDef circleProfilDef;
-    circleProfilDef.Radius = (float)value->getRadius();
+    
+    CircleprofilDef.Radius = (float)value->getRadius();
 
     return true;
 }
@@ -702,6 +702,11 @@ Vec3 CreateConstructionPointVisitor::getVectorDirection() const
     return extrusionVector;
 }
 
+Matrix4 CreateConstructionPointVisitor::getTransformation() const
+{
+    return transformation;
+}
+
 
 //***** BOOLEAN *****
 
@@ -813,12 +818,6 @@ std::string CreateConstructionPointVisitor::getNameProfildef() const
 {
     return NameProfilDef;
 }
-
-int CreateConstructionPointVisitor::getnbArgProfilDef() const
-{
-    return nbArgProfilDef;
-}
-
 
 
 void CreateConstructionPointVisitor::transformPoints(const Matrix4& transform)

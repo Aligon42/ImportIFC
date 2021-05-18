@@ -178,7 +178,7 @@ void test()
     {
         count++;
         int key = (int)buildingElement.getKey();
-        std::string entity = buildingElement.getClassType().getName();
+        std::string entity = buildingElement.getType().getName();
 
         acutPrintf(_T("    => Element %d\n"), count);
 
@@ -213,29 +213,193 @@ void test()
 
         buildingElement.acceptVisitor(&placementVisitor);
         Matrix4 transform1 = placementVisitor.getTransformation();
-
+        Matrix4 transformation = visitor1.getTransformation();
        
-        if (entity == "IFCWALLSTANDARDCASE")
+        if (entity == "IfcWallStandardCase")
         {
             if (points1.size() > 0 && ListNbArg.size() > 0)
-                createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal);
+                createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, transformation, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal);
 
         }
-        else if (entity == "IFCCOLLUMN")
+        else if (entity == "IfcColumn")
         {
             std::string NameProfilDef = visitor1.getNameProfildef();
-            if (NameProfilDef == "IFCISHAPEPROFILDEF")
+            if (NameProfilDef == "IfcIShapeProfileDef")
             {
                 I_profilDef IprofilDef = visitor1.getIprofilDef();
-                int nbArgProfilDef = visitor1.getnbArgProfilDef();
-                if (nbArgProfilDef == 8)
+                if (IprofilDef.nbArg == 5)
                 {
                     createSolid3dProfilIPE(IprofilDef, VecteurExtrusion, transform1);
                 }
+                else
+                {
+                    //createSolid3dProfilIPN(IprofilDef, VecteurExtrusion, transform1);
+                }
+            }
+            else if (NameProfilDef == "IfcLShapeProfileDef")
+            {
+                L_profilDef LprofilDef = visitor1.getLprofilDef();
+                if (LprofilDef.nbArg == 5)
+                {
+                    createSolid3dProfilL8(LprofilDef, VecteurExtrusion, transform1);
+                }
+                else
+                {
+                    createSolid3dProfilL9(LprofilDef, VecteurExtrusion, transform1);
+                }
+            }
+            else if (NameProfilDef == "IfcTShapeProfileDef")
+            {
+                T_profilDef TprofilDef = visitor1.getTprofilDef();
+                if (TprofilDef.nbArg == 7)
+                {
+                    createSolid3dProfilT10(TprofilDef, VecteurExtrusion, transform1);
+                }
+                else
+                {
+                    createSolid3dProfilT12(TprofilDef, VecteurExtrusion, transform1);
+                }
+            }
+            else if (NameProfilDef == "IfcUShapeProfileDef")
+            {
+                U_profilDef UprofilDef = visitor1.getUprofilDef();
+                if (UprofilDef.nbArg == 5)
+                {
+                    createSolid3dProfilUPE(UprofilDef, VecteurExtrusion, transform1);
+                }
+                else
+                {
+                    createSolid3dProfilUPN(UprofilDef, VecteurExtrusion, transform1);
+                }
+            }
+            else if (NameProfilDef == "IfcCShapeProfileDef")
+            {
+                C_profilDef CprofilDef = visitor1.getCprofilDef();
+                createSolid3dProfilC(CprofilDef, VecteurExtrusion, transform1);
+            }
+            else if (NameProfilDef == "IfcZShapeProfileDef")
+            {
+                Z_profilDef ZprofilDef = visitor1.getZprofilDef();
+                createSolid3dProfilZ(ZprofilDef, VecteurExtrusion, transform1);
+            }
+            else if (NameProfilDef == "IfcAsymmetricIShapeProfileDef")
+            {
+                AsymmetricI_profilDef AsymmetricIprofilDef = visitor1.getAsymmetricIprofilDef();
+                createSolid3dProfilAsyI(AsymmetricIprofilDef, VecteurExtrusion, transform1);
+            }
+            else if (NameProfilDef == "IfcCircleHollowShapeProfileDef")
+            {
+                CircleHollow_profilDef CircleHollowProfilDef = visitor1.getCircleHollowprofilDef();
+                createSolid3dProfilCircHollow(CircleHollowProfilDef, VecteurExtrusion, transform1);
+            }
+            else if (NameProfilDef == "IfcRectangleHollowShapeProfileDef")
+            {
+                RectangleHollow_profilDef RectangleHollowProfilDef = visitor1.getRectangleHollowprofilDef();
+                createSolid3dProfilRectHollow(RectangleHollowProfilDef, VecteurExtrusion, transform1);
+            }
+            else if (NameProfilDef == "IfcCircleShapeProfileDef")
+            {
+                Circle_profilDef CircleProfilDef = visitor1.getCircleprofilDef();
+                createSolid3dProfilCircle(CircleProfilDef, VecteurExtrusion, transform1);
+            }
+            else if (NameProfilDef == "IfcRectangleShapeProfileDef")
+            {
+                Rectangle_profilDef RectangleProfilDef = visitor1.getRectangleprofilDef();
+                createSolid3dProfilRectangle(RectangleProfilDef, VecteurExtrusion, transform1);
+            }
+            
+        }
+        else if (entity == "IfcBeam")
+        {
+            std::string NameProfilDef = visitor1.getNameProfildef();
+            if (NameProfilDef == "IfcIShapeProfileDef")
+            {
+                I_profilDef IprofilDef = visitor1.getIprofilDef();
+                if (IprofilDef.nbArg == 5)
+                {
+                    createSolid3dProfilIPE(IprofilDef, VecteurExtrusion, transform1);
+                }
+                else
+                {
+                    //createSolid3dProfilIPN(IprofilDef, VecteurExtrusion, transform1);
+                }
+            }
+            else if (NameProfilDef == "IfcLShapeProfileDef")
+            {
+                L_profilDef LprofilDef = visitor1.getLprofilDef();
+                if (LprofilDef.nbArg == 5)
+                {
+                    createSolid3dProfilL8(LprofilDef, VecteurExtrusion, transform1);
+                }
+                else
+                {
+                    createSolid3dProfilL9(LprofilDef, VecteurExtrusion, transform1);
+                }
+            }
+            else if (NameProfilDef == "IfcTShapeProfileDef")
+            {
+                T_profilDef TprofilDef = visitor1.getTprofilDef();
+                if (TprofilDef.nbArg == 7)
+                {
+                    createSolid3dProfilT10(TprofilDef, VecteurExtrusion, transform1);
+                }
+                else
+                {
+                    createSolid3dProfilT12(TprofilDef, VecteurExtrusion, transform1);
+                }
+            }
+            else if (NameProfilDef == "IfcUShapeProfileDef")
+            {
+                U_profilDef UprofilDef = visitor1.getUprofilDef();
+                if (UprofilDef.nbArg == 5)
+                {
+                    createSolid3dProfilUPE(UprofilDef, VecteurExtrusion, transform1);
+                }
+                else
+                {
+                    createSolid3dProfilUPN(UprofilDef, VecteurExtrusion, transform1);
+                }
+            }
+            else if (NameProfilDef == "IfcCShapeProfileDef")
+            {
+                C_profilDef CprofilDef = visitor1.getCprofilDef();
+                createSolid3dProfilC(CprofilDef, VecteurExtrusion, transform1);
+            }
+            else if (NameProfilDef == "IfcZShapeProfileDef")
+            {
+                Z_profilDef ZprofilDef = visitor1.getZprofilDef();
+                createSolid3dProfilZ(ZprofilDef, VecteurExtrusion, transform1);
+            }
+            else if (NameProfilDef == "IfcAsymmetricIShapeProfileDef")
+            {
+                AsymmetricI_profilDef AsymmetricIprofilDef = visitor1.getAsymmetricIprofilDef();
+                createSolid3dProfilAsyI(AsymmetricIprofilDef, VecteurExtrusion, transform1);
+            }
+            else if (NameProfilDef == "IfcCircleHollowProfileDef")
+            {
+                CircleHollow_profilDef CircleHollowProfilDef = visitor1.getCircleHollowprofilDef();
+                createSolid3dProfilCircHollow(CircleHollowProfilDef, VecteurExtrusion, transform1);
+            }
+            else if (NameProfilDef == "IfcRectangleHollowProfileDef")
+            {
+                RectangleHollow_profilDef RectangleHollowProfilDef = visitor1.getRectangleHollowprofilDef();
+                createSolid3dProfilRectHollow(RectangleHollowProfilDef, VecteurExtrusion, transform1);
+            }
+            else if (NameProfilDef == "IfcCircleProfileDef")
+            {
+                Circle_profilDef CircleProfilDef = visitor1.getCircleprofilDef();
+                createSolid3dProfilCircle(CircleProfilDef, VecteurExtrusion, transform1);
+            }
+            else if (NameProfilDef == "IfcRectangleProfileDef")
+            {
+                Rectangle_profilDef RectangleProfilDef = visitor1.getRectangleprofilDef();
+                createSolid3dProfilRectangle(RectangleProfilDef, VecteurExtrusion, transform1);
             }
         }
-        else if (entity == "IFCBEAM")
+        else if (entity == "IfcSlab")
         {
+            if (points1.size() > 0 && ListNbArg.size() > 0)
+                createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, transformation, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal);
 
         }
         

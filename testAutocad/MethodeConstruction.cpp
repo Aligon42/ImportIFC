@@ -1,7 +1,7 @@
 ﻿#include "MethodeConstruction.h"
 #include "CreateConstructionPointVisitor.h"
 
-void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, Matrix4 tranform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal)
+void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, Matrix4 tranform1, Matrix4 transformation, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal)
 {
     Acad::ErrorStatus es;
 
@@ -100,6 +100,7 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
 	}
 
 	DeplacementObjet3D(pSolid, tranform1);
+	DeplacementObjet3D(pSolid, transformation);
 
 	acutPrintf(_T("Matrice : \n{ %f, %f, %f, %f,\n %f, %f, %f, %f,\n %f, %f, %f, %f,\n %f, %f, %f, %f,\n"),
 		listLocationPolygonal.front()[0], listLocationPolygonal.front()[1], listLocationPolygonal.front()[2], listLocationPolygonal.front()[3],

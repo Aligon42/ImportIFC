@@ -126,6 +126,7 @@ private:
 
     std::list<Vec3> _points;
     Vec3 extrusionVector;
+    Matrix4 transformation;
 
     //opération boolean
     std::vector<bool> AgreementHalf;
@@ -147,27 +148,16 @@ private:
     //profilDef
     std::string NameProfilDef;
     I_profilDef IprofilDef;
-    int nbArg_I_ProfilDef;
     L_profilDef LprofilDef;
-    int nbArg_L_ProfilDef;
     T_profilDef TprofilDef;
-    int nbArg_T_ProfilDef;
     U_profilDef UprofilDef;
-    int nbArg_U_ProfilDef;
     C_profilDef CprofilDef;
-    int nbArg_C_ProfilDef;
     Z_profilDef ZprofilDef;
-    int nbArg_Z_ProfilDef;
     AsymmetricI_profilDef AsymmetricIprofilDef; 
-    int nbArg_AsymmetricII_ProfilDef;
     CircleHollow_profilDef CircleHollowprofilDef;
-    int nbArg_CircleHollow_ProfilDef;
     RectangleHollow_profilDef RectangleHollowprofilDef;
-    int nbArg_RectangleHollow_ProfilDef;
     Circle_profilDef CircleprofilDef;
-    int nbArg_Circle_ProfilDef;
     Rectangle_profilDef RectangleprofilDef;
-    int nbArg_Rectangle_ProfilDef;
 
 
 public:
@@ -213,6 +203,7 @@ public:
 
     std::list<Vec3> getPoints() const;
     Vec3 getVectorDirection() const;
+    Matrix4 getTransformation() const;
 
     //get opération boolean
     std::vector<bool> getAgreementHalfBool() const;
@@ -236,7 +227,7 @@ public:
     Circle_profilDef getCircleprofilDef() const;
     Rectangle_profilDef getRectangleprofilDef() const;
     std::string getNameProfildef() const;
-    int getnbArgProfilDef() const;
+    int getnbArgIProfilDef() const;
 
 
     void SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);
