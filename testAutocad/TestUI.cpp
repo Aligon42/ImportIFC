@@ -184,7 +184,7 @@ void test()
 
         CreateConstructionPointVisitor visitor1;
         acutPrintf(_T("Index : %i\n"), key);
-        if (key == 108852)
+        if (key == 108778)
         {
             int PA = 0;
         }
@@ -214,11 +214,13 @@ void test()
         buildingElement.acceptVisitor(&placementVisitor);
         Matrix4 transform1 = placementVisitor.getTransformation();
         Matrix4 transformation = visitor1.getTransformation();
+
+        transform1 *= transformation;
        
         if (entity == "IfcWallStandardCase")
         {
             if (points1.size() > 0 && ListNbArg.size() > 0)
-                createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, transformation, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal);
+                createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal);
 
         }
         else if (entity == "IfcColumn")
@@ -399,7 +401,7 @@ void test()
         else if (entity == "IfcSlab")
         {
             if (points1.size() > 0 && ListNbArg.size() > 0)
-                createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, transformation, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal);
+                createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal);
 
         }
         
