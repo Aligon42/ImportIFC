@@ -178,6 +178,7 @@ void test()
     {
         count++;
         int key = (int)buildingElement.getKey();
+        std::string entity = buildingElement.getClassType().getName();
 
         acutPrintf(_T("    => Element %d\n"), count);
 
@@ -213,8 +214,32 @@ void test()
         buildingElement.acceptVisitor(&placementVisitor);
         Matrix4 transform1 = placementVisitor.getTransformation();
 
-        if (points1.size() > 0 && ListNbArg.size() > 0)
-            createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal);
+       
+        if (entity == "IFCWALLSTANDARDCASE")
+        {
+            if (points1.size() > 0 && ListNbArg.size() > 0)
+                createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal);
+
+        }
+        else if (entity == "IFCCOLLUMN")
+        {
+            std::string NameProfilDef = visitor1.getNameProfildef();
+            if (NameProfilDef == "IFCISHAPEPROFILDEF")
+            {
+                I_profilDef IprofilDef = visitor1.getIprofilDef();
+                int nbArgProfilDef = visitor1.getnbArgProfilDef();
+                if (nbArgProfilDef == 8)
+                {
+                    createSolid3dProfilIPE(IprofilDef, VecteurExtrusion, transform1);
+                }
+            }
+        }
+        else if (entity == "IFCBEAM")
+        {
+
+        }
+        
+
     }
 
     acutPrintf(_T("\nFailure : %d\nSuccess : %d\n"), failure_results, success_results);

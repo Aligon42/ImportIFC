@@ -1,4 +1,5 @@
-#include "MethodeConstruction.h"
+﻿#include "MethodeConstruction.h"
+#include "CreateConstructionPointVisitor.h"
 
 void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, Matrix4 tranform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal)
 {
@@ -233,7 +234,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 
 	AcGePoint3d p5 = AcGePoint3d::AcGePoint3d();
 
-	////Coordonn�es du rep�re du plan
+	////Coordonnées du repère du plan
 	//p0x = float.Parse(PLanDeSection.ElementAt(i).ifcCoordonneesReperePlane[0]); 
 	p0x = listPlan.front()[12];  //x																		
 	//p0y = float.Parse(PLanDeSection.ElementAt(i).ifcCoordonneesReperePlane[1]);
@@ -242,7 +243,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	p0z = listPlan.front()[14]; //z
 
 	p0 = AcGePoint3d::AcGePoint3d(p0x, p0y, p0z);
-	acutPrintf(_T("Coordonn�es du rep�re du plan : [ %f, %f, %f]\n"), listPlan.front()[12], listPlan.front()[13], listPlan.front()[14]);
+	acutPrintf(_T("Coordonnées du repère du plan : [ %f, %f, %f]\n"), listPlan.front()[12], listPlan.front()[13], listPlan.front()[14]);
 
 
 	///Direction1 plan
@@ -396,4 +397,1540 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 		nbArg.erase(nbArg.begin());
 	}
 	
+}
+
+
+void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
+{
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+	AcGePoint3dArray ptArr;
+
+	float Width = IprofilDef.OverallWidth;
+	float Depth = IprofilDef.OverallDepth;
+	float WebThickness = IprofilDef.webThickness;
+	float FlangeThickness = IprofilDef.flangeThickness;
+
+	ptArr.setLogicalLength(12);
+
+	ptArr[0].set(0, 0, 0.0);
+	ptArr[1].set(Width, 0, 0.0);
+	ptArr[2].set(Width, FlangeThickness, 0.0);
+	ptArr[3].set((Width + WebThickness) / 2, FlangeThickness, 0.0);
+	ptArr[4].set((Width + WebThickness) / 2, Depth - FlangeThickness, 0.0);
+	ptArr[5].set(Width, Depth - FlangeThickness, 0.0);
+	ptArr[6].set(Width, Depth, 0.0);
+	ptArr[7].set(0, Depth, 0.0);
+	ptArr[8].set(0, Depth - FlangeThickness, 0.0);
+	ptArr[9].set((Width - WebThickness) / 2, Depth - FlangeThickness, 0.0);
+	ptArr[10].set((Width - WebThickness) / 2, FlangeThickness, 0.0);
+	ptArr[11].set(0, FlangeThickness, 0.0);
+
+
+	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+	pNewPline->setColorIndex(3);
+
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity = NULL;
+
+	if (pNewPline == NULL)
+	{
+		pEntity->close();
+		return;
+	}
+	AcDbVoidPtrArray lines;
+	pNewPline->explode(lines);
+	pNewPline->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions;
+	es = AcDbRegion::createFromCurves(lines, regions);
+
+	if (Acad::eOk != es)
+	{
+		pNewPline->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}
+	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
+
+	// Extrude the region to create a solid.
+	AcDb3dSolid* pSolid = new AcDb3dSolid();
+	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
+
+	for (int i = 0; i < lines.length(); i++)
+	{
+		delete (AcRxObject*)lines[i];
+	}
+
+	for (int ii = 0; ii < regions.length(); ii++)
+	{
+		delete (AcRxObject*)regions[ii];
+	}
+
+	DeplacementObjet3D(pSolid, transform1);
+
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSolid);
+		pBlockTableRecord->close();
+		pSolid->close();
+	}
+	else
+	{
+		delete pSolid;
+	}
+}
+
+void createSolid3dProfilIPN(I_profilDef IprofilDef, Matrix4 transform1)
+{
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+	AcGePoint3dArray ptArr;
+
+	float Width = 143;
+	float Depth = 360;
+	float WebThickness = 13;
+	float FlangeThickness = 19.5;
+	float FlangeSlope = 0.13962634;
+
+	float dy = (Width - Width / 4) * tan(FlangeSlope);
+
+	ptArr.setLogicalLength(16);
+
+	ptArr[0].set(0, 0, 0.0);
+	ptArr[1].set(Width, 0, 0.0);
+	ptArr[2].set(Width, FlangeThickness - dy, 0.0);
+	ptArr[3].set(Width - Width / 4, FlangeThickness, 0.0);
+	ptArr[4].set((Width + WebThickness) / 2, FlangeThickness + dy, 0.0);
+	ptArr[5].set((Width + WebThickness) / 2, Depth - FlangeThickness - dy, 0.0);
+	ptArr[6].set(Width - Width / 4, Depth - FlangeThickness, 0.0);
+	ptArr[7].set(Width, Depth - FlangeThickness + dy, 0.0);
+	ptArr[8].set(Width, Depth, 0.0);
+	ptArr[9].set(0, Depth, 0.0);
+	ptArr[10].set(0, Depth - FlangeThickness + dy, 0.0);
+	ptArr[11].set(Width / 4, Depth - FlangeThickness, 0.0);
+	ptArr[12].set((Width - WebThickness) / 2, Depth - FlangeThickness - dy, 0.0);
+	ptArr[13].set((Width - WebThickness) / 2, FlangeThickness + dy, 0.0);
+	ptArr[14].set(Width / 4, FlangeThickness, 0.0);
+	ptArr[15].set(0, FlangeThickness - dy, 0.0);
+
+
+	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+	pNewPline->setColorIndex(3);
+
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity = NULL;
+
+	if (pNewPline == NULL)
+	{
+		pEntity->close();
+		return;
+	}
+	AcDbVoidPtrArray lines;
+	pNewPline->explode(lines);
+	pNewPline->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions;
+	es = AcDbRegion::createFromCurves(lines, regions);
+
+	if (Acad::eOk != es)
+	{
+		pNewPline->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}
+	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
+
+	// Extrude the region to create a solid.
+	AcDb3dSolid* pSolid = new AcDb3dSolid();
+	es = pSolid->extrude(pRegion, 10.0, 0.0);
+
+	for (int i = 0; i < lines.length(); i++)
+	{
+		delete (AcRxObject*)lines[i];
+	}
+
+	for (int ii = 0; ii < regions.length(); ii++)
+	{
+		delete (AcRxObject*)regions[ii];
+	}
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSolid);
+		pBlockTableRecord->close();
+		pSolid->close();
+	}
+	else
+	{
+		delete pSolid;
+	}
+}
+
+void createSolid3dProfilL8(L_profilDef LprofilDef, Matrix4 transform1)
+{
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+	AcGePoint3dArray ptArr;
+
+	float Depth = 60;
+	float Width = 60;
+	float Thickness = 6;
+	float FilletRadius = 8;
+
+	ptArr.setLogicalLength(6);
+
+	ptArr[0].set(0, 0, 0.0);
+	ptArr[1].set(Width, 0, 0.0);
+	ptArr[2].set(Width, Thickness, 0.0);
+	ptArr[3].set(Thickness, Thickness, 0.0);
+	ptArr[4].set(Thickness, Depth, 0.0);
+	ptArr[5].set(0, Depth, 0.0);
+
+
+
+	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+	pNewPline->setColorIndex(3);
+
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity = NULL;
+
+	if (pNewPline == NULL)
+	{
+		pEntity->close();
+		return;
+	}
+	AcDbVoidPtrArray lines;
+	pNewPline->explode(lines);
+	pNewPline->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions;
+	es = AcDbRegion::createFromCurves(lines, regions);
+
+	if (Acad::eOk != es)
+	{
+		pNewPline->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}
+	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
+
+	// Extrude the region to create a solid.
+	AcDb3dSolid* pSolid = new AcDb3dSolid();
+	es = pSolid->extrude(pRegion, 10.0, 0.0);
+
+	for (int i = 0; i < lines.length(); i++)
+	{
+		delete (AcRxObject*)lines[i];
+	}
+
+	for (int ii = 0; ii < regions.length(); ii++)
+	{
+		delete (AcRxObject*)regions[ii];
+	}
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSolid);
+		pBlockTableRecord->close();
+		pSolid->close();
+	}
+	else
+	{
+		delete pSolid;
+	}
+}
+
+void createSolid3dProfilL9(L_profilDef LprofilDef, Matrix4 transform1)
+{
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+	AcGePoint3dArray ptArr;
+
+	float Depth = 60;
+	float Width = 40;
+	float Thickness = 6;
+	float FilletRadius = 8;
+	float LegSlope = 2;
+
+	double dy = (Width - Thickness) * tan(LegSlope);
+
+	ptArr.setLogicalLength(6);
+
+	ptArr[0].set(0, 0, 0.0);
+	ptArr[1].set(Width, 0, 0.0);
+	ptArr[2].set(Width, Thickness, 0.0);
+	ptArr[3].set(Thickness + dy, Thickness + dy, 0.0);
+	ptArr[4].set(Thickness, Depth, 0.0);
+	ptArr[5].set(0, Depth, 0.0);
+
+
+
+	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+	pNewPline->setColorIndex(3);
+
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity = NULL;
+
+	if (pNewPline == NULL)
+	{
+		pEntity->close();
+		return;
+	}
+	AcDbVoidPtrArray lines;
+	pNewPline->explode(lines);
+	pNewPline->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions;
+	es = AcDbRegion::createFromCurves(lines, regions);
+
+	if (Acad::eOk != es)
+	{
+		pNewPline->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}
+	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
+
+	// Extrude the region to create a solid.
+	AcDb3dSolid* pSolid = new AcDb3dSolid();
+	es = pSolid->extrude(pRegion, 10.0, 0.0);
+
+	for (int i = 0; i < lines.length(); i++)
+	{
+		delete (AcRxObject*)lines[i];
+	}
+
+	for (int ii = 0; ii < regions.length(); ii++)
+	{
+		delete (AcRxObject*)regions[ii];
+	}
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSolid);
+		pBlockTableRecord->close();
+		pSolid->close();
+	}
+	else
+	{
+		delete pSolid;
+	}
+}
+
+void createSolid3dProfilT10(T_profilDef TprofilDef, Matrix4 transform1)
+{
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+	AcGePoint3dArray ptArr;
+
+	float Depth = 140;
+	float Width = 140;
+	float WebThickness = 15;
+	float FlangeThickness = 15;
+	float FilletRadius = 15;
+
+	ptArr.setLogicalLength(8);
+
+	ptArr[0].set(0, 0, 0.0);
+	ptArr[1].set(Width, 0, 0.0);
+	ptArr[2].set(Width, FlangeThickness, 0.0);
+	ptArr[3].set((Width + WebThickness) / 2, FlangeThickness, 0.0);
+	ptArr[4].set((Width + WebThickness) / 2, Depth, 0.0);
+	ptArr[5].set((Width - WebThickness) / 2, Depth, 0.0);
+	ptArr[6].set((Width - WebThickness) / 2, FlangeThickness, 0.0);
+	ptArr[7].set(0, FlangeThickness, 0.0);
+
+
+
+	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+	pNewPline->setColorIndex(3);
+
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity = NULL;
+
+	if (pNewPline == NULL)
+	{
+		pEntity->close();
+		return;
+	}
+	AcDbVoidPtrArray lines;
+	pNewPline->explode(lines);
+	pNewPline->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions;
+	es = AcDbRegion::createFromCurves(lines, regions);
+
+	if (Acad::eOk != es)
+	{
+		pNewPline->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}
+	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
+
+	// Extrude the region to create a solid.
+	AcDb3dSolid* pSolid = new AcDb3dSolid();
+	es = pSolid->extrude(pRegion, 10.0, 0.0);
+
+	for (int i = 0; i < lines.length(); i++)
+	{
+		delete (AcRxObject*)lines[i];
+	}
+
+	for (int ii = 0; ii < regions.length(); ii++)
+	{
+		delete (AcRxObject*)regions[ii];
+	}
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSolid);
+		pBlockTableRecord->close();
+		pSolid->close();
+	}
+	else
+	{
+		delete pSolid;
+	}
+}
+
+void createSolid3dProfilT12(T_profilDef TprofilDef, Matrix4 transform1)
+{
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+	AcGePoint3dArray ptArr;
+
+	float Depth = 140;
+	float Width = 140;
+	float WebThickness = 15;
+	float FlangeThickness = 15;
+	float FilletRadius = 15;
+	float WebSlope​ = 2;
+	float FlangeSlope = 2;
+
+	double dy1 = (Width - FlangeThickness) * tan(FlangeSlope);
+	double dy2 = (Depth - WebThickness) * tan(WebSlope​);
+
+	ptArr.setLogicalLength(8);
+
+	ptArr[0].set(0, 0, 0.0);
+	ptArr[1].set(Width, 0, 0.0);
+	ptArr[2].set(Width, FlangeThickness - dy1, 0.0);
+	ptArr[3].set((Width + WebThickness) / 2, FlangeThickness, 0.0);
+	ptArr[4].set(((Width + WebThickness) / 2) - dy2, Depth, 0.0);
+	ptArr[5].set(((Width - WebThickness) / 2) + dy2, Depth, 0.0);
+	ptArr[6].set((Width - WebThickness) / 2, FlangeThickness, 0.0);
+	ptArr[7].set(0, FlangeThickness - dy1, 0.0);
+
+
+
+	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+	pNewPline->setColorIndex(3);
+
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity = NULL;
+
+	if (pNewPline == NULL)
+	{
+		pEntity->close();
+		return;
+	}
+	AcDbVoidPtrArray lines;
+	pNewPline->explode(lines);
+	pNewPline->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions;
+	es = AcDbRegion::createFromCurves(lines, regions);
+
+	if (Acad::eOk != es)
+	{
+		pNewPline->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}
+	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
+
+	// Extrude the region to create a solid.
+	AcDb3dSolid* pSolid = new AcDb3dSolid();
+	es = pSolid->extrude(pRegion, 10.0, 0.0);
+
+	for (int i = 0; i < lines.length(); i++)
+	{
+		delete (AcRxObject*)lines[i];
+	}
+
+	for (int ii = 0; ii < regions.length(); ii++)
+	{
+		delete (AcRxObject*)regions[ii];
+	}
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSolid);
+		pBlockTableRecord->close();
+		pSolid->close();
+	}
+	else
+	{
+		delete pSolid;
+	}
+}
+
+void createSolid3dProfilUPE(U_profilDef UprofilDef, Matrix4 transform1)
+{
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+	AcGePoint3dArray ptArr;
+
+	float Depth = 360;
+	float Width = 110;
+	float WebThickness = 12;
+	float FlangeThickness = 17;
+	float FilletRadius = 15;
+
+	ptArr.setLogicalLength(8);
+
+	ptArr[0].set(0, 0, 0.0);
+	ptArr[1].set(Width, 0, 0.0);
+	ptArr[2].set(Width, FlangeThickness, 0.0);
+	ptArr[3].set(WebThickness, FlangeThickness, 0.0);
+	ptArr[4].set(WebThickness, Depth - FlangeThickness, 0.0);
+	ptArr[5].set(Width, Depth - FlangeThickness, 0.0);
+	ptArr[6].set(Width, Depth, 0.0);
+	ptArr[7].set(0, Depth, 0.0);
+
+
+
+	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+	pNewPline->setColorIndex(3);
+
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity = NULL;
+
+	if (pNewPline == NULL)
+	{
+		pEntity->close();
+		return;
+	}
+	AcDbVoidPtrArray lines;
+	pNewPline->explode(lines);
+	pNewPline->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions;
+	es = AcDbRegion::createFromCurves(lines, regions);
+
+	if (Acad::eOk != es)
+	{
+		pNewPline->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}
+	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
+
+	// Extrude the region to create a solid.
+	AcDb3dSolid* pSolid = new AcDb3dSolid();
+	es = pSolid->extrude(pRegion, 10.0, 0.0);
+
+	for (int i = 0; i < lines.length(); i++)
+	{
+		delete (AcRxObject*)lines[i];
+	}
+
+	for (int ii = 0; ii < regions.length(); ii++)
+	{
+		delete (AcRxObject*)regions[ii];
+	}
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSolid);
+		pBlockTableRecord->close();
+		pSolid->close();
+	}
+	else
+	{
+		delete pSolid;
+	}
+}
+
+void createSolid3dProfilUPN(U_profilDef UprofilDef, Matrix4 transform1)
+{
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+	AcGePoint3dArray ptArr;
+
+	float Depth = 360;
+	float Width = 110;
+	float WebThickness = 12;
+	float FlangeThickness = 17;
+	float FilletRadius = 15;
+
+	ptArr.setLogicalLength(8);
+
+	ptArr[0].set(0, 0, 0.0);
+	ptArr[1].set(Width, 0, 0.0);
+	ptArr[2].set(Width, FlangeThickness, 0.0);
+	ptArr[3].set(WebThickness, FlangeThickness, 0.0);
+	ptArr[4].set(WebThickness, Depth - FlangeThickness, 0.0);
+	ptArr[5].set(Width, Depth - FlangeThickness, 0.0);
+	ptArr[6].set(Width, Depth, 0.0);
+	ptArr[7].set(0, Depth, 0.0);
+
+
+
+	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+	pNewPline->setColorIndex(3);
+
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity = NULL;
+
+	if (pNewPline == NULL)
+	{
+		pEntity->close();
+		return;
+	}
+	AcDbVoidPtrArray lines;
+	pNewPline->explode(lines);
+	pNewPline->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions;
+	es = AcDbRegion::createFromCurves(lines, regions);
+
+	if (Acad::eOk != es)
+	{
+		pNewPline->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}
+	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
+
+	// Extrude the region to create a solid.
+	AcDb3dSolid* pSolid = new AcDb3dSolid();
+	es = pSolid->extrude(pRegion, 10.0, 0.0);
+
+	for (int i = 0; i < lines.length(); i++)
+	{
+		delete (AcRxObject*)lines[i];
+	}
+
+	for (int ii = 0; ii < regions.length(); ii++)
+	{
+		delete (AcRxObject*)regions[ii];
+	}
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSolid);
+		pBlockTableRecord->close();
+		pSolid->close();
+	}
+	else
+	{
+		delete pSolid;
+	}
+}
+
+void createSolid3dProfilC(C_profilDef CprofilDef, Matrix4 transform1)
+{
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+	AcGePoint3dArray ptArr;
+
+	float Depth = 24;
+	float Width = 5.2;
+	float WallThickness = 1;
+	float Girth = 3.25;
+	//float FilletRadius = 15;
+
+	ptArr.setLogicalLength(12);
+
+	ptArr[0].set(0, 0, 0.0);
+	ptArr[1].set(Width, 0, 0.0);
+	ptArr[2].set(Width, Girth, 0.0);
+	ptArr[3].set(Width - WallThickness, Girth, 0.0);
+	ptArr[4].set(Width - WallThickness, WallThickness, 0.0);
+	ptArr[5].set(WallThickness, WallThickness, 0.0);
+	ptArr[6].set(WallThickness, Depth - WallThickness, 0.0);
+	ptArr[7].set(Width - WallThickness, Depth - WallThickness, 0.0);
+	ptArr[8].set(Width - WallThickness, Depth - Girth, 0.0);
+	ptArr[9].set(Width, Depth - Girth, 0.0);
+	ptArr[10].set(Width, Depth, 0.0);
+	ptArr[11].set(0, Depth, 0.0);
+
+
+
+	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+	pNewPline->setColorIndex(3);
+
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity = NULL;
+
+	if (pNewPline == NULL)
+	{
+		pEntity->close();
+		return;
+	}
+	AcDbVoidPtrArray lines;
+	pNewPline->explode(lines);
+	pNewPline->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions;
+	es = AcDbRegion::createFromCurves(lines, regions);
+
+	if (Acad::eOk != es)
+	{
+		pNewPline->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}
+	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
+
+	// Extrude the region to create a solid.
+	AcDb3dSolid* pSolid = new AcDb3dSolid();
+	es = pSolid->extrude(pRegion, 10.0, 0.0);
+
+	for (int i = 0; i < lines.length(); i++)
+	{
+		delete (AcRxObject*)lines[i];
+	}
+
+	for (int ii = 0; ii < regions.length(); ii++)
+	{
+		delete (AcRxObject*)regions[ii];
+	}
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSolid);
+		pBlockTableRecord->close();
+		pSolid->close();
+	}
+	else
+	{
+		delete pSolid;
+	}
+}
+
+void createSolid3dProfilZ(Z_profilDef ZprofilDef, Matrix4 transform1)
+{
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+	AcGePoint3dArray ptArr;
+
+	float Depth = 40;
+	float Width = 30;
+	float WebThickness = 5;
+	float FlangeThickness = 5;
+	//float FilletRadius = 15;
+
+	ptArr.setLogicalLength(9);
+
+	ptArr[0].set(Width - WebThickness, 0, 0.0);
+	ptArr[1].set(Width - WebThickness + Width, 0, 0.0);
+	ptArr[2].set(Width - WebThickness + Width, FlangeThickness, 0.0);
+	ptArr[3].set(Width, FlangeThickness, 0.0);
+	ptArr[4].set(Width, Depth, 0.0);
+	ptArr[5].set(0, Depth, 0);
+	ptArr[6].set(0, Depth - FlangeThickness, 0.0);
+	ptArr[7].set(Width - WebThickness, Depth - FlangeThickness, 0.0);
+	ptArr[8].set(0, Depth, 0.0);
+
+
+
+	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+	pNewPline->setColorIndex(3);
+
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity = NULL;
+
+	if (pNewPline == NULL)
+	{
+		pEntity->close();
+		return;
+	}
+	AcDbVoidPtrArray lines;
+	pNewPline->explode(lines);
+	pNewPline->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions;
+	es = AcDbRegion::createFromCurves(lines, regions);
+
+	if (Acad::eOk != es)
+	{
+		pNewPline->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}
+	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
+
+	// Extrude the region to create a solid.
+	AcDb3dSolid* pSolid = new AcDb3dSolid();
+	es = pSolid->extrude(pRegion, 10.0, 0.0);
+
+	for (int i = 0; i < lines.length(); i++)
+	{
+		delete (AcRxObject*)lines[i];
+	}
+
+	for (int ii = 0; ii < regions.length(); ii++)
+	{
+		delete (AcRxObject*)regions[ii];
+	}
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSolid);
+		pBlockTableRecord->close();
+		pSolid->close();
+	}
+	else
+	{
+		delete pSolid;
+	}
+}
+
+void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Matrix4 transform1)
+{
+
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+	AcGePoint3dArray ptArr;
+
+	float BottomFlangeWidth = 200;
+	float OverallDepth = 400;
+	float WebThickness = 10;
+	float BottomFlangeThickness = 10;
+	float TopFlangeWidth = 100;
+	float TopFlangeThickness = 5;
+	float TopMinus = (BottomFlangeWidth - TopFlangeWidth) / 2;
+
+
+
+	ptArr.setLogicalLength(12);
+
+	ptArr[0].set(0, 0, 0.0);
+	ptArr[1].set(BottomFlangeWidth, 0, 0.0);
+	ptArr[2].set(BottomFlangeWidth, BottomFlangeThickness, 0.0);
+	ptArr[3].set((BottomFlangeWidth + WebThickness) / 2, BottomFlangeThickness, 0.0);
+	ptArr[4].set((BottomFlangeWidth + WebThickness) / 2, OverallDepth - TopFlangeThickness, 0.0);
+	ptArr[5].set(BottomFlangeWidth - TopMinus, OverallDepth - TopFlangeThickness, 0.0);
+	ptArr[6].set(BottomFlangeWidth - TopMinus, OverallDepth, 0.0);
+	ptArr[7].set(TopMinus, OverallDepth, 0.0);
+	ptArr[8].set(TopMinus, OverallDepth - TopFlangeThickness, 0.0);
+	ptArr[9].set((BottomFlangeWidth - WebThickness) / 2, OverallDepth - TopFlangeThickness, 0.0);
+	ptArr[10].set((BottomFlangeWidth - WebThickness) / 2, BottomFlangeThickness, 0.0);
+	ptArr[11].set(0, BottomFlangeThickness, 0.0);
+
+
+	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+	pNewPline->setColorIndex(3);
+
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity = NULL;
+
+	if (pNewPline == NULL)
+	{
+		pEntity->close();
+		return;
+	}
+	AcDbVoidPtrArray lines;
+	pNewPline->explode(lines);
+	pNewPline->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions;
+	es = AcDbRegion::createFromCurves(lines, regions);
+
+	if (Acad::eOk != es)
+	{
+		pNewPline->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}
+	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
+
+	// Extrude the region to create a solid.
+	AcDb3dSolid* pSolid = new AcDb3dSolid();
+	es = pSolid->extrude(pRegion, 10.0, 0.0);
+
+	for (int i = 0; i < lines.length(); i++)
+	{
+		delete (AcRxObject*)lines[i];
+	}
+
+	for (int ii = 0; ii < regions.length(); ii++)
+	{
+		delete (AcRxObject*)regions[ii];
+	}
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSolid);
+		pBlockTableRecord->close();
+		pSolid->close();
+	}
+	else
+	{
+		delete pSolid;
+	}
+}
+
+void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, Matrix4 transform1) {
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+
+	AcGePoint3dArray ptArr2;
+
+	float Radius = 34;
+	float WallThickness = 4;
+
+	AcGePoint3d center = AcGePoint3d::AcGePoint3d(Radius, Radius, 0);
+	/// <summary>
+	/// Première polyline
+	/// </summary>
+
+
+	AcDbCircle* circle1 = new AcDbCircle();
+	circle1->setCenter(center);
+	circle1->setRadius(Radius);
+	circle1->setColorIndex(3);
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity1 = NULL;
+
+	if (circle1 == NULL)
+	{
+		pEntity1->close();
+		return;
+	}
+	AcDbVoidPtrArray lines1;
+	lines1.append(circle1);
+
+	//circle1->explode(lines1);
+	circle1->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions1;
+	es = AcDbRegion::createFromCurves(lines1, regions1);
+
+	if (Acad::eOk != es)
+	{
+		circle1->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}
+	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
+
+
+	AcDbCircle* circle2 = new AcDbCircle();
+	circle2->setCenter(center);
+	circle2->setRadius(Radius - WallThickness);
+	circle2->setColorIndex(3);
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity2 = NULL;
+
+	if (circle2 == NULL)
+	{
+		pEntity2->close();
+		return;
+	}
+	AcDbVoidPtrArray lines2;
+	lines2.append(circle2);
+
+	//circle1->explode(lines1);
+	circle2->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions2;
+	es = AcDbRegion::createFromCurves(lines2, regions2);
+
+	if (Acad::eOk != es)
+	{
+		circle1->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}
+	AcDbRegion* pRegion2 = AcDbRegion::cast((AcRxObject*)regions2[0]);
+
+	pRegion1->booleanOper(AcDb::kBoolSubtract, pRegion2);
+
+	// Extrude the region to create a solid.
+	AcDb3dSolid* pSolid = new AcDb3dSolid();
+	es = pSolid->extrude(pRegion1, 10.0, 0.0);
+
+	for (int i = 0; i < lines1.length(); i++)
+	{
+		delete (AcRxObject*)lines1[i];
+	}
+
+	for (int ii = 0; ii < regions1.length(); ii++)
+	{
+		delete (AcRxObject*)regions1[ii];
+	}
+
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSolid);
+		pBlockTableRecord->close();
+		pSolid->close();
+	}
+	else
+	{
+		delete pSolid;
+	}
+
+}
+
+void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Matrix4 transform1) {
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+	AcGePoint3dArray ptArr1;
+	AcGePoint3dArray ptArr2;
+
+	float XDim = 100;
+	float YDim = 60;
+	float WallThickness = 2.5;
+
+	/// <summary>
+	/// Première polyline
+	/// </summary>
+	ptArr1.setLogicalLength(4);
+
+	ptArr1[0].set(0, 0, 0.0);
+	ptArr1[1].set(XDim, 0, 0.0);
+	ptArr1[2].set(XDim, YDim, 0.0);
+	ptArr1[3].set(0, YDim, 0.0);
+
+	AcDb2dPolyline* pNewPline1 = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr1, 0.0, Adesk::kTrue);
+	pNewPline1->setColorIndex(3);
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity1 = NULL;
+
+	if (pNewPline1 == NULL)
+	{
+		pEntity1->close();
+		return;
+	}
+	AcDbVoidPtrArray lines1;
+	pNewPline1->explode(lines1);
+	pNewPline1->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions1;
+	es = AcDbRegion::createFromCurves(lines1, regions1);
+
+	if (Acad::eOk != es)
+	{
+		pNewPline1->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}
+	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
+
+
+
+	/// <summary>
+	/// Deuxième polyline
+	/// </summary>
+	ptArr2.setLogicalLength(4);
+
+	ptArr2[0].set(WallThickness, WallThickness, 0.0);
+	ptArr2[1].set(XDim - WallThickness, WallThickness, 0.0);
+	ptArr2[2].set(XDim - WallThickness, YDim - WallThickness, 0.0);
+	ptArr2[3].set(WallThickness, YDim - WallThickness, 0.0);
+
+	AcDb2dPolyline* pNewPline2 = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr2, 0.0, Adesk::kTrue);
+	pNewPline2->setColorIndex(3);
+
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity2 = NULL;
+
+	if (pNewPline2 == NULL)
+	{
+		pEntity2->close();
+		return;
+	}
+	AcDbVoidPtrArray lines2;
+	pNewPline2->explode(lines2);
+	pNewPline2->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions2;
+	es = AcDbRegion::createFromCurves(lines2, regions2);
+
+	if (Acad::eOk != es)
+	{
+		pNewPline2->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}
+	AcDbRegion* pRegion2 = AcDbRegion::cast((AcRxObject*)regions2[0]);
+
+
+
+	pRegion1->booleanOper(AcDb::kBoolSubtract, pRegion2);
+
+
+	// Extrude the region to create a solid.
+	AcDb3dSolid* pSolid = new AcDb3dSolid();
+	es = pSolid->extrude(pRegion1, 10.0, 0.0);
+
+	for (int i = 0; i < lines1.length(); i++)
+	{
+		delete (AcRxObject*)lines1[i];
+	}
+
+	for (int ii = 0; ii < regions1.length(); ii++)
+	{
+		delete (AcRxObject*)regions1[ii];
+	}
+
+	for (int y = 0; y < lines2.length(); y++)
+	{
+		delete (AcRxObject*)lines2[y];
+	}
+
+	for (int yy = 0; yy < regions2.length(); yy++)
+	{
+		delete (AcRxObject*)regions2[yy];
+	}
+
+
+
+
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSolid);
+		pBlockTableRecord->close();
+		pSolid->close();
+	}
+	else
+	{
+		delete pSolid;
+	}
+
+}
+
+void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Matrix4 transform1) {
+
+
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+
+
+
+	AcGePoint3dArray ptArr2;
+
+
+
+	float Radius = 34;
+
+
+
+	AcGePoint3d center = AcGePoint3d::AcGePoint3d(Radius, Radius, 0);
+	/// <summary>
+	/// Première polyline
+	/// </summary>
+
+
+
+
+	AcDbCircle* circle1 = new AcDbCircle();
+	circle1->setCenter(center);
+	circle1->setRadius(Radius);
+	circle1->setColorIndex(3);
+
+
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity1 = NULL;
+
+
+
+	if (circle1 == NULL)
+	{
+		pEntity1->close();
+		return;
+	}
+	AcDbVoidPtrArray lines1;
+	lines1.append(circle1);
+
+
+
+	//circle1->explode(lines1);
+	circle1->close();
+
+
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions1;
+	es = AcDbRegion::createFromCurves(lines1, regions1);
+
+
+
+	if (Acad::eOk != es)
+	{
+		circle1->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+
+
+	}
+	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
+
+
+
+	// Extrude the region to create a solid.
+	AcDb3dSolid* pSolid = new AcDb3dSolid();
+	es = pSolid->extrude(pRegion1, 10.0, 0.0);
+
+
+
+	for (int i = 0; i < lines1.length(); i++)
+	{
+		delete (AcRxObject*)lines1[i];
+	}
+
+
+
+	for (int ii = 0; ii < regions1.length(); ii++)
+	{
+		delete (AcRxObject*)regions1[ii];
+	}
+
+
+
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+
+
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSolid);
+		pBlockTableRecord->close();
+		pSolid->close();
+	}
+	else
+	{
+		delete pSolid;
+	}
+
+
+
+}
+
+void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Matrix4 transform1) {
+
+
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+
+
+	AcGePoint3dArray ptArr1;
+	AcGePoint3dArray ptArr2;
+
+
+
+	float XDim = 100;
+	float YDim = 60;
+	float WallThickness = 2.5;
+
+
+
+	/// <summary>
+	/// Première polyline
+	/// </summary>
+	ptArr1.setLogicalLength(4);
+
+
+
+	ptArr1[0].set(0, 0, 0.0);
+	ptArr1[1].set(XDim, 0, 0.0);
+	ptArr1[2].set(XDim, YDim, 0.0);
+	ptArr1[3].set(0, YDim, 0.0);
+
+
+
+	AcDb2dPolyline* pNewPline1 = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr1, 0.0, Adesk::kTrue);
+	pNewPline1->setColorIndex(3);
+
+
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity1 = NULL;
+
+
+
+	if (pNewPline1 == NULL)
+	{
+		pEntity1->close();
+		return;
+	}
+	AcDbVoidPtrArray lines1;
+	pNewPline1->explode(lines1);
+	pNewPline1->close();
+
+
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions1;
+	es = AcDbRegion::createFromCurves(lines1, regions1);
+
+
+
+	if (Acad::eOk != es)
+	{
+		pNewPline1->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+
+
+	}
+	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
+
+
+
+
+	// Extrude the region to create a solid.
+	AcDb3dSolid* pSolid = new AcDb3dSolid();
+	es = pSolid->extrude(pRegion1, 10.0, 0.0);
+
+
+
+	for (int i = 0; i < lines1.length(); i++)
+	{
+		delete (AcRxObject*)lines1[i];
+	}
+
+
+
+	for (int ii = 0; ii < regions1.length(); ii++)
+	{
+		delete (AcRxObject*)regions1[ii];
+	}
+
+
+
+
+
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+
+
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSolid);
+		pBlockTableRecord->close();
+		pSolid->close();
+	}
+	else
+	{
+		delete pSolid;
+	}
+
+
+
 }

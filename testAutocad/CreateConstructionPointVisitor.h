@@ -145,17 +145,29 @@ private:
     std::vector<int> listNbArgPolyline;
     
     //profilDef
+    std::string NameProfilDef;
     I_profilDef IprofilDef;
+    int nbArg_I_ProfilDef;
     L_profilDef LprofilDef;
+    int nbArg_L_ProfilDef;
     T_profilDef TprofilDef;
+    int nbArg_T_ProfilDef;
     U_profilDef UprofilDef;
+    int nbArg_U_ProfilDef;
     C_profilDef CprofilDef;
+    int nbArg_C_ProfilDef;
     Z_profilDef ZprofilDef;
-    AsymmetricI_profilDef AsymmetricIprofilDef;
+    int nbArg_Z_ProfilDef;
+    AsymmetricI_profilDef AsymmetricIprofilDef; 
+    int nbArg_AsymmetricII_ProfilDef;
     CircleHollow_profilDef CircleHollowprofilDef;
+    int nbArg_CircleHollow_ProfilDef;
     RectangleHollow_profilDef RectangleHollowprofilDef;
+    int nbArg_RectangleHollow_ProfilDef;
     Circle_profilDef CircleprofilDef;
+    int nbArg_Circle_ProfilDef;
     Rectangle_profilDef RectangleprofilDef;
+    int nbArg_Rectangle_ProfilDef;
 
 
 public:
@@ -223,6 +235,8 @@ public:
     RectangleHollow_profilDef getRectangleHollowprofilDef() const;
     Circle_profilDef getCircleprofilDef() const;
     Rectangle_profilDef getRectangleprofilDef() const;
+    std::string getNameProfildef() const;
+    int getnbArgProfilDef() const;
 
 
     void SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);

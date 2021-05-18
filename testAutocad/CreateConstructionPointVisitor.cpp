@@ -17,8 +17,6 @@ bool CreateConstructionPointVisitor::visitIfcProduct(ifc2x3::IfcProduct* value)
     return true;
 }
 
-
-
 bool CreateConstructionPointVisitor::visitIfcProductRepresentation(
     ifc2x3::IfcProductRepresentation* value)
 {
@@ -343,6 +341,8 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
 
             transformPoints(transformation);
 
+            NameProfilDef = value->getSweptArea()->getType().getName();
+
             if(value->testExtrudedDirection())
             {
                 extrusionVector = ComputePlacementVisitor::getDirection(
@@ -358,6 +358,8 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
 
     return false;
 }
+
+//***** PROFILDEF *****
 
 bool CreateConstructionPointVisitor::visitIfcIShapeProfileDef(
     ifc2x3::IfcIShapeProfileDef* value)
@@ -576,8 +578,10 @@ bool CreateConstructionPointVisitor::visitIfcCircleProfileDef(
     return true;
 }
 
-bool CreateConstructionPointVisitor::visitIfcArbitraryClosedProfileDef(
-    ifc2x3::IfcArbitraryClosedProfileDef* value)
+
+
+
+bool CreateConstructionPointVisitor::visitIfcArbitraryClosedProfileDef(ifc2x3::IfcArbitraryClosedProfileDef* value)
 {
     if(value->testOuterCurve())
     {
@@ -587,8 +591,7 @@ bool CreateConstructionPointVisitor::visitIfcArbitraryClosedProfileDef(
     return false;
 }
 
-bool CreateConstructionPointVisitor::visitIfcPolyline(ifc2x3::IfcPolyline*
-                                                      value)
+bool CreateConstructionPointVisitor::visitIfcPolyline(ifc2x3::IfcPolyline* value)
 {
     int size = _points.size();
 
@@ -669,6 +672,8 @@ bool CreateConstructionPointVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value
     return _points.empty() == false;
 }
 
+
+
 void CreateConstructionPointVisitor::SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine)
 {
     auto listPoint = value->getCoordinates();
@@ -696,6 +701,9 @@ Vec3 CreateConstructionPointVisitor::getVectorDirection() const
 {
     return extrusionVector;
 }
+
+
+//***** BOOLEAN *****
 
 std::vector<bool> CreateConstructionPointVisitor::getAgreementHalfBool() const
 {
@@ -731,6 +739,9 @@ std::vector<std::string> CreateConstructionPointVisitor::getListEntityPolygonal(
 {
     return entityPolygonal;
 }
+
+
+//****** PROFILDEF ******
 
 I_profilDef CreateConstructionPointVisitor::getIprofilDef() const
 {
@@ -797,6 +808,18 @@ Rectangle_profilDef CreateConstructionPointVisitor::getRectangleprofilDef() cons
 
     return RectangleprofilDef;
 }
+
+std::string CreateConstructionPointVisitor::getNameProfildef() const
+{
+    return NameProfilDef;
+}
+
+int CreateConstructionPointVisitor::getnbArgProfilDef() const
+{
+    return nbArgProfilDef;
+}
+
+
 
 void CreateConstructionPointVisitor::transformPoints(const Matrix4& transform)
 {

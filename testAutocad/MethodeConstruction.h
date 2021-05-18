@@ -23,3 +23,20 @@
 void createSolid3d(std::list<Vec3> points1, std::vector<int> nbArg, Vec3 VecteurExtrusion, Matrix4 tranform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal);
 static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1);
 static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3>& points1, std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal, std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal, std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal);
+
+//profilDef
+void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+void createSolid3dProfilIPN(I_profilDef IprofilDef, Matrix4 transform1);
+void createSolid3dProfilL8(L_profilDef LprofilDef, Matrix4 transform1);
+void createSolid3dProfilL9(L_profilDef LprofilDef, Matrix4 transform1);
+void createSolid3dProfilT10(T_profilDef TprofilDef, Matrix4 transform1);
+void createSolid3dProfilT12(T_profilDef TprofilDef, Matrix4 transform1);
+void createSolid3dProfilUPE(U_profilDef UprofilDef, Matrix4 transform1);
+void createSolid3dProfilUPN(U_profilDef UprofilDef, Matrix4 transform1);
+void createSolid3dProfilC(C_profilDef CprofilDef, Matrix4 transform1);
+void createSolid3dProfilZ(Z_profilDef ZprofilDef, Matrix4 transform1);
+void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Matrix4 transform1);
+void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, Matrix4 transform1);
+void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Matrix4 transform1);
+void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Matrix4 transform1);
+void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Matrix4 transform1);
