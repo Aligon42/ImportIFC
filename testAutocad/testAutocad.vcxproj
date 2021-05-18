@@ -154,6 +154,7 @@
   <ItemGroup>
     <ClCompile Include="ComputePlacementVisitor.cpp" />
     <ClCompile Include="CreateConstructionPointVisitor.cpp" />
+    <ClCompile Include="DessinExemple.cpp" />
     <ClCompile Include="MethodeConstruction.cpp" />
     <ClCompile Include="TestUI.cpp" />
   </ItemGroup>
@@ -163,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="ComputePlacementVisitor.h" />
     <ClInclude Include="CreateConstructionPointVisitor.h" />
+    <ClInclude Include="DessinExemple.h" />
     <ClInclude Include="MethodeConstruction.h" />
     <ClInclude Include="tests.h" />
   </ItemGroup>
