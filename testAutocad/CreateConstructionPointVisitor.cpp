@@ -348,7 +348,6 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
             transformPoints(transformation);
 
             _nameProfilDef = value->getSweptArea()->getType().getName();
-            const char* test = value->getSweptArea()->getType().getName().c_str();
 
             if(value->testExtrudedDirection())
             {
