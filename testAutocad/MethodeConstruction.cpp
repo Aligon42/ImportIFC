@@ -2132,5 +2132,133 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 V
 
 }
 
+AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef) {
 
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+	AcGePoint3dArray ptArr2;
+
+	float Radius = CircleprofilDef.Radius;
+
+	AcGePoint3d center = AcGePoint3d::AcGePoint3d(Radius, Radius, 0);
+
+	/// <summary>
+	/// Première polyline
+	/// </summary>
+	AcDbCircle* circle1 = new AcDbCircle();
+	circle1->setCenter(center);
+	circle1->setRadius(Radius);
+	circle1->setColorIndex(3);
+
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Radius / 2, -Radius / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	circle1->transformBy(matrix3d.translation(acVec3d));
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity1 = NULL;
+
+	/*if (circle1 == NULL)
+	{
+		pEntity1->close();
+		return;
+	}*/
+	AcDbVoidPtrArray lines1;
+	lines1.append(circle1);
+
+	//circle1->explode(lines1);
+	circle1->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions1;
+	es = AcDbRegion::createFromCurves(lines1, regions1);
+
+	/*if (Acad::eOk != es)
+	{
+		circle1->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+	}*/
+	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
+
+	return pRegion1;
+}
+
+AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef) {
+
+
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+
+
+	AcGePoint3dArray ptArr1;
+	AcGePoint3dArray ptArr2;
+
+
+
+	float XDim = RectangleprofilDef.XDim;
+	float YDim = RectangleprofilDef.YDim;
+
+	/// <summary>
+	/// Première polyline
+	/// </summary>
+	ptArr1.setLogicalLength(4);
+
+
+
+	ptArr1[0].set(0, 0, 0.0);
+	ptArr1[1].set(XDim, 0, 0.0);
+	ptArr1[2].set(XDim, YDim, 0.0);
+	ptArr1[3].set(0, YDim, 0.0);
+
+	AcDb2dPolyline* pNewPline1 = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr1, 0.0, Adesk::kTrue);
+	pNewPline1->setColorIndex(3);
+
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-XDim / 2, -YDim / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline1->transformBy(matrix3d.translation(acVec3d));
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity1 = NULL;
+
+
+
+	/*if (pNewPline1 == NULL)
+	{
+		pEntity1->close();
+		return;
+	}*/
+	AcDbVoidPtrArray lines1;
+	pNewPline1->explode(lines1);
+	pNewPline1->close();
+
+
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions1;
+	es = AcDbRegion::createFromCurves(lines1, regions1);
+
+
+
+	/*if (Acad::eOk != es)
+	{
+		pNewPline1->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}*/
+	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
+
+	return pRegion1;
+}
 
