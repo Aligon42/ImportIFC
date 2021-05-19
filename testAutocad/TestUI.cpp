@@ -173,14 +173,45 @@ void test()
     expressDataSet->instantiateAll();
     ComputePlacementVisitor placementVisitor;
 
-    int count = 0;
+    int count1 = 0;
+    for (auto& voids : expressDataSet->getAllIfcRelVoidsElement())
+    {
+        count1++;
+
+        CreateConstructionPointVisitor visitor1;
+        int key = (int)voids.getKey();
+        
+        voids.acceptVisitor(&visitor1);
+        _objectVoid.keyForVoid = visitor1.getkeyForVoid();
+        _objectVoid.points1 = visitor1.getPoints();
+        _objectVoid.nbArg = visitor1.getNbArgPolyline();
+        _objectVoid.VecteurExtrusion = visitor1.getVectorDirection();
+        _objectVoid.listPlan = visitor1.getPlanPolygonal();
+        _objectVoid.listLocationPolygonal = visitor1.getLocationPolygonal();
+        _objectVoid.AgreementHalf = visitor1.getAgreementHalfBool();
+        _objectVoid.AgreementPolygonal = visitor1.getAgreementPolygonalBool();
+        _objectVoid.listEntityHalf = visitor1.getListEntityHalf();
+        _objectVoid.listEntityPolygonal = visitor1.getListEntityPolygonal();
+        _objectVoid.NameProfilDef = visitor1.getNameProfildef();
+
+        voids.acceptVisitor(&placementVisitor);
+        _objectVoid.transform1 = placementVisitor.getTransformation();
+        Matrix4 transformation = visitor1.getTransformation();
+
+        _objectVoid.transform1 *= transformation;
+
+        listVoid.push_back(_objectVoid);
+
+    }
+
+    int count2 = 0;
     for (auto& buildingElement : expressDataSet->getAllIfcBuildingElement())
     {
-        count++;
+        count2++;
         int key = (int)buildingElement.getKey();
         std::string entity = buildingElement.getType().getName();
 
-        acutPrintf(_T("    => Element %d\n"), count);
+        acutPrintf(_T("    => Element %d\n"), count2);
 
         CreateConstructionPointVisitor visitor1;
         acutPrintf(_T("Index : %i\n"), key);
@@ -188,6 +219,7 @@ void test()
         {
             int PA = 0;
         }
+
         buildingElement.acceptVisitor(&visitor1);
 
         std::list<Vec3> points1 = visitor1.getPoints();
@@ -216,12 +248,12 @@ void test()
         Matrix4 transformation = visitor1.getTransformation();
 
         transform1 *= transformation;
+
        
         if (entity == "IfcWallStandardCase" || entity == "IfcSlab")
         {
             if (points1.size() > 0 && ListNbArg.size() > 0)
-                createSolid3d(points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal);
-
+                createSolid3d(key, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid);
         }
         else if (entity == "IfcColumn" || entity == "IfcBeam")
         {

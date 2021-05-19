@@ -7,11 +7,27 @@ CreateConstructionPointVisitor::CreateConstructionPointVisitor() :
 
 }
 
-bool CreateConstructionPointVisitor::visitIfcProduct(ifc2x3::IfcProduct* value)
+bool CreateConstructionPointVisitor::visitIfcProduct(
+    ifc2x3::IfcProduct* value)
 {
     if(value->testRepresentation())
     {
         return value->getRepresentation()->acceptVisitor(this);
+    }
+
+    return true;
+}
+
+bool CreateConstructionPointVisitor::visitIfcRelVoidsElement(
+    ifc2x3::IfcRelVoidsElement* value)
+{
+    if (value->testRelatedOpeningElement())
+    {
+        value->getRelatedOpeningElement()->acceptVisitor(this);
+    }
+    if (value->testRelatingBuildingElement())
+    {
+        keyForVoid = value->getRelatingBuildingElement()->getKey();
     }
 
     return true;
@@ -817,6 +833,11 @@ Rectangle_profilDef CreateConstructionPointVisitor::getRectangleprofilDef() cons
 std::string CreateConstructionPointVisitor::getNameProfildef() const
 {
     return NameProfilDef;
+}
+
+int CreateConstructionPointVisitor::getkeyForVoid() const
+{
+    return keyForVoid;
 }
 
 
