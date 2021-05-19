@@ -24,18 +24,20 @@
 struct ObjectVoid
 {
 	int keyForVoid;
+	std::string NameProfilDef;
+	Vec3 VecteurExtrusion;
 	std::list<Vec3> points1;
 	std::vector<int> nbArg;
-	Vec3 VecteurExtrusion;
-	Matrix4 transform1;
+	float XDim;
+	float YDim;
+	float radius;
 	std::list<Matrix4> listPlan;
 	std::list<Matrix4> listLocationPolygonal;
 	std::vector<bool> AgreementHalf;
 	std::vector<bool> AgreementPolygonal;
 	std::vector<std::string> listEntityHalf;
 	std::vector<std::string> listEntityPolygonal;
-	std::string NameProfilDef;
-
+	Matrix4 transform1;
 };
 
 static std::vector<ObjectVoid> listVoid;
@@ -69,3 +71,5 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
 void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
 void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);

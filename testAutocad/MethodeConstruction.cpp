@@ -95,15 +95,20 @@ void createSolid3d(int key, std::list<Vec3> points1, std::vector<int> ListNbArg,
 			listPlan.pop_front();
 	}
 
+	
+
+	DeplacementObjet3D(pSolid, transform1);
+
 	for (int v = 0; v < listVoid.size(); v++)
 	{
 		if (key == listVoid[v].keyForVoid)
 		{
-			CreationVoid(pSolid, listVoid[v]);
+			if (listVoid[v].NameProfilDef == "IfcArbitraryClosedProfileDef")
+			{
+				CreationVoid(pSolid, listVoid[v]);
+			}
 		}
 	}
-
-	DeplacementObjet3D(pSolid, transform1);
 
    AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
     if (Acad::eOk == es)
@@ -403,69 +408,75 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void)
 	ads_name polyName;
 	ads_point ptres;
 	AcGePoint3dArray ptArr;
+	
+	
 
-	if (Void.nbArg.size() > 1)
-	{
-		Void.nbArg.erase(Void.nbArg.begin());
-		Void.points1.pop_front();
-	}
-
-	ptArr.setLogicalLength(Void.nbArg[0]);
-	Vec3 pointOrigine = { Void.transform1[12], Void.transform1[13] , Void.transform1[14] };
-
-	int i = 0;
-
-	for (const auto& point : Void.points1)
-	{
-		if (i == Void.nbArg[0])
+		if (Void.nbArg.size() > 1)
 		{
-			break;
+			Void.nbArg.erase(Void.nbArg.begin());
+			Void.points1.pop_front();
 		}
 
-		ptArr[i].set(point.x(), point.y(), point.z());
+		ptArr.setLogicalLength(Void.nbArg[0]);
+		Vec3 pointOrigine = { Void.transform1[12], Void.transform1[13] , Void.transform1[14] };
 
-		i++;
-	}
+		int i = 0;
 
-	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
-		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
-	pNewPline->setColorIndex(3);
+		for (const auto& point : Void.points1)
+		{
+			if (i == Void.nbArg[0])
+			{
+				break;
+			}
 
-	//get the boundary curves of the polyline
-	AcDbEntity* pEntity = NULL;
-	if (pNewPline == NULL)
-	{
-		pEntity->close();
-		return;
-	}
-	AcDbVoidPtrArray lines;
-	pNewPline->explode(lines);
-	pNewPline->close();
+			ptArr[i].set(point.x(), point.y(), point.z());
 
-	// Create a region from the set of lines.
-	AcDbVoidPtrArray regions;
-	es = AcDbRegion::createFromCurves(lines, regions);
-	if (Acad::eOk != es)
-	{
+			i++;
+		}
+
+		AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+			AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+		pNewPline->setColorIndex(3);
+
+		//get the boundary curves of the polyline
+		AcDbEntity* pEntity = NULL;
+		if (pNewPline == NULL)
+		{
+			pEntity->close();
+			return;
+		}
+		AcDbVoidPtrArray lines;
+		pNewPline->explode(lines);
 		pNewPline->close();
-		acutPrintf(L"\nFailed to create region\n");
-		return;
-	}
 
-	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+		// Create a region from the set of lines.
+		AcDbVoidPtrArray regions;
+		es = AcDbRegion::createFromCurves(lines, regions);
+		if (Acad::eOk != es)
+		{
+			pNewPline->close();
+			acutPrintf(L"\nFailed to create region\n");
+			return;
+		}
+
+		AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
+		 for (int i = 0; i < lines.length(); i++)
+		 {
+			 delete (AcRxObject*)lines[i];
+		 }
+		 for (int ii = 0; ii < regions.length(); ii++)
+		 {
+			 delete (AcRxObject*)regions[ii];
+		 }
+
+	
 	// Extrude the region to create a solid.
 	AcDb3dSolid* extrusion_void = new AcDb3dSolid();
 	es = extrusion_void->extrude(pRegion, Void.VecteurExtrusion.z(), 0.0);
 	//es = extrusion_void->extrude(pRegion, 10, 0.0);
 
-	for (int i = 0; i < lines.length(); i++)
-	{
-		delete (AcRxObject*)lines[i];
-	}
-	for (int ii = 0; ii < regions.length(); ii++)
-	{
-		delete (AcRxObject*)regions[ii];
-	}
+	
 
 	int nbPlan = Void.listPlan.size();
 
@@ -491,9 +502,17 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void)
 
 	DeplacementObjet3D(extrusion_void, Void.transform1);
 
-	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
-	extrusion_void->close();
+	/*AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+	AcDbDatabase* pDb = curDoc()->database();
+	AcDbObjectId modelId;
+	modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+	AcDbBlockTableRecord* pBlockTableRecord;
+	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+	pBlockTableRecord->appendAcDbEntity(extrusion_void);
+	pBlockTableRecord->close();*/
+	
 	extrusion->booleanOper(AcDb::kBoolSubtract, extrusion_void);
+	extrusion_void->close();
 }
 
 
@@ -2132,7 +2151,7 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 V
 
 }
 
-AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef) {
+AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1) {
 
 	Acad::ErrorStatus es;
 	ads_name polyName;
@@ -2184,10 +2203,19 @@ AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef) {
 	}*/
 	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
 
+	for (int i = 0; i < lines1.length(); i++)
+	{
+		delete (AcRxObject*)lines1[i];
+	}
+	for (int ii = 0; ii < regions1.length(); ii++)
+	{
+		delete (AcRxObject*)regions1[ii];
+	}
+
 	return pRegion1;
 }
 
-AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef) {
+AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1) {
 
 
 
@@ -2259,6 +2287,14 @@ AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef) {
 	}*/
 	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
 
+	for (int i = 0; i < lines1.length(); i++)
+	{
+		delete (AcRxObject*)lines1[i];
+	}
+	for (int ii = 0; ii < regions1.length(); ii++)
+	{
+		delete (AcRxObject*)regions1[ii];
+	}
 	return pRegion1;
 }
 

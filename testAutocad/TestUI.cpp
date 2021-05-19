@@ -183,8 +183,21 @@ void test()
         
         voids.acceptVisitor(&visitor1);
         _objectVoid.keyForVoid = visitor1.getkeyForVoid();
-        _objectVoid.points1 = visitor1.getPoints();
-        _objectVoid.nbArg = visitor1.getNbArgPolyline();
+        _objectVoid.NameProfilDef = visitor1.getNameProfildef();
+        if (_objectVoid.NameProfilDef == "IfcArbitraryClosedProfileDef")
+        {
+            _objectVoid.points1 = visitor1.getPoints();
+            _objectVoid.nbArg = visitor1.getNbArgPolyline();
+        }
+        else if (_objectVoid.NameProfilDef == "IfcCircleProfileDef")
+        {
+            _objectVoid.radius = visitor1.getCircleprofilDef().Radius;
+        }
+        else if (_objectVoid.NameProfilDef == "IfcRectangleProfileDef")
+        {
+            _objectVoid.XDim = visitor1.getRectangleprofilDef().XDim;
+            _objectVoid.YDim = visitor1.getRectangleprofilDef().YDim;
+        }
         _objectVoid.VecteurExtrusion = visitor1.getVectorDirection();
         _objectVoid.listPlan = visitor1.getPlanPolygonal();
         _objectVoid.listLocationPolygonal = visitor1.getLocationPolygonal();
@@ -192,7 +205,6 @@ void test()
         _objectVoid.AgreementPolygonal = visitor1.getAgreementPolygonalBool();
         _objectVoid.listEntityHalf = visitor1.getListEntityHalf();
         _objectVoid.listEntityPolygonal = visitor1.getListEntityPolygonal();
-        _objectVoid.NameProfilDef = visitor1.getNameProfildef();
 
         voids.acceptVisitor(&placementVisitor);
         _objectVoid.transform1 = placementVisitor.getTransformation();

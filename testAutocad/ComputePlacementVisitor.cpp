@@ -17,6 +17,21 @@ bool ComputePlacementVisitor::visitIfcProduct(
     return true;
 }
 
+//bool ComputePlacementVisitor::visitIfcOpeningElement(
+//    ifc2x3::IfcOpeningElement* value)
+//{
+//    if (value->testObjectPlacement())
+//    {
+//        getTransformation(value->getObjectPlacement()->)
+//
+//
+//      return value->getObjectPlacement()->acceptVisitor(this);
+//
+//    }
+//
+//    return true;
+//}
+
 bool ComputePlacementVisitor::visitIfcLocalPlacement(
     ifc2x3::IfcLocalPlacement* value)
 {
