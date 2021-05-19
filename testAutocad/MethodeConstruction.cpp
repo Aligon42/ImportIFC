@@ -1,7 +1,11 @@
 ﻿#include "MethodeConstruction.h"
 #include "CreateConstructionPointVisitor.h"
 
-void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, Matrix4 tranform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal)
+void createSolid3d(int key, std::list<Vec3> points1, std::vector<int> ListNbArg,
+	Vec3 VecteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, 
+	std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, 
+	std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, 
+	std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid)
 {
     Acad::ErrorStatus es;
 
@@ -18,7 +22,7 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
 	}
 
 	ptArr.setLogicalLength(ListNbArg[0]);
-	Vec3 pointOrigine = { tranform1[12], tranform1[13] , tranform1[14] };
+	Vec3 pointOrigine = { transform1[12], transform1[13] , transform1[14] };
 
     int i = 0;
 
@@ -77,7 +81,7 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
 	int nbPlan = listPlan.size();
 
 
-	for (size_t i = 0; i < ListNbArg[0]; i++)
+	for (int i = 0; i < ListNbArg[0]; i++)
 	{
 		points1.pop_front();
 	}
@@ -89,25 +93,22 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
 			CreationSection(pSolid, VecteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal);
 	
 			listPlan.pop_front();
-			/*AcDbDatabase* pDb = curDoc()->database();
-			AcDbObjectId modelId;
-			modelId = acdbSymUtil()->blockModelSpaceId(pDb);
-			AcDbBlockTableRecord* pBlockTableRecord;
-			acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
-			pBlockTableRecord->appendAcDbEntity(pSolid);
-			pBlockTableRecord->close();*/
-				
 	}
 
-	DeplacementObjet3D(pSolid, tranform1);
+	
 
-	acutPrintf(_T("Matrice : \n{ %f, %f, %f, %f,\n %f, %f, %f, %f,\n %f, %f, %f, %f,\n %f, %f, %f, %f,\n"),
-		listLocationPolygonal.front()[0], listLocationPolygonal.front()[1], listLocationPolygonal.front()[2], listLocationPolygonal.front()[3],
-		listLocationPolygonal.front()[4], listLocationPolygonal.front()[5], listLocationPolygonal.front()[6], listLocationPolygonal.front()[7],
-		listLocationPolygonal.front()[8], listLocationPolygonal.front()[9], listLocationPolygonal.front()[10], listLocationPolygonal.front()[11],
-		listLocationPolygonal.front()[12], listLocationPolygonal.front()[13], listLocationPolygonal.front()[14], listLocationPolygonal.front()[15]);
+	DeplacementObjet3D(pSolid, transform1);
 
-	//pSolid->close();
+	for (int v = 0; v < listVoid.size(); v++)
+	{
+		if (key == listVoid[v].keyForVoid)
+		{
+			if (listVoid[v].NameProfilDef == "IfcArbitraryClosedProfileDef")
+			{
+				CreationVoid(pSolid, listVoid[v]);
+			}
+		}
+	}
 
    AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
     if (Acad::eOk == es)
@@ -128,7 +129,6 @@ void createSolid3d(std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 Vec
         return;
     }
 }
-
 
 static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1) {
 
@@ -186,7 +186,10 @@ static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1) {
 
 }
 
-static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3>& points1, std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal, std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal, std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal)
+static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3>& points1,
+	std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal,
+	std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal,
+	std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal)
 {
 
 	AcGeVector3d v1 = AcGeVector3d::AcGeVector3d(0, 0, 0);             // Vector 1 (x,y,z) & Vector 2 (x,y,z)
@@ -399,6 +402,121 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	
 }
 
+static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void)
+{
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+	AcGePoint3dArray ptArr;
+	
+	
+
+		if (Void.nbArg.size() > 1)
+		{
+			Void.nbArg.erase(Void.nbArg.begin());
+			Void.points1.pop_front();
+		}
+
+		ptArr.setLogicalLength(Void.nbArg[0]);
+		Vec3 pointOrigine = { Void.transform1[12], Void.transform1[13] , Void.transform1[14] };
+
+		int i = 0;
+
+		for (const auto& point : Void.points1)
+		{
+			if (i == Void.nbArg[0])
+			{
+				break;
+			}
+
+			ptArr[i].set(point.x(), point.y(), point.z());
+
+			i++;
+		}
+
+		AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+			AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+		pNewPline->setColorIndex(3);
+
+		//get the boundary curves of the polyline
+		AcDbEntity* pEntity = NULL;
+		if (pNewPline == NULL)
+		{
+			pEntity->close();
+			return;
+		}
+		AcDbVoidPtrArray lines;
+		pNewPline->explode(lines);
+		pNewPline->close();
+
+		// Create a region from the set of lines.
+		AcDbVoidPtrArray regions;
+		es = AcDbRegion::createFromCurves(lines, regions);
+		if (Acad::eOk != es)
+		{
+			pNewPline->close();
+			acutPrintf(L"\nFailed to create region\n");
+			return;
+		}
+
+		AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
+		 for (int i = 0; i < lines.length(); i++)
+		 {
+			 delete (AcRxObject*)lines[i];
+		 }
+		 for (int ii = 0; ii < regions.length(); ii++)
+		 {
+			 delete (AcRxObject*)regions[ii];
+		 }
+
+	
+	// Extrude the region to create a solid.
+	AcDb3dSolid* extrusion_void = new AcDb3dSolid();
+	es = extrusion_void->extrude(pRegion, Void.VecteurExtrusion.z(), 0.0);
+	//es = extrusion_void->extrude(pRegion, 10, 0.0);
+
+	
+
+	int nbPlan = Void.listPlan.size();
+
+	for (int a = 0; a < nbPlan; a++)
+	{
+		for (size_t i = 0; i < Void.nbArg[0]; i++)
+		{
+			Void.points1.pop_front();
+		}
+
+		Void.nbArg.erase(Void.nbArg.begin());
+
+		if (Void.points1.size() > 0 && Void.nbArg.size() > 0)
+		{
+			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.points1,
+				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal);
+
+
+			Void.listPlan.pop_front();
+		}
+	}
+
+	DeplacementObjet3D(extrusion_void, Void.transform1);
+
+	/*AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+	AcDbDatabase* pDb = curDoc()->database();
+	AcDbObjectId modelId;
+	modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+	AcDbBlockTableRecord* pBlockTableRecord;
+	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+	pBlockTableRecord->appendAcDbEntity(extrusion_void);
+	pBlockTableRecord->close();*/
+	
+	extrusion->booleanOper(AcDb::kBoolSubtract, extrusion_void);
+	extrusion_void->close();
+}
+
+
+//*** ProfilDef ***
 
 void createSolid3dProfil(BaseProfilDef* profilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
 {
@@ -509,6 +627,13 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matri
 	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
+
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
 
 
 	//get the boundary curves of the polyline
@@ -705,6 +830,13 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix
 	pNewPline->setColorIndex(3);
 
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
+
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
 
@@ -798,6 +930,12 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
@@ -892,6 +1030,13 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matri
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
 
+
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
@@ -991,6 +1136,13 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matri
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
+
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
@@ -1085,6 +1237,12 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matri
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
@@ -1179,6 +1337,12 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matri
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
@@ -1277,6 +1441,12 @@ void createSolid3dProfilC(C_profilDef CprofilDef, Vec3 VecteurExtrusion, Matrix4
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
@@ -1372,6 +1542,12 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, Vec3 VecteurExtrusion, Matrix4
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width + WebThickness/ 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
@@ -1478,6 +1654,13 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Vec3 Ve
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-BottomFlangeWidth / 2, -OverallDepth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
+
 	if (pNewPline == NULL)
 	{
 		pEntity->close();
@@ -1559,6 +1742,13 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	circle1->setRadius(Radius);
 	circle1->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d1 = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D1 = AcGePoint3d::AcGePoint3d(-Radius / 2, -Radius / 2, 0);
+	AcGeVector3d acVec3d1 = pointDeplacement3D1.asVector();
+	circle1->transformBy(matrix3d1.translation(acVec3d1));
+
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity1 = NULL;
 
@@ -1591,6 +1781,13 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	circle2->setCenter(center);
 	circle2->setRadius(Radius - WallThickness);
 	circle2->setColorIndex(3);
+
+	AcGeMatrix3d matrix3d2 = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d2 = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D2 = AcGePoint3d::AcGePoint3d(-Radius / 2, -Radius	 / 2, 0);
+	AcGeVector3d acVec3d2 = pointDeplacement3D2.asVector();
+	circle2->transformBy(matrix3d2.translation(acVec3d2));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity2 = NULL;
@@ -1684,6 +1881,13 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 		AcDb::k2dSimplePoly, ptArr1, 0.0, Adesk::kTrue);
 	pNewPline1->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d1 = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D1 = AcGePoint3d::AcGePoint3d(-XDim / 2, -YDim / 2, 0);
+	AcGeVector3d acVec3d1 = pointDeplacement3D1.asVector();
+	pNewPline1->transformBy(matrix3d1.translation(acVec3d1));
+
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity1 = NULL;
 
@@ -1725,6 +1929,12 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 		AcDb::k2dSimplePoly, ptArr2, 0.0, Adesk::kTrue);
 	pNewPline2->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d2 = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d2 = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D2 = AcGePoint3d::AcGePoint3d(-XDim / 2, -YDim / 2, 0);
+	AcGeVector3d acVec3d2 = pointDeplacement3D2.asVector();
+	pNewPline2->transformBy(matrix3d2.translation(acVec3d2));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity2 = NULL;
@@ -1820,6 +2030,13 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExt
 	circle1->setCenter(center);
 	circle1->setRadius(Radius);
 	circle1->setColorIndex(3);
+
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Radius / 2, -Radius / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	circle1->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity1 = NULL;
@@ -1921,7 +2138,12 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 V
 		AcDb::k2dSimplePoly, ptArr1, 0.0, Adesk::kTrue);
 	pNewPline1->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
 
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-XDim / 2, -YDim / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline1->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity1 = NULL;
@@ -2004,3 +2226,151 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 V
 
 
 }
+
+AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1) {
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+	AcGePoint3dArray ptArr2;
+
+	float Radius = CircleprofilDef.Radius;
+
+	AcGePoint3d center = AcGePoint3d::AcGePoint3d(Radius, Radius, 0);
+
+	/// <summary>
+	/// Première polyline
+	/// </summary>
+	AcDbCircle* circle1 = new AcDbCircle();
+	circle1->setCenter(center);
+	circle1->setRadius(Radius);
+	circle1->setColorIndex(3);
+
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Radius / 2, -Radius / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	circle1->transformBy(matrix3d.translation(acVec3d));
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity1 = NULL;
+
+	/*if (circle1 == NULL)
+	{
+		pEntity1->close();
+		return;
+	}*/
+	AcDbVoidPtrArray lines1;
+	lines1.append(circle1);
+
+	//circle1->explode(lines1);
+	circle1->close();
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions1;
+	es = AcDbRegion::createFromCurves(lines1, regions1);
+
+	/*if (Acad::eOk != es)
+	{
+		circle1->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+	}*/
+	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
+
+	for (int i = 0; i < lines1.length(); i++)
+	{
+		delete (AcRxObject*)lines1[i];
+	}
+	for (int ii = 0; ii < regions1.length(); ii++)
+	{
+		delete (AcRxObject*)regions1[ii];
+	}
+
+	return pRegion1;
+}
+
+AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1) {
+
+
+
+	Acad::ErrorStatus es;
+	ads_name polyName;
+	ads_point ptres;
+
+
+
+	AcGePoint3dArray ptArr1;
+	AcGePoint3dArray ptArr2;
+
+
+
+	float XDim = RectangleprofilDef.XDim;
+	float YDim = RectangleprofilDef.YDim;
+
+	/// <summary>
+	/// Première polyline
+	/// </summary>
+	ptArr1.setLogicalLength(4);
+
+
+
+	ptArr1[0].set(0, 0, 0.0);
+	ptArr1[1].set(XDim, 0, 0.0);
+	ptArr1[2].set(XDim, YDim, 0.0);
+	ptArr1[3].set(0, YDim, 0.0);
+
+	AcDb2dPolyline* pNewPline1 = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr1, 0.0, Adesk::kTrue);
+	pNewPline1->setColorIndex(3);
+
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-XDim / 2, -YDim / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline1->transformBy(matrix3d.translation(acVec3d));
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity1 = NULL;
+
+
+
+	/*if (pNewPline1 == NULL)
+	{
+		pEntity1->close();
+		return;
+	}*/
+	AcDbVoidPtrArray lines1;
+	pNewPline1->explode(lines1);
+	pNewPline1->close();
+
+
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions1;
+	es = AcDbRegion::createFromCurves(lines1, regions1);
+
+
+
+	/*if (Acad::eOk != es)
+	{
+		pNewPline1->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+
+	}*/
+	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
+
+	for (int i = 0; i < lines1.length(); i++)
+	{
+		delete (AcRxObject*)lines1[i];
+	}
+	for (int ii = 0; ii < regions1.length(); ii++)
+	{
+		delete (AcRxObject*)regions1[ii];
+	}
+	return pRegion1;
+}
+

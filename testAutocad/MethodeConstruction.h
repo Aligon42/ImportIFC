@@ -21,9 +21,40 @@
 #include "CreateConstructionPointVisitor.h"
 #include "ProfilDef.h"
 
-void createSolid3d(std::list<Vec3> points1, std::vector<int> nbArg, Vec3 VecteurExtrusion, Matrix4 tranform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal);
+
+struct ObjectVoid
+{
+	int keyForVoid;
+	std::string NameProfilDef;
+	Vec3 VecteurExtrusion;
+	std::list<Vec3> points1;
+	std::vector<int> nbArg;
+	float XDim;
+	float YDim;
+	float radius;
+	std::list<Matrix4> listPlan;
+	std::list<Matrix4> listLocationPolygonal;
+	std::vector<bool> AgreementHalf;
+	std::vector<bool> AgreementPolygonal;
+	std::vector<std::string> listEntityHalf;
+	std::vector<std::string> listEntityPolygonal;
+	Matrix4 transform1;
+};
+
+static std::vector<ObjectVoid> listVoid;
+static ObjectVoid _objectVoid;
+
+void createSolid3d(int key, std::list<Vec3> points1, std::vector<int> nbArg, Vec3 VecteurExtrusion,
+	Matrix4 transform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal,
+	std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal,
+	std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal,
+	std::vector<ObjectVoid> listVoid);
 static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1);
-static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3>& points1, std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal, std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal, std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal);
+static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3>& points1,
+	std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal,
+	std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal, std::vector<std::string>& listEntityHalf,
+	std::vector<std::string>& listEntityPolygonal);
+static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void);
 
 //profilDef
 void createSolid3dProfil(BaseProfilDef* profilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
@@ -42,3 +73,5 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
 void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
 void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);

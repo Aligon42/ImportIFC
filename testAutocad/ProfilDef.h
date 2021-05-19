@@ -1,6 +1,9 @@
 #pragma once
+#include <string>
 
-struct BaseProfilDef
+#include "DataObject.h"
+
+struct BaseProfilDef : public BaseObject
 {
     std::string Name;
 };

@@ -6,7 +6,8 @@ ComputePlacementVisitor::ComputePlacementVisitor() :
 
 }
 
-bool ComputePlacementVisitor::visitIfcProduct(ifc2x3::IfcProduct* value)
+bool ComputePlacementVisitor::visitIfcProduct(
+    ifc2x3::IfcProduct* value)
 {
     if(value->testObjectPlacement())
     {
@@ -15,6 +16,21 @@ bool ComputePlacementVisitor::visitIfcProduct(ifc2x3::IfcProduct* value)
 
     return true;
 }
+
+//bool ComputePlacementVisitor::visitIfcOpeningElement(
+//    ifc2x3::IfcOpeningElement* value)
+//{
+//    if (value->testObjectPlacement())
+//    {
+//        getTransformation(value->getObjectPlacement()->)
+//
+//
+//      return value->getObjectPlacement()->acceptVisitor(this);
+//
+//    }
+//
+//    return true;
+//}
 
 bool ComputePlacementVisitor::visitIfcLocalPlacement(
     ifc2x3::IfcLocalPlacement* value)
@@ -27,8 +43,8 @@ bool ComputePlacementVisitor::visitIfcLocalPlacement(
     return true;
 }
 
-Matrix4 ComputePlacementVisitor::getTransformation(ifc2x3::IfcLocalPlacement*
-                                                   value)
+Matrix4 ComputePlacementVisitor::getTransformation(
+    ifc2x3::IfcLocalPlacement*value)
 {
     Matrix4 currentTransformation = Matrix4::Identity();
 
@@ -53,8 +69,8 @@ Matrix4 ComputePlacementVisitor::getTransformation(ifc2x3::IfcLocalPlacement*
     return totalTransformation;
 }
 
-Matrix4 ComputePlacementVisitor::getTransformation(ifc2x3::IfcAxis2Placement3D*
-                                                   value)
+Matrix4 ComputePlacementVisitor::getTransformation(
+    ifc2x3::IfcAxis2Placement3D*value)
 {
     Vec3 location(0.f);
 
@@ -91,7 +107,8 @@ Matrix4 ComputePlacementVisitor::getTransformation(ifc2x3::IfcAxis2Placement3D*
     return transformation;
 }
 
-Vec3 ComputePlacementVisitor::getPoint(ifc2x3::IfcCartesianPoint* point)
+Vec3 ComputePlacementVisitor::getPoint(
+    ifc2x3::IfcCartesianPoint* point)
 {
     Vec3 vector(0.f);
 
@@ -113,7 +130,6 @@ Vec3 ComputePlacementVisitor::getPoint(ifc2x3::IfcCartesianPoint* point)
 
     return vector;
 }
-
 
 Matrix4 ComputePlacementVisitor::getTransformation(
     ifc2x3::IfcCartesianTransformationOperator* value)
@@ -153,7 +169,8 @@ Matrix4 ComputePlacementVisitor::getTransformation(
     return transformation;
 }
 
-Vec3 ComputePlacementVisitor::getDirection(ifc2x3::IfcDirection* direction)
+Vec3 ComputePlacementVisitor::getDirection(
+    ifc2x3::IfcDirection* direction)
 {
     ifc2x3::List_Real_2_3& dir = direction->getDirectionRatios();
     return Vec3(static_cast<float>(dir[0]), static_cast<float>(dir[1]),

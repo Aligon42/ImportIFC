@@ -1,13 +1,27 @@
 #pragma once
+#include "tchar.h"
+#include "aced.h"
+#include "rxregsvc.h"
+#include "dbapserv.h"
+#include "dbents.h"
+#include "dbsol3d.h"
+#include "dbregion.h"
+#include "dbsymutl.h"
+#include "dbplanesurf.h"
+#include "AcApDMgr.h"
+#include <Windows.h>
+#include <string.h>
+#include <iostream>
+#include <math.h>
 #include <string>
 #include <ifc2x3/InheritVisitor.h>
-#include "ProfilDef.h"
 
 #include <vectorial/config.h>
 #include <vectorial/vectorial.h>
 #include <vectorial/simd4f.h>
 #include <mathfu/vector_3.h>
 #include <mathfu/matrix_4x4.h>
+#include "ProfilDef.h"
 
 typedef mathfu::Vector<float, 3> Vec3;
 typedef mathfu::Matrix<float, 4> Matrix4;
@@ -22,6 +36,8 @@ private:
     std::list<Vec3> _points;
     Vec3 extrusionVector;
     Matrix4 transformation;
+
+    int keyForVoid;
 
     //opération boolean
     std::vector<bool> AgreementHalf;
@@ -51,6 +67,7 @@ public:
     ~CreateConstructionPointVisitor();
 
     bool visitIfcProduct(ifc2x3::IfcProduct* value) override;
+    bool visitIfcRelVoidsElement(ifc2x3::IfcRelVoidsElement* value) override;
     bool visitIfcProductRepresentation(ifc2x3::IfcProductRepresentation* value) override;
     bool visitIfcProductDefinitionShape(ifc2x3::IfcProductDefinitionShape* value) override;
     bool visitIfcShapeRepresentation(ifc2x3::IfcShapeRepresentation* value) override;
@@ -103,7 +120,8 @@ public:
     //get profilDef
     BaseProfilDef* GetProfilDef() { return _profilDef; }
     std::string getNameProfildef() const;
-    int getnbArgIProfilDef() const;
+
+    int getkeyForVoid() const;
 
 
     void SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);

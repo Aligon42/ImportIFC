@@ -1,5 +1,6 @@
 #include "CreateConstructionPointVisitor.h"
 #include "ComputePlacementVisitor.h"
+#include "ProfilDef.h"
 
 CreateConstructionPointVisitor::CreateConstructionPointVisitor() :
     ifc2x3::InheritVisitor()
@@ -9,7 +10,7 @@ CreateConstructionPointVisitor::CreateConstructionPointVisitor() :
 
 CreateConstructionPointVisitor::~CreateConstructionPointVisitor()
 {
-    delete _profilDef;
+    //delete _profilDef;
 }
 
 bool CreateConstructionPointVisitor::visitIfcProduct(ifc2x3::IfcProduct* value)
@@ -17,6 +18,21 @@ bool CreateConstructionPointVisitor::visitIfcProduct(ifc2x3::IfcProduct* value)
     if(value->testRepresentation())
     {
         return value->getRepresentation()->acceptVisitor(this);
+    }
+
+    return true;
+}
+
+bool CreateConstructionPointVisitor::visitIfcRelVoidsElement(
+    ifc2x3::IfcRelVoidsElement* value)
+{
+    if (value->testRelatedOpeningElement())
+    {
+        value->getRelatedOpeningElement()->acceptVisitor(this);
+    }
+    if (value->testRelatingBuildingElement())
+    {
+        keyForVoid = value->getRelatingBuildingElement()->getKey();
     }
 
     return true;
@@ -594,9 +610,6 @@ bool CreateConstructionPointVisitor::visitIfcCircleProfileDef(
     return true;
 }
 
-
-
-
 bool CreateConstructionPointVisitor::visitIfcArbitraryClosedProfileDef(ifc2x3::IfcArbitraryClosedProfileDef* value)
 {
     if(value->testOuterCurve())
@@ -765,6 +778,12 @@ std::string CreateConstructionPointVisitor::getNameProfildef() const
 {
     return _nameProfilDef;
 }
+
+int CreateConstructionPointVisitor::getkeyForVoid() const
+{
+    return keyForVoid;
+}
+
 
 void CreateConstructionPointVisitor::transformPoints(const Matrix4& transform)
 {
