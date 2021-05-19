@@ -458,19 +458,19 @@ void createSolid3dProfil(BaseProfilDef* profilDef, Vec3 VecteurExtrusion, Matrix
 	{
 		createSolid3dProfilAsyI(*(AsymmetricI_profilDef*)profilDef, VecteurExtrusion, transform1);
 	}
-	else if (profilDef->Name == "IfcCircleHollowShapeProfileDef")
+	else if (profilDef->Name == "IfcCircleHollowProfileDef")
 	{
 		createSolid3dProfilCircHollow(*(CircleHollow_profilDef*)profilDef, VecteurExtrusion, transform1);
 	}
-	else if (profilDef->Name == "IfcRectangleHollowShapeProfileDef")
+	else if (profilDef->Name == "IfcRectangleHollowProfileDef")
 	{
 		createSolid3dProfilRectHollow(*(RectangleHollow_profilDef*)profilDef, VecteurExtrusion, transform1);
 	}
-	else if (profilDef->Name == "IfcCircleShapeProfileDef")
+	else if (profilDef->Name == "IfcCircleProfileDef")
 	{
 		createSolid3dProfilCircle(*(Circle_profilDef*)profilDef, VecteurExtrusion, transform1);
 	}
-	else if (profilDef->Name == "IfcRectangleShapeProfileDef")
+	else if (profilDef->Name == "IfcRectangleProfileDef")
 	{
 		createSolid3dProfilRectangle(*(Rectangle_profilDef*)profilDef, VecteurExtrusion, transform1);
 	}

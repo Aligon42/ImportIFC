@@ -1,14 +1,13 @@
 #pragma once
 #include <string>
 #include <ifc2x3/InheritVisitor.h>
+#include "ProfilDef.h"
 
 #include <vectorial/config.h>
 #include <vectorial/vectorial.h>
 #include <vectorial/simd4f.h>
 #include <mathfu/vector_3.h>
 #include <mathfu/matrix_4x4.h>
-
-#include "ProfilDef.h"
 
 typedef mathfu::Vector<float, 3> Vec3;
 typedef mathfu::Matrix<float, 4> Matrix4;

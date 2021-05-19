@@ -184,7 +184,7 @@ void test()
 
         CreateConstructionPointVisitor visitor1;
         acutPrintf(_T("Index : %i\n"), key);
-        if (key == 108778)
+        if (key == 181415)
         {
             int PA = 0;
         }

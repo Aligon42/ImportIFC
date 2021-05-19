@@ -408,7 +408,6 @@ bool CreateConstructionPointVisitor::visitIfcLShapeProfileDef(
         ((L_profilDef*)_profilDef)->LegSlope = (float)value->getLegSlope();
         ((L_profilDef*)_profilDef)->nbArg = 6;
     }
-    
 
     return true;
 }
