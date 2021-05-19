@@ -289,22 +289,22 @@ void test()
                 AsymmetricI_profilDef AsymmetricIprofilDef = visitor1.getAsymmetricIprofilDef();
                 createSolid3dProfilAsyI(AsymmetricIprofilDef, VecteurExtrusion, transform1);
             }
-            else if (NameProfilDef == "IfcCircleHollowShapeProfileDef")
+            else if (NameProfilDef == "IfcCircleHollowProfileDef")
             {
                 CircleHollow_profilDef CircleHollowProfilDef = visitor1.getCircleHollowprofilDef();
                 createSolid3dProfilCircHollow(CircleHollowProfilDef, VecteurExtrusion, transform1);
             }
-            else if (NameProfilDef == "IfcRectangleHollowShapeProfileDef")
+            else if (NameProfilDef == "IfcRectangleHollowProfileDef")
             {
                 RectangleHollow_profilDef RectangleHollowProfilDef = visitor1.getRectangleHollowprofilDef();
                 createSolid3dProfilRectHollow(RectangleHollowProfilDef, VecteurExtrusion, transform1);
             }
-            else if (NameProfilDef == "IfcCircleShapeProfileDef")
+            else if (NameProfilDef == "IfcCircleProfileDef")
             {
                 Circle_profilDef CircleProfilDef = visitor1.getCircleprofilDef();
                 createSolid3dProfilCircle(CircleProfilDef, VecteurExtrusion, transform1);
             }
-            else if (NameProfilDef == "IfcRectangleShapeProfileDef")
+            else if (NameProfilDef == "IfcRectangleProfileDef")
             {
                 Rectangle_profilDef RectangleProfilDef = visitor1.getRectangleprofilDef();
                 createSolid3dProfilRectangle(RectangleProfilDef, VecteurExtrusion, transform1);

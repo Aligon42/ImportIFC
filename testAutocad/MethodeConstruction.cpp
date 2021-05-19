@@ -434,6 +434,13 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matri
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
+
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
@@ -629,6 +636,13 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix
 	pNewPline->setColorIndex(3);
 
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
+
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
 
@@ -722,6 +736,12 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
@@ -816,6 +836,13 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matri
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
 
+
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
@@ -915,6 +942,13 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matri
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
+
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
@@ -1009,6 +1043,12 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matri
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
@@ -1103,6 +1143,12 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matri
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
@@ -1201,6 +1247,12 @@ void createSolid3dProfilC(C_profilDef CprofilDef, Vec3 VecteurExtrusion, Matrix4
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
@@ -1296,6 +1348,12 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, Vec3 VecteurExtrusion, Matrix4
 		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width + WebThickness/ 2, -Depth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
@@ -1402,6 +1460,13 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Vec3 Ve
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-BottomFlangeWidth / 2, -OverallDepth / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline->transformBy(matrix3d.translation(acVec3d));
+
 	if (pNewPline == NULL)
 	{
 		pEntity->close();
@@ -1483,6 +1548,13 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	circle1->setRadius(Radius);
 	circle1->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d1 = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D1 = AcGePoint3d::AcGePoint3d(-Radius / 2, -Radius / 2, 0);
+	AcGeVector3d acVec3d1 = pointDeplacement3D1.asVector();
+	circle1->transformBy(matrix3d1.translation(acVec3d1));
+
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity1 = NULL;
 
@@ -1515,6 +1587,13 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	circle2->setCenter(center);
 	circle2->setRadius(Radius - WallThickness);
 	circle2->setColorIndex(3);
+
+	AcGeMatrix3d matrix3d2 = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d2 = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D2 = AcGePoint3d::AcGePoint3d(-Radius / 2, -Radius	 / 2, 0);
+	AcGeVector3d acVec3d2 = pointDeplacement3D2.asVector();
+	circle2->transformBy(matrix3d2.translation(acVec3d2));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity2 = NULL;
@@ -1608,6 +1687,13 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 		AcDb::k2dSimplePoly, ptArr1, 0.0, Adesk::kTrue);
 	pNewPline1->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d1 = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D1 = AcGePoint3d::AcGePoint3d(-XDim / 2, -YDim / 2, 0);
+	AcGeVector3d acVec3d1 = pointDeplacement3D1.asVector();
+	pNewPline1->transformBy(matrix3d1.translation(acVec3d1));
+
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity1 = NULL;
 
@@ -1649,6 +1735,12 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 		AcDb::k2dSimplePoly, ptArr2, 0.0, Adesk::kTrue);
 	pNewPline2->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d2 = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d2 = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D2 = AcGePoint3d::AcGePoint3d(-XDim / 2, -YDim / 2, 0);
+	AcGeVector3d acVec3d2 = pointDeplacement3D2.asVector();
+	pNewPline2->transformBy(matrix3d2.translation(acVec3d2));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity2 = NULL;
@@ -1744,6 +1836,13 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExt
 	circle1->setCenter(center);
 	circle1->setRadius(Radius);
 	circle1->setColorIndex(3);
+
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Radius / 2, -Radius / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	circle1->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity1 = NULL;
@@ -1845,7 +1944,12 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 V
 		AcDb::k2dSimplePoly, ptArr1, 0.0, Adesk::kTrue);
 	pNewPline1->setColorIndex(3);
 
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
 
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-XDim / 2, -YDim / 2, 0);
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	pNewPline1->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity1 = NULL;
