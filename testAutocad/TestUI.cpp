@@ -82,7 +82,7 @@ const wchar_t* GetWC(const char* c, ...)
 #define Log(x) \
     acutPrintf(_T(x))
 
-void DoYourThing(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vector<BaseObject*>* objects)
+void DoYourThing(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vector<BaseObject*>& objects)
 {
     ComputePlacementVisitor placementVisitor;
     int count = 0;
@@ -153,7 +153,7 @@ void DoYourThing(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vector<
                 ((DataObject*)obj)->ListEntityHalf = listEntityHalf;
                 ((DataObject*)obj)->ListEntityPolygonal = listEntityPolygonal;
 
-                objects->push_back(obj);
+                objects.push_back(obj);
             }
         }
         else if (entity == "IfcColumn" || entity == "IfcBeam")
@@ -167,7 +167,7 @@ void DoYourThing(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vector<
                 profilDef->Transformation = transform1;
                 profilDef->VecteurExtrusion = VecteurExtrusion;
 
-                objects->push_back(profilDef);
+                objects.push_back(profilDef);
             }
         }
 
@@ -315,17 +315,16 @@ void test()
         _objectVoid.transform1 *= transformation;
 
         listVoid.push_back(_objectVoid);
-
     }
 
     std::vector<std::thread*> threads;
-    std::vector<BaseObject*>* objects = new std::vector<BaseObject*>;
+    std::vector<BaseObject*> objects;
 
     for (auto& buildingElement : expressDataSet->getAllIfcBuildingElement().m_refList)
     {
         if (buildingElement->size() > 0)
         {
-            threads.push_back(new std::thread(DoYourThing, buildingElement, objects));
+            threads.push_back(new std::thread(DoYourThing, buildingElement, std::ref(objects)));
         }
     }
 
@@ -339,21 +338,18 @@ void test()
         delete thread;
     }
 
-    for (int i = 0; i < objects->size(); i++)
+    for (auto el : objects)
     {
-        auto object = objects->at(i);
-
-        if (object->EntityType == "IfcWallStandardCase" || object->EntityType == "IfcSlab")
+        if (el->EntityType == "IfcWallStandardCase" || el->EntityType == "IfcSlab")
         {
-            auto type = (DataObject*)object;
-    
+            auto type = (DataObject*)el;
+
             createSolid3d(type->Key, type->Points, type->NbArgs, type->VecteurExtrusion, type->Transformation, type->ListePlan, type->ListeLocationPolygonal, type->AgreementHalf, type->AgreementPolygonal, type->ListEntityHalf, type->ListEntityPolygonal, listVoid);
         }
-        else if (object->EntityType == "IfcColumn" || object->EntityType == "IfcBeam")
+        else if (el->EntityType == "IfcColumn" || el->EntityType == "IfcBeam")
         {
-            createSolid3dProfil((BaseProfilDef*)object, object->VecteurExtrusion, object->Transformation);
+            createSolid3dProfil((BaseProfilDef*)el, el->VecteurExtrusion, el->Transformation);
         }
-
     }
 
     acutPrintf(_T("\nFailure : %d\nSuccess : %d\n"), failure_results, success_results);
@@ -369,12 +365,12 @@ void test()
     //    filestream.close();
     //}
 
-    for (int i = 0; i < objects->size(); i++)
+    for (auto obj : objects)
     {
-        delete objects->at(i);
+        delete obj;
     }
-    objects->clear();
-    delete objects;
+
+    objects.clear();
     delete expressDataSet;
 
     auto stop = std::chrono::high_resolution_clock::now();
