@@ -1,5 +1,6 @@
 ﻿#include "MethodeConstruction.h"
 #include "CreateConstructionPointVisitor.h"
+#include <vector>
 
 void createSolid3d(int key, std::list<Vec3> points1, std::vector<int> ListNbArg,
 	Vec3 VecteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, 
@@ -95,10 +96,6 @@ void createSolid3d(int key, std::list<Vec3> points1, std::vector<int> ListNbArg,
 			listPlan.pop_front();
 	}
 
-	
-
-	DeplacementObjet3D(pSolid, transform1);
-
 	for (int v = 0; v < listVoid.size(); v++)
 	{
 		if (key == listVoid[v].keyForVoid)
@@ -106,9 +103,12 @@ void createSolid3d(int key, std::list<Vec3> points1, std::vector<int> ListNbArg,
 			if (listVoid[v].NameProfilDef == "IfcArbitraryClosedProfileDef")
 			{
 				CreationVoid(pSolid, listVoid[v]);
+				//listVoid.erase(listVoid.begin() + v);
 			}
 		}
 	}
+
+	DeplacementObjet3D(pSolid, transform1);
 
    AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
     if (Acad::eOk == es)
@@ -461,22 +461,24 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void)
 
 		AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
-		 for (int i = 0; i < lines.length(); i++)
-		 {
-			 delete (AcRxObject*)lines[i];
-		 }
-		 for (int ii = 0; ii < regions.length(); ii++)
-		 {
-			 delete (AcRxObject*)regions[ii];
-		 }
+		 
 
 	
 	// Extrude the region to create a solid.
 	AcDb3dSolid* extrusion_void = new AcDb3dSolid();
-	es = extrusion_void->extrude(pRegion, Void.VecteurExtrusion.z(), 0.0);
+	AcDb3dSolid* extrusion_void2 = new AcDb3dSolid();
+	es = extrusion_void->extrude(pRegion, -(Void.VecteurExtrusion.z()), 0.0);
+	es = extrusion_void2->extrude(pRegion, Void.VecteurExtrusion.z(), 0.0);
 	//es = extrusion_void->extrude(pRegion, 10, 0.0);
 
-	
+	for (int i = 0; i < lines.length(); i++)
+	{
+		delete (AcRxObject*)lines[i];
+	}
+	for (int ii = 0; ii < regions.length(); ii++)
+	{
+		delete (AcRxObject*)regions[ii];
+	}
 
 	int nbPlan = Void.listPlan.size();
 
@@ -494,25 +496,31 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void)
 			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
 				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal);
-
+			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.points1,
+				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal);
 
 			Void.listPlan.pop_front();
 		}
 	}
 
 	DeplacementObjet3D(extrusion_void, Void.transform1);
+	DeplacementObjet3D(extrusion_void2, Void.transform1);
 
-	/*AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 	AcDbDatabase* pDb = curDoc()->database();
 	AcDbObjectId modelId;
 	modelId = acdbSymUtil()->blockModelSpaceId(pDb);
 	AcDbBlockTableRecord* pBlockTableRecord;
 	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
 	pBlockTableRecord->appendAcDbEntity(extrusion_void);
-	pBlockTableRecord->close();*/
+	pBlockTableRecord->appendAcDbEntity(extrusion_void2);
+	pBlockTableRecord->close();
 	
 	extrusion->booleanOper(AcDb::kBoolSubtract, extrusion_void);
+	extrusion->booleanOper(AcDb::kBoolSubtract, extrusion_void2);
 	extrusion_void->close();
+	extrusion_void2->close();
 }
 
 
