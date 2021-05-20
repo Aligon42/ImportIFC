@@ -82,7 +82,7 @@ const wchar_t* GetWC(const char* c, ...)
 #define Log(x) \
     acutPrintf(_T(x))
 
-void DoYourThing(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vector<BaseObject*>& objects)
+void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vector<BaseObject*>& objects)
 {
     ComputePlacementVisitor placementVisitor;
     int count = 0;
@@ -177,6 +177,8 @@ void DoYourThing(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vector<
 
 void test()
 {
+    auto start = std::chrono::high_resolution_clock::now();
+
     AcDbObjectId transId;
     TCHAR* fname;
 
@@ -273,8 +275,6 @@ void test()
     expressDataSet->instantiateAll();
     ComputePlacementVisitor placementVisitor;
 
-    auto start = std::chrono::high_resolution_clock::now();
-
     int count = 0;
     for (auto& voids : expressDataSet->getAllIfcRelVoidsElement())
     {
@@ -328,7 +328,7 @@ void test()
             std::string type = (*buildingElement->begin()).second->type();
             objects.emplace(std::make_pair(type, vector));
 
-            threads.push_back(new std::thread(DoYourThing, buildingElement, std::ref(objects[type])));
+            threads.push_back(new std::thread(ExploreElement, buildingElement, std::ref(objects[type])));
         }
     }
 
