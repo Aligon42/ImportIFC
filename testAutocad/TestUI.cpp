@@ -318,13 +318,17 @@ void test()
     }
 
     std::vector<std::thread*> threads;
-    std::vector<BaseObject*> objects;
+    std::map<std::string, std::vector<BaseObject*>> objects;
 
-    for (auto& buildingElement : expressDataSet->getAllIfcBuildingElement().m_refList)
+    for (auto buildingElement : expressDataSet->getAllIfcBuildingElement().m_refList)
     {
         if (buildingElement->size() > 0)
         {
-            threads.push_back(new std::thread(DoYourThing, buildingElement, std::ref(objects)));
+            std::vector<BaseObject*> vector;
+            std::string type = (*buildingElement->begin()).second->type();
+            objects.emplace(std::make_pair(type, vector));
+
+            threads.push_back(new std::thread(DoYourThing, buildingElement, std::ref(objects[type])));
         }
     }
 
@@ -333,22 +337,28 @@ void test()
         thread->join();
     }
 
-    for (auto thread : threads)
+    for (auto& thread : threads)
     {
         delete thread;
     }
 
-    for (auto el : objects)
+    for (auto& type : objects)
     {
-        if (el->EntityType == "IfcWallStandardCase" || el->EntityType == "IfcSlab")
+        for (auto& el : type.second)
         {
-            auto type = (DataObject*)el;
+            if (type.first == "IfcWallStandardCase" || type.first == "IfcSlab")
+            {
+                auto type = (DataObject*)el;
 
-            createSolid3d(type->Key, type->Points, type->NbArgs, type->VecteurExtrusion, type->Transformation, type->ListePlan, type->ListeLocationPolygonal, type->AgreementHalf, type->AgreementPolygonal, type->ListEntityHalf, type->ListEntityPolygonal, listVoid);
-        }
-        else if (el->EntityType == "IfcColumn" || el->EntityType == "IfcBeam")
-        {
-            createSolid3dProfil((BaseProfilDef*)el, el->VecteurExtrusion, el->Transformation);
+                createSolid3d(type->Key, type->Points, type->NbArgs, type->VecteurExtrusion, type->Transformation, type->ListePlan, type->ListeLocationPolygonal, type->AgreementHalf, type->AgreementPolygonal, type->ListEntityHalf, type->ListEntityPolygonal, listVoid);
+            }
+            else if (type.first == "IfcColumn" || type.first == "IfcBeam")
+            {
+                createSolid3dProfil((BaseProfilDef*)el, el->VecteurExtrusion, el->Transformation);
+            }
+
+            delete el;
+            el = nullptr;
         }
     }
 
@@ -364,11 +374,6 @@ void test()
     //    bool status = writer.write(filestream);
     //    filestream.close();
     //}
-
-    for (auto obj : objects)
-    {
-        delete obj;
-    }
 
     objects.clear();
     delete expressDataSet;
