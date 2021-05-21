@@ -2,6 +2,8 @@
 #include "CreateConstructionPointVisitor.h"
 #include <vector>
 
+
+
 void createSolid3d(int key, std::list<Vec3> points1, std::vector<int> ListNbArg,
 	Vec3 VecteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, 
 	std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, 
@@ -777,6 +779,96 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void)
 	extrusion_void2->close();
 }
 
+AcDbRegion* createCompositeCurve(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1) {
+
+	Acad::ErrorStatus es;
+
+	ads_name polyName;
+
+	ads_point ptres;
+
+	AcGePoint3dArray ptArr;
+
+	// Polyligne
+	/*if (ListNbArg.size() > 1)
+	{
+		ListNbArg.erase(ListNbArg.begin());
+		points1.pop_front();
+	}
+
+	ptArr.setLogicalLength(ListNbArg[0]);
+	Vec3 pointOrigine = { transform1[12], transform1[13] , transform1[14] };
+
+	int i = 0;
+
+	for (const auto& point : points1)
+	{
+		if (i == ListNbArg[0])
+		{
+			break;
+		}
+
+		ptArr[i].set(point.x(), point.y(), point.z());
+
+		i++;
+	}
+
+	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+	pNewPline->setColorIndex(3);
+
+	//get the boundary curves of the polyline
+	AcDbEntity* pEntity = NULL;
+	if (pNewPline == NULL)
+	{
+		pEntity->close();
+		return;
+	}*/
+	AcDbVoidPtrArray lines;
+	//pNewPline->explode(lines);
+	//pNewPline->close();
+
+
+	//Arc
+	/*
+	AcDbArc* arc = new AcDbArc();
+	arc->setCenter(center);
+	arc->setRadius(radius);
+
+	if (SenseAgreement)
+	{
+		arc->setStartAngle(270);
+		arc->setEndAngle(90)
+	}
+	else {
+		arc->setStartAngle(-270);
+		arc->setEndAngle(-90)
+	}*/
+
+	// Create a region from the set of lines.
+	AcDbVoidPtrArray regions;
+	es = AcDbRegion::createFromCurves(lines, regions);
+
+	/*if (Acad::eOk != es)
+	{
+		circle1->close();
+		acutPrintf(L"\nFailed to create region\n");
+		return;
+	}*/
+	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
+	for (int i = 0; i < lines.length(); i++)
+	{
+		delete (AcRxObject*)lines[i];
+	}
+	for (int ii = 0; ii < regions.length(); ii++)
+	{
+		delete (AcRxObject*)regions[ii];
+	}
+
+	return pRegion;
+}
+
 //*** ProfilDef ***
 
 void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
@@ -898,6 +990,8 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matri
 	float FlangeSlope = IprofilDef.FlangeSlope;
 
 	float dy = (Width - Width / 4) * tan(FlangeSlope);
+	double pi = PI;
+
 
 	ptArr.setLogicalLength(16);
 
