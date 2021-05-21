@@ -4,7 +4,7 @@
 
 
 
-void createSolid3d(int key, std::list<Vec3> points1, std::vector<int> ListNbArg,
+void createSolid3d(int key, std::vector<std::string> nameItems, std::list<Vec3> points1, std::vector<int> ListNbArg,
 	Vec3 VecteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, 
 	std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, 
 	std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, 

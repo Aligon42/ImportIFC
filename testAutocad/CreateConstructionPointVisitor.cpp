@@ -65,6 +65,7 @@ bool CreateConstructionPointVisitor::visitIfcShapeRepresentation(
 {
     for(auto item : value->getItems())
     {
+        nameItems.push_back(item->getType().getName());
         if(item->acceptVisitor(this))
         {
             return true;
@@ -258,6 +259,7 @@ bool CreateConstructionPointVisitor::visitIfcCompositeCurveSegment(
     {
         value->getParentCurve()->acceptVisitor(this);
         nameParentCurve = value->getParentCurve()->getClassType().getName();
+        _compositeCurveSegment.listParentCurve.push_back(value->getParentCurve()->getClassType().getName());
         return true;
     }
 
@@ -297,23 +299,27 @@ bool CreateConstructionPointVisitor::visitIfcCircle(
     if (value->testRadius())
     {
         radiusCircle.push_back(value->getRadius());
+        _trimmedCurve.radius = value->getRadius();
     }
     if (value->testPosition())
     {
         value->getPosition()->acceptVisitor(this);
     }
+    auto index = value->getKey();
+
     return true;
 }
 
 bool CreateConstructionPointVisitor::visitIfcAxis2Placement2D(
     ifc2x3::IfcAxis2Placement2D* value)
 {
-    
+    auto index = value->getKey();
     if (value->testLocation())
     {
-        auto coordonnées = value->getLocation()->getCoordinates();
-        _trimmedCurve.centreCircle.x() = coordonnées.at(0);
-        _trimmedCurve.centreCircle.y() = coordonnées.at(1);
+        value->getLocation()->acceptVisitor(this);
+        auto coordonnees = value->getLocation()->getCoordinates();
+        _trimmedCurve.centreCircle.x() = coordonnees.at(0);
+        _trimmedCurve.centreCircle.y() = coordonnees.at(1);
         _trimmedCurve.centreCircle.z() = 0.0;
     }
 
@@ -738,6 +744,10 @@ Matrix4 CreateConstructionPointVisitor::getTransformation() const
     return transformation;
 }
 
+std::vector<std::string> CreateConstructionPointVisitor::getNameItems() const
+{
+    return nameItems;
+}
 
 //***** BOOLEAN *****
 
@@ -855,6 +865,15 @@ int CreateConstructionPointVisitor::getkeyForVoid() const
     return keyForVoid;
 }
 
+TrimmedCurve CreateConstructionPointVisitor::getTrimmedCurve() const
+{
+    return _trimmedCurve;
+}
+
+CompositeCurveSegment CreateConstructionPointVisitor::getCompositeCurveSegment() const
+{
+    return _compositeCurveSegment;
+}
 
 void CreateConstructionPointVisitor::transformPoints(const Matrix4& transform)
 {

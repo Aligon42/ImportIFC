@@ -227,12 +227,14 @@ void test()
 
         CreateConstructionPointVisitor visitor1;
         acutPrintf(_T("Index : %i\n"), key);
-        if (key == 255)
+        if (key == 112788)
         {
             int PA = 0;
         }
 
         buildingElement.acceptVisitor(&visitor1);
+
+        std::vector<std::string> nameItems = visitor1.getNameItems();
 
         std::list<Vec3> points1 = visitor1.getPoints();
         for (const auto& point : points1)
@@ -255,6 +257,13 @@ void test()
         std::vector<std::string> listEntityHalf = visitor1.getListEntityHalf();
         std::vector<std::string> listEntityPolygonal = visitor1.getListEntityPolygonal();
 
+        _trimmedCurve.centreCircle = visitor1.getTrimmedCurve().centreCircle;
+        _trimmedCurve.radius = visitor1.getTrimmedCurve().radius;
+        _trimmedCurve.trim1 = visitor1.getTrimmedCurve().trim1;
+        _trimmedCurve.trim2 = visitor1.getTrimmedCurve().trim2;
+        _trimmedCurve.senseArgreement = visitor1.getTrimmedCurve().senseArgreement;
+
+
         buildingElement.acceptVisitor(&placementVisitor);
         Matrix4 transform1 = placementVisitor.getTransformation();
         Matrix4 transformation = visitor1.getTransformation();
@@ -265,7 +274,7 @@ void test()
         if (entity == "IfcWallStandardCase" || entity == "IfcSlab")
         {
             if (points1.size() > 0 && ListNbArg.size() > 0)
-                createSolid3d(key, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid);
+                createSolid3d(key, nameItems, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid);
         }
         else if (entity == "IfcColumn" || entity == "IfcBeam")
         {

@@ -131,12 +131,6 @@ struct Circle_profilDef
     float Radius;
 };
 
-struct CompositeCurveSegment
-{
-    std::vector<std::vector<Vec3>> listPolyligne;
-    std::vector<TrimmedCurve> listTrimmedCurve;
-};
-
 struct TrimmedCurve
 {
     Vec3 centreCircle;
@@ -145,6 +139,18 @@ struct TrimmedCurve
     int trim2;
     bool senseArgreement;
 };
+
+struct CompositeCurveSegment
+{
+    std::vector<std::vector<Vec3>> listPolyligne;
+    std::vector<TrimmedCurve> listTrimmedCurve;
+    std::vector<std::string> listParentCurve;
+};
+
+
+
+static TrimmedCurve _trimmedCurve;
+static CompositeCurveSegment _compositeCurveSegment;
 
 class CreateConstructionPointVisitor : public ifc2x3::InheritVisitor
 {
@@ -156,6 +162,7 @@ private:
     std::list<Vec3> _points;
     Vec3 extrusionVector;
     Matrix4 transformation;
+    std::vector<std::string> nameItems;
 
     int keyForVoid;
 
@@ -190,6 +197,7 @@ private:
     Circle_profilDef CircleprofilDef;
     Rectangle_profilDef RectangleprofilDef;
 
+    
 
 public:
     //! Constructor
@@ -237,6 +245,7 @@ public:
     std::list<Vec3> getPoints() const;
     Vec3 getVectorDirection() const;
     Matrix4 getTransformation() const;
+    std::vector<std::string> getNameItems() const;
 
     //get opération boolean
     std::vector<bool> getAgreementHalfBool() const;
@@ -262,8 +271,8 @@ public:
     std::string getNameProfildef() const;
 
     int getkeyForVoid() const;
-
-    TrimmedCurve _trimmedCurve;
+    TrimmedCurve getTrimmedCurve() const;
+    CompositeCurveSegment getCompositeCurveSegment() const;
 
     void SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);
     void SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);
