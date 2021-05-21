@@ -461,14 +461,6 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void)
 
 		AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
-		 for (int i = 0; i < lines.length(); i++)
-		 {
-			 delete (AcRxObject*)lines[i];
-		 }
-		 for (int ii = 0; ii < regions.length(); ii++)
-		 {
-			 delete (AcRxObject*)regions[ii];
-		 }
 
 	
 	// Extrude the region to create a solid.
@@ -476,7 +468,15 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void)
 	es = extrusion_void->extrude(pRegion, Void.VecteurExtrusion.z(), 0.0);
 	//es = extrusion_void->extrude(pRegion, 10, 0.0);
 
-	
+
+	for (int i = 0; i < lines.length(); i++)
+	{
+		delete (AcRxObject*)lines[i];
+	}
+	for (int ii = 0; ii < regions.length(); ii++)
+	{
+		delete (AcRxObject*)regions[ii];
+	}
 
 	int nbPlan = Void.listPlan.size();
 
@@ -502,14 +502,14 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void)
 
 	DeplacementObjet3D(extrusion_void, Void.transform1);
 
-	/*AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 	AcDbDatabase* pDb = curDoc()->database();
 	AcDbObjectId modelId;
 	modelId = acdbSymUtil()->blockModelSpaceId(pDb);
 	AcDbBlockTableRecord* pBlockTableRecord;
 	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
 	pBlockTableRecord->appendAcDbEntity(extrusion_void);
-	pBlockTableRecord->close();*/
+	pBlockTableRecord->close();
 	
 	extrusion->booleanOper(AcDb::kBoolSubtract, extrusion_void);
 	extrusion_void->close();
