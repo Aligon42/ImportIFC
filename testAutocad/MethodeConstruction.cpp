@@ -96,6 +96,8 @@ void createSolid3d(int key, std::list<Vec3> points1, std::vector<int> ListNbArg,
 			listPlan.pop_front();
 	}
 
+	DeplacementObjet3D(pSolid, transform1);
+
 	for (int v = 0; v < listVoid.size(); v++)
 	{
 		if (key == listVoid[v].keyForVoid)
@@ -105,20 +107,18 @@ void createSolid3d(int key, std::list<Vec3> points1, std::vector<int> ListNbArg,
 				CreationVoid(pSolid, listVoid[v]);
 				//listVoid.erase(listVoid.begin() + v);
 			}
-			if (listVoid[v].NameProfilDef == "IfcRectangleProfileDef")
+			else if (listVoid[v].NameProfilDef == "IfcCircleProfileDef")
 			{
-				CreationVoid(pSolid, listVoid[v]);
+				CreationVoidCircle(pSolid, listVoid[v]);
 				//listVoid.erase(listVoid.begin() + v);
 			}
-			if (listVoid[v].NameProfilDef == "IfcCircleProfileDef")
+			else if (listVoid[v].NameProfilDef == "IfcRectangleProfileDef")
 			{
-				CreationVoid(pSolid, listVoid[v]);
+				CreationVoidRectangle(pSolid, listVoid[v]);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 		}
 	}
-
-	DeplacementObjet3D(pSolid, transform1);
 
    AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
     if (Acad::eOk == es)

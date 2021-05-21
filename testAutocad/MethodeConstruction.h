@@ -53,7 +53,11 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal,
 	std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal, std::vector<std::string>& listEntityHalf,
 	std::vector<std::string>& listEntityPolygonal);
+
+//Void
 static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void);
+static void CreationVoidCircle(AcDb3dSolid* extrusion, ObjectVoid Void);
+static void CreationVoidRectangle(AcDb3dSolid* extrusion, ObjectVoid Void);
 
 //profilDef
 void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
