@@ -20,6 +20,8 @@
 #include <mathfu/matrix_4x4.h>
 #include "CreateConstructionPointVisitor.h"
 
+#define PI 3.14159265358979323846
+
 
 struct ObjectVoid
 {
