@@ -383,6 +383,7 @@ void initApp()
         ACRX_CMD_TRANSPARENT,
         test);
 }
+
 void unloadApp()
 {
     acedRegCmds->removeGroup(_T("IMPORT_COMMANDS"));

@@ -269,15 +269,15 @@ bool CreateConstructionPointVisitor::visitIfcTrimmedCurve(
 {
     if (value->testTrim1())
     {
-       
+        _trimmedCurve.trim1 = value->getTrim1().getLowerBound();
     }
     if (value->testTrim2())
     {
-
+        _trimmedCurve.trim2 = value->getTrim2().getLowerBound();
     }
     if (value->testSenseAgreement())
     {
-        senseAgreementTrimmedCurve.push_back(value->getSenseAgreement());
+        _trimmedCurve.senseArgreement = value->getSenseAgreement();
     }
     if (value->testMasterRepresentation())
     {
@@ -302,6 +302,21 @@ bool CreateConstructionPointVisitor::visitIfcCircle(
     {
         value->getPosition()->acceptVisitor(this);
     }
+    return true;
+}
+
+bool CreateConstructionPointVisitor::visitIfcAxis2Placement2D(
+    ifc2x3::IfcAxis2Placement2D* value)
+{
+    
+    if (value->testLocation())
+    {
+        auto coordonnées = value->getLocation()->getCoordinates();
+        _trimmedCurve.centreCircle.x() = coordonnées.at(0);
+        _trimmedCurve.centreCircle.y() = coordonnées.at(1);
+        _trimmedCurve.centreCircle.z() = 0.0;
+    }
+
     return true;
 }
 

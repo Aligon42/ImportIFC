@@ -131,6 +131,21 @@ struct Circle_profilDef
     float Radius;
 };
 
+struct CompositeCurveSegment
+{
+    std::vector<std::vector<Vec3>> listPolyligne;
+    std::vector<TrimmedCurve> listTrimmedCurve;
+};
+
+struct TrimmedCurve
+{
+    Vec3 centreCircle;
+    float radius;
+    int trim1;
+    int trim2;
+    bool senseArgreement;
+};
+
 class CreateConstructionPointVisitor : public ifc2x3::InheritVisitor
 {
 private:
@@ -195,6 +210,7 @@ public:
     bool visitIfcCircle(ifc2x3::IfcCircle* value) override; 
     bool visitIfcRepresentationMap(ifc2x3::IfcRepresentationMap* value) override;
     bool visitIfcPlane(ifc2x3::IfcPlane* value) override;
+    bool visitIfcAxis2Placement2D(ifc2x3::IfcAxis2Placement2D* value) override;
     bool visitIfcExtrudedAreaSolid(ifc2x3::IfcExtrudedAreaSolid* value) override;
 
     //profilDef
@@ -247,6 +263,7 @@ public:
 
     int getkeyForVoid() const;
 
+    TrimmedCurve _trimmedCurve;
 
     void SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);
     void SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);
