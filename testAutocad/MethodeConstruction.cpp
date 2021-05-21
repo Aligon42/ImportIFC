@@ -105,6 +105,16 @@ void createSolid3d(int key, std::list<Vec3> points1, std::vector<int> ListNbArg,
 				CreationVoid(pSolid, listVoid[v]);
 				//listVoid.erase(listVoid.begin() + v);
 			}
+			if (listVoid[v].NameProfilDef == "IfcRectangleProfileDef")
+			{
+				CreationVoid(pSolid, listVoid[v]);
+				//listVoid.erase(listVoid.begin() + v);
+			}
+			if (listVoid[v].NameProfilDef == "IfcCircleProfileDef")
+			{
+				CreationVoid(pSolid, listVoid[v]);
+				//listVoid.erase(listVoid.begin() + v);
+			}
 		}
 	}
 
