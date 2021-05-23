@@ -33,19 +33,9 @@ static CompositeCurveSegment _compositeCurveSegment;
 class CreateConstructionPointVisitor : public ifc2x3::InheritVisitor
 {
 private:
-    Matrix4 _transformation{ Matrix4::Identity() };
-    Matrix4 transform;
-
-    std::list<Vec3> _points;
-    Vec3 extrusionVector;
-    Matrix4 transformation;
     std::vector<std::string> nameItems;
 
     //opération boolean
-    std::vector<bool> AgreementHalf;
-    std::vector<std::string> entityHalf;
-    std::vector<bool> AgreementPolygonal;
-    std::vector<std::string> entityPolygonal;
     std::vector<bool> AgreementCompositeCurve;
     std::vector<ifc2x3::IfcTransitionCode> transitionCompositeCurveSegment;
     std::vector<bool> sameSenseCompositeCurveSegment;
@@ -54,12 +44,8 @@ private:
     std::vector<bool> senseAgreementTrimmedCurve;
     std::string nameParentCurve;
     std::vector<int> radiusCircle;
-    std::list<Matrix4> listPlan;
-    std::list<Matrix4> listLocationPolygonal;
-    std::vector<int> listNbArgPolyline;
     
     //profilDef
-    std::string _nameProfilDef;
     BaseProfilDef* _profilDef;
     BaseObject* _object;
 
@@ -112,23 +98,10 @@ public:
     bool visitIfcFaceOuterBound(ifc2x3::IfcFaceOuterBound* value) override;
     bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value) override;
 
-    std::list<Vec3> getPoints() const;
-    Vec3 getVectorDirection() const;
-    Matrix4 getTransformation() const;
     std::vector<std::string> getNameItems() const;
-
-    //get opération boolean
-    std::vector<bool> getAgreementHalfBool() const;
-    std::vector<bool> getAgreementPolygonalBool() const;
-    std::list<Matrix4> getPlanPolygonal();
-    std::list<Matrix4> getLocationPolygonal() const;
-    std::vector<int> getNbArgPolyline() const;
-    std::vector<std::string> getListEntityHalf() const;
-    std::vector<std::string> getListEntityPolygonal() const;
 
     //get profilDef
     inline BaseProfilDef* GetProfilDef() { return _profilDef; }
-    std::string getNameProfildef() const;
 
     int getkeyForVoid() const;
     TrimmedCurve getTrimmedCurve() const;

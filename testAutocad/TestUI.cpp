@@ -126,7 +126,6 @@ void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vect
             {
                 profilDef->Key = it->first;
                 profilDef->Type = entity;
-                profilDef->Name = visitor1.getNameProfildef();
                 profilDef->Transform = obj->Transform;
                 profilDef->VecteurExtrusion = obj->VecteurExtrusion;
 
@@ -140,185 +139,192 @@ void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vect
     }
 }
 
-void test()
+void LoadIfc()
 {
-    AcDbObjectId transId;
-    TCHAR* fname;
-
-    struct resbuf* rb;
-    // Get a ifc file from the user.
-    //
-    rb = acutNewRb(RTSTR);
-    int stat = acedGetFileD(_T("Pick a IFC file"), NULL, _T("ifc"), 0, rb);
-    if ((stat != RTNORM) || (rb == NULL))
+    try
     {
-        acutPrintf(_T("\nYou must pick a ifc file."));
-        return;
-    }
-    fname = (TCHAR*)acad_malloc((_tcslen(rb->resval.rstring) + 1) * sizeof(TCHAR));
-    _tcscpy(fname, rb->resval.rstring);
-    acutRelRb(rb);
+        AcDbObjectId transId;
+        TCHAR* fname;
 
-    auto start = std::chrono::high_resolution_clock::now();
-
-    Log("Simple read/write example of Ifc2x3 SDK\n");
-    bool shouldWrite = false;
-    bool inMemory = false;
-
-    // ** open, load, close the file
-    std::ifstream ifcFile;
-    ifcFile.open(fname);
-
-    ifc2x3::SPFReader reader;
-    ConsoleCallBack cb;
-    //    reader.setCallBack(&cb);
-
-    if (ifcFile.is_open())
-    {
-        acutPrintf(_T("\nreading file ..."));
-    }
-    else
-    {
-        acutPrintf(_T("ERROR: failed to open <%s>\n"), fname);
-    }
-
-    // get length of file
-    ifcFile.seekg(0, ifcFile.end);
-    std::ifstream::pos_type length = ifcFile.tellg();
-    ifcFile.seekg(0, ifcFile.beg);
-
-    bool result = reader.read(ifcFile, inMemory ? length : (std::ifstream::pos_type)0);
-    ifcFile.close();
-
-    if (result)
-        acutPrintf(_T("OK!!\n"));
-    else
-    {
-        Log("Ho no, there is a PROBLEM!!\n");
-        std::vector<std::string> errors = reader.errors();
-        std::vector<std::string>::iterator it = errors.begin();
-        while (it != errors.end())
+        struct resbuf* rb;
+        // Get a ifc file from the user.
+        //
+        rb = acutNewRb(RTSTR);
+        int stat = acedGetFileD(_T("Pick a IFC file"), NULL, _T("ifc"), 0, rb);
+        if ((stat != RTNORM) || (rb == NULL))
         {
-            acutPrintf(_T("%s\n"), *it);
-            ++it;
+            acutPrintf(_T("\nYou must pick a ifc file."));
+            return;
         }
-    }
+        fname = (TCHAR*)acad_malloc((_tcslen(rb->resval.rstring) + 1) * sizeof(TCHAR));
+        _tcscpy(fname, rb->resval.rstring);
+        acutRelRb(rb);
 
-    // ** get the model
-    ifc2x3::ExpressDataSet* expressDataSet = dynamic_cast<ifc2x3::ExpressDataSet*>(reader.getExpressDataSet());
+        auto start = std::chrono::high_resolution_clock::now();
 
-    if (expressDataSet == NULL)
-    {
-        acutPrintf(_T("Ho no ... there is no ExpressDataSet.\n"));
-    }
+        Log("Simple read/write example of Ifc2x3 SDK\n");
+        bool shouldWrite = false;
+        bool inMemory = false;
 
-    if (shouldWrite)
-    {
-        // ** Instantiate the model if we want to write it
-        expressDataSet->instantiateAll(/*&cb*/);
-    }
+        // ** open, load, close the file
+        std::ifstream ifcFile;
+        ifcFile.open(fname);
 
-    // ** Check the root of the model
-    Step::RefLinkedList< ifc2x3::IfcProject > projects = expressDataSet->getAllIfcProject();
-    if (projects.size() == 0) {
-        acutPrintf(_T("Strange ... there is no IfcProject\n"));
-    }
-    else if (projects.size() > 1) {
-        acutPrintf(_T("Strange ... there more than one IfcProject\n"));
-    }
-    else {
-        Step::RefPtr< ifc2x3::IfcProject > project = &*(projects.begin());
-        //Log("Project name is: %s\n", GetWC(project->getName().toISO_8859(Step::String::Western_European)));
-        acutPrintf(_T("Project name is: %s\n"), GetWC((project->getName().toISO_8859(Step::String::Western_European)).c_str()));
-        if (Step::isUnset(project->getLongName().toISO_8859(Step::String::Western_European))) {
-            project->setLongName("Je lui donne le nom que je veux");
-        }
-        acutPrintf(_T("Project long name is: %s\n"), GetWC((project->getLongName().toISO_8859(Step::String::Western_European)).c_str()));
-    }
+        ifc2x3::SPFReader reader;
+        ConsoleCallBack cb;
+        //    reader.setCallBack(&cb);
 
-    //TEST_ASSERT(expressDataSet != nullptr);
-    expressDataSet->instantiateAll();
-    ComputePlacementVisitor placementVisitor;
-    MethodeConstruction methodeConstruction;
-    std::vector<std::thread> threads;
-
-    threads.push_back(std::thread([&]() {
-        int count = 0;
-        for (auto& voids : expressDataSet->getAllIfcRelVoidsElement())
+        if (ifcFile.is_open())
         {
-            count++;
-
-            CreateConstructionPointVisitor visitor1;
-            int key = (int)voids.getKey();
-
-            voids.acceptVisitor(&visitor1);
-
-            ObjectVoid objectVoid = visitor1.getObjectVoid();
-            voids.acceptVisitor(&placementVisitor);
-            objectVoid.Transform = placementVisitor.getTransformation() * objectVoid.Transform;
-
-            methodeConstruction.AddObjectVoid(objectVoid);
+            acutPrintf(_T("\nreading file ..."));
         }
+        else
+        {
+            acutPrintf(_T("ERROR: failed to open <%s>\n"), fname);
+        }
+
+        // get length of file
+        ifcFile.seekg(0, ifcFile.end);
+        std::ifstream::pos_type length = ifcFile.tellg();
+        ifcFile.seekg(0, ifcFile.beg);
+
+        bool result = reader.read(ifcFile, inMemory ? length : (std::ifstream::pos_type)0);
+        ifcFile.close();
+
+        if (result)
+            acutPrintf(_T("OK!!\n"));
+        else
+        {
+            Log("Ho no, there is a PROBLEM!!\n");
+            std::vector<std::string> errors = reader.errors();
+            std::vector<std::string>::iterator it = errors.begin();
+            while (it != errors.end())
+            {
+                acutPrintf(_T("%s\n"), *it);
+                ++it;
+            }
+        }
+
+        // ** get the model
+        ifc2x3::ExpressDataSet* expressDataSet = dynamic_cast<ifc2x3::ExpressDataSet*>(reader.getExpressDataSet());
+
+        if (expressDataSet == NULL)
+        {
+            acutPrintf(_T("Ho no ... there is no ExpressDataSet.\n"));
+        }
+
+        if (shouldWrite)
+        {
+            // ** Instantiate the model if we want to write it
+            expressDataSet->instantiateAll(/*&cb*/);
+        }
+
+        // ** Check the root of the model
+        Step::RefLinkedList< ifc2x3::IfcProject > projects = expressDataSet->getAllIfcProject();
+        if (projects.size() == 0) {
+            acutPrintf(_T("Strange ... there is no IfcProject\n"));
+        }
+        else if (projects.size() > 1) {
+            acutPrintf(_T("Strange ... there more than one IfcProject\n"));
+        }
+        else {
+            Step::RefPtr< ifc2x3::IfcProject > project = &*(projects.begin());
+            //Log("Project name is: %s\n", GetWC(project->getName().toISO_8859(Step::String::Western_European)));
+            acutPrintf(_T("Project name is: %s\n"), GetWC((project->getName().toISO_8859(Step::String::Western_European)).c_str()));
+            if (Step::isUnset(project->getLongName().toISO_8859(Step::String::Western_European))) {
+                project->setLongName("Je lui donne le nom que je veux");
+            }
+            acutPrintf(_T("Project long name is: %s\n"), GetWC((project->getLongName().toISO_8859(Step::String::Western_European)).c_str()));
+        }
+
+        //TEST_ASSERT(expressDataSet != nullptr);
+        expressDataSet->instantiateAll();
+        ComputePlacementVisitor placementVisitor;
+        MethodeConstruction methodeConstruction;
+        std::vector<std::thread> threads;
+
+        threads.push_back(std::thread([&]()
+        {
+            int count = 0;
+            for (auto& voids : expressDataSet->getAllIfcRelVoidsElement())
+            {
+                count++;
+
+                CreateConstructionPointVisitor visitor1;
+                int key = (int)voids.getKey();
+
+                voids.acceptVisitor(&visitor1);
+
+                ObjectVoid objectVoid = visitor1.getObjectVoid();
+                voids.acceptVisitor(&placementVisitor);
+                objectVoid.Transform = placementVisitor.getTransformation() * objectVoid.Transform;
+                methodeConstruction.AddObjectVoid(objectVoid);
+            }
         }));
 
-    std::map<std::string, std::vector<BaseObject*>> objects;
+        std::map<std::string, std::vector<BaseObject*>> objects;
 
-    for (auto buildingElement : expressDataSet->getAllIfcBuildingElement().m_refList)
-    {
-        if (buildingElement->size() > 0)
+        for (auto buildingElement : expressDataSet->getAllIfcBuildingElement().m_refList)
         {
-            std::vector<BaseObject*> vector;
-            std::string type = (*buildingElement->begin()).second->type();
-
-            if (type != "IfcWallStandardCase" && type != "IfcSlab" && type != "IfcColumn" && type != "IfcBeam") continue;
-
-            objects.emplace(std::make_pair(type, vector));
-
-            threads.push_back(std::thread(ExploreElement, buildingElement, std::ref(objects[type])));
-        }
-    }
-
-    for (auto& thread : threads)
-    {
-        thread.join();
-    }
-
-    for (auto& type : objects)
-    {
-        for (auto& el : type.second)
-        {
-            if (type.first == "IfcWallStandardCase" || type.first == "IfcSlab")
+            if (buildingElement->size() > 0)
             {
-                methodeConstruction.createSolid3d(*(ObjectToConstruct*)el);
-                delete (ObjectToConstruct*)el;
-            }
-            else if (type.first == "IfcColumn" || type.first == "IfcBeam")
-            {
-                methodeConstruction.createSolid3dProfil((BaseProfilDef*)el);
+                std::vector<BaseObject*> vector;
+                std::string type = (*buildingElement->begin()).second->type();
+
+                if (type != "IfcWallStandardCase" && type != "IfcSlab" && type != "IfcColumn" && type != "IfcBeam") continue;
+
+                objects.emplace(std::make_pair(type, vector));
+
+                threads.push_back(std::thread(ExploreElement, buildingElement, std::ref(objects[type])));
             }
         }
+
+        for (auto& thread : threads)
+        {
+            thread.join();
+        }
+
+        for (auto& type : objects)
+        {
+            for (auto& el : type.second)
+            {
+                if (type.first == "IfcWallStandardCase" || type.first == "IfcSlab")
+                {
+                    methodeConstruction.createSolid3d(*(ObjectToConstruct*)el);
+                    delete (ObjectToConstruct*)el;
+                }
+                else if (type.first == "IfcColumn" || type.first == "IfcBeam")
+                {
+                    methodeConstruction.createSolid3dProfil((BaseProfilDef*)el);
+                }
+            }
+        }
+
+        acutPrintf(_T("\nFailure : %d\nSuccess : %d\n"), failure_results, success_results);
+
+        //if (shouldWrite)
+        //{
+        //    // ** Write the file
+        //    ifc2x3::SPFWriter writer(expressDataSet);
+        //    std::ofstream filestream;
+        //    filestream.open(writeFile);
+
+        //    bool status = writer.write(filestream);
+        //    filestream.close();
+        //}
+
+        objects.clear();
+        delete expressDataSet;
+
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+
+        acutPrintf(_T("Durée: %d\n"), (int)duration.count());
     }
-
-    acutPrintf(_T("\nFailure : %d\nSuccess : %d\n"), failure_results, success_results);
-
-    //if (shouldWrite)
-    //{
-    //    // ** Write the file
-    //    ifc2x3::SPFWriter writer(expressDataSet);
-    //    std::ofstream filestream;
-    //    filestream.open(writeFile);
-
-    //    bool status = writer.write(filestream);
-    //    filestream.close();
-    //}
-
-    objects.clear();
-    delete expressDataSet;
-
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-
-    acutPrintf(_T("Durée: %d\n"), (int)duration.count());
+    catch (const std::exception& ex)
+    {
+        acutPrintf(_T("%s"), ex.what());
+    }
 }
 
 void initApp()
@@ -328,7 +334,7 @@ void initApp()
         _T("Import"),
         _T("Import"),
         ACRX_CMD_TRANSPARENT,
-        test);
+        LoadIfc);
 }
 void unloadApp()
 {

@@ -236,7 +236,7 @@ bool CreateConstructionPointVisitor::visitIfcPolygonalBoundedHalfSpace(
         {
             if (value->testPosition())
             {
-                transform = ComputePlacementVisitor::getTransformation(value->getPosition());
+                auto transform = ComputePlacementVisitor::getTransformation(value->getPosition());
                 transformPoints(transform);
 
                 if (!_exploringRelVoid)
@@ -444,15 +444,15 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
                 ((ObjectToConstruct*)_object)->Transform = transform;
             else
                 ((ObjectVoid*)_object)->Transform = transform;
-
-            _nameProfilDef = value->getSweptArea()->getType().getName(); 
             
             if (_exploringRelVoid)
-                ((ObjectVoid*)_object)->NameProfilDef = _nameProfilDef;
+                ((ObjectVoid*)_object)->NameProfilDef = value->getSweptArea()->getType().getName();
+            else if (_profilDef != nullptr)
+                _profilDef->Name = value->getSweptArea()->getType().getName();
 
             if(value->testExtrudedDirection())
             {
-                extrusionVector = ComputePlacementVisitor::getDirection(value->getExtrudedDirection());
+                auto extrusionVector = ComputePlacementVisitor::getDirection(value->getExtrudedDirection());
                 extrusionVector.Normalize();
                 extrusionVector *= value->getDepth();
 
@@ -674,10 +674,18 @@ bool CreateConstructionPointVisitor::visitIfcRectangleProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new Rectangle_profilDef();
-    
-    ((Rectangle_profilDef*)_profilDef)->XDim = (float)value->getXDim();
-    ((Rectangle_profilDef*)_profilDef)->YDim = (float)value->getYDim();
+    if (_exploringRelVoid)
+    {
+        ((ObjectVoid*)_object)->XDim = (float)value->getXDim();
+        ((ObjectVoid*)_object)->YDim = (float)value->getYDim();
+    }
+    else
+    {
+        _profilDef = new Rectangle_profilDef();
+
+        ((Rectangle_profilDef*)_profilDef)->XDim = (float)value->getXDim();
+        ((Rectangle_profilDef*)_profilDef)->YDim = (float)value->getYDim();
+    }
 
     return true;
 }
@@ -689,6 +697,7 @@ bool CreateConstructionPointVisitor::visitIfcCircleProfileDef(
     {
         value->getPosition()->acceptVisitor(this);
     }
+
     if (_exploringRelVoid)
         ((ObjectVoid*)_object)->Radius = (float)value->getRadius();
     else
@@ -941,66 +950,9 @@ void CreateConstructionPointVisitor::transformPoints(const Matrix4& transform)
     _nbArgToCompute = 0;
 }
 
-std::list<Vec3> CreateConstructionPointVisitor::getPoints() const
-{
-    return _points;
-}
-
-Vec3 CreateConstructionPointVisitor::getVectorDirection() const
-{
-    return extrusionVector;
-}
-
-Matrix4 CreateConstructionPointVisitor::getTransformation() const
-{
-    return transformation;
-}
-
 std::vector<std::string> CreateConstructionPointVisitor::getNameItems() const
 {
     return std::vector<std::string>();
-}
-
-//***** BOOLEAN *****
-
-std::vector<bool> CreateConstructionPointVisitor::getAgreementHalfBool() const
-{
-    return AgreementHalf;
-}
-
-std::vector<bool> CreateConstructionPointVisitor::getAgreementPolygonalBool() const
-{
-    return AgreementPolygonal;
-}
-
-std::list<Matrix4> CreateConstructionPointVisitor::getPlanPolygonal()
-{
-    return listPlan;
-}
-
-std::list<Matrix4> CreateConstructionPointVisitor::getLocationPolygonal() const
-{
-    return listLocationPolygonal;
-}
-
-std::vector<int> CreateConstructionPointVisitor::getNbArgPolyline() const
-{
-    return listNbArgPolyline;
-}
-
-std::vector<std::string> CreateConstructionPointVisitor::getListEntityHalf() const
-{
-    return entityHalf;
-}
-
-std::vector<std::string> CreateConstructionPointVisitor::getListEntityPolygonal() const
-{
-    return entityPolygonal;
-}
-
-std::string CreateConstructionPointVisitor::getNameProfildef() const
-{
-    return _nameProfilDef;
 }
 
 int CreateConstructionPointVisitor::getkeyForVoid() const
