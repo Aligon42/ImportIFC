@@ -97,62 +97,24 @@ void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vect
         int key = it->first;
         std::string entity = buildingElement.getType().getName();
 
-        //acutPrintf(_T("    => Element %d\n"), count);
-
         CreateConstructionPointVisitor visitor1;
-        //acutPrintf(_T("Index : %i\n"), key);
-        if (key == 542)
-        {
-            int PA = 0;
-        }
+
+        //if (key != 17109) continue;
 
         buildingElement.acceptVisitor(&visitor1);
 
-        std::list<Vec3> points1 = visitor1.getPoints();
-        /*for (const auto& point : points1)
-        {
-            acutPrintf(_T("[ %f, %f, %f ]\n"), point.x(), point.y(), point.z());
-        }*/
-
-        std::vector<int> ListNbArg = visitor1.getNbArgPolyline();
-
-        Vec3 VecteurExtrusion = visitor1.getVectorDirection();
-        //acutPrintf(_T("Vecteur extrusion : [ %f, %f , %f]\n"), VecteurExtrusion.x(), VecteurExtrusion.y(), VecteurExtrusion.z());
-
-        std::list<Matrix4> listPlan = visitor1.getPlanPolygonal();
-
-        std::list<Matrix4> listLocationPolygonal = visitor1.getLocationPolygonal();
-
-        std::vector<bool> AgreementHalf = visitor1.getAgreementHalfBool();
-        std::vector<bool> AgreementPolygonal = visitor1.getAgreementPolygonalBool();
-
-        std::vector<std::string> listEntityHalf = visitor1.getListEntityHalf();
-        std::vector<std::string> listEntityPolygonal = visitor1.getListEntityPolygonal();
+        auto obj = visitor1.getObjectToConstructs();
+        obj->Key = it->first;
+        obj->Type = entity;
 
         buildingElement.acceptVisitor(&placementVisitor);
-        Matrix4 transform1 = placementVisitor.getTransformation();
-        Matrix4 transformation = visitor1.getTransformation();
 
-        transform1 *= transformation;
+        obj->Transform = placementVisitor.getTransformation() * obj->Transform;
 
         if (entity == "IfcWallStandardCase" || entity == "IfcSlab")
         {
-            if (points1.size() > 0 && ListNbArg.size() > 0)
+            if (obj->ElementsToConstruct.size() > 0)
             {
-                BaseObject* obj = new DataObject;
-                obj->EntityType = entity;
-                ((DataObject*)obj)->Key = key;
-                ((DataObject*)obj)->Points = points1;
-                ((DataObject*)obj)->NbArgs = ListNbArg;
-                ((DataObject*)obj)->VecteurExtrusion = VecteurExtrusion;
-                ((DataObject*)obj)->Transformation = transform1;
-                ((DataObject*)obj)->ListePlan = listPlan;
-                ((DataObject*)obj)->ListeLocationPolygonal = listLocationPolygonal;
-                ((DataObject*)obj)->AgreementHalf = AgreementHalf;
-                ((DataObject*)obj)->AgreementPolygonal = AgreementPolygonal;
-                ((DataObject*)obj)->ListEntityHalf = listEntityHalf;
-                ((DataObject*)obj)->ListEntityPolygonal = listEntityPolygonal;
-
                 objects.push_back(obj);
             }
         }
@@ -162,13 +124,16 @@ void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vect
 
             if (profilDef != nullptr)
             {
+                profilDef->Key = it->first;
+                profilDef->Type = entity;
                 profilDef->Name = visitor1.getNameProfildef();
-                profilDef->EntityType = entity;
-                profilDef->Transformation = transform1;
-                profilDef->VecteurExtrusion = VecteurExtrusion;
+                profilDef->Transform = obj->Transform;
+                profilDef->VecteurExtrusion = obj->VecteurExtrusion;
 
                 objects.push_back(profilDef);
             }
+
+            delete obj;
         }
 
         it++;
@@ -177,8 +142,6 @@ void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vect
 
 void test()
 {
-    auto start = std::chrono::high_resolution_clock::now();
-
     AcDbObjectId transId;
     TCHAR* fname;
 
@@ -195,6 +158,8 @@ void test()
     fname = (TCHAR*)acad_malloc((_tcslen(rb->resval.rstring) + 1) * sizeof(TCHAR));
     _tcscpy(fname, rb->resval.rstring);
     acutRelRb(rb);
+
+    auto start = std::chrono::high_resolution_clock::now();
 
     Log("Simple read/write example of Ifc2x3 SDK\n");
     bool shouldWrite = false;
@@ -274,50 +239,28 @@ void test()
     //TEST_ASSERT(expressDataSet != nullptr);
     expressDataSet->instantiateAll();
     ComputePlacementVisitor placementVisitor;
+    MethodeConstruction methodeConstruction;
+    std::vector<std::thread> threads;
 
-    int count = 0;
-    for (auto& voids : expressDataSet->getAllIfcRelVoidsElement())
-    {
-        count++;
-
-        CreateConstructionPointVisitor visitor1;
-        int key = (int)voids.getKey();
-        
-        voids.acceptVisitor(&visitor1);
-        _objectVoid.keyForVoid = visitor1.getkeyForVoid();
-        _objectVoid.NameProfilDef = visitor1.getNameProfildef();
-        if (_objectVoid.NameProfilDef == "IfcArbitraryClosedProfileDef")
+    threads.push_back(std::thread([&]() {
+        int count = 0;
+        for (auto& voids : expressDataSet->getAllIfcRelVoidsElement())
         {
-            _objectVoid.points1 = visitor1.getPoints();
-            _objectVoid.nbArg = visitor1.getNbArgPolyline();
+            count++;
+
+            CreateConstructionPointVisitor visitor1;
+            int key = (int)voids.getKey();
+
+            voids.acceptVisitor(&visitor1);
+
+            ObjectVoid objectVoid = visitor1.getObjectVoid();
+            voids.acceptVisitor(&placementVisitor);
+            objectVoid.Transform = placementVisitor.getTransformation() * objectVoid.Transform;
+
+            methodeConstruction.AddObjectVoid(objectVoid);
         }
-        else if (_objectVoid.NameProfilDef == "IfcCircleProfileDef")
-        {
-            _objectVoid.radius = ((Circle_profilDef*)visitor1.GetProfilDef())->Radius;
-        }
-        else if (_objectVoid.NameProfilDef == "IfcRectangleProfileDef")
-        {
-            _objectVoid.XDim = ((Rectangle_profilDef*)visitor1.GetProfilDef())->XDim;
-            _objectVoid.YDim = ((Rectangle_profilDef*)visitor1.GetProfilDef())->YDim;
-        }
-        _objectVoid.VecteurExtrusion = visitor1.getVectorDirection();
-        _objectVoid.listPlan = visitor1.getPlanPolygonal();
-        _objectVoid.listLocationPolygonal = visitor1.getLocationPolygonal();
-        _objectVoid.AgreementHalf = visitor1.getAgreementHalfBool();
-        _objectVoid.AgreementPolygonal = visitor1.getAgreementPolygonalBool();
-        _objectVoid.listEntityHalf = visitor1.getListEntityHalf();
-        _objectVoid.listEntityPolygonal = visitor1.getListEntityPolygonal();
+        }));
 
-        voids.acceptVisitor(&placementVisitor);
-        _objectVoid.transform1 = placementVisitor.getTransformation();
-        Matrix4 transformation = visitor1.getTransformation();
-
-        _objectVoid.transform1 *= transformation;
-
-        listVoid.push_back(_objectVoid);
-    }
-
-    std::vector<std::thread*> threads;
     std::map<std::string, std::vector<BaseObject*>> objects;
 
     for (auto buildingElement : expressDataSet->getAllIfcBuildingElement().m_refList)
@@ -326,20 +269,18 @@ void test()
         {
             std::vector<BaseObject*> vector;
             std::string type = (*buildingElement->begin()).second->type();
+
+            if (type != "IfcWallStandardCase" && type != "IfcSlab" && type != "IfcColumn" && type != "IfcBeam") continue;
+
             objects.emplace(std::make_pair(type, vector));
 
-            threads.push_back(new std::thread(ExploreElement, buildingElement, std::ref(objects[type])));
+            threads.push_back(std::thread(ExploreElement, buildingElement, std::ref(objects[type])));
         }
-    }
-
-    for (auto thread : threads)
-    {
-        thread->join();
     }
 
     for (auto& thread : threads)
     {
-        delete thread;
+        thread.join();
     }
 
     for (auto& type : objects)
@@ -348,17 +289,13 @@ void test()
         {
             if (type.first == "IfcWallStandardCase" || type.first == "IfcSlab")
             {
-                auto type = (DataObject*)el;
-
-                createSolid3d(type->Key, type->Points, type->NbArgs, type->VecteurExtrusion, type->Transformation, type->ListePlan, type->ListeLocationPolygonal, type->AgreementHalf, type->AgreementPolygonal, type->ListEntityHalf, type->ListEntityPolygonal, listVoid);
+                methodeConstruction.createSolid3d(*(ObjectToConstruct*)el);
+                delete (ObjectToConstruct*)el;
             }
             else if (type.first == "IfcColumn" || type.first == "IfcBeam")
             {
-                createSolid3dProfil((BaseProfilDef*)el, el->VecteurExtrusion, el->Transformation);
+                methodeConstruction.createSolid3dProfil((BaseProfilDef*)el);
             }
-
-            delete el;
-            el = nullptr;
         }
     }
 

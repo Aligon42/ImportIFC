@@ -20,58 +20,53 @@
 #include <mathfu/matrix_4x4.h>
 #include "CreateConstructionPointVisitor.h"
 #include "ProfilDef.h"
+#include "DataObject.h"
 
-
-struct ObjectVoid
+class MethodeConstruction
 {
-	int keyForVoid;
-	std::string NameProfilDef;
-	Vec3 VecteurExtrusion;
-	std::list<Vec3> points1;
-	std::vector<int> nbArg;
-	float XDim;
-	float YDim;
-	float radius;
-	std::list<Matrix4> listPlan;
-	std::list<Matrix4> listLocationPolygonal;
-	std::vector<bool> AgreementHalf;
-	std::vector<bool> AgreementPolygonal;
-	std::vector<std::string> listEntityHalf;
-	std::vector<std::string> listEntityPolygonal;
-	Matrix4 transform1;
+public:
+	void createSolid3d(ObjectToConstruct object);
+	
+	//Base profilDef
+	void createSolid3dProfil(BaseProfilDef* profilDef);
+	
+
+	inline std::vector<ObjectVoid>& getObjectsVoid() { return _listVoid; }
+	inline void AddObjectVoid(ObjectVoid objv) { _listVoid.push_back(objv); }
+
+private:
+	std::vector<ObjectVoid> _listVoid;
+
+private:
+	void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform);
+	void CreationSection(AcDb3dSolid* extrusion, Vec3 vecteurExtrusion, ElementToConstruct& elementToConstruct);
+
+	//profilDef
+	void drawForProfil(AcGePoint3dArray* ptArr[], AcGeVector3d* acVec3d[], int count, Vec3& vecteurExtrusion, Matrix4& transform);
+	void drawForProfilCircle(AcDbCircle* circle[], AcGeVector3d* acVec3d[], int count, Vec3& vecteurExtrusion, Matrix4& transform);
+
+	void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	void createSolid3dProfilIPN(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	void createSolid3dProfilL8(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	void createSolid3dProfilL9(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	void createSolid3dProfilT10(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	void createSolid3dProfilT12(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	void createSolid3dProfilUPE(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	void createSolid3dProfilUPN(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	void createSolid3dProfilC(C_profilDef CprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	void createSolid3dProfilZ(Z_profilDef ZprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+
+	//Void
+	void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid& objectVoid);
+	void CreationVoidCircle(AcDb3dSolid* extrusion, ObjectVoid& objectVoid);
+	void CreationVoidRectangle(AcDb3dSolid* extrusion, ObjectVoid& objectVoid);
+
+	AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	AcDbRegion* createCompositeCurve(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
 };
-
-static std::vector<ObjectVoid> listVoid;
-static ObjectVoid _objectVoid;
-
-void createSolid3d(int key, std::list<Vec3> points1, std::vector<int> nbArg, Vec3 VecteurExtrusion,
-	Matrix4 transform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal,
-	std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal,
-	std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal,
-	std::vector<ObjectVoid> listVoid);
-static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1);
-static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3>& points1,
-	std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal,
-	std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal, std::vector<std::string>& listEntityHalf,
-	std::vector<std::string>& listEntityPolygonal);
-static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void);
-
-//profilDef
-void createSolid3dProfil(BaseProfilDef* profilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-void createSolid3dProfilIPN(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-void createSolid3dProfilL8(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-void createSolid3dProfilL9(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-void createSolid3dProfilT10(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-void createSolid3dProfilT12(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-void createSolid3dProfilUPE(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-void createSolid3dProfilUPN(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-void createSolid3dProfilC(C_profilDef CprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-void createSolid3dProfilZ(Z_profilDef ZprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
-AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);

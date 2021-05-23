@@ -22,22 +22,24 @@
 #include <mathfu/vector_3.h>
 #include <mathfu/matrix_4x4.h>
 #include "ProfilDef.h"
+#include "DataObject.h"
 
 typedef mathfu::Vector<float, 3> Vec3;
 typedef mathfu::Matrix<float, 4> Matrix4;
 
+static TrimmedCurve _trimmedCurve;
+static CompositeCurveSegment _compositeCurveSegment;
+
 class CreateConstructionPointVisitor : public ifc2x3::InheritVisitor
 {
 private:
-
     Matrix4 _transformation{ Matrix4::Identity() };
     Matrix4 transform;
 
     std::list<Vec3> _points;
     Vec3 extrusionVector;
     Matrix4 transformation;
-
-    int keyForVoid;
+    std::vector<std::string> nameItems;
 
     //opération boolean
     std::vector<bool> AgreementHalf;
@@ -59,7 +61,12 @@ private:
     //profilDef
     std::string _nameProfilDef;
     BaseProfilDef* _profilDef;
+    BaseObject* _object;
 
+    int keyForVoid;
+    bool _exploringRelVoid = false;
+    bool _compositeCurve = false;
+    int _nbArgToCompute = 0;
 
 public:
     //! Constructor
@@ -78,9 +85,10 @@ public:
     bool visitIfcCompositeCurve(ifc2x3::IfcCompositeCurve* value) override;
     bool visitIfcCompositeCurveSegment(ifc2x3::IfcCompositeCurveSegment* value) override;
     bool visitIfcTrimmedCurve(ifc2x3::IfcTrimmedCurve* value) override;
-    bool visitIfcCircle(ifc2x3::IfcCircle* value) override; 
+    bool visitIfcCircle(ifc2x3::IfcCircle* value) override;
     bool visitIfcRepresentationMap(ifc2x3::IfcRepresentationMap* value) override;
     bool visitIfcPlane(ifc2x3::IfcPlane* value) override;
+    bool visitIfcAxis2Placement2D(ifc2x3::IfcAxis2Placement2D* value) override;
     bool visitIfcExtrudedAreaSolid(ifc2x3::IfcExtrudedAreaSolid* value) override;
 
     //profilDef
@@ -107,6 +115,7 @@ public:
     std::list<Vec3> getPoints() const;
     Vec3 getVectorDirection() const;
     Matrix4 getTransformation() const;
+    std::vector<std::string> getNameItems() const;
 
     //get opération boolean
     std::vector<bool> getAgreementHalfBool() const;
@@ -118,14 +127,17 @@ public:
     std::vector<std::string> getListEntityPolygonal() const;
 
     //get profilDef
-    BaseProfilDef* GetProfilDef() { return _profilDef; }
+    inline BaseProfilDef* GetProfilDef() { return _profilDef; }
     std::string getNameProfildef() const;
 
     int getkeyForVoid() const;
-
+    TrimmedCurve getTrimmedCurve() const;
+    CompositeCurveSegment getCompositeCurveSegment() const;
 
     void SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);
     void SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);
     void transformPoints(const Matrix4& transform);
 
+    inline ObjectToConstruct* getObjectToConstructs() { return (ObjectToConstruct*)_object; }
+    inline ObjectVoid getObjectVoid() { return *(ObjectVoid*)_object; }
 };

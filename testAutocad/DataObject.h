@@ -10,20 +10,49 @@ typedef mathfu::Matrix<float, 4> Matrix4;
 
 struct BaseObject
 {
-	std::string EntityType;
-	Vec3 VecteurExtrusion;
-	Matrix4 Transformation;
+	int Key;
+	std::string Type;
 };
 
-struct DataObject : public BaseObject
+struct ElementToConstruct : public BaseObject
 {
-	int Key;
 	std::list<Vec3> Points;
-	std::vector<int> NbArgs;
-	std::list<Matrix4> ListePlan;
-	std::list<Matrix4> ListeLocationPolygonal;
+	std::vector<int> Args;
+	std::list<Matrix4> Plans;
+	std::list<Matrix4> LocationsPolygonal;
 	std::vector<bool> AgreementHalf;
 	std::vector<bool> AgreementPolygonal;
-	std::vector<std::string> ListEntityHalf;
-	std::vector<std::string> ListEntityPolygonal;
+	std::vector<std::string> EntitiesHalf;
+	std::vector<std::string> EntitiesPolygonal;
+};
+
+struct ObjectToConstruct : public BaseObject
+{
+	Vec3 VecteurExtrusion;
+	Matrix4 Transform;
+	std::vector<ElementToConstruct> ElementsToConstruct;
+};
+
+struct ObjectVoid : ObjectToConstruct
+{
+	std::string NameProfilDef;
+	float XDim;
+	float YDim;
+	float Radius;
+};
+
+struct TrimmedCurve
+{
+	Vec3 centreCircle;
+	float radius;
+	int trim1;
+	int trim2;
+	bool senseArgreement;
+};
+
+struct CompositeCurveSegment
+{
+	std::vector<std::vector<Vec3>> listPolyligne;
+	std::vector<TrimmedCurve> listTrimmedCurve;
+	std::vector<std::string> listParentCurve;
 };

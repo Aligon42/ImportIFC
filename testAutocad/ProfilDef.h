@@ -6,6 +6,8 @@
 struct BaseProfilDef : public BaseObject
 {
     std::string Name;
+    Vec3 VecteurExtrusion;
+    Matrix4 Transform;
 };
 
 struct I_profilDef : public BaseProfilDef
