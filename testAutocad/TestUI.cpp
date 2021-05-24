@@ -33,6 +33,7 @@
 #include <chrono>
 
 #include "DataObject.h"
+#include "Core.h"
 
 #define DISTANCE_TOLERANCE 0.001
 
@@ -82,7 +83,7 @@ const wchar_t* GetWC(const char* c, ...)
 #define Log(x) \
     acutPrintf(_T(x))
 
-void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vector<BaseObject*>& objects)
+void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vector<Ref<BaseObject>>& objects)
 {
     ComputePlacementVisitor placementVisitor;
     int count = 0;
@@ -131,8 +132,6 @@ void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vect
 
                 objects.push_back(profilDef);
             }
-
-            delete obj;
         }
 
         it++;
@@ -262,13 +261,13 @@ void LoadIfc()
             }
         }));
 
-        std::map<std::string, std::vector<BaseObject*>> objects;
+        std::map<std::string, std::vector<Ref<BaseObject>>> objects;
 
         for (auto buildingElement : expressDataSet->getAllIfcBuildingElement().m_refList)
         {
             if (buildingElement->size() > 0)
             {
-                std::vector<BaseObject*> vector;
+                std::vector<Ref<BaseObject>> vector;
                 std::string type = (*buildingElement->begin()).second->type();
 
                 if (type != "IfcWallStandardCase" && type != "IfcSlab" && type != "IfcColumn" && type != "IfcBeam") continue;
@@ -290,12 +289,11 @@ void LoadIfc()
             {
                 if (type.first == "IfcWallStandardCase" || type.first == "IfcSlab")
                 {
-                    methodeConstruction.createSolid3d(*(ObjectToConstruct*)el);
-                    delete (ObjectToConstruct*)el;
+                    methodeConstruction.createSolid3d(std::static_pointer_cast<ObjectToConstruct>(el));
                 }
                 else if (type.first == "IfcColumn" || type.first == "IfcBeam")
                 {
-                    methodeConstruction.createSolid3dProfil((BaseProfilDef*)el);
+                    methodeConstruction.createSolid3dProfil(std::static_pointer_cast<BaseProfilDef>(el));
                 }
             }
         }

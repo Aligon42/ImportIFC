@@ -21,8 +21,10 @@
 #include <vectorial/simd4f.h>
 #include <mathfu/vector_3.h>
 #include <mathfu/matrix_4x4.h>
+
 #include "ProfilDef.h"
 #include "DataObject.h"
+#include "Core.h"
 
 typedef mathfu::Vector<float, 3> Vec3;
 typedef mathfu::Matrix<float, 4> Matrix4;
@@ -46,8 +48,8 @@ private:
     std::vector<int> radiusCircle;
     
     //profilDef
-    BaseProfilDef* _profilDef;
-    BaseObject* _object;
+    Ref<BaseProfilDef> _profilDef;
+    Ref<BaseObject> _object;
 
     int keyForVoid;
     bool _exploringRelVoid = false;
@@ -57,7 +59,6 @@ private:
 public:
     //! Constructor
     CreateConstructionPointVisitor();
-    ~CreateConstructionPointVisitor();
 
     bool visitIfcProduct(ifc2x3::IfcProduct* value) override;
     bool visitIfcRelVoidsElement(ifc2x3::IfcRelVoidsElement* value) override;
@@ -101,7 +102,7 @@ public:
     std::vector<std::string> getNameItems() const;
 
     //get profilDef
-    inline BaseProfilDef* GetProfilDef() { return _profilDef; }
+    inline Ref<BaseProfilDef> GetProfilDef() { return _profilDef; }
 
     int getkeyForVoid() const;
     TrimmedCurve getTrimmedCurve() const;
@@ -111,6 +112,6 @@ public:
     void SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);
     void transformPoints(const Matrix4& transform);
 
-    inline ObjectToConstruct* getObjectToConstructs() { return (ObjectToConstruct*)_object; }
-    inline ObjectVoid getObjectVoid() { return *(ObjectVoid*)_object; }
+    inline Ref<ObjectToConstruct> getObjectToConstructs() { return std::static_pointer_cast<ObjectToConstruct>(_object); }
+    inline ObjectVoid getObjectVoid() { return *std::static_pointer_cast<ObjectVoid>(_object); }
 };

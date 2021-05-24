@@ -2,25 +2,25 @@
 #include "CreateConstructionPointVisitor.h"
 #include <vector>
 
-void MethodeConstruction::createSolid3d(ObjectToConstruct object)
+void MethodeConstruction::createSolid3d(Ref<ObjectToConstruct> object)
 {
 	Acad::ErrorStatus es;
 	ads_name polyName;
 	ads_point ptres;
 	AcGePoint3dArray ptArr;
 
-	std::vector<ElementToConstruct>::iterator it = object.ElementsToConstruct.begin();
-	for (size_t i = 0; i < object.ElementsToConstruct.size(); i++)
+	std::vector<ElementToConstruct>::iterator it = object->ElementsToConstruct.begin();
+	for (size_t i = 0; i < object->ElementsToConstruct.size(); i++)
 	{
 		if ((*it).Points.size() == 0)
-			object.ElementsToConstruct.erase(it);
+			object->ElementsToConstruct.erase(it);
 
 		it++;
 	}
 
 	int totalPts = 0;
 	int totalArgs = 0;
-	for (auto& els : object.ElementsToConstruct)
+	for (auto& els : object->ElementsToConstruct)
 	{
 		totalPts += els.Points.size();
 
@@ -32,23 +32,23 @@ void MethodeConstruction::createSolid3d(ObjectToConstruct object)
 
 	if (totalPts == 0 || totalArgs == 0) return;
 
-	if (object.ElementsToConstruct.size() > 1 && object.ElementsToConstruct[0].Args[0] == 1)
+	if (object->ElementsToConstruct.size() > 1 && object->ElementsToConstruct[0].Args[0] == 1)
 	{
-		object.ElementsToConstruct[0].Args.erase(object.ElementsToConstruct[0].Args.begin());
-		object.ElementsToConstruct[0].Points.pop_front();
+		object->ElementsToConstruct[0].Args.erase(object->ElementsToConstruct[0].Args.begin());
+		object->ElementsToConstruct[0].Points.pop_front();
 
-		if (object.ElementsToConstruct[0].Points.size() == 0)
-			object.ElementsToConstruct.erase(object.ElementsToConstruct.begin());
+		if (object->ElementsToConstruct[0].Points.size() == 0)
+			object->ElementsToConstruct.erase(object->ElementsToConstruct.begin());
 	}
 
-	ptArr.setLogicalLength(object.ElementsToConstruct[0].Args[0]);
-	Vec3 pointOrigine = { object.Transform[12], object.Transform[13] , object.Transform[14] };
+	ptArr.setLogicalLength(object->ElementsToConstruct[0].Args[0]);
+	Vec3 pointOrigine = { object->Transform[12], object->Transform[13] , object->Transform[14] };
 
 	int i = 0;
 
-	for (const auto& point : object.ElementsToConstruct[0].Points)
+	for (const auto& point : object->ElementsToConstruct[0].Points)
 	{
-		if (i == object.ElementsToConstruct[0].Args[0])
+		if (i == object->ElementsToConstruct[0].Args[0])
 		{
 			break;
 		}
@@ -86,7 +86,7 @@ void MethodeConstruction::createSolid3d(ObjectToConstruct object)
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, object.VecteurExtrusion.z(), 0.0);
+	es = pSolid->extrude(pRegion, object->VecteurExtrusion.z(), 0.0);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -98,33 +98,33 @@ void MethodeConstruction::createSolid3d(ObjectToConstruct object)
 		delete (AcRxObject*)regions[ii];
 	}
 
-	if (object.ElementsToConstruct.size() == 1)
+	if (object->ElementsToConstruct.size() == 1)
 	{
-		int nbPlan = object.ElementsToConstruct[0].Plans.size();
+		int nbPlan = object->ElementsToConstruct[0].Plans.size();
 		for (size_t i = 0; i < nbPlan; i++)
 		{
-			CreationSection(pSolid, object.VecteurExtrusion, object.ElementsToConstruct[0]);
+			CreationSection(pSolid, object->VecteurExtrusion, object->ElementsToConstruct[0]);
 
-			object.ElementsToConstruct[0].Plans.pop_front();
+			object->ElementsToConstruct[0].Plans.pop_front();
 		}
 	}
 
-	for (int a = 1; a < object.ElementsToConstruct.size(); a++)
+	for (int a = 1; a < object->ElementsToConstruct.size(); a++)
 	{
-		int nbPlan = object.ElementsToConstruct[a].Plans.size();
+		int nbPlan = object->ElementsToConstruct[a].Plans.size();
 		for (size_t i = 0; i < nbPlan; i++)
 		{
-			CreationSection(pSolid, object.VecteurExtrusion, object.ElementsToConstruct[a]);
+			CreationSection(pSolid, object->VecteurExtrusion, object->ElementsToConstruct[a]);
 
-			object.ElementsToConstruct[a].Plans.pop_front();
+			object->ElementsToConstruct[a].Plans.pop_front();
 		}
 	}
 
-	DeplacementObjet3D(pSolid, object.Transform);
+	DeplacementObjet3D(pSolid, object->Transform);
 
 	for (int v = 0; v < _listVoid.size(); v++)
 	{
-		if (object.Key == _listVoid[v].Key)
+		if (object->Key == _listVoid[v].Key)
 		{
 			if (_listVoid[v].NameProfilDef == "IfcArbitraryClosedProfileDef")
 			{
@@ -164,97 +164,6 @@ void MethodeConstruction::createSolid3d(ObjectToConstruct object)
 	}
 }
 
-void MethodeConstruction::createSolid3dProfil(BaseProfilDef* profilDef)
-{
-	if (profilDef->Name == "IfcIShapeProfileDef")
-	{
-		if (((I_profilDef*)profilDef)->nbArg == 5)
-		{
-			createSolid3dProfilIPE(*(I_profilDef*)profilDef, profilDef->VecteurExtrusion, profilDef->Transform);
-			delete (I_profilDef*)profilDef;
-		}
-		else
-		{
-			//createSolid3dProfilIPN(IprofilDef, VecteurExtrusion, transform1);
-			delete (I_profilDef*)profilDef;
-		}
-	}
-	else if (profilDef->Name == "IfcLShapeProfileDef")
-	{
-		if (((L_profilDef*)profilDef)->nbArg == 5)
-		{
-			createSolid3dProfilL8(*(L_profilDef*)profilDef, profilDef->VecteurExtrusion, profilDef->Transform);
-			delete (L_profilDef*)profilDef;
-		}
-		else
-		{
-			createSolid3dProfilL9(*(L_profilDef*)profilDef, profilDef->VecteurExtrusion, profilDef->Transform);
-			delete (L_profilDef*)profilDef;
-		}
-	}
-	else if (profilDef->Name == "IfcTShapeProfileDef")
-	{
-		if (((T_profilDef*)profilDef)->nbArg == 7)
-		{
-			createSolid3dProfilT10(*(T_profilDef*)profilDef, profilDef->VecteurExtrusion, profilDef->Transform);
-			delete (T_profilDef*)profilDef;
-		}
-		else
-		{
-			createSolid3dProfilT12(*(T_profilDef*)profilDef, profilDef->VecteurExtrusion, profilDef->Transform);
-			delete (T_profilDef*)profilDef;
-		}
-	}
-	else if (profilDef->Name == "IfcUShapeProfileDef")
-	{
-		if (((U_profilDef*)profilDef)->nbArg == 5)
-		{
-			createSolid3dProfilUPE(*(U_profilDef*)profilDef, profilDef->VecteurExtrusion, profilDef->Transform);
-			delete (U_profilDef*)profilDef;
-		}
-		else
-		{
-			createSolid3dProfilUPN(*(U_profilDef*)profilDef, profilDef->VecteurExtrusion, profilDef->Transform);
-			delete (U_profilDef*)profilDef;
-		}
-	}
-	else if (profilDef->Name == "IfcCShapeProfileDef")
-	{
-		createSolid3dProfilC(*(C_profilDef*)profilDef, profilDef->VecteurExtrusion, profilDef->Transform);
-		delete (C_profilDef*)profilDef;
-	}
-	else if (profilDef->Name == "IfcZShapeProfileDef")
-	{
-		createSolid3dProfilZ(*(Z_profilDef*)profilDef, profilDef->VecteurExtrusion, profilDef->Transform);
-		delete (Z_profilDef*)profilDef;
-	}
-	else if (profilDef->Name == "IfcAsymmetricIShapeProfileDef")
-	{
-		createSolid3dProfilAsyI(*(AsymmetricI_profilDef*)profilDef, profilDef->VecteurExtrusion, profilDef->Transform);
-		delete (AsymmetricI_profilDef*)profilDef;
-	}
-	else if (profilDef->Name == "IfcCircleHollowProfileDef")
-	{
-		createSolid3dProfilCircHollow(*(CircleHollow_profilDef*)profilDef, profilDef->VecteurExtrusion, profilDef->Transform);
-		delete (CircleHollow_profilDef*)profilDef;
-	}
-	else if (profilDef->Name == "IfcRectangleHollowProfileDef")
-	{
-		createSolid3dProfilRectHollow(*(RectangleHollow_profilDef*)profilDef, profilDef->VecteurExtrusion, profilDef->Transform);
-		delete (RectangleHollow_profilDef*)profilDef;
-	}
-	else if (profilDef->Name == "IfcCircleProfileDef")
-	{
-		createSolid3dProfilCircle(*(Circle_profilDef*)profilDef, profilDef->VecteurExtrusion, profilDef->Transform);
-		delete (Circle_profilDef*)profilDef;
-	}
-	else if (profilDef->Name == "IfcRectangleProfileDef")
-	{
-		createSolid3dProfilRectangle(*(Rectangle_profilDef*)profilDef, profilDef->VecteurExtrusion, profilDef->Transform);
-		delete (Rectangle_profilDef*)profilDef;
-	}
-}
-
 void MethodeConstruction::DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform)
 {
 	// 3 source points
@@ -263,21 +172,13 @@ void MethodeConstruction::DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transf
 	AcGePoint3d srcpt3 = AcGePoint3d::AcGePoint3d(1, 0, 0);
 
 	double x1 = transform.operator()(12);  //PointDeplacement x
-
 	double y1 = transform.operator()(13); //PointDeplacement y
-
 	double z1 = transform.operator()(14); //PointDeplacement z
-
 	double x2 = transform.operator()(8); //Direction1 x
-
 	double y2 = transform.operator()(9); //Direction1 y
-
 	double z2 = transform.operator()(10); //Direction1 z
-
 	double x3 = transform.operator()(0); //Direction2 x
-
 	double y3 = transform.operator()(1); //Direction2 y
-
 	double z3 = transform.operator()(2); //Direction2 z
 
 	// 3 destination points
@@ -694,280 +595,330 @@ void MethodeConstruction::drawForProfilCircle(AcDbCircle* circle[], AcGeVector3d
 	delete[] circle;
 }
 
-void MethodeConstruction::createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
+void MethodeConstruction::createSolid3dProfil(Ref<BaseProfilDef> profilDef)
 {
-	AcGePoint3dArray ptArrTemp;
-	float Width = IprofilDef.OverallWidth;
-	float Depth = IprofilDef.OverallDepth;
-	float WebThickness = IprofilDef.webThickness;
-	float FlangeThickness = IprofilDef.flangeThickness;
-
-	ptArrTemp.setLogicalLength(12);
-
-	ptArrTemp[0].set(0, 0, 0.0);
-	ptArrTemp[1].set(Width, 0, 0.0);
-	ptArrTemp[2].set(Width, FlangeThickness, 0.0);
-	ptArrTemp[3].set((Width + WebThickness) / 2, FlangeThickness, 0.0);
-	ptArrTemp[4].set((Width + WebThickness) / 2, Depth - FlangeThickness, 0.0);
-	ptArrTemp[5].set(Width, Depth - FlangeThickness, 0.0);
-	ptArrTemp[6].set(Width, Depth, 0.0);
-	ptArrTemp[7].set(0, Depth, 0.0);
-	ptArrTemp[8].set(0, Depth - FlangeThickness, 0.0);
-	ptArrTemp[9].set((Width - WebThickness) / 2, Depth - FlangeThickness, 0.0);
-	ptArrTemp[10].set((Width - WebThickness) / 2, FlangeThickness, 0.0);
-	ptArrTemp[11].set(0, FlangeThickness, 0.0);
-
-	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
-	auto acVec3dTemp = pointDeplacement3D.asVector();
-
-	AcGePoint3dArray* ptArr[1];
-	AcGeVector3d* acVec3d[1];
-
-	ptArr[0] = &ptArrTemp;
-	acVec3d[0] = &acVec3dTemp;
-
-	drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
+	if (profilDef->Name == "IfcIShapeProfileDef")
+	{
+		createSolid3dProfil(*(I_profilDef*)profilDef.get(), profilDef->VecteurExtrusion, profilDef->Transform);
+	}
+	else if (profilDef->Name == "IfcLShapeProfileDef")
+	{
+		createSolid3dProfil(*(L_profilDef*)profilDef.get(), profilDef->VecteurExtrusion, profilDef->Transform);
+	}
+	else if (profilDef->Name == "IfcTShapeProfileDef")
+	{
+		createSolid3dProfil(*(T_profilDef*)profilDef.get(), profilDef->VecteurExtrusion, profilDef->Transform);
+	}
+	else if (profilDef->Name == "IfcUShapeProfileDef")
+	{
+		createSolid3dProfil(*(U_profilDef*)profilDef.get(), profilDef->VecteurExtrusion, profilDef->Transform);
+	}
+	else if (profilDef->Name == "IfcCShapeProfileDef")
+	{
+		createSolid3dProfil(*(C_profilDef*)profilDef.get(), profilDef->VecteurExtrusion, profilDef->Transform);
+	}
+	else if (profilDef->Name == "IfcZShapeProfileDef")
+	{
+		createSolid3dProfil(*(Z_profilDef*)profilDef.get(), profilDef->VecteurExtrusion, profilDef->Transform);
+	}
+	else if (profilDef->Name == "IfcAsymmetricIShapeProfileDef")
+	{
+		createSolid3dProfil(*(AsymmetricI_profilDef*)profilDef.get(), profilDef->VecteurExtrusion, profilDef->Transform);
+	}
+	else if (profilDef->Name == "IfcCircleHollowProfileDef")
+	{
+		createSolid3dProfil(*(CircleHollow_profilDef*)profilDef.get(), profilDef->VecteurExtrusion, profilDef->Transform);
+	}
+	else if (profilDef->Name == "IfcRectangleHollowProfileDef")
+	{
+		createSolid3dProfil(*(RectangleHollow_profilDef*)profilDef.get(), profilDef->VecteurExtrusion, profilDef->Transform);
+	}
+	else if (profilDef->Name == "IfcCircleProfileDef")
+	{
+		createSolid3dProfil(*(Circle_profilDef*)profilDef.get(), profilDef->VecteurExtrusion, profilDef->Transform);
+	}
+	else if (profilDef->Name == "IfcRectangleProfileDef")
+	{
+		createSolid3dProfil(*(Rectangle_profilDef*)profilDef.get(), profilDef->VecteurExtrusion, profilDef->Transform);
+	}
 }
 
-void MethodeConstruction::createSolid3dProfilIPN(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
-{
-	AcGePoint3dArray ptArrTemp;
-
-	float Width = IprofilDef.OverallWidth;
-	float Depth = IprofilDef.OverallDepth;
-	float WebThickness = IprofilDef.webThickness;
-	float FlangeThickness = IprofilDef.flangeThickness;
-	float FlangeSlope = IprofilDef.FlangeSlope;
-
-	float dy = (Width - Width / 4) * tan(FlangeSlope);
-
-	ptArrTemp.setLogicalLength(16);
-
-	ptArrTemp[0].set(0, 0, 0.0);
-	ptArrTemp[1].set(Width, 0, 0.0);
-	ptArrTemp[2].set(Width, FlangeThickness - dy, 0.0);
-	ptArrTemp[3].set(Width - Width / 4, FlangeThickness, 0.0);
-	ptArrTemp[4].set((Width + WebThickness) / 2, FlangeThickness + dy, 0.0);
-	ptArrTemp[5].set((Width + WebThickness) / 2, Depth - FlangeThickness - dy, 0.0);
-	ptArrTemp[6].set(Width - Width / 4, Depth - FlangeThickness, 0.0);
-	ptArrTemp[7].set(Width, Depth - FlangeThickness + dy, 0.0);
-	ptArrTemp[8].set(Width, Depth, 0.0);
-	ptArrTemp[9].set(0, Depth, 0.0);
-	ptArrTemp[10].set(0, Depth - FlangeThickness + dy, 0.0);
-	ptArrTemp[11].set(Width / 4, Depth - FlangeThickness, 0.0);
-	ptArrTemp[12].set((Width - WebThickness) / 2, Depth - FlangeThickness - dy, 0.0);
-	ptArrTemp[13].set((Width - WebThickness) / 2, FlangeThickness + dy, 0.0);
-	ptArrTemp[14].set(Width / 4, FlangeThickness, 0.0);
-	ptArrTemp[15].set(0, FlangeThickness - dy, 0.0);
-
-	AcGePoint3dArray* ptArr[1];
-
-	ptArr[0] = &ptArrTemp;
-
-	drawForProfil(ptArr, nullptr, 1, VecteurExtrusion, transform);
-}
-
-void MethodeConstruction::createSolid3dProfilL8(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
+#pragma region ProfilDef
+void MethodeConstruction::createSolid3dProfil(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
 {
 	AcGePoint3dArray ptArrTemp;
 
-	float Depth = LprofilDef.Depth;
-	float Width = LprofilDef.Width;
-	float Thickness = LprofilDef.Thickness;
-	float FilletRadius = LprofilDef.FilletRadius;
+	if (IprofilDef.nbArg == 5) // IPE
+	{
+		float Width = IprofilDef.OverallWidth;
+		float Depth = IprofilDef.OverallDepth;
+		float WebThickness = IprofilDef.webThickness;
+		float FlangeThickness = IprofilDef.flangeThickness;
 
-	ptArrTemp.setLogicalLength(6);
+		ptArrTemp.setLogicalLength(12);
 
-	ptArrTemp[0].set(0, 0, 0.0);
-	ptArrTemp[1].set(Width, 0, 0.0);
-	ptArrTemp[2].set(Width, Thickness, 0.0);
-	ptArrTemp[3].set(Thickness, Thickness, 0.0);
-	ptArrTemp[4].set(Thickness, Depth, 0.0);
-	ptArrTemp[5].set(0, Depth, 0.0);
+		ptArrTemp[0].set(0, 0, 0.0);
+		ptArrTemp[1].set(Width, 0, 0.0);
+		ptArrTemp[2].set(Width, FlangeThickness, 0.0);
+		ptArrTemp[3].set((Width + WebThickness) / 2, FlangeThickness, 0.0);
+		ptArrTemp[4].set((Width + WebThickness) / 2, Depth - FlangeThickness, 0.0);
+		ptArrTemp[5].set(Width, Depth - FlangeThickness, 0.0);
+		ptArrTemp[6].set(Width, Depth, 0.0);
+		ptArrTemp[7].set(0, Depth, 0.0);
+		ptArrTemp[8].set(0, Depth - FlangeThickness, 0.0);
+		ptArrTemp[9].set((Width - WebThickness) / 2, Depth - FlangeThickness, 0.0);
+		ptArrTemp[10].set((Width - WebThickness) / 2, FlangeThickness, 0.0);
+		ptArrTemp[11].set(0, FlangeThickness, 0.0);
 
-	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
-	auto acVec3dTemp = pointDeplacement3D.asVector();
+		AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+		auto acVec3dTemp = pointDeplacement3D.asVector();
 
-	AcGePoint3dArray* ptArr[1];
-	AcGeVector3d* acVec3d[1];
+		AcGePoint3dArray* ptArr[1];
+		AcGeVector3d* acVec3d[1];
 
-	ptArr[0] = &ptArrTemp;
-	acVec3d[0] = &acVec3dTemp;
+		ptArr[0] = &ptArrTemp;
+		acVec3d[0] = &acVec3dTemp;
 
-	drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
+		drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
+	}
+	else // IPN
+	{
+		float Width = IprofilDef.OverallWidth;
+		float Depth = IprofilDef.OverallDepth;
+		float WebThickness = IprofilDef.webThickness;
+		float FlangeThickness = IprofilDef.flangeThickness;
+		float FlangeSlope = IprofilDef.FlangeSlope;
+
+		float dy = (Width - Width / 4) * tan(FlangeSlope);
+
+		ptArrTemp.setLogicalLength(16);
+
+		ptArrTemp[0].set(0, 0, 0.0);
+		ptArrTemp[1].set(Width, 0, 0.0);
+		ptArrTemp[2].set(Width, FlangeThickness - dy, 0.0);
+		ptArrTemp[3].set(Width - Width / 4, FlangeThickness, 0.0);
+		ptArrTemp[4].set((Width + WebThickness) / 2, FlangeThickness + dy, 0.0);
+		ptArrTemp[5].set((Width + WebThickness) / 2, Depth - FlangeThickness - dy, 0.0);
+		ptArrTemp[6].set(Width - Width / 4, Depth - FlangeThickness, 0.0);
+		ptArrTemp[7].set(Width, Depth - FlangeThickness + dy, 0.0);
+		ptArrTemp[8].set(Width, Depth, 0.0);
+		ptArrTemp[9].set(0, Depth, 0.0);
+		ptArrTemp[10].set(0, Depth - FlangeThickness + dy, 0.0);
+		ptArrTemp[11].set(Width / 4, Depth - FlangeThickness, 0.0);
+		ptArrTemp[12].set((Width - WebThickness) / 2, Depth - FlangeThickness - dy, 0.0);
+		ptArrTemp[13].set((Width - WebThickness) / 2, FlangeThickness + dy, 0.0);
+		ptArrTemp[14].set(Width / 4, FlangeThickness, 0.0);
+		ptArrTemp[15].set(0, FlangeThickness - dy, 0.0);
+
+		AcGePoint3dArray* ptArr[1];
+
+		ptArr[0] = &ptArrTemp;
+
+		drawForProfil(ptArr, nullptr, 1, VecteurExtrusion, transform);
+	}
 }
 
-void MethodeConstruction::createSolid3dProfilL9(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
+void MethodeConstruction::createSolid3dProfil(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
 {
 	AcGePoint3dArray ptArrTemp;
 
-	float Depth = LprofilDef.Depth;
-	float Width = LprofilDef.Width;
-	float Thickness = LprofilDef.Thickness;
-	float FilletRadius = LprofilDef.FilletRadius;
-	float LegSlope = LprofilDef.LegSlope;
+	if (LprofilDef.nbArg == 5) // L8
+	{
+		float Depth = LprofilDef.Depth;
+		float Width = LprofilDef.Width;
+		float Thickness = LprofilDef.Thickness;
+		float FilletRadius = LprofilDef.FilletRadius;
 
-	double dy = (Width - Thickness) * tan(LegSlope);
+		ptArrTemp.setLogicalLength(6);
 
-	ptArrTemp.setLogicalLength(6);
+		ptArrTemp[0].set(0, 0, 0.0);
+		ptArrTemp[1].set(Width, 0, 0.0);
+		ptArrTemp[2].set(Width, Thickness, 0.0);
+		ptArrTemp[3].set(Thickness, Thickness, 0.0);
+		ptArrTemp[4].set(Thickness, Depth, 0.0);
+		ptArrTemp[5].set(0, Depth, 0.0);
 
-	ptArrTemp[0].set(0, 0, 0.0);
-	ptArrTemp[1].set(Width, 0, 0.0);
-	ptArrTemp[2].set(Width, Thickness, 0.0);
-	ptArrTemp[3].set(Thickness + dy, Thickness + dy, 0.0);
-	ptArrTemp[4].set(Thickness, Depth, 0.0);
-	ptArrTemp[5].set(0, Depth, 0.0);
+		AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+		auto acVec3dTemp = pointDeplacement3D.asVector();
 
-	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
-	auto acVec3dTemp = pointDeplacement3D.asVector();
+		AcGePoint3dArray* ptArr[1];
+		AcGeVector3d* acVec3d[1];
 
-	AcGePoint3dArray* ptArr[1];
-	AcGeVector3d* acVec3d[1];
+		ptArr[0] = &ptArrTemp;
+		acVec3d[0] = &acVec3dTemp;
 
-	ptArr[0] = &ptArrTemp;
-	acVec3d[0] = &acVec3dTemp;
+		drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
+	}
+	else // L9
+	{
+		float Depth = LprofilDef.Depth;
+		float Width = LprofilDef.Width;
+		float Thickness = LprofilDef.Thickness;
+		float FilletRadius = LprofilDef.FilletRadius;
+		float LegSlope = LprofilDef.LegSlope;
 
-	drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
+		double dy = (Width - Thickness) * tan(LegSlope);
+
+		ptArrTemp.setLogicalLength(6);
+
+		ptArrTemp[0].set(0, 0, 0.0);
+		ptArrTemp[1].set(Width, 0, 0.0);
+		ptArrTemp[2].set(Width, Thickness, 0.0);
+		ptArrTemp[3].set(Thickness + dy, Thickness + dy, 0.0);
+		ptArrTemp[4].set(Thickness, Depth, 0.0);
+		ptArrTemp[5].set(0, Depth, 0.0);
+
+		AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+		auto acVec3dTemp = pointDeplacement3D.asVector();
+
+		AcGePoint3dArray* ptArr[1];
+		AcGeVector3d* acVec3d[1];
+
+		ptArr[0] = &ptArrTemp;
+		acVec3d[0] = &acVec3dTemp;
+
+		drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
+	}
 }
 
-void MethodeConstruction::createSolid3dProfilT10(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
+void MethodeConstruction::createSolid3dProfil(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
 {
 	AcGePoint3dArray ptArrTemp;
 
-	float Depth = TprofilDef.Depth;
-	float Width = TprofilDef.FlangeWidth;
-	float WebThickness = TprofilDef.WebThickness;
-	float FlangeThickness = TprofilDef.FlangeThickness;
-	float FilletRadius = TprofilDef.FilletRadius;
+	if (TprofilDef.nbArg == 7) // T10
+	{
+		float Depth = TprofilDef.Depth;
+		float Width = TprofilDef.FlangeWidth;
+		float WebThickness = TprofilDef.WebThickness;
+		float FlangeThickness = TprofilDef.FlangeThickness;
+		float FilletRadius = TprofilDef.FilletRadius;
 
-	ptArrTemp.setLogicalLength(8);
+		ptArrTemp.setLogicalLength(8);
 
-	ptArrTemp[0].set(0, 0, 0.0);
-	ptArrTemp[1].set(Width, 0, 0.0);
-	ptArrTemp[2].set(Width, FlangeThickness, 0.0);
-	ptArrTemp[3].set((Width + WebThickness) / 2, FlangeThickness, 0.0);
-	ptArrTemp[4].set((Width + WebThickness) / 2, Depth, 0.0);
-	ptArrTemp[5].set((Width - WebThickness) / 2, Depth, 0.0);
-	ptArrTemp[6].set((Width - WebThickness) / 2, FlangeThickness, 0.0);
-	ptArrTemp[7].set(0, FlangeThickness, 0.0);
+		ptArrTemp[0].set(0, 0, 0.0);
+		ptArrTemp[1].set(Width, 0, 0.0);
+		ptArrTemp[2].set(Width, FlangeThickness, 0.0);
+		ptArrTemp[3].set((Width + WebThickness) / 2, FlangeThickness, 0.0);
+		ptArrTemp[4].set((Width + WebThickness) / 2, Depth, 0.0);
+		ptArrTemp[5].set((Width - WebThickness) / 2, Depth, 0.0);
+		ptArrTemp[6].set((Width - WebThickness) / 2, FlangeThickness, 0.0);
+		ptArrTemp[7].set(0, FlangeThickness, 0.0);
 
-	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
-	auto acVec3dTemp = pointDeplacement3D.asVector();
+		AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+		auto acVec3dTemp = pointDeplacement3D.asVector();
 
-	AcGePoint3dArray* ptArr[1];
-	AcGeVector3d* acVec3d[1];
+		AcGePoint3dArray* ptArr[1];
+		AcGeVector3d* acVec3d[1];
 
-	ptArr[0] = &ptArrTemp;
-	acVec3d[0] = &acVec3dTemp;
+		ptArr[0] = &ptArrTemp;
+		acVec3d[0] = &acVec3dTemp;
 
-	drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
+		drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
+	}
+	else // T12
+	{
+		float Depth = TprofilDef.Depth;
+		float Width = TprofilDef.FlangeWidth;
+		float WebThickness = TprofilDef.WebThickness;
+		float FlangeThickness = TprofilDef.FlangeThickness;
+		float FilletRadius = TprofilDef.FilletRadius;
+		float WebSlope​ = TprofilDef.WebSlope;
+		float FlangeSlope = TprofilDef.FlangeSlope;
+
+		double dy1 = (Width - FlangeThickness) * tan(FlangeSlope);
+		double dy2 = (Depth - WebThickness) * tan(WebSlope​);
+
+		ptArrTemp.setLogicalLength(8);
+
+		ptArrTemp[0].set(0, 0, 0.0);
+		ptArrTemp[1].set(Width, 0, 0.0);
+		ptArrTemp[2].set(Width, FlangeThickness - dy1, 0.0);
+		ptArrTemp[3].set((Width + WebThickness) / 2, FlangeThickness, 0.0);
+		ptArrTemp[4].set(((Width + WebThickness) / 2) - dy2, Depth, 0.0);
+		ptArrTemp[5].set(((Width - WebThickness) / 2) + dy2, Depth, 0.0);
+		ptArrTemp[6].set((Width - WebThickness) / 2, FlangeThickness, 0.0);
+		ptArrTemp[7].set(0, FlangeThickness - dy1, 0.0);
+
+		AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+		auto acVec3dTemp = pointDeplacement3D.asVector();
+
+		AcGePoint3dArray* ptArr[1];
+		AcGeVector3d* acVec3d[1];
+
+		ptArr[0] = &ptArrTemp;
+		acVec3d[0] = &acVec3dTemp;
+
+		drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
+	}
 }
 
-void MethodeConstruction::createSolid3dProfilT12(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
+void MethodeConstruction::createSolid3dProfil(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
 {
 	AcGePoint3dArray ptArrTemp;
 
-	float Depth = TprofilDef.Depth;
-	float Width = TprofilDef.FlangeWidth;
-	float WebThickness = TprofilDef.WebThickness;
-	float FlangeThickness = TprofilDef.FlangeThickness;
-	float FilletRadius = TprofilDef.FilletRadius;
-	float WebSlope​ = TprofilDef.WebSlope;
-	float FlangeSlope = TprofilDef.FlangeSlope;
+	if (UprofilDef.nbArg == 5) // UPE
+	{
+		float Depth = UprofilDef.Depth;
+		float Width = UprofilDef.FlangeWidth;
+		float WebThickness = UprofilDef.WebThickness;
+		float FlangeThickness = UprofilDef.FlangeThickness;
+		float FilletRadius = UprofilDef.FilletRadius;
 
-	double dy1 = (Width - FlangeThickness) * tan(FlangeSlope);
-	double dy2 = (Depth - WebThickness) * tan(WebSlope​);
+		ptArrTemp.setLogicalLength(8);
 
-	ptArrTemp.setLogicalLength(8);
+		ptArrTemp[0].set(0, 0, 0.0);
+		ptArrTemp[1].set(Width, 0, 0.0);
+		ptArrTemp[2].set(Width, FlangeThickness, 0.0);
+		ptArrTemp[3].set(WebThickness, FlangeThickness, 0.0);
+		ptArrTemp[4].set(WebThickness, Depth - FlangeThickness, 0.0);
+		ptArrTemp[5].set(Width, Depth - FlangeThickness, 0.0);
+		ptArrTemp[6].set(Width, Depth, 0.0);
+		ptArrTemp[7].set(0, Depth, 0.0);
 
-	ptArrTemp[0].set(0, 0, 0.0);
-	ptArrTemp[1].set(Width, 0, 0.0);
-	ptArrTemp[2].set(Width, FlangeThickness - dy1, 0.0);
-	ptArrTemp[3].set((Width + WebThickness) / 2, FlangeThickness, 0.0);
-	ptArrTemp[4].set(((Width + WebThickness) / 2) - dy2, Depth, 0.0);
-	ptArrTemp[5].set(((Width - WebThickness) / 2) + dy2, Depth, 0.0);
-	ptArrTemp[6].set((Width - WebThickness) / 2, FlangeThickness, 0.0);
-	ptArrTemp[7].set(0, FlangeThickness - dy1, 0.0);
+		AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+		auto acVec3dTemp = pointDeplacement3D.asVector();
 
-	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
-	auto acVec3dTemp = pointDeplacement3D.asVector();
+		AcGePoint3dArray* ptArr[1];
+		AcGeVector3d* acVec3d[1];
 
-	AcGePoint3dArray* ptArr[1];
-	AcGeVector3d* acVec3d[1];
+		ptArr[0] = &ptArrTemp;
+		acVec3d[0] = &acVec3dTemp;
 
-	ptArr[0] = &ptArrTemp;
-	acVec3d[0] = &acVec3dTemp;
+		drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
+	}
+	else // UPN
+	{
+		float Depth = UprofilDef.Depth;
+		float Width = UprofilDef.FlangeWidth;
+		float WebThickness = UprofilDef.WebThickness;
+		float FlangeThickness = UprofilDef.FlangeThickness;
+		float FilletRadius = UprofilDef.FilletRadius;
 
-	drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
+		ptArrTemp.setLogicalLength(8);
+
+		ptArrTemp[0].set(0, 0, 0.0);
+		ptArrTemp[1].set(Width, 0, 0.0);
+		ptArrTemp[2].set(Width, FlangeThickness, 0.0);
+		ptArrTemp[3].set(WebThickness, FlangeThickness, 0.0);
+		ptArrTemp[4].set(WebThickness, Depth - FlangeThickness, 0.0);
+		ptArrTemp[5].set(Width, Depth - FlangeThickness, 0.0);
+		ptArrTemp[6].set(Width, Depth, 0.0);
+		ptArrTemp[7].set(0, Depth, 0.0);
+
+		AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
+		auto acVec3dTemp = pointDeplacement3D.asVector();
+
+		AcGePoint3dArray* ptArr[1];
+		AcGeVector3d* acVec3d[1];
+
+		ptArr[0] = &ptArrTemp;
+		acVec3d[0] = &acVec3dTemp;
+
+		drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
+	}
 }
 
-void MethodeConstruction::createSolid3dProfilUPE(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
-{
-	AcGePoint3dArray ptArrTemp;
-
-	float Depth = UprofilDef.Depth;
-	float Width = UprofilDef.FlangeWidth;
-	float WebThickness = UprofilDef.WebThickness;
-	float FlangeThickness = UprofilDef.FlangeThickness;
-	float FilletRadius = UprofilDef.FilletRadius;
-
-	ptArrTemp.setLogicalLength(8);
-
-	ptArrTemp[0].set(0, 0, 0.0);
-	ptArrTemp[1].set(Width, 0, 0.0);
-	ptArrTemp[2].set(Width, FlangeThickness, 0.0);
-	ptArrTemp[3].set(WebThickness, FlangeThickness, 0.0);
-	ptArrTemp[4].set(WebThickness, Depth - FlangeThickness, 0.0);
-	ptArrTemp[5].set(Width, Depth - FlangeThickness, 0.0);
-	ptArrTemp[6].set(Width, Depth, 0.0);
-	ptArrTemp[7].set(0, Depth, 0.0);
-
-	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
-	auto acVec3dTemp = pointDeplacement3D.asVector();
-
-	AcGePoint3dArray* ptArr[1];
-	AcGeVector3d* acVec3d[1];
-
-	ptArr[0] = &ptArrTemp;
-	acVec3d[0] = &acVec3dTemp;
-
-	drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
-}
-
-void MethodeConstruction::createSolid3dProfilUPN(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
-{
-	AcGePoint3dArray ptArrTemp;
-
-	float Depth = UprofilDef.Depth;
-	float Width = UprofilDef.FlangeWidth;
-	float WebThickness = UprofilDef.WebThickness;
-	float FlangeThickness = UprofilDef.FlangeThickness;
-	float FilletRadius = UprofilDef.FilletRadius;
-
-	ptArrTemp.setLogicalLength(8);
-
-	ptArrTemp[0].set(0, 0, 0.0);
-	ptArrTemp[1].set(Width, 0, 0.0);
-	ptArrTemp[2].set(Width, FlangeThickness, 0.0);
-	ptArrTemp[3].set(WebThickness, FlangeThickness, 0.0);
-	ptArrTemp[4].set(WebThickness, Depth - FlangeThickness, 0.0);
-	ptArrTemp[5].set(Width, Depth - FlangeThickness, 0.0);
-	ptArrTemp[6].set(Width, Depth, 0.0);
-	ptArrTemp[7].set(0, Depth, 0.0);
-
-	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Width / 2, -Depth / 2, 0);
-	auto acVec3dTemp = pointDeplacement3D.asVector();
-
-	AcGePoint3dArray* ptArr[1];
-	AcGeVector3d* acVec3d[1];
-
-	ptArr[0] = &ptArrTemp;
-	acVec3d[0] = &acVec3dTemp;
-
-	drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
-}
-
-void MethodeConstruction::createSolid3dProfilC(C_profilDef CprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
+void MethodeConstruction::createSolid3dProfil(C_profilDef CprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
 {
 	AcGePoint3dArray ptArrTemp;
 
@@ -1004,7 +955,7 @@ void MethodeConstruction::createSolid3dProfilC(C_profilDef CprofilDef, Vec3 Vect
 	drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
 }
 
-void MethodeConstruction::createSolid3dProfilZ(Z_profilDef ZprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
+void MethodeConstruction::createSolid3dProfil(Z_profilDef ZprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
 {
 	AcGePoint3dArray ptArrTemp;
 
@@ -1038,7 +989,7 @@ void MethodeConstruction::createSolid3dProfilZ(Z_profilDef ZprofilDef, Vec3 Vect
 	drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
 }
 
-void MethodeConstruction::createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
+void MethodeConstruction::createSolid3dProfil(AsymmetricI_profilDef AsymmetricIprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
 {
 	AcGePoint3dArray ptArrTemp;
 
@@ -1077,7 +1028,7 @@ void MethodeConstruction::createSolid3dProfilAsyI(AsymmetricI_profilDef Asymmetr
 	drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
 }
 
-void MethodeConstruction::createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
+void MethodeConstruction::createSolid3dProfil(CircleHollow_profilDef CircleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
 {
 	float Radius = CircleHollowprofilDef.Radius;
 	float WallThickness = CircleHollowprofilDef.WallThickness;
@@ -1107,7 +1058,7 @@ void MethodeConstruction::createSolid3dProfilCircHollow(CircleHollow_profilDef C
 	//drawForProfilCircle(circles, acVec3d1s, 2, VecteurExtrusion, transform);
 }
 
-void MethodeConstruction::createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
+void MethodeConstruction::createSolid3dProfil(RectangleHollow_profilDef RectangleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
 {
 	AcGePoint3dArray* ptArr[2];
 	AcGeVector3d* acVec3d1s[2];
@@ -1148,7 +1099,7 @@ void MethodeConstruction::createSolid3dProfilRectHollow(RectangleHollow_profilDe
 	drawForProfil(ptArr, acVec3d1s, 2, VecteurExtrusion, transform);
 }
 
-void MethodeConstruction::createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
+void MethodeConstruction::createSolid3dProfil(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
 {
 	float Radius = CircleprofilDef.Radius;
 
@@ -1168,7 +1119,7 @@ void MethodeConstruction::createSolid3dProfilCircle(Circle_profilDef Circleprofi
 	//drawForProfilCircle(circles, acVec3d1s, 2, VecteurExtrusion, transform);
 }
 
-void MethodeConstruction::createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
+void MethodeConstruction::createSolid3dProfil(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
 {
 	AcGePoint3dArray ptArrTemp;
 
@@ -1193,6 +1144,7 @@ void MethodeConstruction::createSolid3dProfilRectangle(Rectangle_profilDef Recta
 
 	drawForProfil(ptArr, acVec3d, 1, VecteurExtrusion, transform);
 }
+#pragma endregion
 
 void MethodeConstruction::CreationVoid(AcDb3dSolid* extrusion, ObjectVoid& objectVoid)
 {
@@ -1324,11 +1276,6 @@ void MethodeConstruction::CreationVoidCircle(AcDb3dSolid* extrusion, ObjectVoid&
 	circle->setColorIndex(3);
 
 	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
-
-	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
-	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Radius / 2, -Radius / 2, 0);
-	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
-	circle->transformBy(matrix3d.translation(acVec3d));
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity = NULL;

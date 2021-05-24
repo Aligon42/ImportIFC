@@ -8,18 +8,12 @@ CreateConstructionPointVisitor::CreateConstructionPointVisitor() :
 
 }
 
-CreateConstructionPointVisitor::~CreateConstructionPointVisitor()
-{
-    if (_exploringRelVoid)
-        delete (ObjectVoid*)_object;
-}
-
 bool CreateConstructionPointVisitor::visitIfcProduct(ifc2x3::IfcProduct* value)
 {
     if(value->testRepresentation())
     {
         if (!_exploringRelVoid)
-            _object = new ObjectToConstruct;
+            _object = CreateRef<ObjectToConstruct>();
 
         return value->getRepresentation()->acceptVisitor(this);
     }
@@ -31,7 +25,7 @@ bool CreateConstructionPointVisitor::visitIfcRelVoidsElement(
     ifc2x3::IfcRelVoidsElement* value)
 {
     _exploringRelVoid = true;
-    _object = new ObjectVoid;
+    _object = CreateRef<ObjectVoid>();
     if (value->testRelatedOpeningElement())
     {
         value->getRelatedOpeningElement()->acceptVisitor(this);
@@ -85,9 +79,9 @@ bool CreateConstructionPointVisitor::visitIfcShapeRepresentation(
             el.Type = value->type();
 
             if (!_exploringRelVoid)
-                ((ObjectToConstruct*)_object)->ElementsToConstruct.push_back(el);
+                ((ObjectToConstruct*)_object.get())->ElementsToConstruct.push_back(el);
             else
-                ((ObjectVoid*)_object)->ElementsToConstruct.push_back(el);
+                ((ObjectVoid*)_object.get())->ElementsToConstruct.push_back(el);
         }
 
         if(item->acceptVisitor(this))
@@ -205,15 +199,15 @@ bool CreateConstructionPointVisitor::visitIfcHalfSpaceSolid(
     if (value->testAgreementFlag())
     {
         if (!_exploringRelVoid)
-            ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].AgreementHalf.push_back(value->getAgreementFlag());
+            ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].AgreementHalf.push_back(value->getAgreementFlag());
         else
-            ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].AgreementHalf.push_back(value->getAgreementFlag());        
+            ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].AgreementHalf.push_back(value->getAgreementFlag());
     }
 
     if (!_exploringRelVoid)
-        ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].EntitiesHalf.push_back(value->getClassType().getName());
+        ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].EntitiesHalf.push_back(value->getClassType().getName());
     else
-        ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].EntitiesHalf.push_back(value->getClassType().getName());
+        ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].EntitiesHalf.push_back(value->getClassType().getName());
 
     return true;
 }
@@ -228,9 +222,9 @@ bool CreateConstructionPointVisitor::visitIfcPolygonalBoundedHalfSpace(
         el.Type = value->type();
 
         if (!_exploringRelVoid)
-            ((ObjectToConstruct*)_object)->ElementsToConstruct.push_back(el);
+            ((ObjectToConstruct*)_object.get())->ElementsToConstruct.push_back(el);
         else
-            ((ObjectVoid*)_object)->ElementsToConstruct.push_back(el);
+            ((ObjectVoid*)_object.get())->ElementsToConstruct.push_back(el);
 
         if (value->getPolygonalBoundary()->acceptVisitor(this))
         {
@@ -240,17 +234,17 @@ bool CreateConstructionPointVisitor::visitIfcPolygonalBoundedHalfSpace(
                 transformPoints(transform);
 
                 if (!_exploringRelVoid)
-                    ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].LocationsPolygonal.push_back(transform);
+                    ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].LocationsPolygonal.push_back(transform);
                 else
-                    ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].LocationsPolygonal.push_back(transform);
+                    ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].LocationsPolygonal.push_back(transform);
             }
 
             if (value->testAgreementFlag())
             {
                 if (!_exploringRelVoid)
-                    ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].AgreementPolygonal.push_back(value->getAgreementFlag());
+                    ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].AgreementPolygonal.push_back(value->getAgreementFlag());
                 else
-                    ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].AgreementPolygonal.push_back(value->getAgreementFlag());
+                    ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].AgreementPolygonal.push_back(value->getAgreementFlag());
             }
 
             if (value->testBaseSurface())
@@ -259,9 +253,9 @@ bool CreateConstructionPointVisitor::visitIfcPolygonalBoundedHalfSpace(
             }
 
             if (!_exploringRelVoid)
-                ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].EntitiesPolygonal.push_back(value->getClassType().getName());
+                ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].EntitiesPolygonal.push_back(value->getClassType().getName());
             else
-                ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].EntitiesPolygonal.push_back(value->getClassType().getName());
+                ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].EntitiesPolygonal.push_back(value->getClassType().getName());
             
             return true;
         }
@@ -396,9 +390,9 @@ bool CreateConstructionPointVisitor::visitIfcPlane(
             );
 
         if (!_exploringRelVoid)
-            ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].Plans.push_back(plan);
+            ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Plans.push_back(plan);
         else
-            ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].Plans.push_back(plan);
+            ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Plans.push_back(plan);
 
         return true;
     }
@@ -431,9 +425,9 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
         el.Type = value->type();
 
         if (!_exploringRelVoid)
-            ((ObjectToConstruct*)_object)->ElementsToConstruct.push_back(el);
+            ((ObjectToConstruct*)_object.get())->ElementsToConstruct.push_back(el);
         else
-            ((ObjectVoid*)_object)->ElementsToConstruct.push_back(el);
+            ((ObjectVoid*)_object.get())->ElementsToConstruct.push_back(el);
 
         if(value->getSweptArea()->acceptVisitor(this))
         {
@@ -441,12 +435,12 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
             transformPoints(transform);
 
             if (!_exploringRelVoid)
-                ((ObjectToConstruct*)_object)->Transform = transform;
+                ((ObjectToConstruct*)_object.get())->Transform = transform;
             else
-                ((ObjectVoid*)_object)->Transform = transform;
+                ((ObjectVoid*)_object.get())->Transform = transform;
             
             if (_exploringRelVoid)
-                ((ObjectVoid*)_object)->NameProfilDef = value->getSweptArea()->getType().getName();
+                ((ObjectVoid*)_object.get())->NameProfilDef = value->getSweptArea()->getType().getName();
             else if (_profilDef != nullptr)
                 _profilDef->Name = value->getSweptArea()->getType().getName();
 
@@ -457,9 +451,9 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
                 extrusionVector *= value->getDepth();
 
                 if (!_exploringRelVoid)
-                    ((ObjectToConstruct*)_object)->VecteurExtrusion = extrusionVector;
+                    ((ObjectToConstruct*)_object.get())->VecteurExtrusion = extrusionVector;
                 else
-                    ((ObjectVoid*)_object)->VecteurExtrusion = extrusionVector;
+                    ((ObjectVoid*)_object.get())->VecteurExtrusion = extrusionVector;
             }
 
             return true;
@@ -478,14 +472,14 @@ bool CreateConstructionPointVisitor::visitIfcIShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new I_profilDef();
+    _profilDef = CreateRef<I_profilDef>();
 
-    ((I_profilDef*)_profilDef)->OverallWidth = (float) value->getOverallWidth();
-    ((I_profilDef*)_profilDef)->OverallDepth = (float)value->getOverallDepth();
-    ((I_profilDef*)_profilDef)->webThickness = (float)value->getWebThickness();
-    ((I_profilDef*)_profilDef)->flangeThickness = (float)value->getFlangeThickness();
-    ((I_profilDef*)_profilDef)->filletRadius = (float)value->getFilletRadius();
-    ((I_profilDef*)_profilDef)->nbArg = 5;
+    ((I_profilDef*)_profilDef.get())->OverallWidth = (float) value->getOverallWidth();
+    ((I_profilDef*)_profilDef.get())->OverallDepth = (float)value->getOverallDepth();
+    ((I_profilDef*)_profilDef.get())->webThickness = (float)value->getWebThickness();
+    ((I_profilDef*)_profilDef.get())->flangeThickness = (float)value->getFlangeThickness();
+    ((I_profilDef*)_profilDef.get())->filletRadius = (float)value->getFilletRadius();
+    ((I_profilDef*)_profilDef.get())->nbArg = 5;
 
     return true;
 }
@@ -498,18 +492,18 @@ bool CreateConstructionPointVisitor::visitIfcLShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new L_profilDef();
+    _profilDef = CreateRef<L_profilDef>();
    
-    ((L_profilDef*)_profilDef)->Depth = (float)value->getDepth();
-    ((L_profilDef*)_profilDef)->Width = (float)value->getWidth();
-    ((L_profilDef*)_profilDef)->Thickness = (float)value->getThickness();
-    ((L_profilDef*)_profilDef)->FilletRadius = (float)value->getFilletRadius();
-    ((L_profilDef*)_profilDef)->EdgeRadius = (float)value->getEdgeRadius();
-    ((L_profilDef*)_profilDef)->nbArg = 5;
+    ((L_profilDef*)_profilDef.get())->Depth = (float)value->getDepth();
+    ((L_profilDef*)_profilDef.get())->Width = (float)value->getWidth();
+    ((L_profilDef*)_profilDef.get())->Thickness = (float)value->getThickness();
+    ((L_profilDef*)_profilDef.get())->FilletRadius = (float)value->getFilletRadius();
+    ((L_profilDef*)_profilDef.get())->EdgeRadius = (float)value->getEdgeRadius();
+    ((L_profilDef*)_profilDef.get())->nbArg = 5;
     if (value->testLegSlope())
     {
-        ((L_profilDef*)_profilDef)->LegSlope = (float)value->getLegSlope();
-        ((L_profilDef*)_profilDef)->nbArg = 6;
+        ((L_profilDef*)_profilDef.get())->LegSlope = (float)value->getLegSlope();
+        ((L_profilDef*)_profilDef.get())->nbArg = 6;
     }
 
     return true;
@@ -523,21 +517,21 @@ bool CreateConstructionPointVisitor::visitIfcTShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new T_profilDef();
+    _profilDef = CreateRef<T_profilDef>();
     
-    ((T_profilDef*)_profilDef)->Depth = (float)value->getDepth();
-    ((T_profilDef*)_profilDef)->FlangeWidth = (float)value->getFlangeWidth();
-    ((T_profilDef*)_profilDef)->WebThickness = (float)value->getWebThickness();
-    ((T_profilDef*)_profilDef)->FlangeThickness = (float)value->getFlangeThickness();
-    ((T_profilDef*)_profilDef)->FilletRadius = (float)value->getFilletRadius();
-    ((T_profilDef*)_profilDef)->FlangeEdgeRadius = (float)value->getFlangeEdgeRadius();
-    ((T_profilDef*)_profilDef)->WebEdgeRadius = (float)value->getWebEdgeRadius();
-    ((T_profilDef*)_profilDef)->nbArg = 7;
+    ((T_profilDef*)_profilDef.get())->Depth = (float)value->getDepth();
+    ((T_profilDef*)_profilDef.get())->FlangeWidth = (float)value->getFlangeWidth();
+    ((T_profilDef*)_profilDef.get())->WebThickness = (float)value->getWebThickness();
+    ((T_profilDef*)_profilDef.get())->FlangeThickness = (float)value->getFlangeThickness();
+    ((T_profilDef*)_profilDef.get())->FilletRadius = (float)value->getFilletRadius();
+    ((T_profilDef*)_profilDef.get())->FlangeEdgeRadius = (float)value->getFlangeEdgeRadius();
+    ((T_profilDef*)_profilDef.get())->WebEdgeRadius = (float)value->getWebEdgeRadius();
+    ((T_profilDef*)_profilDef.get())->nbArg = 7;
     if (value->testWebSlope() && value->testFlangeSlope())
     {
-        ((T_profilDef*)_profilDef)->WebSlope = (float)value->getWebSlope();
-        ((T_profilDef*)_profilDef)->FlangeSlope = (float)value->getFlangeSlope();
-        ((T_profilDef*)_profilDef)->nbArg = 9;
+        ((T_profilDef*)_profilDef.get())->WebSlope = (float)value->getWebSlope();
+        ((T_profilDef*)_profilDef.get())->FlangeSlope = (float)value->getFlangeSlope();
+        ((T_profilDef*)_profilDef.get())->nbArg = 9;
     }
 
     return true;
@@ -551,19 +545,19 @@ bool CreateConstructionPointVisitor::visitIfcUShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new U_profilDef();
+    _profilDef = CreateRef<U_profilDef>();
     
-    ((U_profilDef*)_profilDef)->Depth = (float)value->getDepth();
-    ((U_profilDef*)_profilDef)->FlangeWidth = (float)value->getFlangeWidth();
-    ((U_profilDef*)_profilDef)->WebThickness = (float)value->getWebThickness();
-    ((U_profilDef*)_profilDef)->FlangeThickness = (float)value->getFlangeThickness();
-    ((U_profilDef*)_profilDef)->FilletRadius = (float)value->getFilletRadius();
-    ((U_profilDef*)_profilDef)->nbArg = 5;
+    ((U_profilDef*)_profilDef.get())->Depth = (float)value->getDepth();
+    ((U_profilDef*)_profilDef.get())->FlangeWidth = (float)value->getFlangeWidth();
+    ((U_profilDef*)_profilDef.get())->WebThickness = (float)value->getWebThickness();
+    ((U_profilDef*)_profilDef.get())->FlangeThickness = (float)value->getFlangeThickness();
+    ((U_profilDef*)_profilDef.get())->FilletRadius = (float)value->getFilletRadius();
+    ((U_profilDef*)_profilDef.get())->nbArg = 5;
     if (value->testEdgeRadius() && value->testFlangeSlope())
     {
-        ((U_profilDef*)_profilDef)->EdgeRadius = (float)value->getEdgeRadius();
-        ((U_profilDef*)_profilDef)->FlangeSlope = (float)value->getFlangeSlope();
-        ((U_profilDef*)_profilDef)->nbArg = 7;
+        ((U_profilDef*)_profilDef.get())->EdgeRadius = (float)value->getEdgeRadius();
+        ((U_profilDef*)_profilDef.get())->FlangeSlope = (float)value->getFlangeSlope();
+        ((U_profilDef*)_profilDef.get())->nbArg = 7;
     }
     
 
@@ -578,13 +572,13 @@ bool CreateConstructionPointVisitor::visitIfcCShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new C_profilDef();
+    _profilDef = CreateRef<C_profilDef>();
     
-    ((C_profilDef*)_profilDef)->Depth = (float)value->getDepth();
-    ((C_profilDef*)_profilDef)->Width = (float)value->getWidth();
-    ((C_profilDef*)_profilDef)->WallThickness = (float)value->getWallThickness();
-    ((C_profilDef*)_profilDef)->Girth = (float)value->getGirth();
-    ((C_profilDef*)_profilDef)->InternalFilletRadius = (float)value->getInternalFilletRadius();
+    ((C_profilDef*)_profilDef.get())->Depth = (float)value->getDepth();
+    ((C_profilDef*)_profilDef.get())->Width = (float)value->getWidth();
+    ((C_profilDef*)_profilDef.get())->WallThickness = (float)value->getWallThickness();
+    ((C_profilDef*)_profilDef.get())->Girth = (float)value->getGirth();
+    ((C_profilDef*)_profilDef.get())->InternalFilletRadius = (float)value->getInternalFilletRadius();
 
     return true;
 }
@@ -597,14 +591,14 @@ bool CreateConstructionPointVisitor::visitIfcZShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new Z_profilDef();
+    _profilDef = CreateRef<Z_profilDef>();
     
-    ((Z_profilDef*)_profilDef)->Depth = (float)value->getDepth();
-    ((Z_profilDef*)_profilDef)->FlangeWidth = (float)value->getFlangeWidth();
-    ((Z_profilDef*)_profilDef)->WebThickness = (float)value->getWebThickness();
-    ((Z_profilDef*)_profilDef)->FlangeThickness = (float)value->getFlangeThickness();
-    ((Z_profilDef*)_profilDef)->FilletRadius = (float)value->getFilletRadius();
-    ((Z_profilDef*)_profilDef)->EdgeRadius = (float)value->getEdgeRadius();
+    ((Z_profilDef*)_profilDef.get())->Depth = (float)value->getDepth();
+    ((Z_profilDef*)_profilDef.get())->FlangeWidth = (float)value->getFlangeWidth();
+    ((Z_profilDef*)_profilDef.get())->WebThickness = (float)value->getWebThickness();
+    ((Z_profilDef*)_profilDef.get())->FlangeThickness = (float)value->getFlangeThickness();
+    ((Z_profilDef*)_profilDef.get())->FilletRadius = (float)value->getFilletRadius();
+    ((Z_profilDef*)_profilDef.get())->EdgeRadius = (float)value->getEdgeRadius();
 
     return true;
 }
@@ -617,16 +611,16 @@ bool CreateConstructionPointVisitor::visitIfcAsymmetricIShapeProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new AsymmetricI_profilDef();
+    _profilDef = CreateRef<AsymmetricI_profilDef>();
     
-    ((AsymmetricI_profilDef*)_profilDef)->OverallWidth = (float)value->getOverallWidth();
-    ((AsymmetricI_profilDef*)_profilDef)->OverallDepth = (float)value->getOverallDepth();
-    ((AsymmetricI_profilDef*)_profilDef)->WebThickness = (float)value->getWebThickness();
-    ((AsymmetricI_profilDef*)_profilDef)->FlangeThickness = (float)value->getFlangeThickness();
-    ((AsymmetricI_profilDef*)_profilDef)->FlangeFilletRadius = (float)value->getTopFlangeFilletRadius();
-    ((AsymmetricI_profilDef*)_profilDef)->TopFlangeWidth = (float)value->getTopFlangeWidth();
-    ((AsymmetricI_profilDef*)_profilDef)->TopFlangeThickness = (float)value->getTopFlangeThickness();
-    ((AsymmetricI_profilDef*)_profilDef)->TopFlangeFilletRadius = (float)value->getTopFlangeFilletRadius();
+    ((AsymmetricI_profilDef*)_profilDef.get())->OverallWidth = (float)value->getOverallWidth();
+    ((AsymmetricI_profilDef*)_profilDef.get())->OverallDepth = (float)value->getOverallDepth();
+    ((AsymmetricI_profilDef*)_profilDef.get())->WebThickness = (float)value->getWebThickness();
+    ((AsymmetricI_profilDef*)_profilDef.get())->FlangeThickness = (float)value->getFlangeThickness();
+    ((AsymmetricI_profilDef*)_profilDef.get())->FlangeFilletRadius = (float)value->getTopFlangeFilletRadius();
+    ((AsymmetricI_profilDef*)_profilDef.get())->TopFlangeWidth = (float)value->getTopFlangeWidth();
+    ((AsymmetricI_profilDef*)_profilDef.get())->TopFlangeThickness = (float)value->getTopFlangeThickness();
+    ((AsymmetricI_profilDef*)_profilDef.get())->TopFlangeFilletRadius = (float)value->getTopFlangeFilletRadius();
 
     return true;
 }
@@ -639,10 +633,10 @@ bool CreateConstructionPointVisitor::visitIfcCircleHollowProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new CircleHollow_profilDef();
+    _profilDef = CreateRef<CircleHollow_profilDef>();
     
-    ((CircleHollow_profilDef*)_profilDef)->Radius = (float)value->getRadius();
-    ((CircleHollow_profilDef*)_profilDef)->WallThickness = (float)value->getWallThickness();
+    ((CircleHollow_profilDef*)_profilDef.get())->Radius = (float)value->getRadius();
+    ((CircleHollow_profilDef*)_profilDef.get())->WallThickness = (float)value->getWallThickness();
 
     return true;
 }
@@ -655,13 +649,13 @@ bool CreateConstructionPointVisitor::visitIfcRectangleHollowProfileDef(
         value->getPosition()->acceptVisitor(this);
     }
 
-    _profilDef = new RectangleHollow_profilDef();
+    _profilDef = CreateRef<RectangleHollow_profilDef>();
     
-    ((RectangleHollow_profilDef*)_profilDef)->XDim = (float)value->getXDim();
-    ((RectangleHollow_profilDef*)_profilDef)->YDim = (float)value->getYDim();
-    ((RectangleHollow_profilDef*)_profilDef)->WallThickness = (float)value->getWallThickness();
-    ((RectangleHollow_profilDef*)_profilDef)->InnerFilletRadius = (float)value->getInnerFilletRadius();
-    ((RectangleHollow_profilDef*)_profilDef)->OuteerFilletRadius = (float)value->getOuterFilletRadius();
+    ((RectangleHollow_profilDef*)_profilDef.get())->XDim = (float)value->getXDim();
+    ((RectangleHollow_profilDef*)_profilDef.get())->YDim = (float)value->getYDim();
+    ((RectangleHollow_profilDef*)_profilDef.get())->WallThickness = (float)value->getWallThickness();
+    ((RectangleHollow_profilDef*)_profilDef.get())->InnerFilletRadius = (float)value->getInnerFilletRadius();
+    ((RectangleHollow_profilDef*)_profilDef.get())->OuteerFilletRadius = (float)value->getOuterFilletRadius();
 
     return true;
 }
@@ -676,15 +670,15 @@ bool CreateConstructionPointVisitor::visitIfcRectangleProfileDef(
 
     if (_exploringRelVoid)
     {
-        ((ObjectVoid*)_object)->XDim = (float)value->getXDim();
-        ((ObjectVoid*)_object)->YDim = (float)value->getYDim();
+        ((ObjectVoid*)_object.get())->XDim = (float)value->getXDim();
+        ((ObjectVoid*)_object.get())->YDim = (float)value->getYDim();
     }
     else
     {
-        _profilDef = new Rectangle_profilDef();
+        _profilDef = CreateRef<Rectangle_profilDef>();
 
-        ((Rectangle_profilDef*)_profilDef)->XDim = (float)value->getXDim();
-        ((Rectangle_profilDef*)_profilDef)->YDim = (float)value->getYDim();
+        ((Rectangle_profilDef*)_profilDef.get())->XDim = (float)value->getXDim();
+        ((Rectangle_profilDef*)_profilDef.get())->YDim = (float)value->getYDim();
     }
 
     return true;
@@ -699,12 +693,12 @@ bool CreateConstructionPointVisitor::visitIfcCircleProfileDef(
     }
 
     if (_exploringRelVoid)
-        ((ObjectVoid*)_object)->Radius = (float)value->getRadius();
+        ((ObjectVoid*)_object.get())->Radius = (float)value->getRadius();
     else
     {
-        _profilDef = new Circle_profilDef();
+        _profilDef = CreateRef<Circle_profilDef>();
 
-        ((Circle_profilDef*)_profilDef)->Radius = (float)value->getRadius();
+        ((Circle_profilDef*)_profilDef.get())->Radius = (float)value->getRadius();
     }
 
     return true;
@@ -726,29 +720,29 @@ bool CreateConstructionPointVisitor::visitIfcPolyline(ifc2x3::IfcPolyline* value
     int size = 0;
 
     if (!_exploringRelVoid)
-        size = ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].Points.size();
+        size = ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Points.size();
     else
-        size = ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].Points.size();
+        size = ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Points.size();
 
     for (auto point : value->getPoints())
     {
         if (!_exploringRelVoid)
-            ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].Points.push_back(ComputePlacementVisitor::getPoint(point.get()));
+            ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Points.push_back(ComputePlacementVisitor::getPoint(point.get()));
         else
-            ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].Points.push_back(ComputePlacementVisitor::getPoint(point.get()));
+            ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Points.push_back(ComputePlacementVisitor::getPoint(point.get()));
     }
 
     if (!_exploringRelVoid)
-        ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].Points.pop_back();
+        ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Points.pop_back();
     else
-        ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].Points.pop_back();
+        ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Points.pop_back();
 
     if (!_compositeCurve)
     {
         if (!_exploringRelVoid)
-            ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].Args.push_back(((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].Points.size() - size);
+            ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Args.push_back(((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Points.size() - size);
         else
-            ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].Args.push_back(((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].Points.size() - size);
+            ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Args.push_back(((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Points.size() - size);
 
         _nbArgToCompute++;
     }
@@ -756,36 +750,36 @@ bool CreateConstructionPointVisitor::visitIfcPolyline(ifc2x3::IfcPolyline* value
     {
         if (!_exploringRelVoid)
         {
-            int elementIndex = ((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1;
+            int elementIndex = ((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1;
 
-            if (((ObjectToConstruct*)_object)->ElementsToConstruct[elementIndex].Args.size() == 0)
-                ((ObjectToConstruct*)_object)->ElementsToConstruct[elementIndex].Args.push_back(((ObjectToConstruct*)_object)->ElementsToConstruct[elementIndex].Points.size());
+            if (((ObjectToConstruct*)_object.get())->ElementsToConstruct[elementIndex].Args.size() == 0)
+                ((ObjectToConstruct*)_object.get())->ElementsToConstruct[elementIndex].Args.push_back(((ObjectToConstruct*)_object.get())->ElementsToConstruct[elementIndex].Points.size());
             else
             {
-                int argsIndex = ((ObjectToConstruct*)_object)->ElementsToConstruct[elementIndex].Args.size() - 1;
+                int argsIndex = ((ObjectToConstruct*)_object.get())->ElementsToConstruct[elementIndex].Args.size() - 1;
 
-                ((ObjectToConstruct*)_object)->ElementsToConstruct[elementIndex].Args[argsIndex] = ((ObjectToConstruct*)_object)->ElementsToConstruct[elementIndex].Points.size();
+                ((ObjectToConstruct*)_object.get())->ElementsToConstruct[elementIndex].Args[argsIndex] = ((ObjectToConstruct*)_object.get())->ElementsToConstruct[elementIndex].Points.size();
             }
         }
         else
         {
-            int elementIndex = ((ObjectVoid*)_object)->ElementsToConstruct.size() - 1;
+            int elementIndex = ((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1;
 
-            if (((ObjectVoid*)_object)->ElementsToConstruct[elementIndex].Args.size() == 0)
-                ((ObjectVoid*)_object)->ElementsToConstruct[elementIndex].Args.push_back(((ObjectVoid*)_object)->ElementsToConstruct[elementIndex].Points.size());
+            if (((ObjectVoid*)_object.get())->ElementsToConstruct[elementIndex].Args.size() == 0)
+                ((ObjectVoid*)_object.get())->ElementsToConstruct[elementIndex].Args.push_back(((ObjectVoid*)_object.get())->ElementsToConstruct[elementIndex].Points.size());
             else
             {
-                int argsIndex = ((ObjectVoid*)_object)->ElementsToConstruct[elementIndex].Args.size() - 1;
+                int argsIndex = ((ObjectVoid*)_object.get())->ElementsToConstruct[elementIndex].Args.size() - 1;
 
-                ((ObjectVoid*)_object)->ElementsToConstruct[elementIndex].Args[argsIndex] = ((ObjectVoid*)_object)->ElementsToConstruct[elementIndex].Points.size();
+                ((ObjectVoid*)_object.get())->ElementsToConstruct[elementIndex].Args[argsIndex] = ((ObjectVoid*)_object.get())->ElementsToConstruct[elementIndex].Points.size();
             }
         }
     }
 
     if (!_exploringRelVoid)
-        return ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].Points.empty() == false;
+        return ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Points.empty() == false;
     else
-        return ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].Points.empty() == false;
+        return ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Points.empty() == false;
 }
 
 bool CreateConstructionPointVisitor::visitIfcFacetedBrep(ifc2x3::IfcFacetedBrep* value)
@@ -797,9 +791,9 @@ bool CreateConstructionPointVisitor::visitIfcFacetedBrep(ifc2x3::IfcFacetedBrep*
         el.Type = value->type();
 
         if (!_exploringRelVoid)
-            ((ObjectToConstruct*)_object)->ElementsToConstruct.push_back(el);
+            ((ObjectToConstruct*)_object.get())->ElementsToConstruct.push_back(el);
         else
-            ((ObjectVoid*)_object)->ElementsToConstruct.push_back(el);
+            ((ObjectVoid*)_object.get())->ElementsToConstruct.push_back(el);
 
         return value->getOuter()->acceptVisitor(this);
     }
@@ -858,15 +852,15 @@ bool CreateConstructionPointVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value
         auto v = ComputePlacementVisitor::getPoint(point.get());
 
         if (!_exploringRelVoid)
-            ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].Points.push_back(v);
+            ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Points.push_back(v);
         else
-            ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].Points.push_back(v);
+            ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Points.push_back(v);
     }
 
     if (!_exploringRelVoid)
-        return ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].Points.empty() == false;
+        return ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Points.empty() == false;
     else
-        return ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].Points.empty() == false;
+        return ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Points.empty() == false;
 }
 
 void CreateConstructionPointVisitor::SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine)
@@ -892,39 +886,39 @@ void CreateConstructionPointVisitor::transformPoints(const Matrix4& transform)
     std::list<Vec3> tmpPoints;
 
     if (!_exploringRelVoid)
-        tmpPoints = ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].Points;
+        tmpPoints = ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Points;
     else
-        tmpPoints = ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].Points;
+        tmpPoints = ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Points;
 
     int size = -1;
 
     if (!_exploringRelVoid)
     {
-        if (((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].Args.size() > 2)
+        if (((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Args.size() > 2)
         {
             size = 0;
-            for (int i = 0; i < ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].Args.size() - _nbArgToCompute; i++)
+            for (int i = 0; i < ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Args.size() - _nbArgToCompute; i++)
             {
-                size += ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].Args[i];
+                size += ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Args[i];
             }
         }
     }
     else
     {
-        if (((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].Args.size() > 2)
+        if (((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Args.size() > 2)
         {
             size = 0;
-            for (int i = 0; i < ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].Args.size() - _nbArgToCompute; i++)
+            for (int i = 0; i < ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Args.size() - _nbArgToCompute; i++)
             {
-                size += ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].Args[i];
+                size += ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Args[i];
             }
         }
     }
 
     if (!_exploringRelVoid)
-        ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].Points.clear();
+        ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Points.clear();
     else
-        ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].Points.clear();
+        ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Points.clear();
 
     int count = 1;
     for (const auto& point : tmpPoints)
@@ -932,16 +926,16 @@ void CreateConstructionPointVisitor::transformPoints(const Matrix4& transform)
         if (count > size)
         {
             if (!_exploringRelVoid)
-                ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].Points.push_back(transform * point);
+                ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Points.push_back(transform * point);
             else
-                ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].Points.push_back(transform * point);
+                ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Points.push_back(transform * point);
         }
         else
         {
             if (!_exploringRelVoid)
-                ((ObjectToConstruct*)_object)->ElementsToConstruct[((ObjectToConstruct*)_object)->ElementsToConstruct.size() - 1].Points.push_back(point);
+                ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Points.push_back(point);
             else
-                ((ObjectVoid*)_object)->ElementsToConstruct[((ObjectVoid*)_object)->ElementsToConstruct.size() - 1].Points.push_back(point);
+                ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Points.push_back(point);
         }
 
         count++;
