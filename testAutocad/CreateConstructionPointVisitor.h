@@ -197,7 +197,14 @@ private:
     Circle_profilDef CircleprofilDef;
     Rectangle_profilDef RectangleprofilDef;
 
-    
+    //face
+    bool orientationFace;
+    std::vector<int> nbArgFace;
+
+    //style
+    int red;
+    int green;
+    int blue;
 
 public:
     //! Constructor
@@ -220,6 +227,13 @@ public:
     bool visitIfcPlane(ifc2x3::IfcPlane* value) override;
     bool visitIfcAxis2Placement2D(ifc2x3::IfcAxis2Placement2D* value) override;
     bool visitIfcExtrudedAreaSolid(ifc2x3::IfcExtrudedAreaSolid* value) override;
+
+    //style
+    bool visitIfcStyledItem(ifc2x3::IfcStyledItem* value);
+    bool visitIfcPresentationStyleAssignment(ifc2x3::IfcPresentationStyleAssignment* value);
+    bool visitIfcSurfaceStyle(ifc2x3::IfcSurfaceStyle* value);
+    bool visitIfcSurfaceStyleRendering(ifc2x3::IfcSurfaceStyleRendering* value);
+    bool visitIfcColourRgb(ifc2x3::IfcColourRgb* value);
 
     //profilDef
     bool visitIfcIShapeProfileDef(ifc2x3::IfcIShapeProfileDef* value) override;
@@ -273,6 +287,9 @@ public:
     int getkeyForVoid() const;
     TrimmedCurve getTrimmedCurve() const;
     CompositeCurveSegment getCompositeCurveSegment() const;
+
+    std::vector<int> getListNbArgFace() const;
+    bool getOrientatationFace() const;
 
     void SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);
     void SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);

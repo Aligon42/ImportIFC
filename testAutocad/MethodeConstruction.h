@@ -45,12 +45,13 @@ struct ObjectVoid
 static std::vector<ObjectVoid> listVoid;
 static ObjectVoid _objectVoid;
 
-void createSolid3d(int key, std::vector<std::string> nameItems, std::list<Vec3> points1, std::vector<int> nbArg, Vec3 VecteurExtrusion,
+void extrusion(int key, std::vector<std::string> nameItems, std::list<Vec3> points1, std::vector<int> nbArg, Vec3 VecteurExtrusion,
 	Matrix4 transform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal,
 	std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal,
 	std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal,
 	std::vector<ObjectVoid> listVoid);
 static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1);
+static void DeplacementObjet3D(AcDbPlaneSurface* pSurface, Matrix4 transform1);
 static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3>& points1,
 	std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal,
 	std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal, std::vector<std::string>& listEntityHalf,
@@ -79,3 +80,5 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExt
 void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
 AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
 AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
+void createBoundingBox();
+void createFaceSolid(std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transformFace);

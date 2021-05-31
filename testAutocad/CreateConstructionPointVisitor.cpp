@@ -171,6 +171,81 @@ bool CreateConstructionPointVisitor::visitIfcMappedItem(
     return false;
 }
 
+bool CreateConstructionPointVisitor::visitIfcStyledItem(
+    ifc2x3::IfcStyledItem* value)
+{
+    if (value->testItem())
+    {
+        value->getItem()->acceptVisitor(this);
+    }
+    if (value->testStyles())
+    {
+        for (auto style : value->getStyles())
+        {
+            style->acceptVisitor(this);
+        }
+    }
+    return true;
+}
+
+bool CreateConstructionPointVisitor::visitIfcPresentationStyleAssignment(
+    ifc2x3::IfcPresentationStyleAssignment* value)
+{
+    if (value->testStyles())
+    {
+        for (auto style : value->getStyles())
+        {
+            style->acceptVisitor(this);
+        }
+    }
+    return true;
+}
+
+bool CreateConstructionPointVisitor::visitIfcSurfaceStyle(
+    ifc2x3::IfcSurfaceStyle* value)
+{
+    if (value->testSide())
+    {
+        value->getSide();
+    }
+    if (value->testStyles())
+    {
+        for (auto style : value->getStyles())
+        {
+            style->acceptVisitor(this);
+        }
+    }
+    return true;
+}
+
+bool CreateConstructionPointVisitor::visitIfcSurfaceStyleRendering(
+    ifc2x3::IfcSurfaceStyleRendering* value)
+{
+    if (value->testSurfaceColour())
+    {
+        value->getSurfaceColour()->acceptVisitor(this);
+    }
+    return true;
+}
+
+bool CreateConstructionPointVisitor::visitIfcColourRgb(
+    ifc2x3::IfcColourRgb* value)
+{
+    if (value->testRed())
+    {
+        red = value->getRed();
+    }
+    if (value->testGreen())
+    {
+        green = value->getGreen();
+    }
+    if (value->testBlue())
+    {
+        blue = value->getBlue();
+    }
+    return true;
+}
+
 bool CreateConstructionPointVisitor::visitIfcHalfSpaceSolid(
     ifc2x3::IfcHalfSpaceSolid* value)
 {
@@ -692,6 +767,7 @@ bool CreateConstructionPointVisitor::visitIfcFaceOuterBound(ifc2x3::IfcFaceOuter
 
     if (value->testBound())
     {
+        orientationFace = value->getOrientation();
         return value->getBound()->acceptVisitor(this);
     }
 
@@ -700,6 +776,8 @@ bool CreateConstructionPointVisitor::visitIfcFaceOuterBound(ifc2x3::IfcFaceOuter
 
 bool CreateConstructionPointVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value)
 {
+    nbArgFace.push_back(value->getPolygon().size());
+
     for (auto point : value->getPolygon())
     {
         auto v = ComputePlacementVisitor::getPoint(point.get());
@@ -873,6 +951,16 @@ TrimmedCurve CreateConstructionPointVisitor::getTrimmedCurve() const
 CompositeCurveSegment CreateConstructionPointVisitor::getCompositeCurveSegment() const
 {
     return _compositeCurveSegment;
+}
+
+std::vector<int> CreateConstructionPointVisitor::getListNbArgFace() const
+{
+    return nbArgFace;
+}
+
+bool CreateConstructionPointVisitor::getOrientatationFace() const
+{
+    return orientationFace;
 }
 
 void CreateConstructionPointVisitor::transformPoints(const Matrix4& transform)
