@@ -309,14 +309,33 @@ bool CreateConstructionPointVisitor::visitIfcCompositeCurve(
     {
         for (auto segment : value->getSegments())
         {
-            if (segment->acceptVisitor(this))
+            if (!segment->acceptVisitor(this))
             {
                 return true;
             }
         }
+
+        for (int j = 0; j < listNbArgPolyline.size(); j++)
+        {
+            std::vector<Vec3> points;
+
+            for (size_t i = 0; i < listNbArgPolyline[j]; i++)
+            {
+                auto point = _points.begin();
+
+                for (int c = 0; c < i; c++)
+                {
+                    point++;
+                }
+
+                points.push_back(*point);
+            }
+
+            _compositeCurveSegment.listPolyligne.push_back(points);
+        }
     }
 
-    return false;
+    return true;
 }
 
 bool CreateConstructionPointVisitor::visitIfcCompositeCurveSegment(
@@ -346,15 +365,15 @@ bool CreateConstructionPointVisitor::visitIfcTrimmedCurve(
 {
     if (value->testTrim1())
     {
-        _trimmedCurve.trim1 = value->getTrim1().getLowerBound();
+        _trimmedCurve.trim1 = value->getTrim1().begin()->get()->getIfcParameterValue();
     }
     if (value->testTrim2())
     {
-        _trimmedCurve.trim2 = value->getTrim2().getLowerBound();
+        _trimmedCurve.trim2 = value->getTrim2().begin()->get()->getIfcParameterValue();
     }
     if (value->testSenseAgreement())
     {
-        _trimmedCurve.senseArgreement = value->getSenseAgreement();
+        _trimmedCurve.senseArgreement = value->getSenseAgreement() - 1;
     }
     if (value->testMasterRepresentation())
     {
@@ -364,6 +383,9 @@ bool CreateConstructionPointVisitor::visitIfcTrimmedCurve(
     {
         value->getBasisCurve()->acceptVisitor(this);
     }
+
+    _compositeCurveSegment.listTrimmedCurve.push_back(_trimmedCurve);
+
 
     return true;
 }
@@ -381,6 +403,21 @@ bool CreateConstructionPointVisitor::visitIfcCircle(
         value->getPosition()->acceptVisitor(this);
     }
     auto index = value->getKey();
+
+    return true;
+}
+
+bool CreateConstructionPointVisitor::visitIfcAxis2Placement(ifc2x3::IfcAxis2Placement* value)
+{
+    switch (value->currentType())
+    {
+        case value->IFCAXIS2PLACEMENT2D:
+            value->getIfcAxis2Placement2D()->acceptVisitor(this);
+            break;
+        case value->IFCAXIS2PLACEMENT3D:
+            value->getIfcAxis2Placement3D()->acceptVisitor(this);
+            break;
+    }
 
     return true;
 }
@@ -690,9 +727,6 @@ bool CreateConstructionPointVisitor::visitIfcCircleProfileDef(
     return true;
 }
 
-
-
-
 bool CreateConstructionPointVisitor::visitIfcArbitraryClosedProfileDef(ifc2x3::IfcArbitraryClosedProfileDef* value)
 {
     if(value->testOuterCurve())
@@ -941,11 +975,6 @@ std::string CreateConstructionPointVisitor::getNameProfildef() const
 int CreateConstructionPointVisitor::getkeyForVoid() const
 {
     return keyForVoid;
-}
-
-TrimmedCurve CreateConstructionPointVisitor::getTrimmedCurve() const
-{
-    return _trimmedCurve;
 }
 
 CompositeCurveSegment CreateConstructionPointVisitor::getCompositeCurveSegment() const

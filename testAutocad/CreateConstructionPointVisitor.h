@@ -147,11 +147,6 @@ struct CompositeCurveSegment
     std::vector<std::string> listParentCurve;
 };
 
-
-
-static TrimmedCurve _trimmedCurve;
-static CompositeCurveSegment _compositeCurveSegment;
-
 class CreateConstructionPointVisitor : public ifc2x3::InheritVisitor
 {
 private:
@@ -197,6 +192,9 @@ private:
     Circle_profilDef CircleprofilDef;
     Rectangle_profilDef RectangleprofilDef;
 
+    TrimmedCurve _trimmedCurve;
+    CompositeCurveSegment _compositeCurveSegment;
+
     //face
     bool orientationFace;
     std::vector<int> nbArgFace;
@@ -225,6 +223,7 @@ public:
     bool visitIfcCircle(ifc2x3::IfcCircle* value) override; 
     bool visitIfcRepresentationMap(ifc2x3::IfcRepresentationMap* value) override;
     bool visitIfcPlane(ifc2x3::IfcPlane* value) override;
+    bool visitIfcAxis2Placement(ifc2x3::IfcAxis2Placement* value) override;
     bool visitIfcAxis2Placement2D(ifc2x3::IfcAxis2Placement2D* value) override;
     bool visitIfcExtrudedAreaSolid(ifc2x3::IfcExtrudedAreaSolid* value) override;
 
@@ -285,7 +284,6 @@ public:
     std::string getNameProfildef() const;
 
     int getkeyForVoid() const;
-    TrimmedCurve getTrimmedCurve() const;
     CompositeCurveSegment getCompositeCurveSegment() const;
 
     std::vector<int> getListNbArgFace() const;
