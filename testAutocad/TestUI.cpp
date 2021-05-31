@@ -112,6 +112,9 @@ void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vect
 
         obj->Transform = placementVisitor.getTransformation() * obj->Transform;
 
+        if (obj->IsCompositeCurve)
+            obj->TrimmedCurve = visitor1.getTrimmedCurve();
+
         if (entity == "IfcWallStandardCase" || entity == "IfcSlab")
         {
             if (obj->ElementsToConstruct.size() > 0)
@@ -257,13 +260,17 @@ void LoadIfc()
                 ObjectVoid objectVoid = visitor1.getObjectVoid();
                 voids.acceptVisitor(&placementVisitor);
                 objectVoid.Transform = placementVisitor.getTransformation() * objectVoid.Transform;
+
+                if (objectVoid.IsCompositeCurve)
+                    objectVoid.TrimmedCurve = visitor1.getTrimmedCurve();
+
                 methodeConstruction.AddObjectVoid(objectVoid);
             }
         }));
 
         std::map<std::string, std::vector<Ref<BaseObject>>> objects;
 
-        for (auto buildingElement : expressDataSet->getAllIfcBuildingElement().m_refList)
+        for (auto buildingElement : expressDataSet->getAllIfcSlab().m_refList)
         {
             if (buildingElement->size() > 0)
             {

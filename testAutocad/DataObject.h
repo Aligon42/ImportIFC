@@ -8,6 +8,15 @@
 typedef mathfu::Vector<float, 3> Vec3;
 typedef mathfu::Matrix<float, 4> Matrix4;
 
+struct TrimmedCurve
+{
+	Vec3 centreCircle;
+	float radius;
+	int trim1;
+	int trim2;
+	bool senseArgreement;
+};
+
 struct BaseObject
 {
 	int Key;
@@ -31,6 +40,8 @@ struct ObjectToConstruct : public BaseObject
 	Vec3 VecteurExtrusion;
 	Matrix4 Transform;
 	std::vector<ElementToConstruct> ElementsToConstruct;
+	TrimmedCurve TrimmedCurve;
+	bool IsCompositeCurve;
 };
 
 struct ObjectVoid : ObjectToConstruct
@@ -39,15 +50,6 @@ struct ObjectVoid : ObjectToConstruct
 	float XDim;
 	float YDim;
 	float Radius;
-};
-
-struct TrimmedCurve
-{
-	Vec3 centreCircle;
-	float radius;
-	int trim1;
-	int trim2;
-	bool senseArgreement;
 };
 
 struct CompositeCurveSegment

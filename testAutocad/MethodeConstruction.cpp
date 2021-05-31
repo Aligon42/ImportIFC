@@ -83,7 +83,13 @@ void MethodeConstruction::createSolid3d(Ref<ObjectToConstruct> object)
 		return;
 	}
 
-	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+	AcDbRegion* pRegion = nullptr;
+	
+	if (object->IsCompositeCurve)
+		pRegion = createCompositeCurve(object->TrimmedCurve, object->ElementsToConstruct[0].Points, object->ElementsToConstruct[0].Args, object->VecteurExtrusion, object->Transform);
+	else
+		pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
 	es = pSolid->extrude(pRegion, object->VecteurExtrusion.z(), 0.0);
@@ -1594,7 +1600,7 @@ AcDbRegion* MethodeConstruction::createPolyRectangle(Rectangle_profilDef Rectang
 	return pRegion1;
 }
 
-AcDbRegion* MethodeConstruction::createCompositeCurve(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform)
+AcDbRegion* MethodeConstruction::createCompositeCurve(TrimmedCurve trimmedCurve, std::list<Vec3> points, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, Matrix4 transform)
 {
 	Acad::ErrorStatus es;
 
@@ -1605,18 +1611,18 @@ AcDbRegion* MethodeConstruction::createCompositeCurve(Circle_profilDef Circlepro
 	AcGePoint3dArray ptArr;
 
 	// Polyligne
-	/*if (ListNbArg.size() > 1)
+	if (ListNbArg.size() > 1)
 	{
 		ListNbArg.erase(ListNbArg.begin());
-		points1.pop_front();
+		points.pop_front();
 	}
 
 	ptArr.setLogicalLength(ListNbArg[0]);
-	Vec3 pointOrigine = { transform1[12], transform1[13] , transform1[14] };
+	Vec3 pointOrigine = { transform[12], transform[13] , transform[14] };
 
 	int i = 0;
 
-	for (const auto& point : points1)
+	for (const auto& point : points)
 	{
 		if (i == ListNbArg[0])
 		{
@@ -1637,39 +1643,34 @@ AcDbRegion* MethodeConstruction::createCompositeCurve(Circle_profilDef Circlepro
 	if (pNewPline == NULL)
 	{
 		pEntity->close();
-		return;
-	}*/
+		return nullptr;
+	}
 	AcDbVoidPtrArray lines;
-	//pNewPline->explode(lines);
-	//pNewPline->close();
+	pNewPline->explode(lines);
+	pNewPline->close();
 
 
 	//Arc
-	/*
+
+	AcGePoint3d center{ trimmedCurve.centreCircle.x(), trimmedCurve.centreCircle.y(), trimmedCurve.centreCircle.z() };
 	AcDbArc* arc = new AcDbArc();
 	arc->setCenter(center);
-	arc->setRadius(radius);
+	arc->setRadius(trimmedCurve.radius);
 
-	if (SenseAgreement)
+	if (trimmedCurve.senseArgreement)
 	{
 		arc->setStartAngle(270);
-		arc->setEndAngle(90)
+		arc->setEndAngle(90);
 	}
 	else {
 		arc->setStartAngle(-270);
-		arc->setEndAngle(-90)
-	}*/
+		arc->setEndAngle(-90);
+	}
 
 	// Create a region from the set of lines.
 	AcDbVoidPtrArray regions;
 	es = AcDbRegion::createFromCurves(lines, regions);
 
-	/*if (Acad::eOk != es)
-	{
-		circle1->close();
-		acutPrintf(L"\nFailed to create region\n");
-		return;
-	}*/
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 	for (int i = 0; i < lines.length(); i++)

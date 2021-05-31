@@ -29,13 +29,13 @@
 typedef mathfu::Vector<float, 3> Vec3;
 typedef mathfu::Matrix<float, 4> Matrix4;
 
-static TrimmedCurve _trimmedCurve;
-static CompositeCurveSegment _compositeCurveSegment;
-
 class CreateConstructionPointVisitor : public ifc2x3::InheritVisitor
 {
 private:
-    std::vector<std::string> nameItems;
+    std::vector<std::string> nameItems; 
+    
+    TrimmedCurve _trimmedCurve;
+    CompositeCurveSegment _compositeCurveSegment;
 
     //opération boolean
     std::vector<bool> AgreementCompositeCurve;
@@ -75,6 +75,7 @@ public:
     bool visitIfcCircle(ifc2x3::IfcCircle* value) override;
     bool visitIfcRepresentationMap(ifc2x3::IfcRepresentationMap* value) override;
     bool visitIfcPlane(ifc2x3::IfcPlane* value) override;
+    bool visitIfcAxis2Placement(ifc2x3::IfcAxis2Placement* value) override;
     bool visitIfcAxis2Placement2D(ifc2x3::IfcAxis2Placement2D* value) override;
     bool visitIfcExtrudedAreaSolid(ifc2x3::IfcExtrudedAreaSolid* value) override;
 

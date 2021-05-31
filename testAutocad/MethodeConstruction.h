@@ -64,5 +64,5 @@ private:
 
 	AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
 	AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
-	AcDbRegion* createCompositeCurve(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform);
+	AcDbRegion* createCompositeCurve(TrimmedCurve trimmedCurve, std::list<Vec3> points, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, Matrix4 transform);
 };

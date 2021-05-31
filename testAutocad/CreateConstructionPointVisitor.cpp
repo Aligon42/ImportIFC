@@ -271,7 +271,10 @@ bool CreateConstructionPointVisitor::visitIfcCompositeCurve(
         AgreementCompositeCurve.push_back(value->getSelfIntersect());
     }
 
-    _compositeCurve = true;
+    if (!_exploringRelVoid)
+        ((ObjectToConstruct*)_object.get())->IsCompositeCurve = true;
+    else
+        ((ObjectVoid*)_object.get())->IsCompositeCurve = true;
 
     if (value->testSegments())
     {
@@ -317,15 +320,15 @@ bool CreateConstructionPointVisitor::visitIfcTrimmedCurve(
 {
     if (value->testTrim1())
     {
-        _trimmedCurve.trim1 = value->getTrim1().getLowerBound();
+        _trimmedCurve.trim1 = value->getTrim1().begin()->get()->getIfcParameterValue();
     }
     if (value->testTrim2())
     {
-        _trimmedCurve.trim2 = value->getTrim2().getLowerBound();
+        _trimmedCurve.trim2 = value->getTrim2().begin()->get()->getIfcParameterValue();
     }
     if (value->testSenseAgreement())
     {
-        _trimmedCurve.senseArgreement = value->getSenseAgreement();
+        _trimmedCurve.senseArgreement = value->getSenseAgreement() - 1;
     }
     if (value->testMasterRepresentation())
     {
@@ -352,6 +355,21 @@ bool CreateConstructionPointVisitor::visitIfcCircle(
         value->getPosition()->acceptVisitor(this);
     }
     auto index = value->getKey();
+
+    return true;
+}
+
+bool CreateConstructionPointVisitor::visitIfcAxis2Placement(ifc2x3::IfcAxis2Placement* value)
+{
+    switch (value->currentType())
+    {
+        case value->IFCAXIS2PLACEMENT2D:
+            value->getIfcAxis2Placement2D()->acceptVisitor(this);
+            break;
+        case value->IFCAXIS2PLACEMENT3D:
+            value->getIfcAxis2Placement3D()->acceptVisitor(this);
+            break;
+    }
 
     return true;
 }
@@ -719,6 +737,13 @@ bool CreateConstructionPointVisitor::visitIfcPolyline(ifc2x3::IfcPolyline* value
 {
     int size = 0;
 
+    bool compositeCurve = false;
+    
+    if (!_exploringRelVoid)
+        compositeCurve = ((ObjectToConstruct*)_object.get())->IsCompositeCurve;
+    else
+        compositeCurve = ((ObjectVoid*)_object.get())->IsCompositeCurve;
+
     if (!_exploringRelVoid)
         size = ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Points.size();
     else
@@ -737,16 +762,16 @@ bool CreateConstructionPointVisitor::visitIfcPolyline(ifc2x3::IfcPolyline* value
     else
         ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Points.pop_back();
 
-    if (!_compositeCurve)
-    {
+    //if (!compositeCurve)
+    //{
         if (!_exploringRelVoid)
             ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Args.push_back(((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Points.size() - size);
         else
             ((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Args.push_back(((ObjectVoid*)_object.get())->ElementsToConstruct[((ObjectVoid*)_object.get())->ElementsToConstruct.size() - 1].Points.size() - size);
 
         _nbArgToCompute++;
-    }
-    else
+    //}
+    /*else
     {
         if (!_exploringRelVoid)
         {
@@ -774,7 +799,7 @@ bool CreateConstructionPointVisitor::visitIfcPolyline(ifc2x3::IfcPolyline* value
                 ((ObjectVoid*)_object.get())->ElementsToConstruct[elementIndex].Args[argsIndex] = ((ObjectVoid*)_object.get())->ElementsToConstruct[elementIndex].Points.size();
             }
         }
-    }
+    }*/
 
     if (!_exploringRelVoid)
         return ((ObjectToConstruct*)_object.get())->ElementsToConstruct[((ObjectToConstruct*)_object.get())->ElementsToConstruct.size() - 1].Points.empty() == false;
@@ -956,10 +981,10 @@ int CreateConstructionPointVisitor::getkeyForVoid() const
 
 TrimmedCurve CreateConstructionPointVisitor::getTrimmedCurve() const
 {
-    return TrimmedCurve();
+    return _trimmedCurve;
 }
 
 CompositeCurveSegment CreateConstructionPointVisitor::getCompositeCurveSegment() const
 {
-    return CompositeCurveSegment();
+    return _compositeCurveSegment;
 }
