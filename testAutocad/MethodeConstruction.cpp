@@ -68,7 +68,7 @@ void extrusion(int key, std::vector<std::string> nameItems, std::list<Vec3> poin
 
 	if (_compositeCurveSegment.listPolyligne.size() > 0 || _compositeCurveSegment.listTrimmedCurve.size() > 0 ||
 		_compositeCurveSegment.listParentCurve.size() > 0)
-		pRegion = createCompositeCurve(_compositeCurveSegment, points1, ListNbArg, VecteurExtrusion, transform1);
+		pRegion = createCompositeCurve(_compositeCurveSegment, transform1);
 	else
 		pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
     // Extrude the region to create a solid.
@@ -839,18 +839,11 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void)
 	extrusion_void2->close();
 }
 
-AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, Vec3 VecteurExtrusion, Matrix4 transform)
+AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, Matrix4 transform)
 {
 	AcDbVoidPtrArray lines;
 	Acad::ErrorStatus es;
 	AcGePoint3dArray ptArr;
-
-	// Polyligne
-	/*if (ListNbArg.size() > 1)
-	{
-		ListNbArg.erase(ListNbArg.begin());
-		points.pop_front();
-	}*/
 
 	for (int i = 0; i < _compositeCurveSegment.listPolyligne.size(); i++)
 	{
@@ -889,10 +882,11 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, V
 
 
 	//Arc
-	
+	AcDbArc* arc = new AcDbArc();
+
 	for (int i = 0; i < _compositeCurveSegment.listTrimmedCurve.size(); i++)
 	{
-		AcDbArc* arc = new AcDbArc();
+		
 		AcGePoint3d center{ _compositeCurveSegment.listTrimmedCurve[i].centreCircle.x(), _compositeCurveSegment.listTrimmedCurve[i].centreCircle.y(), _compositeCurveSegment.listTrimmedCurve[i].centreCircle.z() };
 		arc->setCenter(center);
 		arc->setRadius(_compositeCurveSegment.listTrimmedCurve[i].radius);
@@ -915,12 +909,13 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, V
 	AcDbVoidPtrArray regions;
 	es = AcDbRegion::createFromCurves(lines, regions);
 
-	/*if (Acad::eOk != es)
+	if (Acad::eOk != es)
 	{
-		circle1->close();
+		AcDbRegion* pRegionFail = nullptr;
+		arc->close();
 		acutPrintf(L"\nFailed to create region\n");
-		return;
-	}*/
+		return pRegionFail;
+	}
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 	for (int i = 0; i < lines.length(); i++)

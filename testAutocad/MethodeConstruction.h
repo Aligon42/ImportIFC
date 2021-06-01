@@ -82,4 +82,4 @@ AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtru
 AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
 void createBoundingBox();
 void createFaceSolid(std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transformFace);
-AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, std::list<Vec3> points, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, Matrix4 transform);
+AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, Matrix4 transform);
