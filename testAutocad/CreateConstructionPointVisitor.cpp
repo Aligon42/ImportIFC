@@ -300,6 +300,8 @@ bool CreateConstructionPointVisitor::visitIfcPolygonalBoundedHalfSpace(
 bool CreateConstructionPointVisitor::visitIfcCompositeCurve(
     ifc2x3::IfcCompositeCurve* value) 
 {
+    isCompositeCurve = true;
+
     if (value->testSelfIntersect())
     {
         AgreementCompositeCurve.push_back(value->getSelfIntersect());
@@ -311,7 +313,7 @@ bool CreateConstructionPointVisitor::visitIfcCompositeCurve(
         {
             if (!segment->acceptVisitor(this))
             {
-                return true;
+                return false;
             }
         }
 
@@ -731,7 +733,7 @@ bool CreateConstructionPointVisitor::visitIfcArbitraryClosedProfileDef(ifc2x3::I
 {
     if(value->testOuterCurve())
     {
-        auto outerCurveName = value->getOuterCurve()->getClassType().getName();
+        outerCurveName = value->getOuterCurve()->getType().getName();
         return value->getOuterCurve()->acceptVisitor(this);
     }
 
@@ -747,7 +749,11 @@ bool CreateConstructionPointVisitor::visitIfcPolyline(ifc2x3::IfcPolyline* value
         _points.push_back(ComputePlacementVisitor::getPoint(point.get()));
     }
     
-    _points.pop_back();
+    if (!isCompositeCurve)
+    {
+        _points.pop_back();
+    }
+    
 
     listNbArgPolyline.push_back(_points.size() - size);
 
@@ -860,6 +866,11 @@ Matrix4 CreateConstructionPointVisitor::getTransformation() const
 std::vector<std::string> CreateConstructionPointVisitor::getNameItems() const
 {
     return nameItems;
+}
+
+std::string CreateConstructionPointVisitor::getOuterCurveName() const
+{
+    return outerCurveName;
 }
 
 //***** BOOLEAN *****

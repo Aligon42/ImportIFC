@@ -158,6 +158,8 @@ private:
     Vec3 extrusionVector;
     Matrix4 transformation;
     std::vector<std::string> nameItems;
+    std::string outerCurveName;
+    bool isCompositeCurve = false;
 
     int keyForVoid;
 
@@ -259,6 +261,7 @@ public:
     Vec3 getVectorDirection() const;
     Matrix4 getTransformation() const;
     std::vector<std::string> getNameItems() const;
+    std::string getOuterCurveName() const;
 
     //get opération boolean
     std::vector<bool> getAgreementHalfBool() const;

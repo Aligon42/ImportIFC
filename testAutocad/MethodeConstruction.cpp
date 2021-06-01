@@ -2,75 +2,77 @@
 #include "CreateConstructionPointVisitor.h"
 #include <vector>
 
-void extrusion(int key, std::vector<std::string> nameItems, std::list<Vec3> points1, std::vector<int> ListNbArg,
+void extrusion(int key, std::vector<std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg,
 	Vec3 VecteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, 
 	std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, 
 	std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, 
 	std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment)
 {
     Acad::ErrorStatus es;
-
+	AcDbRegion* pRegion = nullptr;
     ads_name polyName;
-
     ads_point ptres;
-
     AcGePoint3dArray ptArr;
+	AcDbVoidPtrArray lines;
+	AcDbVoidPtrArray regions;
 
-	if (ListNbArg.size() > 1)
+	if (outerCurveName == "IfcCompositeCurve")
 	{
-		ListNbArg.erase(ListNbArg.begin());
-		points1.pop_front();
+		pRegion = createCompositeCurve(_compositeCurveSegment, transform1);
 	}
-
-	ptArr.setLogicalLength(ListNbArg[0]);
-	Vec3 pointOrigine = { transform1[12], transform1[13] , transform1[14] };
-
-    int i = 0;
-
-    for (const auto& point : points1)
-    {
-		if (i == ListNbArg[0])
+	else if (outerCurveName == "IfcPolyline")
+	{
+		if (ListNbArg.size() > 1)
 		{
-			break;
+			ListNbArg.erase(ListNbArg.begin());
+			points1.pop_front();
 		}
 
-		ptArr[i].set(point.x(), point.y(), point.z());
+		ptArr.setLogicalLength(ListNbArg[0]);
+		Vec3 pointOrigine = { transform1[12], transform1[13] , transform1[14] };
 
-		i++;
-    }
-	    
-    AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
-        AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
-    pNewPline->setColorIndex(3);
+		int i = 0;
 
-    //get the boundary curves of the polyline
-    AcDbEntity* pEntity = NULL;
-    if (pNewPline == NULL)
-    {
-        pEntity->close();
-        return;
-    }
-    AcDbVoidPtrArray lines;
-    pNewPline->explode(lines);
-    pNewPline->close();
+		for (const auto& point : points1)
+		{
+			if (i == ListNbArg[0])
+			{
+				break;
+			}
 
-    // Create a region from the set of lines.
-    AcDbVoidPtrArray regions;
-    es = AcDbRegion::createFromCurves(lines, regions);
-    if (Acad::eOk != es)
-    {
-        pNewPline->close();
-        acutPrintf(L"\nFailed to create region\n");
-        return;
-    }
+			ptArr[i].set(point.x(), point.y(), point.z());
 
-	AcDbRegion* pRegion = nullptr;
+			i++;
+		}
 
-	if (_compositeCurveSegment.listPolyligne.size() > 0 || _compositeCurveSegment.listTrimmedCurve.size() > 0 ||
-		_compositeCurveSegment.listParentCurve.size() > 0)
-		pRegion = createCompositeCurve(_compositeCurveSegment, transform1);
-	else
+		AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+			AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+		pNewPline->setColorIndex(3);
+
+		//get the boundary curves of the polyline
+		AcDbEntity* pEntity = NULL;
+		if (pNewPline == NULL)
+		{
+			pEntity->close();
+			return;
+		}
+		
+		pNewPline->explode(lines);
+		pNewPline->close();
+
+		// Create a region from the set of lines.
+		
+		es = AcDbRegion::createFromCurves(lines, regions);
+		if (Acad::eOk != es)
+		{
+			pNewPline->close();
+			acutPrintf(L"\nFailed to create region\n");
+			return;
+		}
+
 		pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+	}
+
     // Extrude the region to create a solid.
     AcDb3dSolid* pSolid = new AcDb3dSolid();
     es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
@@ -97,7 +99,7 @@ void extrusion(int key, std::vector<std::string> nameItems, std::list<Vec3> poin
 
 	for (int a = 0; a < nbPlan; a++)
 	{
-			CreationSection(pSolid, VecteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal);
+			CreationSection(pSolid, VecteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, _compositeCurveSegment, transform1);
 	
 			listPlan.pop_front();
 	}
@@ -110,17 +112,17 @@ void extrusion(int key, std::vector<std::string> nameItems, std::list<Vec3> poin
 		{
 			if (listVoid[v].NameProfilDef == "IfcArbitraryClosedProfileDef")
 			{
-				CreationVoid(pSolid, listVoid[v]);
+				CreationVoid(pSolid, listVoid[v], _compositeCurveSegment, transform1);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 			else if (listVoid[v].NameProfilDef == "IfcCircleProfileDef")
 			{
-				CreationVoidCircle(pSolid, listVoid[v]);
+				CreationVoidCircle(pSolid, listVoid[v], _compositeCurveSegment, transform1);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 			else if (listVoid[v].NameProfilDef == "IfcRectangleProfileDef")
 			{
-				CreationVoidRectangle(pSolid, listVoid[v]);
+				CreationVoidRectangle(pSolid, listVoid[v], _compositeCurveSegment, transform1);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 		}
@@ -261,7 +263,7 @@ static void DeplacementObjet3D(AcDbPlaneSurface* pSurface, Matrix4 transform1) {
 static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3>& points1,
 	std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal,
 	std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal,
-	std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal)
+	std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform)
 {
 
 	AcGeVector3d v1 = AcGeVector3d::AcGeVector3d(0, 0, 0);             // Vector 1 (x,y,z) & Vector 2 (x,y,z)
@@ -434,6 +436,11 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 
 		AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
+		if (_compositeCurveSegment.listPolyligne.size() > 0 || _compositeCurveSegment.listTrimmedCurve.size() > 0 ||
+			_compositeCurveSegment.listParentCurve.size() > 0)
+			pRegion = createCompositeCurve(_compositeCurveSegment, transform);
+		else
+			pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 		// Extrude the region to create a solid.
 		AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -474,7 +481,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	
 }
 
-static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void)
+static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform)
 {
 	Acad::ErrorStatus es;
 	ads_name polyName;
@@ -567,10 +574,10 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void)
 		{
 			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform);
 			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform);
 
 			Void.listPlan.pop_front();
 		}
@@ -595,7 +602,7 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void)
 	extrusion_void2->close();
 }
 
-static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void)
+static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform)
 {
 
 	Acad::ErrorStatus es;
@@ -618,7 +625,7 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void)
 	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
 
 	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
-	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Radius / 2, -Radius / 2, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(0, 0, 0);
 	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
 	circle->transformBy(matrix3d.translation(acVec3d));
 
@@ -681,10 +688,10 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void)
 		{
 			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform);
 			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal,  _compositeCurveSegment, transform);
 
 			Void.listPlan.pop_front();
 		}
@@ -709,7 +716,7 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void)
 	extrusion_void2->close();
 }
 
-static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void)
+static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform)
 {
 
 	Acad::ErrorStatus es;
@@ -811,10 +818,10 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void)
 		{
 			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform);
 			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform);
 
 			Void.listPlan.pop_front();
 		}
@@ -865,7 +872,7 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 		}
 
 		AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
-			AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+			AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kFalse);
 		pNewPline->setColorIndex(3);
 
 		//get the boundary curves of the polyline
@@ -876,7 +883,7 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 			return nullptr;
 		}
 		
-		pNewPline->explode(lines);
+		lines.append(static_cast<void*>(pNewPline));
 		pNewPline->close();
 	}
 
@@ -893,15 +900,16 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 
 		if (_compositeCurveSegment.listTrimmedCurve[i].senseArgreement)
 		{
-			arc->setStartAngle(_compositeCurveSegment.listTrimmedCurve[i].trim1);
-			arc->setEndAngle(_compositeCurveSegment.listTrimmedCurve[i].trim2);
+			arc->setStartAngle(((_compositeCurveSegment.listTrimmedCurve[i].trim1)*PI) / 180);
+			arc->setEndAngle(((_compositeCurveSegment.listTrimmedCurve[i].trim2)* PI) / 180);
 		}
 		else {
-			arc->setStartAngle(-(_compositeCurveSegment.listTrimmedCurve[i].trim1));
-			arc->setEndAngle(-(_compositeCurveSegment.listTrimmedCurve[i].trim2));
+			arc->setStartAngle(((-(_compositeCurveSegment.listTrimmedCurve[i].trim1) * PI) / 180));
+			arc->setEndAngle(((-(_compositeCurveSegment.listTrimmedCurve[i].trim2) * PI) / 180));
 		}
 
-		arc->explode(lines);
+		//arc->explode(lines);
+		lines.append(static_cast<void*>(arc));
 		arc->close();
 	}
 
@@ -912,7 +920,6 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 	if (Acad::eOk != es)
 	{
 		AcDbRegion* pRegionFail = nullptr;
-		arc->close();
 		acutPrintf(L"\nFailed to create region\n");
 		return pRegionFail;
 	}

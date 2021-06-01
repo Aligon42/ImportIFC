@@ -45,7 +45,7 @@ struct ObjectVoid
 static std::vector<ObjectVoid> listVoid;
 static ObjectVoid _objectVoid;
 
-void extrusion(int key, std::vector<std::string> nameItems, std::list<Vec3> points1, std::vector<int> nbArg, Vec3 VecteurExtrusion,
+void extrusion(int key, std::vector <std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> nbArg, Vec3 VecteurExtrusion,
 	Matrix4 transform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal,
 	std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal,
 	std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal,
@@ -55,12 +55,12 @@ static void DeplacementObjet3D(AcDbPlaneSurface* pSurface, Matrix4 transform1);
 static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3>& points1,
 	std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal,
 	std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal, std::vector<std::string>& listEntityHalf,
-	std::vector<std::string>& listEntityPolygonal);
+	std::vector<std::string>& listEntityPolygonal, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform);
 
 //Void
-static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void);
-static void CreationVoidCircle(AcDb3dSolid* extrusion, ObjectVoid Void);
-static void CreationVoidRectangle(AcDb3dSolid* extrusion, ObjectVoid Void);
+static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform);
+static void CreationVoidCircle(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform);
+static void CreationVoidRectangle(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform);
 
 //profilDef
 void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);

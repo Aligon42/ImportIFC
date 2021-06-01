@@ -229,11 +229,11 @@ void test()
 
         CreateConstructionPointVisitor visitor1;
         acutPrintf(_T("Index : %i\n"), key);
-        if (key == 2130)
+        if (key == 108907)
         {
             int PA = 0;
         }
-        if (key == 20924)
+        if (key == 112788)
         {
             int PA = 0;
         }
@@ -243,11 +243,11 @@ void test()
         std::vector<std::string> nameItems = visitor1.getNameItems();
 
         std::list<Vec3> points1 = visitor1.getPoints();
-        for (const auto& point : points1)
+        /*for (const auto& point : points1)
         {
             acutPrintf(_T("[ %f, %f, %f ]\n"), point.x(), point.y(), point.z());
-        }
-
+        }*/
+        std::string outerCurveName = visitor1.getOuterCurveName();
         std::vector<int> ListNbArg = visitor1.getNbArgPolyline();
 
         Vec3 VecteurExtrusion = visitor1.getVectorDirection();
@@ -280,11 +280,11 @@ void test()
                 {
                     if (nameItems[i] == "IfcExtrudedAreaSolid")
                     {
-                        extrusion(key, nameItems, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment);
+                        extrusion(key, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment);
                     }
                     else if (nameItems[i] == "IfcBooleanClippingResult")
                     {
-                        extrusion(key, nameItems, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment);
+                        extrusion(key, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment);
                     }
                     else if (nameItems[i] == "IfcFacetedBrep")
                     {
