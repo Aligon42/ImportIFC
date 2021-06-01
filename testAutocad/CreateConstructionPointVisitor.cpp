@@ -697,6 +697,7 @@ bool CreateConstructionPointVisitor::visitIfcArbitraryClosedProfileDef(ifc2x3::I
 {
     if(value->testOuterCurve())
     {
+        auto outerCurveName = value->getOuterCurve()->getClassType().getName();
         return value->getOuterCurve()->acceptVisitor(this);
     }
 
