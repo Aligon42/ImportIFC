@@ -263,7 +263,7 @@ void test()
         std::vector<std::string> listEntityHalf = visitor1.getListEntityHalf();
         std::vector<std::string> listEntityPolygonal = visitor1.getListEntityPolygonal();
 
-        auto compositeCurveSegment = visitor1.getCompositeCurveSegment();
+        CompositeCurveSegment _compositeCurveSegment = visitor1.getCompositeCurveSegment();
 
         buildingElement.acceptVisitor(&placementVisitor);
         Matrix4 transform1 = placementVisitor.getTransformation();
@@ -274,17 +274,17 @@ void test()
        
         for (int i = 0; i < nameItems.size(); i++)
         {
-            if (entity == "IfcWallStandardCase")
+            if (entity != "IfcColumn" && entity != "IfcBeam")
             {
                 if (points1.size() > 0 && ListNbArg.size() > 0)
                 {
                     if (nameItems[i] == "IfcExtrudedAreaSolid")
                     {
-                        extrusion(key, nameItems, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid);
+                        extrusion(key, nameItems, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment);
                     }
                     else if (nameItems[i] == "IfcBooleanClippingResult")
                     {
-                        extrusion(key, nameItems, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid);
+                        extrusion(key, nameItems, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment);
                     }
                     else if (nameItems[i] == "IfcFacetedBrep")
                     {
@@ -384,24 +384,6 @@ void test()
                     createFaceSolid(points1, ListNbArg, orientation, transformFace);
                 }
 
-            }
-            else if (entity == "IfcSlab")
-            {
-                if (nameItems[i] == "IfcExtrudedAreaSolid")
-                {
-                    //fonction pour slab TO DO
-                    extrusion(key, nameItems, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid);
-                }
-                else if (nameItems[i] == "IfcBooleanClippingResult")
-                {
-                    extrusion(key, nameItems, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid);
-                }
-                else if (nameItems[i] == "IfcFacetedBrep")
-                {
-                    std::vector<int> ListNbArg = visitor1.getListNbArgFace();
-                    bool orientation = visitor1.getOrientatationFace();
-                    createFaceSolid(points1, ListNbArg, orientation, transformFace);
-                }
             }
         }
     }

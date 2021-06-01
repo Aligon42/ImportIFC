@@ -49,7 +49,7 @@ void extrusion(int key, std::vector<std::string> nameItems, std::list<Vec3> poin
 	Matrix4 transform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal,
 	std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal,
 	std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal,
-	std::vector<ObjectVoid> listVoid, TrimmedCurve* trimmedCurve = nullptr);
+	std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment);
 static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1);
 static void DeplacementObjet3D(AcDbPlaneSurface* pSurface, Matrix4 transform1);
 static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3>& points1,
@@ -82,4 +82,4 @@ AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtru
 AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1);
 void createBoundingBox();
 void createFaceSolid(std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transformFace);
-AcDbRegion* createCompositeCurve(TrimmedCurve trimmedCurve, std::list<Vec3> points, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, Matrix4 transform);
+AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, std::list<Vec3> points, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, Matrix4 transform);

@@ -6,7 +6,7 @@ void extrusion(int key, std::vector<std::string> nameItems, std::list<Vec3> poin
 	Vec3 VecteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, 
 	std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, 
 	std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, 
-	std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, TrimmedCurve* trimmedCurve)
+	std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment)
 {
     Acad::ErrorStatus es;
 
@@ -66,8 +66,9 @@ void extrusion(int key, std::vector<std::string> nameItems, std::list<Vec3> poin
 
 	AcDbRegion* pRegion = nullptr;
 
-	if (trimmedCurve != nullptr)
-		pRegion = createCompositeCurve(*trimmedCurve, points1, ListNbArg, VecteurExtrusion, transform1);
+	if (_compositeCurveSegment.listPolyligne.size() > 0 || _compositeCurveSegment.listTrimmedCurve.size() > 0 ||
+		_compositeCurveSegment.listParentCurve.size() > 0)
+		pRegion = createCompositeCurve(_compositeCurveSegment, points1, ListNbArg, VecteurExtrusion, transform1);
 	else
 		pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
     // Extrude the region to create a solid.
@@ -838,72 +839,76 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void)
 	extrusion_void2->close();
 }
 
-AcDbRegion* createCompositeCurve(TrimmedCurve trimmedCurve, std::list<Vec3> points, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, Matrix4 transform)
+AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, Vec3 VecteurExtrusion, Matrix4 transform)
 {
-
+	AcDbVoidPtrArray lines;
 	Acad::ErrorStatus es;
-
-	ads_name polyName;
-
-	ads_point ptres;
-
 	AcGePoint3dArray ptArr;
 
 	// Polyligne
-	if (ListNbArg.size() > 1)
+	/*if (ListNbArg.size() > 1)
 	{
 		ListNbArg.erase(ListNbArg.begin());
 		points.pop_front();
-	}
+	}*/
 
-	ptArr.setLogicalLength(ListNbArg[0]);
-	Vec3 pointOrigine = { transform[12], transform[13] , transform[14] };
-
-	int i = 0;
-
-	for (const auto& point : points)
+	for (int i = 0; i < _compositeCurveSegment.listPolyligne.size(); i++)
 	{
-		if (i == ListNbArg[0])
+		ptArr.setLogicalLength(_compositeCurveSegment.listPolyligne[i].size());
+		Vec3 pointOrigine = { transform[12], transform[13] , transform[14] };
+
+		int j = 0;
+
+		for (const auto& point : _compositeCurveSegment.listPolyligne[i])
 		{
-			break;
+			if (j == _compositeCurveSegment.listPolyligne[i].size())
+			{
+				break;
+			}
+
+			ptArr[j].set(point.x(), point.y(), point.z());
+
+			j++;
 		}
 
-		ptArr[i].set(point.x(), point.y(), point.z());
+		AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
+			AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
+		pNewPline->setColorIndex(3);
 
-		i++;
+		//get the boundary curves of the polyline
+		AcDbEntity* pEntity = NULL;
+		if (pNewPline == NULL)
+		{
+			pEntity->close();
+			return nullptr;
+		}
+		
+		pNewPline->explode(lines);
+		pNewPline->close();
 	}
-
-	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
-		AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
-	pNewPline->setColorIndex(3);
-
-	//get the boundary curves of the polyline
-	AcDbEntity* pEntity = NULL;
-	if (pNewPline == NULL)
-	{
-		pEntity->close();
-		return nullptr;
-	}
-	AcDbVoidPtrArray lines;
-	pNewPline->explode(lines);
-	pNewPline->close();
 
 
 	//Arc
 	
-	AcDbArc* arc = new AcDbArc();
-	AcGePoint3d center{ trimmedCurve.centreCircle.x(), trimmedCurve.centreCircle.y(), trimmedCurve.centreCircle.z() };
-	arc->setCenter(center);
-	arc->setRadius(trimmedCurve.radius);
-
-	if (trimmedCurve.senseArgreement)
+	for (int i = 0; i < _compositeCurveSegment.listTrimmedCurve.size(); i++)
 	{
-		arc->setStartAngle(trimmedCurve.trim1);
-		arc->setEndAngle(trimmedCurve.trim2);
-	}
-	else {
-		arc->setStartAngle(-trimmedCurve.trim1);
-		arc->setEndAngle(-trimmedCurve.trim2);
+		AcDbArc* arc = new AcDbArc();
+		AcGePoint3d center{ _compositeCurveSegment.listTrimmedCurve[i].centreCircle.x(), _compositeCurveSegment.listTrimmedCurve[i].centreCircle.y(), _compositeCurveSegment.listTrimmedCurve[i].centreCircle.z() };
+		arc->setCenter(center);
+		arc->setRadius(_compositeCurveSegment.listTrimmedCurve[i].radius);
+
+		if (_compositeCurveSegment.listTrimmedCurve[i].senseArgreement)
+		{
+			arc->setStartAngle(_compositeCurveSegment.listTrimmedCurve[i].trim1);
+			arc->setEndAngle(_compositeCurveSegment.listTrimmedCurve[i].trim2);
+		}
+		else {
+			arc->setStartAngle(-(_compositeCurveSegment.listTrimmedCurve[i].trim1));
+			arc->setEndAngle(-(_compositeCurveSegment.listTrimmedCurve[i].trim2));
+		}
+
+		arc->explode(lines);
+		arc->close();
 	}
 
 	// Create a region from the set of lines.
