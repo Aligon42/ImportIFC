@@ -217,7 +217,7 @@ void test()
     }
 
     int count2 = 0;
-    for (auto& buildingElement : expressDataSet->getAllIfcBeam())
+    for (auto& buildingElement : expressDataSet->getAllIfcBuildingElement())
     {
         count2++;
         int key = (int)buildingElement.getKey();
@@ -263,14 +263,7 @@ void test()
         std::vector<std::string> listEntityHalf = visitor1.getListEntityHalf();
         std::vector<std::string> listEntityPolygonal = visitor1.getListEntityPolygonal();
 
-        _trimmedCurve.centreCircle = visitor1.getTrimmedCurve().centreCircle;
-        _trimmedCurve.radius = visitor1.getTrimmedCurve().radius;
-        _trimmedCurve.trim1 = visitor1.getTrimmedCurve().trim1;
-        _trimmedCurve.trim2 = visitor1.getTrimmedCurve().trim2;
-        _trimmedCurve.senseArgreement = visitor1.getTrimmedCurve().senseArgreement;
-
-        
-
+        auto compositeCurveSegment = visitor1.getCompositeCurveSegment();
 
         buildingElement.acceptVisitor(&placementVisitor);
         Matrix4 transform1 = placementVisitor.getTransformation();
@@ -278,7 +271,6 @@ void test()
         Matrix4 transformFace = transform1;
 
         transform1 *= transformation;
-
        
         for (int i = 0; i < nameItems.size(); i++)
         {

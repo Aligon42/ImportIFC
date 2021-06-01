@@ -2,13 +2,11 @@
 #include "CreateConstructionPointVisitor.h"
 #include <vector>
 
-
-
 void extrusion(int key, std::vector<std::string> nameItems, std::list<Vec3> points1, std::vector<int> ListNbArg,
 	Vec3 VecteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, 
 	std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, 
 	std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, 
-	std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid)
+	std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, TrimmedCurve* trimmedCurve)
 {
     Acad::ErrorStatus es;
 
@@ -66,7 +64,12 @@ void extrusion(int key, std::vector<std::string> nameItems, std::list<Vec3> poin
         return;
     }
 
-    AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+	AcDbRegion* pRegion = nullptr;
+
+	if (trimmedCurve != nullptr)
+		pRegion = createCompositeCurve(*trimmedCurve, points1, ListNbArg, VecteurExtrusion, transform1);
+	else
+		pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
     // Extrude the region to create a solid.
     AcDb3dSolid* pSolid = new AcDb3dSolid();
     es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
@@ -835,7 +838,8 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void)
 	extrusion_void2->close();
 }
 
-AcDbRegion* createCompositeCurve(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1) {
+AcDbRegion* createCompositeCurve(TrimmedCurve trimmedCurve, std::list<Vec3> points, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, Matrix4 transform)
+{
 
 	Acad::ErrorStatus es;
 
@@ -846,18 +850,18 @@ AcDbRegion* createCompositeCurve(Circle_profilDef CircleprofilDef, Vec3 VecteurE
 	AcGePoint3dArray ptArr;
 
 	// Polyligne
-	/*if (ListNbArg.size() > 1)
+	if (ListNbArg.size() > 1)
 	{
 		ListNbArg.erase(ListNbArg.begin());
-		points1.pop_front();
+		points.pop_front();
 	}
 
 	ptArr.setLogicalLength(ListNbArg[0]);
-	Vec3 pointOrigine = { transform1[12], transform1[13] , transform1[14] };
+	Vec3 pointOrigine = { transform[12], transform[13] , transform[14] };
 
 	int i = 0;
 
-	for (const auto& point : points1)
+	for (const auto& point : points)
 	{
 		if (i == ListNbArg[0])
 		{
@@ -878,28 +882,29 @@ AcDbRegion* createCompositeCurve(Circle_profilDef CircleprofilDef, Vec3 VecteurE
 	if (pNewPline == NULL)
 	{
 		pEntity->close();
-		return;
-	}*/
+		return nullptr;
+	}
 	AcDbVoidPtrArray lines;
-	//pNewPline->explode(lines);
-	//pNewPline->close();
+	pNewPline->explode(lines);
+	pNewPline->close();
 
 
 	//Arc
-	/*
+	
 	AcDbArc* arc = new AcDbArc();
+	AcGePoint3d center{ trimmedCurve.centreCircle.x(), trimmedCurve.centreCircle.y(), trimmedCurve.centreCircle.z() };
 	arc->setCenter(center);
-	arc->setRadius(radius);
+	arc->setRadius(trimmedCurve.radius);
 
-	if (SenseAgreement)
+	if (trimmedCurve.senseArgreement)
 	{
-		arc->setStartAngle(270);
-		arc->setEndAngle(90)
+		arc->setStartAngle(trimmedCurve.trim1);
+		arc->setEndAngle(trimmedCurve.trim2);
 	}
 	else {
-		arc->setStartAngle(-270);
-		arc->setEndAngle(-90)
-	}*/
+		arc->setStartAngle(-trimmedCurve.trim1);
+		arc->setEndAngle(-trimmedCurve.trim2);
+	}
 
 	// Create a region from the set of lines.
 	AcDbVoidPtrArray regions;
@@ -2822,5 +2827,4 @@ void createFaceSolid(std::list<Vec3> points1, std::vector<int> ListNbArg, bool o
 	{
 		delete pSurface;
 	}
-
 }
