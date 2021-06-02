@@ -322,44 +322,17 @@ bool CreateConstructionPointVisitor::visitIfcCompositeCurve(
         {
             std::vector<Vec3> points;
 
+            auto point = _points.begin();
+
+            for (int i = 0; i < a; i++)
+                point++;
+
             for (size_t i = 0; i < listNbArgPolyline[j]; i++)
             {
-                auto point = _points.begin();
-                
-                for (int c = 0; c < i; c++)
-                {
-                    /*if (j > 0)
-                    {
-                        for (int x = 0; x < a; x++)
-                        {
-                            point++;
-                        }
-                    }
-                    else
-                    {*/
-                        point++;
-                    //}
-                    
-                }
-
-                /*if (j > 0)
-                {
-                    point->operator+=(listNbArgPolyline[j]);
-                    points.push_back(*point);
-                }
-                else 
-                {*/
-                    points.push_back(*point);
-                //}
-                
+                    points.push_back(*point++);
+                    a++;               
             }
-            a += listNbArgPolyline[j];
             _compositeCurveSegment.listPolyligne.push_back(points);
-
-            /*for (int x = 0; x < listNbArgPolyline[j]; x++)
-            {
-                _points.erase(_points.begin());
-            }*/
         }
     }
 
