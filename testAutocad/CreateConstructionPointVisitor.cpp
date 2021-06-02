@@ -815,6 +815,19 @@ bool CreateConstructionPointVisitor::visitIfcFaceOuterBound(ifc2x3::IfcFaceOuter
     return false;
 }
 
+bool CreateConstructionPointVisitor::visitIfcFaceBound(ifc2x3::IfcFaceBound* value)
+{
+    auto t1 = value->getBound();
+
+    if (value->testBound())
+    {
+        orientationFace = value->getOrientation();
+        return value->getBound()->acceptVisitor(this);
+    }
+
+    return false;
+}
+
 bool CreateConstructionPointVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value)
 {
     nbArgFace.push_back(value->getPolygon().size());

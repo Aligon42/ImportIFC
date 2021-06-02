@@ -255,6 +255,7 @@ public:
     bool visitIfcClosedShell(ifc2x3::IfcClosedShell* value) override;
     bool visitIfcFace(ifc2x3::IfcFace* value) override;
     bool visitIfcFaceOuterBound(ifc2x3::IfcFaceOuterBound* value) override;
+    bool visitIfcFaceBound(ifc2x3::IfcFaceBound* value) override;
     bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value) override;
 
     std::list<Vec3> getPoints() const;

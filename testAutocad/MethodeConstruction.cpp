@@ -883,7 +883,7 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 			return nullptr;
 		}
 		
-		lines.append(static_cast<void*>(pNewPline));
+		lines.append((pNewPline));
 		pNewPline->close();
 	}
 
@@ -909,7 +909,7 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 		}
 
 		//arc->explode(lines);
-		lines.append(static_cast<void*>(arc));
+		lines.append((arc));
 		arc->close();
 	}
 
@@ -2806,7 +2806,7 @@ void createFaceSolid(std::list<Vec3> points1, std::vector<int> ListNbArg, bool o
 	AcDbPlaneSurface* pSurface = new AcDbPlaneSurface();
 	es = pSurface->createFromRegion(pRegion);
 
-	//DeplacementObjet3D(pSurface, transform1);
+	DeplacementObjet3D(pSurface, transform1);
 
 	for (int i = 0; i < lines.length(); i++)
 	{

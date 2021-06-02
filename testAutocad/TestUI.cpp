@@ -378,7 +378,7 @@ void test()
                 }
                 else if (nameItems[i] == "IfcFacetedBrep")
                 {
-                    if (key != 20924) continue;
+                    //if (key != 20924) continue;
                     std::vector<int> ListNbArg = visitor1.getListNbArgFace();
                     bool orientation = visitor1.getOrientatationFace();
                     createFaceSolid(points1, ListNbArg, orientation, transformFace);
