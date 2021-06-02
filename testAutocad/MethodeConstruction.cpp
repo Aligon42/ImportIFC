@@ -852,16 +852,18 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 	Acad::ErrorStatus es;
 	AcGePoint3dArray ptArr;
 
-	for (int i = 0; i < _compositeCurveSegment.listPolyligne.size(); i++)
+	int sizeListPolyligne = _compositeCurveSegment.listPolyligne.size();
+
+	for (int i = 0; i < sizeListPolyligne; i++)
 	{
-		ptArr.setLogicalLength(_compositeCurveSegment.listPolyligne[i].size());
+		ptArr.setLogicalLength(_compositeCurveSegment.listPolyligne[0].size());
 		Vec3 pointOrigine = { transform[12], transform[13] , transform[14] };
 
 		int j = 0;
 
-		for (const auto& point : _compositeCurveSegment.listPolyligne[i])
+		for (const auto& point : _compositeCurveSegment.listPolyligne[0])
 		{
-			if (j == _compositeCurveSegment.listPolyligne[i].size())
+			if (j == _compositeCurveSegment.listPolyligne[0].size())
 			{
 				break;
 			}
@@ -885,6 +887,7 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 		
 		lines.append((pNewPline));
 		pNewPline->close();
+		_compositeCurveSegment.listPolyligne.erase(_compositeCurveSegment.listPolyligne.begin());
 	}
 
 
@@ -2752,86 +2755,93 @@ void createFaceSolid(std::list<Vec3> points1, std::vector<int> ListNbArg, bool o
 	ads_point ptres;
 
 	AcGePoint3dArray ptArr;
-
-	ptArr.setLogicalLength(ListNbArg[0]);
-	Vec3 pointOrigine = { transform1[12], transform1[13] , transform1[14] };
-
-	int i = 0;
-
-	for (const auto& point : points1)
+	int sizeNbArg = ListNbArg.size();
+	for (int j = 0; j < sizeNbArg; j++)
 	{
-		if (i == ListNbArg[0])
+		int nbPoint = ListNbArg[0];
+		ptArr.setLogicalLength(nbPoint);
+		Vec3 pointOrigine = { transform1[12], transform1[13] , transform1[14] };
+
+		int i = 0;
+
+		for (const auto& point : points1)
 		{
-			break;
+			if (i == ListNbArg[0])
+			{
+				break;
+			}
+
+			ptArr[i].set(point.x(), point.y(), point.z());
+			i++;
 		}
 
-		ptArr[i].set(point.x(), point.y(), point.z());
-
-		i++;
-	}
-
-
-	AcDb3dPolyline* pNewPline = new AcDb3dPolyline(
-		AcDb::k3dSimplePoly, ptArr, Adesk::kTrue);
-	pNewPline->setColorIndex(3);
+		AcDb3dPolyline* pNewPline = new AcDb3dPolyline(
+			AcDb::k3dSimplePoly, ptArr, Adesk::kTrue);
+		pNewPline->setColorIndex(3);
 
 
-	//get the boundary curves of the polyline
-	AcDbEntity* pEntity = NULL;
+		//get the boundary curves of the polyline
+		AcDbEntity* pEntity = NULL;
 
-	if (pNewPline == NULL)
-	{
-		pEntity->close();
-		return;
-	}
-	AcDbVoidPtrArray lines;
-	pNewPline->explode(lines);
-	pNewPline->close();
-
-	// Create a region from the set of lines.
-	AcDbVoidPtrArray regions;
-	es = AcDbRegion::createFromCurves(lines, regions);
-
-	if (Acad::eOk != es)
-	{
+		if (pNewPline == NULL)
+		{
+			pEntity->close();
+			return;
+		}
+		AcDbVoidPtrArray lines;
+		pNewPline->explode(lines);
 		pNewPline->close();
-		acutPrintf(L"\nFailed to create region\n");
-		return;
 
-	}
-	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+		// Create a region from the set of lines.
+		AcDbVoidPtrArray regions;
+		es = AcDbRegion::createFromCurves(lines, regions);
 
+		if (Acad::eOk != es)
+		{
+			acutPrintf(L"\nFailed to create region\n");
+			return;
 
-	// Extrude the region to create a solid.
-	AcDbPlaneSurface* pSurface = new AcDbPlaneSurface();
-	es = pSurface->createFromRegion(pRegion);
+		}
+		AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
-	DeplacementObjet3D(pSurface, transform1);
+		for (int i = 0; i < nbPoint; i++)
+		{
+			points1.erase(points1.begin());
+		}
 
-	for (int i = 0; i < lines.length(); i++)
-	{
-		delete (AcRxObject*)lines[i];
-	}
+		ListNbArg.erase(ListNbArg.begin());
 
-	for (int ii = 0; ii < regions.length(); ii++)
-	{
-		delete (AcRxObject*)regions[ii];
-	}
-	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+		// Extrude the region to create a solid.
+		AcDbPlaneSurface* pSurface = new AcDbPlaneSurface();
+		es = pSurface->createFromRegion(pRegion);
 
-	if (Acad::eOk == es)
-	{
-		AcDbDatabase* pDb = curDoc()->database();
-		AcDbObjectId modelId;
-		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
-		AcDbBlockTableRecord* pBlockTableRecord;
-		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
-		pBlockTableRecord->appendAcDbEntity(pSurface);
-		pBlockTableRecord->close();
-		pSurface->close();
-	}
-	else
-	{
-		delete pSurface;
+		DeplacementObjet3D(pSurface, transform1);
+
+		for (int i = 0; i < lines.length(); i++)
+		{
+			delete (AcRxObject*)lines[i];
+		}
+
+		for (int ii = 0; ii < regions.length(); ii++)
+		{
+			delete (AcRxObject*)regions[ii];
+		}
+		AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+		if (Acad::eOk == es)
+		{
+			AcDbDatabase* pDb = curDoc()->database();
+			AcDbObjectId modelId;
+			modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+			AcDbBlockTableRecord* pBlockTableRecord;
+			acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+			pBlockTableRecord->appendAcDbEntity(pSurface);
+			pBlockTableRecord->close();
+			pSurface->close();
+		}
+		else
+		{
+			delete pSurface;
+		}
 	}
 }
