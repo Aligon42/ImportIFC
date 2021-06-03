@@ -434,12 +434,12 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 			return;
 		}
 
-		AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+		AcDbRegion* pRegion;
 
-		if (_compositeCurveSegment.listPolyligne.size() > 0 || _compositeCurveSegment.listTrimmedCurve.size() > 0 ||
+		/*if (_compositeCurveSegment.listPolyligne.size() > 0 || _compositeCurveSegment.listTrimmedCurve.size() > 0 ||
 			_compositeCurveSegment.listParentCurve.size() > 0)
 			pRegion = createCompositeCurve(_compositeCurveSegment, transform);
-		else
+		else*/
 			pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 		// Extrude the region to create a solid.
@@ -852,28 +852,35 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 	Acad::ErrorStatus es;
 	AcGePoint3dArray ptArr;
 
-	for (int i = 0; i < _compositeCurveSegment.listPolyligne.size(); i++)
+	int sizeListPolyligne = _compositeCurveSegment.listPolyligne.size();
+
+
+	for (int i = 0; i < sizeListPolyligne; i++)
 	{
-		ptArr.setLogicalLength(_compositeCurveSegment.listPolyligne[i].size());
+		ptArr.setLogicalLength(_compositeCurveSegment.listPolyligne[0].size());
 		Vec3 pointOrigine = { transform[12], transform[13] , transform[14] };
+
+
 
 		int j = 0;
 
-		for (const auto& point : _compositeCurveSegment.listPolyligne[i])
+
+
+		for (const auto& point : _compositeCurveSegment.listPolyligne[0])
 		{
-			if (j == _compositeCurveSegment.listPolyligne[i].size())
+			if (j == _compositeCurveSegment.listPolyligne[0].size())
 			{
 				break;
 			}
-
 			ptArr[j].set(point.x(), point.y(), point.z());
 
 			j++;
 		}
-
 		AcDb2dPolyline* pNewPline = new AcDb2dPolyline(
 			AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kFalse);
 		pNewPline->setColorIndex(3);
+
+
 
 		//get the boundary curves of the polyline
 		AcDbEntity* pEntity = NULL;
@@ -882,10 +889,24 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 			pEntity->close();
 			return nullptr;
 		}
-		
+
 		lines.append((pNewPline));
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pNewPline);
+		pBlockTableRecord->close();
 		pNewPline->close();
+	
+
+		_compositeCurveSegment.listPolyligne.erase(_compositeCurveSegment.listPolyligne.begin());
 	}
+		
+		//lines.append(pNewPline);
+
+		
 
 
 	//Arc
@@ -894,7 +915,7 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 	for (int i = 0; i < _compositeCurveSegment.listTrimmedCurve.size(); i++)
 	{
 		
-		AcGePoint3d center{ _compositeCurveSegment.listTrimmedCurve[i].centreCircle.x(), _compositeCurveSegment.listTrimmedCurve[i].centreCircle.y(), _compositeCurveSegment.listTrimmedCurve[i].centreCircle.z() };
+		AcGePoint3d center = AcGePoint3d::AcGePoint3d( _compositeCurveSegment.listTrimmedCurve[i].centreCircle.x(), _compositeCurveSegment.listTrimmedCurve[i].centreCircle.y(), _compositeCurveSegment.listTrimmedCurve[i].centreCircle.z() );
 		arc->setCenter(center);
 		arc->setRadius(_compositeCurveSegment.listTrimmedCurve[i].radius);
 
@@ -909,7 +930,14 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 		}
 
 		//arc->explode(lines);
-		lines.append((arc));
+		//lines.append(arc);
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(arc);
+		pBlockTableRecord->close();
 		arc->close();
 	}
 

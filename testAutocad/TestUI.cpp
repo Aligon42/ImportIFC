@@ -223,7 +223,7 @@ void test()
         int key = (int)buildingElement.getKey();
         std::string entity = buildingElement.getType().getName();
 
-        //if (key != 21045) continue;
+        if (key != 112788) continue;
 
         acutPrintf(_T("    => Element %d\n"), count2);
 
