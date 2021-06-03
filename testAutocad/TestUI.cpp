@@ -224,7 +224,7 @@ void test()
         std::string entity = buildingElement.getType().getName();
 
         if (key != 112788) continue;
-
+        //if (key != 106) continue;
         acutPrintf(_T("    => Element %d\n"), count2);
 
         CreateConstructionPointVisitor visitor1;

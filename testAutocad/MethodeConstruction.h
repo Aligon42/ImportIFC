@@ -83,3 +83,4 @@ AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 Vec
 void createBoundingBox();
 void createFaceSolid(std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transformFace);
 AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, Matrix4 transform);
+float roundoff(float value, unsigned char prec);
