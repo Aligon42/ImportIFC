@@ -160,6 +160,10 @@ private:
     std::vector<std::string> nameItems;
     std::string outerCurveName;
     bool isCompositeCurve = false;
+    bool isBoolean = false;
+
+    int nbPolylineCompositeCurve = 0;
+    int nbSupport = 0;
 
     int keyForVoid;
 
@@ -288,6 +292,7 @@ public:
     std::string getNameProfildef() const;
 
     int getkeyForVoid() const;
+    int getnbPolylineCompositeCurve() const;
     CompositeCurveSegment getCompositeCurveSegment() const;
 
     std::vector<int> getListNbArgFace() const;

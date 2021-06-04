@@ -223,7 +223,7 @@ void test()
         int key = (int)buildingElement.getKey();
         std::string entity = buildingElement.getType().getName();
 
-        if (key != 112788) continue;
+        //if (key != 110867) continue;
         //if (key != 106) continue;
         acutPrintf(_T("    => Element %d\n"), count2);
 
@@ -264,6 +264,7 @@ void test()
         std::vector<std::string> listEntityPolygonal = visitor1.getListEntityPolygonal();
 
         CompositeCurveSegment _compositeCurveSegment = visitor1.getCompositeCurveSegment();
+        int nbPolylineComposite = visitor1.getnbPolylineCompositeCurve();
 
         buildingElement.acceptVisitor(&placementVisitor);
         Matrix4 transform1 = placementVisitor.getTransformation();
@@ -280,11 +281,11 @@ void test()
                 {
                     if (nameItems[i] == "IfcExtrudedAreaSolid")
                     {
-                        extrusion(key, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment);
+                        extrusion(key, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite);
                     }
                     else if (nameItems[i] == "IfcBooleanClippingResult")
                     {
-                        extrusion(key, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment);
+                        extrusion(key, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite);
                     }
                     else if (nameItems[i] == "IfcFacetedBrep")
                     {
@@ -292,6 +293,7 @@ void test()
                         bool orientation = visitor1.getOrientatationFace();
                         createFaceSolid(points1, ListNbArg, orientation, transformFace);
                     }
+
                 }
             }
             else if (entity == "IfcColumn" || entity == "IfcBeam")

@@ -6,7 +6,7 @@ void extrusion(int key, std::vector<std::string> nameItems, std::string outerCur
 	Vec3 VecteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, 
 	std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, 
 	std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, 
-	std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment)
+	std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite)
 {
     Acad::ErrorStatus es;
 	AcDbRegion* pRegion = nullptr;
@@ -99,7 +99,7 @@ void extrusion(int key, std::vector<std::string> nameItems, std::string outerCur
 
 	for (int a = 0; a < nbPlan; a++)
 	{
-			CreationSection(pSolid, VecteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, _compositeCurveSegment, transform1);
+			CreationSection(pSolid, VecteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, _compositeCurveSegment, transform1, nbPolylineComposite);
 	
 			listPlan.pop_front();
 	}
@@ -112,17 +112,17 @@ void extrusion(int key, std::vector<std::string> nameItems, std::string outerCur
 		{
 			if (listVoid[v].NameProfilDef == "IfcArbitraryClosedProfileDef")
 			{
-				CreationVoid(pSolid, listVoid[v], _compositeCurveSegment, transform1);
+				CreationVoid(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 			else if (listVoid[v].NameProfilDef == "IfcCircleProfileDef")
 			{
-				CreationVoidCircle(pSolid, listVoid[v], _compositeCurveSegment, transform1);
+				CreationVoidCircle(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 			else if (listVoid[v].NameProfilDef == "IfcRectangleProfileDef")
 			{
-				CreationVoidRectangle(pSolid, listVoid[v], _compositeCurveSegment, transform1);
+				CreationVoidRectangle(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 		}
@@ -263,7 +263,7 @@ static void DeplacementObjet3D(AcDbPlaneSurface* pSurface, Matrix4 transform1) {
 static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3>& points1,
 	std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal,
 	std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal,
-	std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform)
+	std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite)
 {
 
 	AcGeVector3d v1 = AcGeVector3d::AcGeVector3d(0, 0, 0);             // Vector 1 (x,y,z) & Vector 2 (x,y,z)
@@ -436,10 +436,10 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 
 		AcDbRegion* pRegion;
 
-		/*if (_compositeCurveSegment.listPolyligne.size() > 0 || _compositeCurveSegment.listTrimmedCurve.size() > 0 ||
+		if (_compositeCurveSegment.listPolyligne.size() > 0 || _compositeCurveSegment.listTrimmedCurve.size() > 0 ||
 			_compositeCurveSegment.listParentCurve.size() > 0)
 			pRegion = createCompositeCurve(_compositeCurveSegment, transform);
-		else*/
+		else
 			pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 		// Extrude the region to create a solid.
@@ -471,17 +471,34 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 		extrusion->getSlice(Poly_plane, AgreementPolygonal.at(0), pSolid);
 		extrusion->booleanOper(AcDb::kBoolSubtract, pSolid);
 
-		for (size_t i = 0; i < nbArg[0]; i++)
+		if (nbPolylineComposite > 0)
 		{
-			points1.pop_front();
-		}
+			for (int j = 0; j < nbPolylineComposite; j++)
+			{
+				for (size_t i = 0; i < nbArg[0]; i++)
+				{
+					points1.pop_front();
+				}
 
-		nbArg.erase(nbArg.begin());
+				nbArg.erase(nbArg.begin());
+			}
+		}
+		else 
+		{
+			for (size_t i = 0; i < nbArg[0]; i++)
+			{
+				points1.pop_front();
+			}
+
+			nbArg.erase(nbArg.begin());
+		}
+		
+		
 	}
 	
 }
 
-static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform)
+static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite)
 {
 	Acad::ErrorStatus es;
 	ads_name polyName;
@@ -574,10 +591,10 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurve
 		{
 			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite);
 			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite);
 
 			Void.listPlan.pop_front();
 		}
@@ -602,7 +619,7 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurve
 	extrusion_void2->close();
 }
 
-static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform)
+static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite)
 {
 
 	Acad::ErrorStatus es;
@@ -688,10 +705,10 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, Composi
 		{
 			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite);
 			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal,  _compositeCurveSegment, transform);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal,  _compositeCurveSegment, transform, nbPolylineComposite);
 
 			Void.listPlan.pop_front();
 		}
@@ -716,7 +733,7 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, Composi
 	extrusion_void2->close();
 }
 
-static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform)
+static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite)
 {
 
 	Acad::ErrorStatus es;
@@ -818,10 +835,10 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void, Comp
 		{
 			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite);
 			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite);
 
 			Void.listPlan.pop_front();
 		}
@@ -938,6 +955,7 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 		pBlockTableRecord->appendAcDbEntity(arc);
 		pBlockTableRecord->close();*/
 		arc->close();
+		_compositeCurveSegment.listTrimmedCurve.erase(_compositeCurveSegment.listTrimmedCurve.begin());
 	}
 
 	// Create a region from the set of lines.
@@ -951,6 +969,8 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 		return pRegionFail;
 	}
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+
+	_compositeCurveSegment.listParentCurve.clear();
 
 	return pRegion;
 }

@@ -79,6 +79,7 @@ bool CreateConstructionPointVisitor::visitIfcBooleanClippingResult(
     ifc2x3::IfcBooleanClippingResult* value)
 {
     bool r1 = false, r2 = false;
+    isBoolean = true;
 
     if (value->testFirstOperand())
     {
@@ -333,7 +334,16 @@ bool CreateConstructionPointVisitor::visitIfcCompositeCurve(
                     points.push_back(*point++);
                     a++;               
             }
-            _compositeCurveSegment.listPolyligne.push_back(points);
+
+            if (isBoolean && j < 2)
+            { }
+            else
+            {
+                _compositeCurveSegment.listPolyligne.push_back(points);
+                nbPolylineCompositeCurve++;
+            }
+            
+
             /*
             for (int x = 0; x < nb; x++)
             {
@@ -748,16 +758,37 @@ bool CreateConstructionPointVisitor::visitIfcArbitraryClosedProfileDef(ifc2x3::I
 bool CreateConstructionPointVisitor::visitIfcPolyline(ifc2x3::IfcPolyline* value)
 {
     int size = _points.size();
+    int nb = nbPolylineCompositeCurve;
+    
 
     for(auto point : value->getPoints())
     {
         _points.push_back(ComputePlacementVisitor::getPoint(point.get()));
+    }
+
+    if (nbSupport != 0)
+    {
+        if (nbSupport == nb)
+        {
+            isCompositeCurve = false;
+        }
     }
     
     if (!isCompositeCurve)
     {
         _points.pop_back();
     }
+    else if (isBoolean && !isCompositeCurve)
+    {
+        _points.pop_back();
+    }
+    else if (isBoolean)
+    {
+        nbSupport++;
+        
+    }
+
+    
     
 
     listNbArgPolyline.push_back(_points.size() - size);
@@ -1005,6 +1036,11 @@ std::string CreateConstructionPointVisitor::getNameProfildef() const
 int CreateConstructionPointVisitor::getkeyForVoid() const
 {
     return keyForVoid;
+}
+
+int CreateConstructionPointVisitor::getnbPolylineCompositeCurve() const
+{
+    return nbPolylineCompositeCurve;
 }
 
 CompositeCurveSegment CreateConstructionPointVisitor::getCompositeCurveSegment() const
