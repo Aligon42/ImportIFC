@@ -229,14 +229,6 @@ void test()
 
         CreateConstructionPointVisitor visitor1;
         acutPrintf(_T("Index : %i\n"), key);
-        if (key == 108907)
-        {
-            int PA = 0;
-        }
-        if (key == 112788)
-        {
-            int PA = 0;
-        }
 
         buildingElement.acceptVisitor(&visitor1);
 

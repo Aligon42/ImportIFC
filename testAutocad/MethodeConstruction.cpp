@@ -1,6 +1,7 @@
 ﻿#include "MethodeConstruction.h"
 #include "CreateConstructionPointVisitor.h"
 #include <vector>
+#include <iterator>
 
 void extrusion(int key, std::vector<std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg,
 	Vec3 VecteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, 
@@ -2791,6 +2792,77 @@ void createFaceSolid(std::list<Vec3> points1, std::vector<int> ListNbArg, bool o
 
 	AcGePoint3dArray ptArr;
 	int sizeNbArg = ListNbArg.size();
+
+	////test
+	//int indexNbArg = 0;
+	//std::vector<int> listIndexNbArg;
+	//int arg = ListNbArg[0];
+	//int arg2 = 0;
+	//std::vector<int> newListNbArg;
+	//newListNbArg.push_back(arg);
+	//std::vector<Vec3> newPoints;
+	//std::vector<std::vector<Vec3>> listPointsFace;
+	//std::vector<Vec3> pontPoints;
+	//auto iterator = pontPoints.begin();
+	//int newIterator = 0;
+	//int differentesFaces = 1;
+	//int sizePoints = points1.size();
+	//int sizePontPoints = pontPoints.size();
+
+	//for (int i = 0; i < sizePoints; i++)
+	//{
+	//	pontPoints.push_back(points1.front());
+	//	points1.pop_front();
+	//}
+
+	//for (int i = 0; i < ListNbArg.size(); i++)
+	//{
+	//	if (ListNbArg[0] != ListNbArg[i + 1])
+	//	{
+	//		differentesFaces++;
+	//	}
+	//}
+
+	//for (int j = 0; j < sizePontPoints; j++)
+	//{
+	//	newPoints.push_back(pontPoints.front());
+	//	pontPoints.erase(pontPoints.begin());
+	//}
+
+	//for (int face = 0; face < differentesFaces; face++)
+	//{
+	//	std::vector<Vec3> points;
+	//	for (int i = 1; i < ListNbArg.size(); i++)
+	//	{
+	//		if (arg = ListNbArg[i])
+	//		{
+	//			for (int j = 0; j < ListNbArg[i]; j++)
+	//			{
+	//				points.push_back(newPoints.at(newIterator));
+	//				newPoints.erase(iterator);
+	//			}
+	//			indexNbArg++;
+	//			
+	//		}
+	//		else
+	//		{
+	//			for (int it = 0; it < ListNbArg[i]; it++)
+	//			{
+	//				iterator++;
+	//				newIterator++;
+	//			}
+	//			if (i = sizeNbArg - 1)
+	//			{
+	//				arg2 = ListNbArg[i];
+	//			}
+	//		}
+	//	}
+	//	listPointsFace.push_back(points);
+	//	arg = arg2;
+	//	newListNbArg.push_back(arg);
+	//}
+	//fin test
+
 	for (int j = 0; j < sizeNbArg; j++)
 	{
 		int nbPoint = ListNbArg[0];
@@ -2831,7 +2903,7 @@ void createFaceSolid(std::list<Vec3> points1, std::vector<int> ListNbArg, bool o
 		AcDbVoidPtrArray regions;
 		es = AcDbRegion::createFromCurves(lines, regions);
 
-		if (Acad::eOk != es)
+		if (Acad::eOk != es || es != 0)
 		{
 			acutPrintf(L"\nFailed to create region\n");
 			return;
