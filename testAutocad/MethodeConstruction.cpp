@@ -91,9 +91,12 @@ void extrusion(int key, std::vector<std::string> nameItems, std::string outerCur
 	int nbPlan = listPlan.size();
 
 
-	for (int i = 0; i < ListNbArg[0]; i++)
+	if (ListNbArg.size() > 0)
 	{
-		points1.pop_front();
+		for (int i = 0; i < ListNbArg[0]; i++)
+		{
+			points1.pop_front();
+		}
 	}
 
 	ListNbArg.erase(ListNbArg.begin());

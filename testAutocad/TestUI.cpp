@@ -291,7 +291,7 @@ void test()
                 }
             }
         }
-       
+        
         for (int i = 0; i < nameItems.size(); i++)
         {
             if (entity != "IfcColumn" && entity != "IfcBeam")
