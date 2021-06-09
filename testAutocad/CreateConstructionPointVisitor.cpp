@@ -526,6 +526,29 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
     return false;
 }
 
+bool CreateConstructionPointVisitor::visitIfcBoundingBox(
+    ifc2x3::IfcBoundingBox* value)
+{
+    if (value->testXDim())
+    {
+        XDimBox = value->getXDim();;
+    }
+    if (value->testYDim())
+    {
+        XDimBox = value->getYDim();;
+    }
+    if (value->testZDim())
+    {
+        XDimBox = value->getZDim();;
+    }
+    if (value->testCorner())
+    {
+        auto corner = value->getCorner();
+        //Corner.x() = corner->getArgs().
+    }
+    
+}
+
 //***** PROFILDEF *****
 
 bool CreateConstructionPointVisitor::visitIfcIShapeProfileDef(

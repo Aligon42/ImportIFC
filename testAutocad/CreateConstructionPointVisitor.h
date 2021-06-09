@@ -210,6 +210,13 @@ private:
     int green;
     int blue;
 
+    //Box
+    Vec3 Corner;
+    int XDimBox;
+    int YDimBox;
+    int ZDimBox;
+
+
 public:
     //! Constructor
     CreateConstructionPointVisitor();
@@ -232,6 +239,7 @@ public:
     bool visitIfcAxis2Placement(ifc2x3::IfcAxis2Placement* value) override;
     bool visitIfcAxis2Placement2D(ifc2x3::IfcAxis2Placement2D* value) override;
     bool visitIfcExtrudedAreaSolid(ifc2x3::IfcExtrudedAreaSolid* value) override;
+    bool visitIfcBoundingBox(ifc2x3::IfcBoundingBox* value) override;
 
     //style
     bool visitIfcStyledItem(ifc2x3::IfcStyledItem* value);
