@@ -38,13 +38,13 @@ bool CreateConstructionPointVisitor::visitIfcProductRepresentation(
 {
     for(auto representation : value->getRepresentations())
     {
-        if(representation->acceptVisitor(this))
+        if(!(representation->acceptVisitor(this)))
         {
-            return true;
+            return false;
         }
     }
 
-    return false;
+    return true;
 }
 
 bool CreateConstructionPointVisitor::visitIfcProductDefinitionShape(
@@ -66,6 +66,7 @@ bool CreateConstructionPointVisitor::visitIfcShapeRepresentation(
     for(auto item : value->getItems())
     {
         nameItems.push_back(item->getType().getName());
+        keyItems.push_back(item->getKey());
         if(item->acceptVisitor(this))
         {
             return true;
@@ -150,6 +151,74 @@ bool CreateConstructionPointVisitor::visitIfcRepresentationMap(
     return false;
 }
 
+bool CreateConstructionPointVisitor::visitIfcFaceBasedSurfaceModel(
+    ifc2x3::IfcFaceBasedSurfaceModel* value)
+{
+    if (value->testFbsmFaces())
+    {
+        for (auto face : value->getFbsmFaces())
+        {
+            if (!(face->acceptVisitor(this)))
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool CreateConstructionPointVisitor::visitIfcConnectedFaceSet(
+    ifc2x3::IfcConnectedFaceSet* value)
+{
+    if (value->testCfsFaces())
+    {
+        for (auto face : value->getCfsFaces())
+        {
+            if (!(face->acceptVisitor(this)))
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool CreateConstructionPointVisitor::visitIfcShellBasedSurfaceModel(
+    ifc2x3::IfcShellBasedSurfaceModel* value)
+{
+    if (value->testSbsmBoundary())
+    {
+        for (auto face : value->getSbsmBoundary())
+        {
+            if (!(face->acceptVisitor(this)))
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool CreateConstructionPointVisitor::visitIfcOpenShell(
+    ifc2x3::IfcOpenShell* value)
+{
+    if (value->testCfsFaces())
+    {
+        for (auto face : value->getCfsFaces())
+        {
+            if (!(face->acceptVisitor(this)))
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 bool CreateConstructionPointVisitor::visitIfcMappedItem(
     ifc2x3::IfcMappedItem* value)
 {
@@ -177,7 +246,7 @@ bool CreateConstructionPointVisitor::visitIfcStyledItem(
 {
     if (value->testItem())
     {
-        value->getItem()->acceptVisitor(this);
+        style.keyItem = value->getItem()->getKey();
     }
     if (value->testStyles())
     {
@@ -234,15 +303,15 @@ bool CreateConstructionPointVisitor::visitIfcColourRgb(
 {
     if (value->testRed())
     {
-        red = value->getRed();
+        style.red = value->getRed();
     }
     if (value->testGreen())
     {
-        green = value->getGreen();
+        style.green = value->getGreen();
     }
     if (value->testBlue())
     {
-        blue = value->getBlue();
+        style.blue = value->getBlue();
     }
     return true;
 }
@@ -531,22 +600,23 @@ bool CreateConstructionPointVisitor::visitIfcBoundingBox(
 {
     if (value->testXDim())
     {
-        XDimBox = value->getXDim();;
+        box.XDimBox = value->getXDim();
     }
     if (value->testYDim())
     {
-        XDimBox = value->getYDim();;
+        box.YDimBox = value->getYDim();
     }
     if (value->testZDim())
     {
-        XDimBox = value->getZDim();;
+        box.ZDimBox = value->getZDim();
     }
     if (value->testCorner())
     {
         auto corner = value->getCorner();
-        //Corner.x() = corner->getArgs().
+        SwitchIfcCartesianPointToVecteur3D(corner, box.Corner);
     }
     
+    return true;
 }
 
 //***** PROFILDEF *****
@@ -1076,6 +1146,21 @@ std::vector<int> CreateConstructionPointVisitor::getListNbArgFace() const
     return nbArgFace;
 }
 
+std::vector<int> CreateConstructionPointVisitor::getListKeyItem() const
+{
+    return keyItems;
+}
+
+Box CreateConstructionPointVisitor::getBox() const
+{
+    return box;
+}
+
+Style CreateConstructionPointVisitor::getStyle() const
+{
+    return style;
+}
+
 bool CreateConstructionPointVisitor::getOrientatationFace() const
 {
     return orientationFace;
@@ -1109,4 +1194,5 @@ void CreateConstructionPointVisitor::transformPoints(const Matrix4& transform)
         count++;
     }
 }
+
 

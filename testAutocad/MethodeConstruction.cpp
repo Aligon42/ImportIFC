@@ -7,7 +7,7 @@ void extrusion(int key, std::vector<std::string> nameItems, std::string outerCur
 	Vec3 VecteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, 
 	std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, 
 	std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, 
-	std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite)
+	std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, Style styleDessin)
 {
     Acad::ErrorStatus es;
 	AcDbRegion* pRegion = nullptr;
@@ -129,6 +129,10 @@ void extrusion(int key, std::vector<std::string> nameItems, std::string outerCur
 		}
 	}
 
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(style.red * 255, style.green * 255, style.blue * 255);
+
+	pSolid->setColor(couleurRGB, false);
    AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
     if (Acad::eOk == es)
     {
@@ -205,7 +209,7 @@ static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1) {
 
 }
 
-static void DeplacementObjet3D(AcDbPlaneSurface* pSurface, Matrix4 transform1) {
+static void DeplacementObjet3D(AcDbSubDMesh* pSubDMesh, Matrix4 transform1) {
 
 	// 3 source points
 	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
@@ -257,7 +261,7 @@ static void DeplacementObjet3D(AcDbPlaneSurface* pSurface, Matrix4 transform1) {
 	AcGeMatrix3d mat = AcGeMatrix3d::AcGeMatrix3d();
 	mat = mat.alignCoordSys(fromOrigin, fromXaxis, fromYaxis, fromZaxis, toOrigin, toXaxis, toYaxis, toZaxis);
 
-	pSurface->transformBy(mat);
+	pSubDMesh->transformBy(mat);
 
 }
 
@@ -978,7 +982,7 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 
 //*** ProfilDef ***
 
-void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
+void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
 
 	Acad::ErrorStatus es;
@@ -1081,7 +1085,7 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matri
 	}
 }
 
-void createSolid3dProfilIPN(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
+void createSolid3dProfilIPN(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
 
 	Acad::ErrorStatus es;
@@ -1186,7 +1190,7 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matri
 	}
 }
 
-void createSolid3dProfilL8(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
+void createSolid3dProfilL8(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
 
 	Acad::ErrorStatus es;
@@ -1284,7 +1288,7 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix
 	}
 }
 
-void createSolid3dProfilL9(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
+void createSolid3dProfilL9(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
 
 	Acad::ErrorStatus es;
@@ -1384,7 +1388,7 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix
 	}
 }
 
-void createSolid3dProfilT10(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
+void createSolid3dProfilT10(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
 
 	Acad::ErrorStatus es;
@@ -1485,7 +1489,7 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matri
 	}
 }
 
-void createSolid3dProfilT12(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
+void createSolid3dProfilT12(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
 
 	Acad::ErrorStatus es;
@@ -1591,7 +1595,7 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matri
 	}
 }
 
-void createSolid3dProfilUPE(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
+void createSolid3dProfilUPE(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
 
 	Acad::ErrorStatus es;
@@ -1691,7 +1695,7 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matri
 	}
 }
 
-void createSolid3dProfilUPN(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
+void createSolid3dProfilUPN(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
 
 	Acad::ErrorStatus es;
@@ -1791,7 +1795,7 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matri
 	}
 }
 
-void createSolid3dProfilC(C_profilDef CprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
+void createSolid3dProfilC(C_profilDef CprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
 
 	Acad::ErrorStatus es;
@@ -1895,7 +1899,7 @@ void createSolid3dProfilC(C_profilDef CprofilDef, Vec3 VecteurExtrusion, Matrix4
 	}
 }
 
-void createSolid3dProfilZ(Z_profilDef ZprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
+void createSolid3dProfilZ(Z_profilDef ZprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
 
 	Acad::ErrorStatus es;
@@ -1996,7 +2000,7 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, Vec3 VecteurExtrusion, Matrix4
 	}
 }
 
-void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1)
+void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
 
 
@@ -2105,7 +2109,7 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Vec3 Ve
 	}
 }
 
-void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1) {
+void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin) {
 
 	Acad::ErrorStatus es;
 	ads_name polyName;
@@ -2240,7 +2244,7 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 
 }
 
-void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1) {
+void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin) {
 
 	Acad::ErrorStatus es;
 	ads_name polyName;
@@ -2398,7 +2402,7 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 
 }
 
-void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1) {
+void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin) {
 
 	Acad::ErrorStatus es;
 	ads_name polyName;
@@ -2488,7 +2492,7 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExt
 
 }
 
-void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1) {
+void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin) {
 
 
 
@@ -2613,7 +2617,7 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 V
 
 }
 
-AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1) {
+AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin) {
 
 	Acad::ErrorStatus es;
 	ads_name polyName;
@@ -2677,7 +2681,7 @@ AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtru
 	return pRegion1;
 }
 
-AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1) {
+AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin) {
 
 
 
@@ -2760,7 +2764,7 @@ AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 Vec
 	return pRegion1;
 }
 
-void createBoundingBox() {
+void createBoundingBox(Box box, Style styleDessin) {
 
 	Acad::ErrorStatus es;
 
@@ -2768,7 +2772,14 @@ void createBoundingBox() {
 
 	AcDb3dSolid* box3d = new AcDb3dSolid();
 
-	box3d->createBox(20, 20, 20);  /// Creation de la box au point 0,0,0 avec les dimensions
+	box3d->createBox(box.XDimBox, box.YDimBox, box.ZDimBox);  /// Creation de la box au point 0,0,0 avec les dimensions
+
+	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
+
+	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(box.Corner.x(), box.Corner.y(), box.Corner.z());
+	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
+	box3d->transformBy(matrix3d.translation(acVec3d));
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 	AcDbDatabase* pDb = curDoc()->database();
@@ -2784,14 +2795,16 @@ void createBoundingBox() {
 
 }
 
-void createFaceSolid(std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transform1) {
+void createFaceSolid(std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transform1, Style styleDessin) {
 
 	Acad::ErrorStatus es;
-	ads_name polyName;
-	ads_point ptres;
+	AcArray<Adesk::Int32> faceArray;
+	AcDbSubDMesh* pSubDMesh = new AcDbSubDMesh();
+	AcDb3dSolid* pSolid = new AcDb3dSolid();
 
 	AcGePoint3dArray ptArr;
 	int sizeNbArg = ListNbArg.size();
+	int k = 0;
 
 	////test
 	//int indexNbArg = 0;
@@ -2863,94 +2876,52 @@ void createFaceSolid(std::list<Vec3> points1, std::vector<int> ListNbArg, bool o
 	//}
 	//fin test
 
-	for (int j = 0; j < sizeNbArg; j++)
+	for (const auto& point : points1)
 	{
-		int nbPoint = ListNbArg[0];
-		ptArr.setLogicalLength(nbPoint);
-		Vec3 pointOrigine = { transform1[12], transform1[13] , transform1[14] };
-
-		int i = 0;
-
-		for (const auto& point : points1)
-		{
-			if (i == ListNbArg[0])
-			{
-				break;
-			}
-
-			ptArr[i].set(point.x(), point.y(), point.z());
-			i++;
-		}
-
-		AcDb3dPolyline* pNewPline = new AcDb3dPolyline(
-			AcDb::k3dSimplePoly, ptArr, Adesk::kTrue);
-		pNewPline->setColorIndex(3);
-
-
-		//get the boundary curves of the polyline
-		AcDbEntity* pEntity = NULL;
-
-		if (pNewPline == NULL)
-		{
-			pEntity->close();
-			return;
-		}
-		AcDbVoidPtrArray lines;
-		pNewPline->explode(lines);
-		pNewPline->close();
-
-		// Create a region from the set of lines.
-		AcDbVoidPtrArray regions;
-		es = AcDbRegion::createFromCurves(lines, regions);
-
-		if (Acad::eOk != es || es != 0)
-		{
-			acutPrintf(L"\nFailed to create region\n");
-			return;
-
-		}
-		AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
-
-		for (int i = 0; i < nbPoint; i++)
-		{
-			points1.erase(points1.begin());
-		}
-
-		ListNbArg.erase(ListNbArg.begin());
-
-		// Extrude the region to create a solid.
-		AcDbPlaneSurface* pSurface = new AcDbPlaneSurface();
-		es = pSurface->createFromRegion(pRegion);
-
-		DeplacementObjet3D(pSurface, transform1);
-
-		for (int i = 0; i < lines.length(); i++)
-		{
-			delete (AcRxObject*)lines[i];
-		}
-
-		for (int ii = 0; ii < regions.length(); ii++)
-		{
-			delete (AcRxObject*)regions[ii];
-		}
-		AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
-
-		if (Acad::eOk == es)
-		{
-			AcDbDatabase* pDb = curDoc()->database();
-			AcDbObjectId modelId;
-			modelId = acdbSymUtil()->blockModelSpaceId(pDb);
-			AcDbBlockTableRecord* pBlockTableRecord;
-			acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
-			pBlockTableRecord->appendAcDbEntity(pSurface);
-			pBlockTableRecord->close();
-			pSurface->close();
-		}
-		else
-		{
-			delete pSurface;
-		}
+		AcGePoint3d point3d = AcGePoint3d::AcGePoint3d(point.x(), point.y(), point.z());
+		ptArr.append(point3d);
 	}
+
+	for (int i = 0; i < sizeNbArg; i++)
+	{
+		faceArray.append(ListNbArg[0]);
+		for (int j = 0; j < ListNbArg[0]; j++)
+		{
+			faceArray.append(k);
+			k++;
+		}
+		ListNbArg.erase(ListNbArg.begin());
+	}
+
+	es = pSubDMesh->setSubDMesh(ptArr, faceArray, 0);
+	if (Acad::eOk != es)
+	{
+		pSubDMesh->close();
+		acutPrintf(L"\nFailed to set \n");
+		return;
+	}
+
+	DeplacementObjet3D(pSubDMesh, transform1);
+
+	/*es = pSubDMesh->convertToSolid(false,false, pSolid);
+	if (Acad::eOk != es)
+	{
+		pSubDMesh->close();
+		acutPrintf(L"\nFailed to convert\n");
+		return;
+	}*/
+	//pSubDMesh->close();
+
+
+
+	AcDbDatabase* pDb = curDoc()->database();
+	AcDbObjectId modelId;
+	modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+	AcDbBlockTableRecord* pBlockTableRecord;
+	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+	pBlockTableRecord->appendAcDbEntity(pSubDMesh);
+	pBlockTableRecord->close();
+	pSubDMesh->close();
 }
 
 float roundoff(float value, unsigned char prec)

@@ -147,6 +147,28 @@ struct CompositeCurveSegment
     std::vector<std::string> listParentCurve;
 };
 
+struct Style
+{
+    int keyItem;
+    int red;
+    int green;
+    int blue;
+};
+
+struct Box
+{
+    Vec3 Corner;
+    int XDimBox;
+    int YDimBox;
+    int ZDimBox;
+};
+
+//style
+static Style style;
+static Style styleDessin;
+static std::vector<Style> listStyle;
+
+
 class CreateConstructionPointVisitor : public ifc2x3::InheritVisitor
 {
 private:
@@ -166,6 +188,7 @@ private:
     int nbSupport = 0;
 
     int keyForVoid;
+    std::vector<int> keyItems;
 
     //opération boolean
     std::vector<bool> AgreementHalf;
@@ -205,17 +228,9 @@ private:
     bool orientationFace;
     std::vector<int> nbArgFace;
 
-    //style
-    int red;
-    int green;
-    int blue;
-
     //Box
-    Vec3 Corner;
-    int XDimBox;
-    int YDimBox;
-    int ZDimBox;
-
+    Box box;
+    
 
 public:
     //! Constructor
@@ -227,6 +242,11 @@ public:
     bool visitIfcProductDefinitionShape(ifc2x3::IfcProductDefinitionShape* value) override;
     bool visitIfcShapeRepresentation(ifc2x3::IfcShapeRepresentation* value) override;
     bool visitIfcBooleanClippingResult(ifc2x3::IfcBooleanClippingResult* value) override;
+    bool visitIfcRepresentationMap(ifc2x3::IfcRepresentationMap* value) override;
+    bool visitIfcFaceBasedSurfaceModel(ifc2x3::IfcFaceBasedSurfaceModel* value) override;
+    bool visitIfcConnectedFaceSet(ifc2x3::IfcConnectedFaceSet* value) override;
+    bool visitIfcShellBasedSurfaceModel(ifc2x3::IfcShellBasedSurfaceModel* value) override;
+    bool visitIfcOpenShell(ifc2x3::IfcOpenShell* value) override;
     bool visitIfcMappedItem(ifc2x3::IfcMappedItem* value) override;
     bool visitIfcHalfSpaceSolid(ifc2x3::IfcHalfSpaceSolid* value) override;
     bool visitIfcPolygonalBoundedHalfSpace(ifc2x3::IfcPolygonalBoundedHalfSpace* value) override;
@@ -234,7 +254,6 @@ public:
     bool visitIfcCompositeCurveSegment(ifc2x3::IfcCompositeCurveSegment* value) override;
     bool visitIfcTrimmedCurve(ifc2x3::IfcTrimmedCurve* value) override;
     bool visitIfcCircle(ifc2x3::IfcCircle* value) override; 
-    bool visitIfcRepresentationMap(ifc2x3::IfcRepresentationMap* value) override;
     bool visitIfcPlane(ifc2x3::IfcPlane* value) override;
     bool visitIfcAxis2Placement(ifc2x3::IfcAxis2Placement* value) override;
     bool visitIfcAxis2Placement2D(ifc2x3::IfcAxis2Placement2D* value) override;
@@ -304,7 +323,11 @@ public:
     CompositeCurveSegment getCompositeCurveSegment() const;
 
     std::vector<int> getListNbArgFace() const;
+    std::vector<int> getListKeyItem() const;
     bool getOrientatationFace() const;
+
+    Box getBox() const;
+    Style getStyle() const;
 
     void SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);
     void SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);
