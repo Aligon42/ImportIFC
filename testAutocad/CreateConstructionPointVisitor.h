@@ -261,11 +261,11 @@ public:
     bool visitIfcBoundingBox(ifc2x3::IfcBoundingBox* value) override;
 
     //style
-    bool visitIfcStyledItem(ifc2x3::IfcStyledItem* value);
-    bool visitIfcPresentationStyleAssignment(ifc2x3::IfcPresentationStyleAssignment* value);
-    bool visitIfcSurfaceStyle(ifc2x3::IfcSurfaceStyle* value);
-    bool visitIfcSurfaceStyleRendering(ifc2x3::IfcSurfaceStyleRendering* value);
-    bool visitIfcColourRgb(ifc2x3::IfcColourRgb* value);
+    bool visitIfcStyledItem(ifc2x3::IfcStyledItem* value) override;
+    bool visitIfcPresentationStyleAssignment(ifc2x3::IfcPresentationStyleAssignment* value) override;
+    bool visitIfcSurfaceStyle(ifc2x3::IfcSurfaceStyle* value) override;
+    bool visitIfcSurfaceStyleRendering(ifc2x3::IfcSurfaceStyleRendering* value) override;
+    bool visitIfcColourRgb(ifc2x3::IfcColourRgb* value) override;
 
     //profilDef
     bool visitIfcIShapeProfileDef(ifc2x3::IfcIShapeProfileDef* value) override;

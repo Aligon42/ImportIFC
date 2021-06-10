@@ -250,9 +250,9 @@ bool CreateConstructionPointVisitor::visitIfcStyledItem(
     }
     if (value->testStyles())
     {
-        for (auto style : value->getStyles())
+        for (auto styles : value->getStyles())
         {
-            style->acceptVisitor(this);
+            styles->acceptVisitor(this);
         }
     }
     return true;
@@ -263,11 +263,30 @@ bool CreateConstructionPointVisitor::visitIfcPresentationStyleAssignment(
 {
     if (value->testStyles())
     {
-        for (auto style : value->getStyles())
+        for (auto styles : value->getStyles())
         {
-            style->acceptVisitor(this);
+            switch (styles->currentType())
+            {
+            case ifc2x3::IfcPresentationStyleSelect::IFCCURVESTYLE :
+                styles->getIfcCurveStyle()->acceptVisitor(this);
+                break;
+
+            case ifc2x3::IfcPresentationStyleSelect::IFCFILLAREASTYLE:
+                styles->getIfcFillAreaStyle()->acceptVisitor(this);
+                break;
+
+            case ifc2x3::IfcPresentationStyleSelect::IFCTEXTSTYLE:
+                styles->getIfcTextStyle()->acceptVisitor(this);
+                break;
+
+            case ifc2x3::IfcPresentationStyleSelect::IFCSURFACESTYLE:
+                styles->getIfcSurfaceStyle()->acceptVisitor(this);
+                break;
+            }
+            
         }
     }
+
     return true;
 }
 
@@ -280,9 +299,31 @@ bool CreateConstructionPointVisitor::visitIfcSurfaceStyle(
     }
     if (value->testStyles())
     {
-        for (auto style : value->getStyles())
+        for (auto styles : value->getStyles())
         {
-            style->acceptVisitor(this);
+            
+                switch (styles->currentType())
+                {
+                case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLELIGHTING:
+                    styles->getIfcSurfaceStyleLighting()->acceptVisitor(this);
+                    break;
+
+                case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLESHADING:
+                    styles->getIfcSurfaceStyleShading()->acceptVisitor(this);
+                    break;
+
+                case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLEWITHTEXTURES:
+                    styles->getIfcSurfaceStyleWithTextures()->acceptVisitor(this);
+                    break;
+
+                case ifc2x3::IfcSurfaceStyleElementSelect::IFCEXTERNALLYDEFINEDSURFACESTYLE:
+                    styles->getIfcExternallyDefinedSurfaceStyle()->acceptVisitor(this);
+                    break;
+
+                case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLEREFRACTION:
+                    styles->getIfcSurfaceStyleRefraction()->acceptVisitor(this);
+                    break;
+                }
         }
     }
     return true;
