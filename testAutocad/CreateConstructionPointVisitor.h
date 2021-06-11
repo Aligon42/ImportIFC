@@ -150,9 +150,9 @@ struct CompositeCurveSegment
 struct Style
 {
     int keyItem;
-    int red;
-    int green;
-    int blue;
+    double red;
+    double green;
+    double blue;
 };
 
 struct Box

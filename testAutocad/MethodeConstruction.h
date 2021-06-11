@@ -47,7 +47,7 @@ struct ObjectVoid
 static std::vector<ObjectVoid> listVoid;
 static ObjectVoid _objectVoid;
 
-void extrusion(int key, std::vector <std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> nbArg, Vec3 VecteurExtrusion,
+void extrusion(int key, std::string entity, std::vector <std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> nbArg, Vec3 VecteurExtrusion,
 	Matrix4 transform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal,
 	std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal,
 	std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal,

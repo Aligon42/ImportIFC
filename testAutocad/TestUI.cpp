@@ -283,11 +283,12 @@ void test()
         {
             for (int i = 0; i < listStyle.size(); i++)
             {
-                if (keyItems[0] = listStyle[i].keyItem)
+                if (keyItems[0] == listStyle[i].keyItem)
                 {
                     styleDessin.red = listStyle[i].red;
                     styleDessin.green = listStyle[i].green;
                     styleDessin.blue = listStyle[i].blue;
+                    listStyle.erase(listStyle.begin() + i);
                 }
             }
         }
@@ -304,11 +305,11 @@ void test()
                         dessinProfilDef(NameProfilDef, VecteurExtrusion, transform1, visitor1, points1, transformFace, nameItems, i, styleDessin);
                     }
                     else
-                    extrusion(key, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, styleDessin);
+                    extrusion(key, entity, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, styleDessin);
                 }
                 else if (nameItems[i] == "IfcBooleanClippingResult")
                 {
-                    extrusion(key, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, styleDessin);
+                    extrusion(key, entity, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, styleDessin);
                 }
                 else if (nameItems[i] == "IfcFacetedBrep" || nameItems[i] == "IfcFaceBasedSurfaceModel"  || nameItems[i] == "IfcShellBasedSurfaceModel")
                 {
@@ -343,7 +344,8 @@ void test()
     //    bool status = writer.write(filestream);
     //    filestream.close();
     //}
-
+    listVoid.clear();
+    listStyle.clear();
     delete expressDataSet;
 }
 

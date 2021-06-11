@@ -3,12 +3,40 @@
 #include <vector>
 #include <iterator>
 
-void extrusion(int key, std::vector<std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg,
+void extrusion(int key, std::string entity, std::vector<std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg,
 	Vec3 VecteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, 
 	std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, 
 	std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, 
 	std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, Style styleDessin)
 {
+
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
+	// Check to see if the layer exists
+	if (pLayerTable->has(_T("_%s", entity)) == false)
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(_T("_", entity));
+
+		// Set the color of the layer to cyan
+		/*AcCmColor color;
+		color.setColorIndex(4);
+		pLayerTableRecord->setColor(color);*/
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTable->close();
+		pLayerTableRecord->close();
+	}
+
     Acad::ErrorStatus es;
 	AcDbRegion* pRegion = nullptr;
     ads_name polyName;
@@ -133,9 +161,10 @@ void extrusion(int key, std::vector<std::string> nameItems, std::string outerCur
 	}
 
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(style.red * 255, style.green * 255, style.blue * 255);
-
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	pSolid->setLayer(_T("_%s", entity), Adesk::kTrue, false);
    AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
     if (Acad::eOk == es)
     {
@@ -1071,6 +1100,10 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matri
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pSolid->setColor(couleurRGB, false);
+
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -1176,6 +1209,10 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matri
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pSolid->setColor(couleurRGB, false);
+
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -1273,6 +1310,10 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix
 	DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
 	if (Acad::eOk == es)
 	{
@@ -1374,6 +1415,10 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pSolid->setColor(couleurRGB, false);
+
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -1474,6 +1519,10 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matri
 	DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
 	if (Acad::eOk == es)
 	{
@@ -1581,6 +1630,10 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matri
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pSolid->setColor(couleurRGB, false);
+
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -1681,6 +1734,10 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matri
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pSolid->setColor(couleurRGB, false);
+
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -1780,6 +1837,10 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matri
 	DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
 	if (Acad::eOk == es)
 	{
@@ -1885,6 +1946,10 @@ void createSolid3dProfilC(C_profilDef CprofilDef, Vec3 VecteurExtrusion, Matrix4
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pSolid->setColor(couleurRGB, false);
+
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -1985,6 +2050,10 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, Vec3 VecteurExtrusion, Matrix4
 	DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
 	if (Acad::eOk == es)
 	{
@@ -2094,6 +2163,10 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Vec3 Ve
 	DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
 	if (Acad::eOk == es)
 	{
@@ -2228,6 +2301,10 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
 	if (Acad::eOk == es)
 	{
@@ -2387,6 +2464,10 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pSolid->setColor(couleurRGB, false);
+
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -2474,6 +2555,10 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExt
 	DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
 	if (Acad::eOk == es)
 	{
@@ -2598,7 +2683,9 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 V
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
 	if (Acad::eOk == es)
 	{
@@ -2649,6 +2736,10 @@ AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtru
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity1 = NULL;
 
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	circle1->setColor(couleurRGB, false);
+
 	/*if (circle1 == NULL)
 	{
 		pEntity1->close();
@@ -2671,6 +2762,7 @@ AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtru
 		return;
 	}*/
 	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
+
 
 	for (int i = 0; i < lines1.length(); i++)
 	{
@@ -2728,7 +2820,9 @@ AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 Vec
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity1 = NULL;
 
-
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pNewPline1->setColor(couleurRGB, false);
 
 	/*if (pNewPline1 == NULL)
 	{
@@ -2755,6 +2849,7 @@ AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 Vec
 
 	}*/
 	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
+
 
 	for (int i = 0; i < lines1.length(); i++)
 	{
@@ -2791,6 +2886,10 @@ void createBoundingBox(Box box, Style styleDessin) {
 
 	AcDbBlockTableRecord* pBlockTableRecord;
 	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	box3d->setColor(couleurRGB, false);
 
 	pBlockTableRecord->appendAcDbEntity(box3d);
 	pBlockTableRecord->close();
@@ -2914,8 +3013,10 @@ void createFaceSolid(std::list<Vec3> points1, std::vector<int> ListNbArg, bool o
 		return;
 	}*/
 	//pSubDMesh->close();
-
-
+	
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	pSubDMesh->setColor(couleurRGB, false);
 
 	AcDbDatabase* pDb = curDoc()->database();
 	AcDbObjectId modelId;

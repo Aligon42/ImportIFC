@@ -302,28 +302,28 @@ bool CreateConstructionPointVisitor::visitIfcSurfaceStyle(
         for (auto styles : value->getStyles())
         {
             
-                switch (styles->currentType())
-                {
-                case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLELIGHTING:
-                    styles->getIfcSurfaceStyleLighting()->acceptVisitor(this);
-                    break;
+            switch (styles->currentType())
+            {
+            case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLELIGHTING:
+                styles->getIfcSurfaceStyleLighting()->acceptVisitor(this);
+                break;
 
-                case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLESHADING:
-                    styles->getIfcSurfaceStyleShading()->acceptVisitor(this);
-                    break;
+            case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLESHADING:
+                styles->getIfcSurfaceStyleShading()->acceptVisitor(this);
+                break;
 
-                case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLEWITHTEXTURES:
-                    styles->getIfcSurfaceStyleWithTextures()->acceptVisitor(this);
-                    break;
+            case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLEWITHTEXTURES:
+                styles->getIfcSurfaceStyleWithTextures()->acceptVisitor(this);
+                break;
 
-                case ifc2x3::IfcSurfaceStyleElementSelect::IFCEXTERNALLYDEFINEDSURFACESTYLE:
-                    styles->getIfcExternallyDefinedSurfaceStyle()->acceptVisitor(this);
-                    break;
+            case ifc2x3::IfcSurfaceStyleElementSelect::IFCEXTERNALLYDEFINEDSURFACESTYLE:
+                styles->getIfcExternallyDefinedSurfaceStyle()->acceptVisitor(this);
+                break;
 
-                case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLEREFRACTION:
-                    styles->getIfcSurfaceStyleRefraction()->acceptVisitor(this);
-                    break;
-                }
+            case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLEREFRACTION:
+                styles->getIfcSurfaceStyleRefraction()->acceptVisitor(this);
+                break;
+            }
         }
     }
     return true;
