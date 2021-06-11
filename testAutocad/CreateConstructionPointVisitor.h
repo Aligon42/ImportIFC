@@ -178,6 +178,7 @@ private:
 
     std::list<Vec3> _points;
     Vec3 extrusionVector;
+    float hauteurExtrusion;
     Matrix4 transformation;
     std::vector<std::string> nameItems;
     std::string outerCurveName;
@@ -237,6 +238,7 @@ public:
     CreateConstructionPointVisitor();
 
     bool visitIfcProduct(ifc2x3::IfcProduct* value) override;
+    bool visitIfcSite(ifc2x3::IfcSite* value) override;
     bool visitIfcRelVoidsElement(ifc2x3::IfcRelVoidsElement* value) override;
     bool visitIfcProductRepresentation(ifc2x3::IfcProductRepresentation* value) override;
     bool visitIfcProductDefinitionShape(ifc2x3::IfcProductDefinitionShape* value) override;
@@ -291,6 +293,7 @@ public:
 
     std::list<Vec3> getPoints() const;
     Vec3 getVectorDirection() const;
+    float getHauteurExtrusion() const;
     Matrix4 getTransformation() const;
     std::vector<std::string> getNameItems() const;
     std::string getOuterCurveName() const;

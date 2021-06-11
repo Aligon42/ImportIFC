@@ -18,6 +18,26 @@ bool CreateConstructionPointVisitor::visitIfcProduct(
     return true;
 }
 
+//bool CreateConstructionPointVisitor::visitIfcSpatialStructureElement(
+//    ifc2x3::IfcSpatialStructureElement* value)
+//{
+//    if (value->)
+//    {
+//
+//    }
+//}
+
+bool CreateConstructionPointVisitor::visitIfcSite(
+    ifc2x3::IfcSite* value)
+{
+    if (value->testRepresentation())
+    {
+        value->getRepresentation()->acceptVisitor(this);
+    }
+
+    return true; 
+}
+
 bool CreateConstructionPointVisitor::visitIfcRelVoidsElement(
     ifc2x3::IfcRelVoidsElement* value)
 {
@@ -624,9 +644,10 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
             {
                 extrusionVector = ComputePlacementVisitor::getDirection(
                                       value->getExtrudedDirection());
-                extrusionVector.Normalize();
-
-                extrusionVector *= value->getDepth();
+            }
+            if (value->testDepth())
+            {
+                hauteurExtrusion = value->getDepth();
             }
 
             return true;
@@ -1039,6 +1060,11 @@ std::list<Vec3> CreateConstructionPointVisitor::getPoints() const
 Vec3 CreateConstructionPointVisitor::getVectorDirection() const
 {
     return extrusionVector;
+}
+
+float CreateConstructionPointVisitor::getHauteurExtrusion() const
+{
+    return hauteurExtrusion;
 }
 
 Matrix4 CreateConstructionPointVisitor::getTransformation() const

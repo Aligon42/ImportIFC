@@ -20,6 +20,7 @@ public:
     ComputePlacementVisitor();
 
     bool visitIfcProduct(ifc2x3::IfcProduct* value) override;
+    bool visitIfcSite(ifc2x3::IfcSite* value) override;
     bool visitIfcRelVoidsElement(ifc2x3::IfcRelVoidsElement* value) override;
     bool visitIfcLocalPlacement(ifc2x3::IfcLocalPlacement* value) override;
 

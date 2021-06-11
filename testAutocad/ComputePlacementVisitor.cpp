@@ -17,6 +17,17 @@ bool ComputePlacementVisitor::visitIfcProduct(
     return true;
 }
 
+bool ComputePlacementVisitor::visitIfcSite(
+    ifc2x3::IfcSite* value)
+{
+    if (value->testObjectPlacement())
+    {
+        value->getObjectPlacement()->acceptVisitor(this);
+    }
+
+    return true;
+}
+
 bool ComputePlacementVisitor::visitIfcRelVoidsElement(
     ifc2x3::IfcRelVoidsElement* value)
 {
