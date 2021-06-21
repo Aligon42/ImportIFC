@@ -5,38 +5,51 @@
 #include <iterator>
 
 
+const wchar_t* GetWCM(const char* c, ...)
+{
+	const size_t cSize = strlen(c) + 1;
+	wchar_t* wc = new wchar_t[cSize];
+	mbstowcs(wc, c, cSize);
+
+	return wc;
+}
+
+
+
 void extrusion(int key, std::string entity, std::vector<std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf,  std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, Style styleDessin)
 {
 
-	//// Open the Layer table for read
-	//AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
-	//AcDbLayerTable* pLayerTable;
-	//pDb->getLayerTable(pLayerTable, AcDb::kForRead);
-	//// Check to see if the layer exists
-	//const char* entityForLayer = "_";
-	//entityForLayer += (int)(entity).c_str();
-	//if (pLayerTable->has(_T(entityForLayer)) == false)
-	//{
-	//	// Open the Layer table for write
-	//	pLayerTable->upgradeOpen();
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
-	//	// Create the new layer and assign it the name 'OBJ'
-	//	AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
-	//	pLayerTableRecord->setName(_T(entityForLayer));
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
 
-	//	// Set the color of the layer to cyan
-	//	/*AcCmColor color; 
-	//	color.setColorIndex(4);
-	//	pLayerTableRecord->setColor(color);*/
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
 
-	//	// Add the new layer to the Layer table
-	//	pLayerTable->add(pLayerTableRecord);
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
 
-	//	// Close the Layer table and record
-	//	pLayerTable->close();
-	//	pLayerTableRecord->close();
-	//}
+		// Set the color of the layer to cyan
+		/*AcCmColor color; 
+		color.setColorIndex(4);
+		pLayerTableRecord->setColor(color);*/
 
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		
+		pLayerTableRecord->close();
+		
+	}
+	pLayerTable->close();
     Acad::ErrorStatus es;
 	AcDbRegion* pRegion = nullptr;
     ads_name polyName;
@@ -102,9 +115,12 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 		pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 	}
 
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcDbSweepOptions options;
     // Extrude the region to create a solid.
     AcDb3dSolid* pSolid = new AcDb3dSolid();
-    es = pSolid->extrude(pRegion, hauteurExtrusion, 0.0);
+    //es = pSolid->extrude(pRegion, hauteurExtrusion, 0.0);
+	es = pSolid->createExtrudedSolid(pRegion, vecExtru, options);
 
     for (int i = 0; i < lines.length(); i++)
     {
@@ -164,7 +180,7 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
 
-	//pSolid->setLayer(_T("_%s", entity), Adesk::kTrue, false);
+	pSolid->setLayer(layerName, Adesk::kFalse, false);
    AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
     if (Acad::eOk == es)
     {
