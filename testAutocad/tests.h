@@ -37,4 +37,4 @@ static int success_results=0;
 	++success_results; \
 }
 
-void dessinProfilDef(std::string NameProfilDef, Vec3 VecteurExtrusion, Matrix4 transform1, CreateConstructionPointVisitor visitor1, std::list<Vec3> points1, Matrix4 transformFace, std::vector<std::string> nameItems, int i, Style styleDessin);
+void dessinProfilDef(std::string NameProfilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, CreateConstructionPointVisitor visitor1, std::list<Vec3> points1, Matrix4 transformFace, std::vector<std::string> nameItems, int i, Style styleDessin);
