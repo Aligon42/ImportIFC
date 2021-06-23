@@ -36,11 +36,6 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
 		pLayerTableRecord->setName(layerName);
 
-		// Set the color of the layer to cyan
-		/*AcCmColor color; 
-		color.setColorIndex(4);
-		pLayerTableRecord->setColor(color);*/
-
 		// Add the new layer to the Layer table
 		pLayerTable->add(pLayerTableRecord);
 
@@ -147,7 +142,7 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 
 	for (int a = 0; a < nbPlan; a++)
 	{
-			CreationSection(pSolid, VecteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, _compositeCurveSegment, transform1, nbPolylineComposite);
+			CreationSection(pSolid, VecteurExtrusion, hauteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, _compositeCurveSegment, transform1, nbPolylineComposite);
 	
 			listPlan.pop_front();
 	}
@@ -236,18 +231,11 @@ static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1) {
     AcGeVector3d fromYaxis = srcpt3 - srcpt1;
     AcGeVector3d fromZaxis = fromXaxis.crossProduct(fromYaxis);
 
-    //ed.WriteMessage("\nVecteur Origine X : " + fromXaxis.X + " , " + fromXaxis.Y + " , " + fromXaxis.Z);
-    //ed.WriteMessage("\nVecteur Origine Y : " + fromYaxis.X + " , " + fromYaxis.Y + " , " + fromYaxis.Z);
-    //ed.WriteMessage("\nVecteur Origine Z : " + fromZaxis.X + " , " + fromZaxis.Y + " , " + fromZaxis.Z);
-
     AcGePoint3d toOrigin = destpt1;
     AcGeVector3d toXaxis = (destpt2 - destpt1).normal() * (fromXaxis.length());
     AcGeVector3d toYaxis = (destpt3 - destpt1).normal() * (fromYaxis.length());
     AcGeVector3d toZaxis = toXaxis.crossProduct(toYaxis);
 
-    //ed.WriteMessage("\nVecteur Destination X : " + toXaxis.X + " , " + toXaxis.Y + " , " + toXaxis.Z);
-    //ed.WriteMessage("\nVecteur Destination Y : " + toYaxis.X + " , " + toYaxis.Y + " , " + toYaxis.Z);
-    //ed.WriteMessage("\nVecteur Destination Z : " + toZaxis.X + " , " + toZaxis.Y + " , " + toZaxis.Z);
 
     // Get the transformation matrix for aligning coordinate systems
     AcGeMatrix3d mat = AcGeMatrix3d::AcGeMatrix3d();
@@ -292,18 +280,10 @@ static void DeplacementObjet3D(AcDbSubDMesh* pSubDMesh, Matrix4 transform1) {
 	AcGeVector3d fromYaxis = srcpt3 - srcpt1;
 	AcGeVector3d fromZaxis = fromXaxis.crossProduct(fromYaxis);
 
-	//ed.WriteMessage("\nVecteur Origine X : " + fromXaxis.X + " , " + fromXaxis.Y + " , " + fromXaxis.Z);
-	//ed.WriteMessage("\nVecteur Origine Y : " + fromYaxis.X + " , " + fromYaxis.Y + " , " + fromYaxis.Z);
-	//ed.WriteMessage("\nVecteur Origine Z : " + fromZaxis.X + " , " + fromZaxis.Y + " , " + fromZaxis.Z);
-
 	AcGePoint3d toOrigin = destpt1;
 	AcGeVector3d toXaxis = (destpt2 - destpt1).normal() * (fromXaxis.length());
 	AcGeVector3d toYaxis = (destpt3 - destpt1).normal() * (fromYaxis.length());
 	AcGeVector3d toZaxis = toXaxis.crossProduct(toYaxis);
-
-	//ed.WriteMessage("\nVecteur Destination X : " + toXaxis.X + " , " + toXaxis.Y + " , " + toXaxis.Z);
-	//ed.WriteMessage("\nVecteur Destination Y : " + toYaxis.X + " , " + toYaxis.Y + " , " + toYaxis.Z);
-	//ed.WriteMessage("\nVecteur Destination Z : " + toZaxis.X + " , " + toZaxis.Y + " , " + toZaxis.Z);
 
 	// Get the transformation matrix for aligning coordinate systems
 	AcGeMatrix3d mat = AcGeMatrix3d::AcGeMatrix3d();
@@ -313,7 +293,7 @@ static void DeplacementObjet3D(AcDbSubDMesh* pSubDMesh, Matrix4 transform1) {
 
 }
 
-static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::list<Vec3>& points1,
+static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float hauteurExtrusion, std::list<Vec3>& points1,
 	std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal,
 	std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal,
 	std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite)
@@ -322,10 +302,6 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	AcGeVector3d v1 = AcGeVector3d::AcGeVector3d(0, 0, 0);             // Vector 1 (x,y,z) & Vector 2 (x,y,z)
 	AcGeVector3d v2 = AcGeVector3d::AcGeVector3d(0, 0, 0);
 	AcGeVector3d normal = AcGeVector3d::AcGeVector3d(0, 0, 0);
-
-
-	//for (int i = 0; i < PLanDeSection.Count(); i++)
-	//{
 
 
 	float p0x;
@@ -357,7 +333,6 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	AcGePoint3d p2 = AcGePoint3d::AcGePoint3d();
 
 
-	//AcDbLine line = AcDbLine::AcDbLine();
 	AcGeVector3d v3d = AcGeVector3d::AcGeVector3d();
 
 	AcGePoint3d p33 = AcGePoint3d::AcGePoint3d();
@@ -365,11 +340,9 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	AcGePoint3d p5 = AcGePoint3d::AcGePoint3d();
 
 	////Coordonnées du repère du plan
-	//p0x = float.Parse(PLanDeSection.ElementAt(i).ifcCoordonneesReperePlane[0]); 
+
 	p0x = listPlan.front()[12];  //x																		
-	//p0y = float.Parse(PLanDeSection.ElementAt(i).ifcCoordonneesReperePlane[1]);
 	p0y = listPlan.front()[13]; //y
-	//p0z = float.Parse(PLanDeSection.ElementAt(i).ifcCoordonneesReperePlane[2]);
 	p0z = listPlan.front()[14]; //z
 
 	p0 = AcGePoint3d::AcGePoint3d(p0x, p0y, p0z);
@@ -377,11 +350,8 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 
 
 	///Direction1 plan
-	//p1x = float.Parse(PLanDeSection.ElementAt(i).list_Direction1_Plane[0]);
 	p1x = listPlan.front()[8];  //x
-	//p1y = float.Parse(PLanDeSection.ElementAt(i).list_Direction1_Plane[1]);
 	p1y = listPlan.front()[9]; //y
-	//p1z = float.Parse(PLanDeSection.ElementAt(i).list_Direction1_Plane[2]);
 	p1z = listPlan.front()[10]; //z
 
 	V1 = AcGeVector3d::AcGeVector3d(p1x, p1y, p1z);
@@ -390,23 +360,15 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	acutPrintf(_T("Direction1 plan : [ %f, %f, %f]\n"), listPlan.front()[8], listPlan.front()[9], listPlan.front()[10]);
 
 	///Direction2 plan
-	//p2x = float.Parse(PLanDeSection.ElementAt(i).list_Direction2_Plane[0]);
 	p2x = listPlan.front()[0];  //x
-	//p2y = float.Parse(PLanDeSection.ElementAt(i).list_Direction2_Plane[1]);
 	p2y = listPlan.front()[1]; //y
-	//p2z = float.Parse(PLanDeSection.ElementAt(i).list_Direction2_Plane[2]);
 	p2z = listPlan.front()[2]; //z
-	//Vector3d p2 = new Vector3d(p0x + p2x, p0y + p2y, p0z + p2z);
 
 	acutPrintf(_T("Direction2 plan : [ %f, %f, %f]\n"), listPlan.front()[0], listPlan.front()[1], listPlan.front()[2]);
 
 	p1xx = p0x + p1x;
 	p1yy = p0x + p1x;
 	p1zz = p0x + p1x;
-
-	//p1xx = (p2y * p1z) - (p2z * p1y);
-	//p1yy = (p2x * p1z) - (p2z * p1x);
-	//p1zz = (p2x * p1y) - (p2y * p1x);
 
 	p1xx = (p1y * p2z) - (p1z * p2y);
 	p1yy = (p1z * p2x) - (p1x * p2z);
@@ -422,7 +384,6 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 
 	p5 = AcGePoint3d::AcGePoint3d(p1xx + p0x, p1yy + p0y, p1zz + p0z);
 
-	//var s = (Solid3d)tr.GetObject(id, OpenMode.ForWrite);
 	AcGePlane Poly_plane = AcGePlane::AcGePlane(p0, p5, p2);
 
 	AcDb3dSolid* negSolid = new AcDb3dSolid();
@@ -495,9 +456,11 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 		else
 			pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
+		AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+		AcDbSweepOptions options;
 		// Extrude the region to create a solid.
 		AcDb3dSolid* pSolid = new AcDb3dSolid();
-		es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
+		es = pSolid->createExtrudedSolid(pRegion, vecExtru, options);
 
 		for (int i = 0; i < lines.length(); i++)
 		{
@@ -511,13 +474,6 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 		DeplacementObjet3D(pSolid, listLocationPolygonal.front());
 
 		AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
-		/*AcDbDatabase* pDb = curDoc()->database();
-		AcDbObjectId modelId;
-		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
-		AcDbBlockTableRecord* pBlockTableRecord;
-		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
-		pBlockTableRecord->appendAcDbEntity(pSolid);
-		pBlockTableRecord->close();*/
 
 		pSolid->close();
 
@@ -613,12 +569,14 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurve
 		 
 
 	
-	// Extrude the region to create a solid.
-	AcDb3dSolid* extrusion_void = new AcDb3dSolid();
-	AcDb3dSolid* extrusion_void2 = new AcDb3dSolid();
-	es = extrusion_void->extrude(pRegion, -(Void.VecteurExtrusion.z()), 0.0);
-	es = extrusion_void2->extrude(pRegion, Void.VecteurExtrusion.z(), 0.0);
-	//es = extrusion_void->extrude(pRegion, 10, 0.0);
+		AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)Void.VecteurExtrusion.x() * Void.hauteurExtrusion, (double)Void.VecteurExtrusion.y() * Void.hauteurExtrusion, (double)Void.VecteurExtrusion.z() * Void.hauteurExtrusion);
+		AcDbSweepOptions options;
+
+		// Extrude the region to create a solid.
+		AcDb3dSolid* extrusion_void = new AcDb3dSolid();
+		AcDb3dSolid* extrusion_void2 = new AcDb3dSolid();
+		es = extrusion_void->createExtrudedSolid(pRegion, vecExtru, options);
+		es = extrusion_void2->createExtrudedSolid(pRegion, -vecExtru, options);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -642,10 +600,10 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurve
 
 		if (Void.points1.size() > 0 && Void.nbArg.size() > 0)
 		{
-			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.points1,
+			CreationSection(extrusion_void, Void.VecteurExtrusion,Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
 				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite);
-			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.points1,
+			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
 				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite);
 
@@ -710,7 +668,6 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, Composi
 	AcDbVoidPtrArray lines;
 	lines.append(circle);
 
-	//circle1->explode(lines1);
 	circle->close();
 
 	// Create a region from the set of lines.
@@ -726,13 +683,15 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, Composi
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)Void.VecteurExtrusion.x() * Void.hauteurExtrusion, (double)Void.VecteurExtrusion.y() * Void.hauteurExtrusion, (double)Void.VecteurExtrusion.z() * Void.hauteurExtrusion);
+	AcDbSweepOptions options;
 
 	// Extrude the region to create a solid.
 	AcDb3dSolid* extrusion_void = new AcDb3dSolid();
 	AcDb3dSolid* extrusion_void2 = new AcDb3dSolid();
-	es = extrusion_void->extrude(pRegion, -(Void.VecteurExtrusion.z()), 0.0);
-	es = extrusion_void2->extrude(pRegion, Void.VecteurExtrusion.z(), 0.0);
-	//es = extrusion_void->extrude(pRegion, 10, 0.0);
+	es = extrusion_void->createExtrudedSolid(pRegion, vecExtru, options);
+	es = extrusion_void2->createExtrudedSolid(pRegion, -vecExtru, options);
+
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -756,10 +715,10 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, Composi
 
 		if (Void.points1.size() > 0 && Void.nbArg.size() > 0)
 		{
-			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.points1,
+			CreationSection(extrusion_void, Void.VecteurExtrusion,Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
 				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite);
-			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.points1,
+			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
 				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal,  _compositeCurveSegment, transform, nbPolylineComposite);
 
@@ -857,12 +816,14 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void, Comp
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)Void.VecteurExtrusion.x() * Void.hauteurExtrusion, (double)Void.VecteurExtrusion.y() * Void.hauteurExtrusion, (double)Void.VecteurExtrusion.z() * Void.hauteurExtrusion);
+	AcDbSweepOptions options;
+
 	// Extrude the region to create a solid.
 	AcDb3dSolid* extrusion_void = new AcDb3dSolid();
 	AcDb3dSolid* extrusion_void2 = new AcDb3dSolid();
-	es = extrusion_void->extrude(pRegion, -(Void.VecteurExtrusion.z()), 0.0);
-	es = extrusion_void2->extrude(pRegion, Void.VecteurExtrusion.z(), 0.0);
-	//es = extrusion_void->extrude(pRegion, 10, 0.0);
+	es = extrusion_void->createExtrudedSolid(pRegion, vecExtru, options);
+	es = extrusion_void2->createExtrudedSolid(pRegion, -vecExtru, options);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -886,10 +847,10 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void, Comp
 
 		if (Void.points1.size() > 0 && Void.nbArg.size() > 0)
 		{
-			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.points1,
+			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
 				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite);
-			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.points1,
+			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
 				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite);
 
@@ -915,6 +876,7 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void, Comp
 	extrusion_void->close();
 	extrusion_void2->close();
 }
+
 
 AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, Matrix4 transform)
 {
@@ -958,20 +920,9 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 		}
 
 		lines.append((pNewPline));
-		/*AcDbDatabase* pDb = curDoc()->database();
-		AcDbObjectId modelId;
-		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
-		AcDbBlockTableRecord* pBlockTableRecord;
-		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
-		pBlockTableRecord->appendAcDbEntity(pNewPline);
-		pBlockTableRecord->close();*/
 		pNewPline->close();
 		_compositeCurveSegment.listPolyligne.erase(_compositeCurveSegment.listPolyligne.begin());
 	}
-		
-		//lines.append(pNewPline);
-
-		
 
 
 	//Arc
@@ -998,15 +949,8 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 			arc->setEndAngle(((-(_compositeCurveSegment.listTrimmedCurve[i].trim2) * PI) / 180));
 		}
 
-		//arc->explode(lines);
 		lines.append(arc);
-		/*AcDbDatabase* pDb = curDoc()->database();
-		AcDbObjectId modelId;
-		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
-		AcDbBlockTableRecord* pBlockTableRecord;
-		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
-		pBlockTableRecord->appendAcDbEntity(arc);
-		pBlockTableRecord->close();*/
+		
 		arc->close();
 		_compositeCurveSegment.listTrimmedCurve.erase(_compositeCurveSegment.listTrimmedCurve.begin());
 	}
@@ -1030,8 +974,33 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 
 //*** ProfilDef ***
 
-void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
+
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
+
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
+
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 
 	Acad::ErrorStatus es;
 	ads_name polyName;
@@ -1098,9 +1067,11 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matri
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
+	es = pSolid->createExtrudedSolid(pRegion, vecExtru, options);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -1119,7 +1090,7 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matri
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
-
+	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -1137,9 +1108,32 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matri
 	}
 }
 
-void createSolid3dProfilIPN(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
+
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 	Acad::ErrorStatus es;
 	ads_name polyName;
 	ads_point ptres;
@@ -1207,9 +1201,11 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matri
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
+	es = pSolid->createExtrudedSolid(pRegion, vecExtru, options);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -1228,7 +1224,7 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matri
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
-
+	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -1246,9 +1242,32 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, Vec3 VecteurExtrusion, Matri
 	}
 }
 
-void createSolid3dProfilL8(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
+
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 	Acad::ErrorStatus es;
 	ads_name polyName;
 	ads_point ptres;
@@ -1308,10 +1327,11 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix
 	}
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
-
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
+	es = pSolid->createExtrudedSolid(pRegion, vecExtru, options);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -1330,7 +1350,7 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
-
+	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -1348,9 +1368,32 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix
 	}
 }
 
-void createSolid3dProfilL9(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
+
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 	Acad::ErrorStatus es;
 	ads_name polyName;
 	ads_point ptres;
@@ -1413,9 +1456,11 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
+	es = pSolid->createExtrudedSolid(pRegion, vecExtru, options);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -1434,7 +1479,7 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
-
+	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -1452,9 +1497,32 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, Vec3 VecteurExtrusion, Matrix
 	}
 }
 
-void createSolid3dProfilT10(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
+
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 	Acad::ErrorStatus es;
 	ads_name polyName;
 	ads_point ptres;
@@ -1518,9 +1586,11 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matri
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
+	es = pSolid->createExtrudedSolid(pRegion, vecExtru, options);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -1539,7 +1609,7 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matri
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
-
+	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -1557,9 +1627,32 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matri
 	}
 }
 
-void createSolid3dProfilT12(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
+
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 	Acad::ErrorStatus es;
 	ads_name polyName;
 	ads_point ptres;
@@ -1628,9 +1721,11 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matri
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
+	es = pSolid->createExtrudedSolid(pRegion, vecExtru, options);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -1649,7 +1744,7 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matri
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
-
+	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -1667,9 +1762,32 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, Vec3 VecteurExtrusion, Matri
 	}
 }
 
-void createSolid3dProfilUPE(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
+
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 	Acad::ErrorStatus es;
 	ads_name polyName;
 	ads_point ptres;
@@ -1732,9 +1850,11 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matri
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
+	es = pSolid->createExtrudedSolid(pRegion, vecExtru, options);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -1753,7 +1873,7 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matri
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
-
+	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -1771,9 +1891,32 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matri
 	}
 }
 
-void createSolid3dProfilUPN(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
+
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 	Acad::ErrorStatus es;
 	ads_name polyName;
 	ads_point ptres;
@@ -1836,9 +1979,11 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matri
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
+	es = pSolid->createExtrudedSolid(pRegion, vecExtru, options);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -1857,7 +2002,7 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matri
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
-
+	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -1875,9 +2020,32 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, Vec3 VecteurExtrusion, Matri
 	}
 }
 
-void createSolid3dProfilC(C_profilDef CprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
+
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 	Acad::ErrorStatus es;
 	ads_name polyName;
 	ads_point ptres;
@@ -1944,9 +2112,11 @@ void createSolid3dProfilC(C_profilDef CprofilDef, Vec3 VecteurExtrusion, Matrix4
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
+	es = pSolid->createExtrudedSolid(pRegion, vecExtru, options);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -1965,7 +2135,7 @@ void createSolid3dProfilC(C_profilDef CprofilDef, Vec3 VecteurExtrusion, Matrix4
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
-
+	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -1983,9 +2153,32 @@ void createSolid3dProfilC(C_profilDef CprofilDef, Vec3 VecteurExtrusion, Matrix4
 	}
 }
 
-void createSolid3dProfilZ(Z_profilDef ZprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
+
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 	Acad::ErrorStatus es;
 	ads_name polyName;
 	ads_point ptres;
@@ -2049,9 +2242,11 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, Vec3 VecteurExtrusion, Matrix4
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
+	es = pSolid->createExtrudedSolid(pRegion, vecExtru, options);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -2070,7 +2265,7 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, Vec3 VecteurExtrusion, Matrix4
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
-
+	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -2088,9 +2283,32 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, Vec3 VecteurExtrusion, Matrix4
 	}
 }
 
-void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
 {
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
+
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 
 	Acad::ErrorStatus es;
 	ads_name polyName;
@@ -2162,9 +2380,11 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Vec3 Ve
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion, VecteurExtrusion.z(), 0.0);
+	es = pSolid->createExtrudedSolid(pRegion, vecExtru, options);
 
 	for (int i = 0; i < lines.length(); i++)
 	{
@@ -2183,7 +2403,7 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Vec3 Ve
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
-
+	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -2201,8 +2421,32 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Vec3 Ve
 	}
 }
 
-void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin) {
+void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin) {
+	
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
+
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 	Acad::ErrorStatus es;
 	ads_name polyName;
 	ads_point ptres;
@@ -2222,7 +2466,6 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	AcDbCircle* circle1 = new AcDbCircle();
 	circle1->setCenter(center);
 	circle1->setRadius(Radius);
-	circle1->setColorIndex(3);
 
 	AcGeMatrix3d matrix3d1 = AcGeMatrix3d::AcGeMatrix3d();
 
@@ -2242,7 +2485,6 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	AcDbVoidPtrArray lines1;
 	lines1.append(circle1);
 
-	//circle1->explode(lines1);
 	circle1->close();
 
 	// Create a region from the set of lines.
@@ -2262,7 +2504,6 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	AcDbCircle* circle2 = new AcDbCircle();
 	circle2->setCenter(center);
 	circle2->setRadius(Radius - WallThickness);
-	circle2->setColorIndex(3);
 
 	AcGeMatrix3d matrix3d2 = AcGeMatrix3d::AcGeMatrix3d();
 
@@ -2282,7 +2523,6 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	AcDbVoidPtrArray lines2;
 	lines2.append(circle2);
 
-	//circle1->explode(lines1);
 	circle2->close();
 
 	// Create a region from the set of lines.
@@ -2300,9 +2540,11 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 
 	pRegion1->booleanOper(AcDb::kBoolSubtract, pRegion2);
 
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion1, VecteurExtrusion.z(), 0.0);
+	es = pSolid->createExtrudedSolid(pRegion1, vecExtru, options);
 
 	for (int i = 0; i < lines1.length(); i++)
 	{
@@ -2321,7 +2563,7 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
-
+	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -2340,8 +2582,32 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 
 }
 
-void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin) {
+void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin) {
 
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
+
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
+
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 	Acad::ErrorStatus es;
 	ads_name polyName;
 	ads_point ptres;
@@ -2450,10 +2716,11 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 
 	pRegion1->booleanOper(AcDb::kBoolSubtract, pRegion2);
 
-
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion1, VecteurExtrusion.z(), 0.0);
+	es = pSolid->createExtrudedSolid(pRegion1, vecExtru, options);
 
 	for (int i = 0; i < lines1.length(); i++)
 	{
@@ -2483,7 +2750,7 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
-
+	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -2502,8 +2769,32 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 
 }
 
-void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin) {
+void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin) {
 
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
+
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
+
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 	Acad::ErrorStatus es;
 	ads_name polyName;
 	ads_point ptres;
@@ -2554,9 +2845,11 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExt
 	}
 	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
 
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion1, VecteurExtrusion.z(), 0.0);
+	es = pSolid->createExtrudedSolid(pRegion1, vecExtru, options);
 
 	for (int i = 0; i < lines1.length(); i++)
 	{
@@ -2575,7 +2868,7 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExt
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
-
+	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -2596,20 +2889,38 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExt
 
 }
 
-void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin) {
+void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin) {
 
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
 
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 	Acad::ErrorStatus es;
 	ads_name polyName;
 	ads_point ptres;
 
-
-
 	AcGePoint3dArray ptArr1;
 	AcGePoint3dArray ptArr2;
-
-
 
 	float XDim = RectangleprofilDef.XDim;
 	float YDim = RectangleprofilDef.YDim;
@@ -2619,14 +2930,10 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 V
 	/// </summary>
 	ptArr1.setLogicalLength(4);
 
-
-
 	ptArr1[0].set(0, 0, 0.0);
 	ptArr1[1].set(XDim, 0, 0.0);
 	ptArr1[2].set(XDim, YDim, 0.0);
 	ptArr1[3].set(0, YDim, 0.0);
-
-
 
 	AcDb2dPolyline* pNewPline1 = new AcDb2dPolyline(
 		AcDb::k2dSimplePoly, ptArr1, 0.0, Adesk::kTrue);
@@ -2641,8 +2948,6 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 V
 
 	//get the boundary curves of the polyline
 	AcDbEntity* pEntity1 = NULL;
-
-
 
 	if (pNewPline1 == NULL)
 	{
@@ -2653,56 +2958,40 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 V
 	pNewPline1->explode(lines1);
 	pNewPline1->close();
 
-
-
 	// Create a region from the set of lines.
 	AcDbVoidPtrArray regions1;
 	es = AcDbRegion::createFromCurves(lines1, regions1);
-
-
 
 	if (Acad::eOk != es)
 	{
 		pNewPline1->close();
 		acutPrintf(L"\nFailed to create region\n");
 		return;
-
-
-
 	}
 	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
 
-
-
-
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
-	es = pSolid->extrude(pRegion1, VecteurExtrusion.z(), 0.0);
-
-
+	es = pSolid->createExtrudedSolid(pRegion1, vecExtru, options);
 
 	for (int i = 0; i < lines1.length(); i++)
 	{
 		delete (AcRxObject*)lines1[i];
 	}
-
-
-
 	for (int ii = 0; ii < regions1.length(); ii++)
 	{
 		delete (AcRxObject*)regions1[ii];
 	}
 
-
 	DeplacementObjet3D(pSolid, transform1);
 
-
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
-
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
-
+	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
 		AcDbDatabase* pDb = curDoc()->database();
@@ -2719,164 +3008,9 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 V
 		delete pSolid;
 	}
 
-
-
 }
 
-AcDbRegion* createPolyCircle(Circle_profilDef CircleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin) {
 
-	Acad::ErrorStatus es;
-	ads_name polyName;
-	ads_point ptres;
-	AcGePoint3dArray ptArr2;
-
-	float Radius = CircleprofilDef.Radius;
-
-	AcGePoint3d center = AcGePoint3d::AcGePoint3d(Radius, Radius, 0);
-
-	/// <summary>
-	/// Première polyline
-	/// </summary>
-	AcDbCircle* circle1 = new AcDbCircle();
-	circle1->setCenter(center);
-	circle1->setRadius(Radius);
-	circle1->setColorIndex(3);
-
-	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
-
-	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
-	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-Radius / 2, -Radius / 2, 0);
-	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
-	circle1->transformBy(matrix3d.translation(acVec3d));
-
-	//get the boundary curves of the polyline
-	AcDbEntity* pEntity1 = NULL;
-
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
-	circle1->setColor(couleurRGB, false);
-
-	/*if (circle1 == NULL)
-	{
-		pEntity1->close();
-		return;
-	}*/
-	AcDbVoidPtrArray lines1;
-	lines1.append(circle1);
-
-	//circle1->explode(lines1);
-	circle1->close();
-
-	// Create a region from the set of lines.
-	AcDbVoidPtrArray regions1;
-	es = AcDbRegion::createFromCurves(lines1, regions1);
-
-	/*if (Acad::eOk != es)
-	{
-		circle1->close();
-		acutPrintf(L"\nFailed to create region\n");
-		return;
-	}*/
-	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
-
-
-	for (int i = 0; i < lines1.length(); i++)
-	{
-		delete (AcRxObject*)lines1[i];
-	}
-	for (int ii = 0; ii < regions1.length(); ii++)
-	{
-		delete (AcRxObject*)regions1[ii];
-	}
-
-	return pRegion1;
-}
-
-AcDbRegion* createPolyRectangle(Rectangle_profilDef RectangleprofilDef, Vec3 VecteurExtrusion, Matrix4 transform1, Style styleDessin) {
-
-
-
-	Acad::ErrorStatus es;
-	ads_name polyName;
-	ads_point ptres;
-
-
-
-	AcGePoint3dArray ptArr1;
-	AcGePoint3dArray ptArr2;
-
-
-
-	float XDim = RectangleprofilDef.XDim;
-	float YDim = RectangleprofilDef.YDim;
-
-	/// <summary>
-	/// Première polyline
-	/// </summary>
-	ptArr1.setLogicalLength(4);
-
-
-
-	ptArr1[0].set(0, 0, 0.0);
-	ptArr1[1].set(XDim, 0, 0.0);
-	ptArr1[2].set(XDim, YDim, 0.0);
-	ptArr1[3].set(0, YDim, 0.0);
-
-	AcDb2dPolyline* pNewPline1 = new AcDb2dPolyline(
-		AcDb::k2dSimplePoly, ptArr1, 0.0, Adesk::kTrue);
-	pNewPline1->setColorIndex(3);
-
-	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
-
-	AcGePoint3d Pt3d = AcGePoint3d::AcGePoint3d(0, 0, 0);
-	AcGePoint3d pointDeplacement3D = AcGePoint3d::AcGePoint3d(-XDim / 2, -YDim / 2, 0);
-	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
-	pNewPline1->transformBy(matrix3d.translation(acVec3d));
-
-	//get the boundary curves of the polyline
-	AcDbEntity* pEntity1 = NULL;
-
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
-	pNewPline1->setColor(couleurRGB, false);
-
-	/*if (pNewPline1 == NULL)
-	{
-		pEntity1->close();
-		return;
-	}*/
-	AcDbVoidPtrArray lines1;
-	pNewPline1->explode(lines1);
-	pNewPline1->close();
-
-
-
-	// Create a region from the set of lines.
-	AcDbVoidPtrArray regions1;
-	es = AcDbRegion::createFromCurves(lines1, regions1);
-
-
-
-	/*if (Acad::eOk != es)
-	{
-		pNewPline1->close();
-		acutPrintf(L"\nFailed to create region\n");
-		return;
-
-	}*/
-	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
-
-
-	for (int i = 0; i < lines1.length(); i++)
-	{
-		delete (AcRxObject*)lines1[i];
-	}
-	for (int ii = 0; ii < regions1.length(); ii++)
-	{
-		delete (AcRxObject*)regions1[ii];
-	}
-	return pRegion1;
-}
 
 void createBoundingBox(Box box, Style styleDessin) {
 
@@ -2895,6 +3029,10 @@ void createBoundingBox(Box box, Style styleDessin) {
 	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
 	box3d->transformBy(matrix3d.translation(acVec3d));
 
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
+	box3d->setColor(couleurRGB, false);
+
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 	AcDbDatabase* pDb = curDoc()->database();
 	AcDbObjectId modelId;
@@ -2903,9 +3041,7 @@ void createBoundingBox(Box box, Style styleDessin) {
 	AcDbBlockTableRecord* pBlockTableRecord;
 	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
-	box3d->setColor(couleurRGB, false);
+	
 
 	pBlockTableRecord->appendAcDbEntity(box3d);
 	pBlockTableRecord->close();
@@ -2913,8 +3049,32 @@ void createBoundingBox(Box box, Style styleDessin) {
 
 }
 
-void createFaceSolid(std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transform1, Style styleDessin) {
+void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transform1, Style styleDessin) {
 
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
+
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
+
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 	Acad::ErrorStatus es;
 	AcArray<Adesk::Int32> faceArray;
 	AcDbSubDMesh* pSubDMesh = new AcDbSubDMesh();
@@ -3021,29 +3181,29 @@ void createFaceSolid(std::list<Vec3> points1, std::vector<int> ListNbArg, bool o
 
 	DeplacementObjet3D(pSubDMesh, transform1);
 
-	/*es = pSubDMesh->convertToSolid(false,false, pSolid);
-	if (Acad::eOk != es)
-	{
-		pSubDMesh->close();
-		acutPrintf(L"\nFailed to convert\n");
-		return;
-	}*/
-	//pSubDMesh->close();
-	
+
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSubDMesh->setColor(couleurRGB, false);
+	pSubDMesh->setLayer(layerName, Adesk::kFalse, false);
 
-	AcDbDatabase* pDb = curDoc()->database();
-	AcDbObjectId modelId;
-	modelId = acdbSymUtil()->blockModelSpaceId(pDb);
-	AcDbBlockTableRecord* pBlockTableRecord;
-	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
-	pBlockTableRecord->appendAcDbEntity(pSubDMesh);
-	pBlockTableRecord->close();
-	pSubDMesh->close();
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSubDMesh);
+		pBlockTableRecord->close();
+		pSubDMesh->close();
+
+	}
+	else
+	{
+		delete pSolid;
+	}
 }
-
 float roundoff(float value, unsigned char prec)
 {
 	float pow_10 = pow(10.0f, (float)prec);

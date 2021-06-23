@@ -196,6 +196,7 @@ void test()
             _objectVoid.YDim = visitor1.getRectangleprofilDef().YDim;
         }
         _objectVoid.VecteurExtrusion = visitor1.getVectorDirection();
+        _objectVoid.hauteurExtrusion = visitor1.getHauteurExtrusion();
         _objectVoid.listPlan = visitor1.getPlanPolygonal();
         _objectVoid.listLocationPolygonal = visitor1.getLocationPolygonal();
         _objectVoid.AgreementHalf = visitor1.getAgreementHalfBool();
@@ -286,7 +287,7 @@ void test()
             {
                 if (NameProfilDef != "IfcArbitraryClosedProfileDef")
                 {
-                    dessinProfilDef(NameProfilDef, VecteurExtrusion, transform1, visitor1, points1, transformFace, nameItems, i, styleDessin);
+                    dessinProfilDef(NameProfilDef,entity, VecteurExtrusion, hauteurExtrusion, transform1, visitor1, points1, transformFace, nameItems, i, styleDessin);
                 }
                 else
                     extrusion(key, entity, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, styleDessin);
@@ -299,7 +300,7 @@ void test()
             {
                 std::vector<int> ListNbArg = visitor1.getListNbArgFace();
                 bool orientation = visitor1.getOrientatationFace();
-                createFaceSolid(points1, ListNbArg, orientation, transformFace, styleDessin);
+                createFaceSolid(entity,points1, ListNbArg, orientation, transformFace, styleDessin);
             }
             else if (nameItems[i] == "IfcBoundingBox")
             {
@@ -386,7 +387,7 @@ void test()
                 {
                     if (NameProfilDef != "IfcArbitraryClosedProfileDef")
                     {
-                        dessinProfilDef(NameProfilDef, VecteurExtrusion, transform1, visitor1, points1, transformFace, nameItems, i, styleDessin);
+                        dessinProfilDef(NameProfilDef,entity, VecteurExtrusion, hauteurExtrusion, transform1, visitor1, points1, transformFace, nameItems, i, styleDessin);
                     }
                     else
                     extrusion(key, entity, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, styleDessin);
@@ -399,7 +400,7 @@ void test()
                 {
                     std::vector<int> ListNbArg = visitor1.getListNbArgFace();
                     bool orientation = visitor1.getOrientatationFace();
-                    createFaceSolid(points1, ListNbArg, orientation, transformFace, styleDessin);
+                    createFaceSolid(entity,points1, ListNbArg, orientation, transformFace, styleDessin);
                 }
                 else if (nameItems[i] == "IfcBoundingBox")
                 {
@@ -410,7 +411,7 @@ void test()
             else if (entity == "IfcColumn" || entity == "IfcBeam")
             {
                 std::string NameProfilDef = visitor1.getNameProfildef();
-                dessinProfilDef(NameProfilDef, VecteurExtrusion, transform1, visitor1, points1, transformFace, nameItems, i, styleDessin);
+                dessinProfilDef(NameProfilDef,entity , VecteurExtrusion, hauteurExtrusion, transform1, visitor1, points1, transformFace, nameItems, i, styleDessin);
 
             }
         }
@@ -433,14 +434,14 @@ void test()
     delete expressDataSet;
 }
 
-void dessinProfilDef(std::string NameProfilDef, Vec3 VecteurExtrusion, Matrix4 transform1, CreateConstructionPointVisitor visitor1, std::list<Vec3> points1, Matrix4 transformFace, std::vector<std::string> nameItems, int i, Style styleDessin)
+void dessinProfilDef(std::string NameProfilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, CreateConstructionPointVisitor visitor1, std::list<Vec3> points1, Matrix4 transformFace, std::vector<std::string> nameItems, int i, Style styleDessin)
 {
     if (NameProfilDef == "IfcIShapeProfileDef")
     {
         I_profilDef IprofilDef = visitor1.getIprofilDef();
         if (IprofilDef.nbArg == 5)
         {
-            createSolid3dProfilIPE(IprofilDef, VecteurExtrusion, transform1, styleDessin);
+            createSolid3dProfilIPE(IprofilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, styleDessin);
         }
     }
     else if (NameProfilDef == "IfcLShapeProfileDef")
@@ -448,11 +449,11 @@ void dessinProfilDef(std::string NameProfilDef, Vec3 VecteurExtrusion, Matrix4 t
         L_profilDef LprofilDef = visitor1.getLprofilDef();
         if (LprofilDef.nbArg == 5)
         {
-            createSolid3dProfilL8(LprofilDef, VecteurExtrusion, transform1, styleDessin);
+            createSolid3dProfilL8(LprofilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, styleDessin);
         }
         else
         {
-            createSolid3dProfilL9(LprofilDef, VecteurExtrusion, transform1, styleDessin);
+            createSolid3dProfilL9(LprofilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, styleDessin);
         }
     }
     else if (NameProfilDef == "IfcTShapeProfileDef")
@@ -460,11 +461,11 @@ void dessinProfilDef(std::string NameProfilDef, Vec3 VecteurExtrusion, Matrix4 t
         T_profilDef TprofilDef = visitor1.getTprofilDef();
         if (TprofilDef.nbArg == 7)
         {
-            createSolid3dProfilT10(TprofilDef, VecteurExtrusion, transform1, styleDessin);
+            createSolid3dProfilT10(TprofilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, styleDessin);
         }
         else
         {
-            createSolid3dProfilT12(TprofilDef, VecteurExtrusion, transform1, styleDessin);
+            createSolid3dProfilT12(TprofilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, styleDessin);
         }
     }
     else if (NameProfilDef == "IfcUShapeProfileDef")
@@ -472,54 +473,54 @@ void dessinProfilDef(std::string NameProfilDef, Vec3 VecteurExtrusion, Matrix4 t
         U_profilDef UprofilDef = visitor1.getUprofilDef();
         if (UprofilDef.nbArg == 5)
         {
-            createSolid3dProfilUPE(UprofilDef, VecteurExtrusion, transform1, styleDessin);
+            createSolid3dProfilUPE(UprofilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, styleDessin);
         }
         else
         {
-            createSolid3dProfilUPN(UprofilDef, VecteurExtrusion, transform1, styleDessin);
+            createSolid3dProfilUPN(UprofilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, styleDessin);
         }
     }
     else if (NameProfilDef == "IfcCShapeProfileDef")
     {
         C_profilDef CprofilDef = visitor1.getCprofilDef();
-        createSolid3dProfilC(CprofilDef, VecteurExtrusion, transform1, styleDessin);
+        createSolid3dProfilC(CprofilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, styleDessin);
     }
     else if (NameProfilDef == "IfcZShapeProfileDef")
     {
         Z_profilDef ZprofilDef = visitor1.getZprofilDef();
-        createSolid3dProfilZ(ZprofilDef, VecteurExtrusion, transform1, styleDessin);
+        createSolid3dProfilZ(ZprofilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, styleDessin);
     }
     else if (NameProfilDef == "IfcAsymmetricIShapeProfileDef")
     {
         AsymmetricI_profilDef AsymmetricIprofilDef = visitor1.getAsymmetricIprofilDef();
-        createSolid3dProfilAsyI(AsymmetricIprofilDef, VecteurExtrusion, transform1, styleDessin);
+        createSolid3dProfilAsyI(AsymmetricIprofilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, styleDessin);
     }
     else if (NameProfilDef == "IfcCircleHollowProfileDef")
     {
         CircleHollow_profilDef CircleHollowProfilDef = visitor1.getCircleHollowprofilDef();
-        createSolid3dProfilCircHollow(CircleHollowProfilDef, VecteurExtrusion, transform1, styleDessin);
+        createSolid3dProfilCircHollow(CircleHollowProfilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, styleDessin);
     }
     else if (NameProfilDef == "IfcRectangleHollowProfileDef")
     {
         RectangleHollow_profilDef RectangleHollowProfilDef = visitor1.getRectangleHollowprofilDef();
-        createSolid3dProfilRectHollow(RectangleHollowProfilDef, VecteurExtrusion, transform1, styleDessin);
+        createSolid3dProfilRectHollow(RectangleHollowProfilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, styleDessin);
     }
     else if (NameProfilDef == "IfcCircleProfileDef")
     {
         Circle_profilDef CircleProfilDef = visitor1.getCircleprofilDef();
-        createSolid3dProfilCircle(CircleProfilDef, VecteurExtrusion, transform1, styleDessin);
+        createSolid3dProfilCircle(CircleProfilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, styleDessin);
     }
     else if (NameProfilDef == "IfcRectangleProfileDef")
     {
         Rectangle_profilDef RectangleProfilDef = visitor1.getRectangleprofilDef();
-        createSolid3dProfilRectangle(RectangleProfilDef, VecteurExtrusion, transform1, styleDessin);
+        createSolid3dProfilRectangle(RectangleProfilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, styleDessin);
     }
     else if (nameItems[i] == "IfcFacetedBrep")
     {
         //if (key != 20924) continue;
         std::vector<int> ListNbArg = visitor1.getListNbArgFace();
         bool orientation = visitor1.getOrientatationFace();
-        createFaceSolid(points1, ListNbArg, orientation, transformFace, styleDessin);
+        createFaceSolid(entity,points1, ListNbArg, orientation, transformFace, styleDessin);
     }
 }
 
