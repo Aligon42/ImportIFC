@@ -1,6 +1,7 @@
 ﻿#include "MethodeConstruction.h"
 #include "CreateConstructionPointVisitor.h"
 #include "tchar.h"
+#include "tests.h"
 #include <vector>
 #include <iterator>
 
@@ -16,7 +17,7 @@ const wchar_t* GetWCM(const char* c, ...)
 
 
 
-void extrusion(int key, std::string entity, std::vector<std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf,  std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, Style styleDessin)
+void extrusion(int key, std::string entity, std::vector<std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf,  std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 
 	// Open the Layer table for read
@@ -55,7 +56,7 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 
 	if (outerCurveName == "IfcCompositeCurve")
 	{
-		pRegion = createCompositeCurve(_compositeCurveSegment, transform1);
+		pRegion = createCompositeCurve(_compositeCurveSegment, transform1, isMappedItem, transformationOperator3D);
 	}
 	else if (outerCurveName == "IfcPolyline")
 	{
@@ -142,12 +143,17 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 
 	for (int a = 0; a < nbPlan; a++)
 	{
-			CreationSection(pSolid, VecteurExtrusion, hauteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, _compositeCurveSegment, transform1, nbPolylineComposite);
+			CreationSection(pSolid, VecteurExtrusion, hauteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, _compositeCurveSegment, transform1, nbPolylineComposite, isMappedItem, transformationOperator3D);
 	
 			listPlan.pop_front();
 	}
 
-	DeplacementObjet3D(pSolid, transform1);
+	if (isMappedItem)
+	{
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	}		
+	else
+		DeplacementObjet3D(pSolid, transform1);
 
 	for (int v = 0; v < listVoid.size(); v++)
 	{
@@ -155,17 +161,17 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 		{
 			if (listVoid[v].NameProfilDef == "IfcArbitraryClosedProfileDef")
 			{
-				CreationVoid(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite);
+				CreationVoid(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, isMappedItem, transformationOperator3D);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 			else if (listVoid[v].NameProfilDef == "IfcCircleProfileDef")
 			{
-				CreationVoidCircle(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite);
+				CreationVoidCircle(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, isMappedItem, transformationOperator3D);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 			else if (listVoid[v].NameProfilDef == "IfcRectangleProfileDef")
 			{
-				CreationVoidRectangle(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite);
+				CreationVoidRectangle(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, isMappedItem, transformationOperator3D);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 		}
@@ -293,10 +299,120 @@ static void DeplacementObjet3D(AcDbSubDMesh* pSubDMesh, Matrix4 transform1) {
 
 }
 
-static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float hauteurExtrusion, std::list<Vec3>& points1,
-	std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal,
-	std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal,
-	std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite)
+static void DeplacementObjet3DMappedItem(AcDb3dSolid* pSolid, Matrix4 transformationOperator3D) {
+
+	// 3 source points
+	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
+	AcGePoint3d srcpt3 = AcGePoint3d::AcGePoint3d(1, 0, 0);
+	AcGePoint3d srcpt4 = AcGePoint3d::AcGePoint3d(0, 1, 0);
+
+	double x1 = transformationOperator3D.operator()(3);  //PointDeplacement x
+
+	double y1 = transformationOperator3D.operator()(7); //PointDeplacement y
+
+	double z1 = transformationOperator3D.operator()(11); //PointDeplacement z
+
+	double x2 = transformationOperator3D.operator()(0); //Direction1 x
+
+	double y2 = transformationOperator3D.operator()(4); //Direction1 y
+
+	double z2 = transformationOperator3D.operator()(8); //Direction1 z
+
+	double x3 = transformationOperator3D.operator()(1); //Direction2 x
+
+	double y3 = transformationOperator3D.operator()(5); //Direction2 y
+
+	double z3 = transformationOperator3D.operator()(9); //Direction2 z
+
+	double x4 = transformationOperator3D.operator()(2); //Direction3 x
+
+	double y4 = transformationOperator3D.operator()(6); //Direction3 y
+
+	double z4 = transformationOperator3D.operator()(10); //Direction3 z
+
+	// 3 destination points
+	AcGePoint3d destpt1 = AcGePoint3d::AcGePoint3d(x1, y1, z1);
+	AcGePoint3d destpt2 = AcGePoint3d::AcGePoint3d(x1 + x2, y1 + y2, z1 + z2);
+	AcGePoint3d destpt3 = AcGePoint3d::AcGePoint3d(x1 + x3, y1 + y3, z1 + z3);
+	AcGePoint3d destpt4 = AcGePoint3d::AcGePoint3d(x1 + x4, y1 + y4, z1 + z4);
+
+	AcGePoint3d fromOrigin = srcpt1;
+	AcGeVector3d fromXaxis = srcpt2 - srcpt1;
+	AcGeVector3d fromYaxis = srcpt3 - srcpt1;
+	AcGeVector3d fromZaxis = srcpt4 - srcpt1;
+
+	AcGePoint3d toOrigin = destpt1;
+	AcGeVector3d toXaxis = (destpt2 - destpt1).normal() * (fromXaxis.length());
+	AcGeVector3d toYaxis = (destpt3 - destpt1).normal() * (fromYaxis.length());
+	AcGeVector3d toZaxis = (destpt4 - destpt1).normal() * (fromZaxis.length());
+
+	// Get the transformation matrix for aligning coordinate systems
+	AcGeMatrix3d mat = AcGeMatrix3d::AcGeMatrix3d();
+	mat = mat.alignCoordSys(fromOrigin, fromXaxis, fromYaxis, fromZaxis, toOrigin, toXaxis, toYaxis, toZaxis);
+
+	pSolid->transformBy(mat);
+
+}
+
+static void DeplacementObjet3DMappedItem(AcDbSubDMesh* pSubDMesh, Matrix4 transformationOperator3D) {
+
+	// 3 source points
+	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
+	AcGePoint3d srcpt3 = AcGePoint3d::AcGePoint3d(1, 0, 0);
+	AcGePoint3d srcpt4 = AcGePoint3d::AcGePoint3d(0, 1, 0);
+
+	double x1 = transformationOperator3D.operator()(3);  //PointDeplacement x
+
+	double y1 = transformationOperator3D.operator()(7); //PointDeplacement y
+
+	double z1 = transformationOperator3D.operator()(11); //PointDeplacement z
+
+	double x2 = transformationOperator3D.operator()(0); //Direction1 x
+
+	double y2 = transformationOperator3D.operator()(4); //Direction1 y
+
+	double z2 = transformationOperator3D.operator()(8); //Direction1 z
+
+	double x3 = transformationOperator3D.operator()(1); //Direction2 x
+
+	double y3 = transformationOperator3D.operator()(5); //Direction2 y
+
+	double z3 = transformationOperator3D.operator()(9); //Direction2 z
+
+	double x4 = transformationOperator3D.operator()(2); //Direction3 x
+
+	double y4 = transformationOperator3D.operator()(6); //Direction3 y
+
+	double z4 = transformationOperator3D.operator()(10); //Direction3 z
+
+	// 3 destination points
+	AcGePoint3d destpt1 = AcGePoint3d::AcGePoint3d(x1, y1, z1);
+	AcGePoint3d destpt2 = AcGePoint3d::AcGePoint3d(x1 + x2, y1 + y2, z1 + z2);
+	AcGePoint3d destpt3 = AcGePoint3d::AcGePoint3d(x1 + x3, y1 + y3, z1 + z3);
+	AcGePoint3d destpt4 = AcGePoint3d::AcGePoint3d(x1 + x4, y1 + y4, z1 + z4);
+
+	AcGePoint3d fromOrigin = srcpt1;
+	AcGeVector3d fromXaxis = srcpt2 - srcpt1;
+	AcGeVector3d fromYaxis = srcpt3 - srcpt1;
+	AcGeVector3d fromZaxis = srcpt4 - srcpt1;
+
+	AcGePoint3d toOrigin = destpt1;
+	AcGeVector3d toXaxis = (destpt2 - destpt1).normal() * (fromXaxis.length());
+	AcGeVector3d toYaxis = (destpt3 - destpt1).normal() * (fromYaxis.length());
+	AcGeVector3d toZaxis = (destpt4 - destpt1).normal() * (fromZaxis.length());
+
+	// Get the transformation matrix for aligning coordinate systems
+	AcGeMatrix3d mat = AcGeMatrix3d::AcGeMatrix3d();
+	mat = mat.alignCoordSys(fromOrigin, fromXaxis, fromYaxis, fromZaxis, toOrigin, toXaxis, toYaxis, toZaxis);
+
+	pSubDMesh->transformBy(mat);
+
+}
+
+static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float hauteurExtrusion, std::list<Vec3>& points1, std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal, std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal,
+	std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 
 	AcGeVector3d v1 = AcGeVector3d::AcGeVector3d(0, 0, 0);             // Vector 1 (x,y,z) & Vector 2 (x,y,z)
@@ -452,7 +568,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 
 		if (_compositeCurveSegment.listPolyligne.size() > 0 || _compositeCurveSegment.listTrimmedCurve.size() > 0 ||
 			_compositeCurveSegment.listParentCurve.size() > 0)
-			pRegion = createCompositeCurve(_compositeCurveSegment, transform);
+			pRegion = createCompositeCurve(_compositeCurveSegment, transform, isMappedItem, transformationOperator3D);
 		else
 			pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
@@ -471,7 +587,10 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 			delete (AcRxObject*)regions[ii];
 		}
 
-		DeplacementObjet3D(pSolid, listLocationPolygonal.front());
+		if (isMappedItem)
+			DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		else
+			DeplacementObjet3D(pSolid, listLocationPolygonal.front());
 
 		AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -507,7 +626,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 	
 }
 
-static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite)
+static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 	Acad::ErrorStatus es;
 	ads_name polyName;
@@ -602,17 +721,24 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurve
 		{
 			CreationSection(extrusion_void, Void.VecteurExtrusion,Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
 			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
 
 			Void.listPlan.pop_front();
 		}
 	}
 
-	DeplacementObjet3D(extrusion_void, Void.transform1);
-	DeplacementObjet3D(extrusion_void2, Void.transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(extrusion_void, transformationOperator3D);
+	else
+		DeplacementObjet3D(extrusion_void, Void.transform1);
+
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(extrusion_void2, transformationOperator3D);
+	else
+		DeplacementObjet3D(extrusion_void2, Void.transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 	AcDbDatabase* pDb = curDoc()->database();
@@ -630,7 +756,7 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurve
 	extrusion_void2->close();
 }
 
-static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite)
+static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 
 	Acad::ErrorStatus es;
@@ -717,17 +843,24 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, Composi
 		{
 			CreationSection(extrusion_void, Void.VecteurExtrusion,Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
 			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal,  _compositeCurveSegment, transform, nbPolylineComposite);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal,  _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
 
 			Void.listPlan.pop_front();
 		}
 	}
 
-	DeplacementObjet3D(extrusion_void, Void.transform1);
-	DeplacementObjet3D(extrusion_void2, Void.transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(extrusion_void, transformationOperator3D);
+	else
+		DeplacementObjet3D(extrusion_void, Void.transform1);
+
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(extrusion_void2, transformationOperator3D);
+	else
+		DeplacementObjet3D(extrusion_void2, Void.transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 	AcDbDatabase* pDb = curDoc()->database();
@@ -745,7 +878,7 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, Composi
 	extrusion_void2->close();
 }
 
-static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite)
+static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 
 	Acad::ErrorStatus es;
@@ -849,17 +982,24 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void, Comp
 		{
 			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
 			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
 
 			Void.listPlan.pop_front();
 		}
 	}
 
-	DeplacementObjet3D(extrusion_void, Void.transform1);
-	DeplacementObjet3D(extrusion_void2, Void.transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(extrusion_void, transformationOperator3D);
+	else
+		DeplacementObjet3D(extrusion_void, Void.transform1);
+
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(extrusion_void2, transformationOperator3D);
+	else
+		DeplacementObjet3D(extrusion_void2, Void.transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 	AcDbDatabase* pDb = curDoc()->database();
@@ -878,7 +1018,7 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void, Comp
 }
 
 
-AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, Matrix4 transform)
+AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 	AcDbVoidPtrArray lines;
 	Acad::ErrorStatus es;
@@ -974,7 +1114,7 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 
 //*** ProfilDef ***
 
-void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 
 	// Open the Layer table for read
@@ -1083,7 +1223,10 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, Vec3 Vec
 		delete (AcRxObject*)regions[ii];
 	}
 
-	DeplacementObjet3D(pSolid, transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	else
+		DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -1108,7 +1251,7 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, Vec3 Vec
 	}
 }
 
-void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -1217,7 +1360,10 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, Vec3 Vec
 		delete (AcRxObject*)regions[ii];
 	}
 
-	DeplacementObjet3D(pSolid, transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	else
+		DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -1242,7 +1388,7 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, Vec3 Vec
 	}
 }
 
-void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -1343,7 +1489,10 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, Vec3 Vect
 		delete (AcRxObject*)regions[ii];
 	}
 
-	DeplacementObjet3D(pSolid, transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	else
+		DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -1368,7 +1517,7 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, Vec3 Vect
 	}
 }
 
-void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -1472,7 +1621,10 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, Vec3 Vect
 		delete (AcRxObject*)regions[ii];
 	}
 
-	DeplacementObjet3D(pSolid, transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	else
+		DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -1497,7 +1649,7 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, Vec3 Vect
 	}
 }
 
-void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -1602,7 +1754,10 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, Vec3 Vec
 		delete (AcRxObject*)regions[ii];
 	}
 
-	DeplacementObjet3D(pSolid, transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	else
+		DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -1627,7 +1782,7 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, Vec3 Vec
 	}
 }
 
-void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -1737,7 +1892,10 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, Vec3 Vec
 		delete (AcRxObject*)regions[ii];
 	}
 
-	DeplacementObjet3D(pSolid, transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	else
+		DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -1762,7 +1920,7 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, Vec3 Vec
 	}
 }
 
-void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -1866,7 +2024,10 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, Vec3 Vec
 		delete (AcRxObject*)regions[ii];
 	}
 
-	DeplacementObjet3D(pSolid, transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	else
+		DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -1891,7 +2052,7 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, Vec3 Vec
 	}
 }
 
-void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -1995,7 +2156,10 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, Vec3 Vec
 		delete (AcRxObject*)regions[ii];
 	}
 
-	DeplacementObjet3D(pSolid, transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	else
+		DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -2020,7 +2184,7 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, Vec3 Vec
 	}
 }
 
-void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -2128,7 +2292,10 @@ void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, Vec3 Vecte
 		delete (AcRxObject*)regions[ii];
 	}
 
-	DeplacementObjet3D(pSolid, transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	else
+		DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -2153,7 +2320,7 @@ void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, Vec3 Vecte
 	}
 }
 
-void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -2258,7 +2425,10 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, Vec3 Vecte
 		delete (AcRxObject*)regions[ii];
 	}
 
-	DeplacementObjet3D(pSolid, transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	else
+		DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -2283,7 +2453,7 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, Vec3 Vecte
 	}
 }
 
-void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin)
+void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -2396,7 +2566,10 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::st
 		delete (AcRxObject*)regions[ii];
 	}
 
-	DeplacementObjet3D(pSolid, transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	else
+		DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -2421,7 +2594,7 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::st
 	}
 }
 
-void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin) {
+void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D) {
 	
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -2556,7 +2729,10 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 		delete (AcRxObject*)regions1[ii];
 	}
 
-	DeplacementObjet3D(pSolid, transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	else
+		DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -2582,7 +2758,7 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 
 }
 
-void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin) {
+void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D) {
 
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -2742,7 +2918,10 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 		delete (AcRxObject*)regions2[yy];
 	}
 
-	DeplacementObjet3D(pSolid, transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	else
+		DeplacementObjet3D(pSolid, transform1);
 
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -2769,7 +2948,7 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 
 }
 
-void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin) {
+void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D) {
 
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -2861,7 +3040,10 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string ent
 		delete (AcRxObject*)regions1[ii];
 	}
 
-	DeplacementObjet3D(pSolid, transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	else
+		DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -2889,7 +3071,7 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string ent
 
 }
 
-void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin) {
+void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D) {
 
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -2985,7 +3167,10 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::s
 		delete (AcRxObject*)regions1[ii];
 	}
 
-	DeplacementObjet3D(pSolid, transform1);
+	if (isMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	else
+		DeplacementObjet3D(pSolid, transform1);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
@@ -3049,7 +3234,7 @@ void createBoundingBox(Box box, Style styleDessin) {
 
 }
 
-void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transform1, Style styleDessin) {
+void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D) {
 
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -3179,7 +3364,12 @@ void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<in
 		return;
 	}
 
-	DeplacementObjet3D(pSubDMesh, transform1);
+	if (isMappedItem)
+	{
+		DeplacementObjet3DMappedItem(pSubDMesh, transformationOperator3D);
+	}
+	else
+		DeplacementObjet3D(pSubDMesh, transform1);
 
 
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
@@ -3204,6 +3394,7 @@ void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<in
 		delete pSolid;
 	}
 }
+
 float roundoff(float value, unsigned char prec)
 {
 	float pow_10 = pow(10.0f, (float)prec);
