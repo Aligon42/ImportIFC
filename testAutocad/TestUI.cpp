@@ -274,6 +274,11 @@ void test()
             }
         }
 
+        for (auto& buildingElement : expressDataSet->getAllIfcMappedItem())
+        {
+
+        }
+
         for (int i = 0; i < nameItems.size(); i++)
         {
             std::string NameProfilDef = visitor1.getNameProfildef();

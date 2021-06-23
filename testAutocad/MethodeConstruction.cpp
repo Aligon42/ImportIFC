@@ -412,7 +412,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, std::
 	p1yy = (p1z * p2x) - (p1x * p2z);
 	p1zz = (p1x * p2y) - (p1y * p2x);
 
-	p1 = AcGePoint3d::AcGePoint3d(p1x + p0x, p1y + p0y, p1z + p0z);
+	p1 = AcGePoint3d::AcGePoint3d(p1x + p0x, p1y + p0y, p1z + p0z); 
 	p2 = AcGePoint3d::AcGePoint3d(p2x + p0x, p2y + p0y, p2z + p0z);
 
 	AcDbLine* line = new AcDbLine(p0, p1);

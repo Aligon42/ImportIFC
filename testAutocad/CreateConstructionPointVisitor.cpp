@@ -261,6 +261,15 @@ bool CreateConstructionPointVisitor::visitIfcMappedItem(
     return false;
 }
 
+bool CreateConstructionPointVisitor::visitIfcCartesianTransformationOperator3D(
+    ifc2x3::IfcCartesianTransformationOperator3D* value)
+{
+    if (value->testAxis1())
+    {
+
+    }
+}
+
 bool CreateConstructionPointVisitor::visitIfcStyledItem(
     ifc2x3::IfcStyledItem* value)
 {
@@ -1193,10 +1202,12 @@ std::string CreateConstructionPointVisitor::getNameProfildef() const
     return NameProfilDef;
 }
 
+
 int CreateConstructionPointVisitor::getkeyForVoid() const
 {
     return keyForVoid;
 }
+
 
 int CreateConstructionPointVisitor::getnbPolylineCompositeCurve() const
 {

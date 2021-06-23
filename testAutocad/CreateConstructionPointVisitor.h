@@ -250,6 +250,7 @@ public:
     bool visitIfcShellBasedSurfaceModel(ifc2x3::IfcShellBasedSurfaceModel* value) override;
     bool visitIfcOpenShell(ifc2x3::IfcOpenShell* value) override;
     bool visitIfcMappedItem(ifc2x3::IfcMappedItem* value) override;
+    bool visitIfcCartesianTransformationOperator3D(ifc2x3::IfcCartesianTransformationOperator3D* value) override;
     bool visitIfcHalfSpaceSolid(ifc2x3::IfcHalfSpaceSolid* value) override;
     bool visitIfcPolygonalBoundedHalfSpace(ifc2x3::IfcPolygonalBoundedHalfSpace* value) override;
     bool visitIfcCompositeCurve(ifc2x3::IfcCompositeCurve* value) override;
