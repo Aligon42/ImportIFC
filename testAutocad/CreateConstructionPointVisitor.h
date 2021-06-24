@@ -175,6 +175,8 @@ private:
 
     Matrix4 _transformation{ Matrix4::Identity() };
     Matrix4 transform;
+    Matrix4 transformationOperator3D;
+    float determinantMatrixOperator3D;
 
     std::list<Vec3> _points;
     Vec3 extrusionVector;
@@ -184,9 +186,11 @@ private:
     std::string outerCurveName;
     bool isCompositeCurve = false;
     bool isBoolean = false;
+    bool isMappedItem = false;
 
     int nbPolylineCompositeCurve = 0;
     int nbSupport = 0;
+    int scale = 0;
 
     int keyForVoid;
     std::vector<int> keyItems;
@@ -250,6 +254,7 @@ public:
     bool visitIfcShellBasedSurfaceModel(ifc2x3::IfcShellBasedSurfaceModel* value) override;
     bool visitIfcOpenShell(ifc2x3::IfcOpenShell* value) override;
     bool visitIfcMappedItem(ifc2x3::IfcMappedItem* value) override;
+    bool visitIfcCartesianTransformationOperator3D(ifc2x3::IfcCartesianTransformationOperator3D* value) override;
     bool visitIfcHalfSpaceSolid(ifc2x3::IfcHalfSpaceSolid* value) override;
     bool visitIfcPolygonalBoundedHalfSpace(ifc2x3::IfcPolygonalBoundedHalfSpace* value) override;
     bool visitIfcCompositeCurve(ifc2x3::IfcCompositeCurve* value) override;
@@ -295,6 +300,10 @@ public:
     Vec3 getVectorDirection() const;
     float getHauteurExtrusion() const;
     Matrix4 getTransformation() const;
+    Matrix4 getTransformationOperator3D() const;
+    float getDetermiantOperator3D() const;
+    bool getIsMappedItem() const;
+    bool getScale() const;
     std::vector<std::string> getNameItems() const;
     std::string getOuterCurveName() const;
 
@@ -332,8 +341,8 @@ public:
     Box getBox() const;
     Style getStyle() const;
 
-    void SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);
-    void SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);
+    Vec3 SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);
+    Vec3 SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);
     void transformPoints(const Matrix4& transform);
 
 };

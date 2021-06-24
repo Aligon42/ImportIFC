@@ -10,6 +10,8 @@ CreateConstructionPointVisitor::CreateConstructionPointVisitor() :
 bool CreateConstructionPointVisitor::visitIfcProduct(
     ifc2x3::IfcProduct* value)
 {
+    isMappedItem = false;
+
     if(value->testRepresentation())
     {
         return value->getRepresentation()->acceptVisitor(this);
@@ -87,13 +89,13 @@ bool CreateConstructionPointVisitor::visitIfcShapeRepresentation(
     {
         nameItems.push_back(item->getType().getName());
         keyItems.push_back(item->getKey());
-        if(item->acceptVisitor(this))
+        if(!item->acceptVisitor(this))
         {
-            return true;
+            return false;
         }
     }
 
-    return false;
+    return true;
 }
 
 bool CreateConstructionPointVisitor::visitIfcBooleanClippingResult(
@@ -242,16 +244,15 @@ bool CreateConstructionPointVisitor::visitIfcOpenShell(
 bool CreateConstructionPointVisitor::visitIfcMappedItem(
     ifc2x3::IfcMappedItem* value)
 {
+    isMappedItem = true;
+
     if (value->testMappingSource())
     {
         if (value->getMappingSource()->acceptVisitor(this))
         {
             if (value->testMappingTarget())
             {
-                Matrix4 transform = ComputePlacementVisitor::getTransformation(
-                    value->getMappingTarget());
-
-                transformPoints(transform);
+                value->getMappingTarget()->acceptVisitor(this);
             }
 
             return true;
@@ -259,6 +260,53 @@ bool CreateConstructionPointVisitor::visitIfcMappedItem(
     }
 
     return false;
+}
+
+bool CreateConstructionPointVisitor::visitIfcCartesianTransformationOperator3D(
+    ifc2x3::IfcCartesianTransformationOperator3D* value)
+{
+    Vec3 Axis1(1.0f, 0.0f, 0.0f);
+
+    if (value->testAxis1())
+    {
+       Axis1 = SwitchIfcDirectionToVecteur3D(value->getAxis1(), Axis1);
+    }
+
+    Vec3 Axis2(0.0f, 1.0f, 0.0f);
+
+    if (value->testAxis2())
+    {
+        Axis2 = SwitchIfcDirectionToVecteur3D(value->getAxis2(), Axis2);
+    }
+
+    Vec3 Axis3(0.0f, 0.0f, 1.0f);
+
+    if (value->testAxis3())
+    {
+        Axis3 = SwitchIfcDirectionToVecteur3D(value->getAxis3(), Axis3);
+    }
+
+    Vec3 localOrigine(0.0f, 0.0f, 0.0f);
+
+    if (value->testLocalOrigin())
+    {
+        localOrigine = SwitchIfcCartesianPointToVecteur3D(value->getLocalOrigin(), localOrigine);
+    }
+
+    Matrix4 operator3D(
+        Axis3.x(), Axis1.x(), Axis2.x(), localOrigine.x(),
+        Axis3.y(), Axis1.y(), Axis2.y(), localOrigine.y(),
+        Axis3.z(), Axis1.z(), Axis2.z(), localOrigine.z(),
+        0.0f, 0.0f, 0.0f, 1.0f
+    );
+
+    scale = value->getScale();
+
+    transformationOperator3D = operator3D;
+
+    determinantMatrixOperator3D = (Axis1.x()*Axis2.y()*Axis3.z()) - (Axis2.x()*Axis1.y()*Axis3.z()) + (Axis3.x()*Axis1.y()*Axis2.z()) - localOrigine.x();
+
+    return true;
 }
 
 bool CreateConstructionPointVisitor::visitIfcStyledItem(
@@ -1034,22 +1082,26 @@ bool CreateConstructionPointVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value
 
 
 
-void CreateConstructionPointVisitor::SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine)
+Vec3 CreateConstructionPointVisitor::SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine)
 {
     auto listPoint = value->getCoordinates();
 
     outOrigine.x() = (float) listPoint.at(0);
     outOrigine.y() = (float) listPoint.at(1);
     outOrigine.z() = (float) listPoint.at(2);
+
+    return outOrigine;
 }
 
-void CreateConstructionPointVisitor::SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur)
+Vec3 CreateConstructionPointVisitor::SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur)
 {
     auto listPoint = value->getDirectionRatios();
 
     outVecteur.x() = (float) listPoint.at(0);
     outVecteur.y() = (float) listPoint.at(1);
     outVecteur.z() = (float) listPoint.at(2);
+
+    return outVecteur;
 }
 
 std::list<Vec3> CreateConstructionPointVisitor::getPoints() const
@@ -1070,6 +1122,26 @@ float CreateConstructionPointVisitor::getHauteurExtrusion() const
 Matrix4 CreateConstructionPointVisitor::getTransformation() const
 {
     return transformation;
+}
+
+Matrix4 CreateConstructionPointVisitor::getTransformationOperator3D() const
+{
+    return transformationOperator3D;
+}
+
+float CreateConstructionPointVisitor::getDetermiantOperator3D() const
+{
+    return determinantMatrixOperator3D;
+}
+
+bool CreateConstructionPointVisitor::getIsMappedItem() const
+{
+    return isMappedItem;
+}
+
+bool CreateConstructionPointVisitor::getScale() const
+{
+    return scale;
 }
 
 std::vector<std::string> CreateConstructionPointVisitor::getNameItems() const
@@ -1193,10 +1265,12 @@ std::string CreateConstructionPointVisitor::getNameProfildef() const
     return NameProfilDef;
 }
 
+
 int CreateConstructionPointVisitor::getkeyForVoid() const
 {
     return keyForVoid;
 }
+
 
 int CreateConstructionPointVisitor::getnbPolylineCompositeCurve() const
 {
