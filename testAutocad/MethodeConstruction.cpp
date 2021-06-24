@@ -27,6 +27,37 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
 
+	if (entity == "IfcWallStandardCase")
+	{
+		layerName = _T("Mur");
+	}
+	if (entity == "IfcWall")
+	{
+		layerName = _T("Mur");
+	}
+	if (entity == "IfcSlab")
+	{
+		layerName = _T("Dalle");
+	}
+	if (entity == "IfcRoof")
+	{
+		layerName = _T("Toit");
+	}
+	if (entity == "IfcCovering")
+	{
+		layerName = _T("Revêtement");
+	}
+	if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
+	
+
+
 	if (!pLayerTable->has(layerName))
 	{
 		// Open the Layer table for write
@@ -984,6 +1015,22 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, Vec3 Vec
 
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
 
 	if (!pLayerTable->has(layerName))
 	{
@@ -1117,6 +1164,23 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, Vec3 Vec
 
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
+
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
 
 	if (!pLayerTable->has(layerName))
 	{
@@ -1252,6 +1316,23 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, Vec3 Vect
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
 
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
+
 	if (!pLayerTable->has(layerName))
 	{
 		// Open the Layer table for write
@@ -1377,6 +1458,23 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, Vec3 Vect
 
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
+
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
 
 	if (!pLayerTable->has(layerName))
 	{
@@ -1507,6 +1605,23 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, Vec3 Vec
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
 
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
+
 	if (!pLayerTable->has(layerName))
 	{
 		// Open the Layer table for write
@@ -1636,6 +1751,23 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, Vec3 Vec
 
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
+
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
 
 	if (!pLayerTable->has(layerName))
 	{
@@ -1772,6 +1904,23 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, Vec3 Vec
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
 
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
+
 	if (!pLayerTable->has(layerName))
 	{
 		// Open the Layer table for write
@@ -1901,6 +2050,23 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, Vec3 Vec
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
 
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
+
 	if (!pLayerTable->has(layerName))
 	{
 		// Open the Layer table for write
@@ -2029,6 +2195,23 @@ void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, Vec3 Vecte
 
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
+
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
 
 	if (!pLayerTable->has(layerName))
 	{
@@ -2163,6 +2346,23 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, Vec3 Vecte
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
 
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
+
 	if (!pLayerTable->has(layerName))
 	{
 		// Open the Layer table for write
@@ -2292,6 +2492,23 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::st
 
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
+
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
 
 	if (!pLayerTable->has(layerName))
 	{
@@ -2430,6 +2647,23 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
+
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
 
 	if (!pLayerTable->has(layerName))
 	{
@@ -2591,6 +2825,23 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
+
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
 
 	if (!pLayerTable->has(layerName))
 	{
@@ -2779,6 +3030,23 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string ent
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
 
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
+
 	if (!pLayerTable->has(layerName))
 	{
 		// Open the Layer table for write
@@ -2898,6 +3166,23 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::s
 
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
+
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
 
 	if (!pLayerTable->has(layerName))
 	{
@@ -3058,6 +3343,69 @@ void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<in
 
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
+
+
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	else if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	else if (entity == "IfcWallStandardCase")
+	{
+		layerName = _T("Mur");
+	}
+	else if (entity == "IfcWall")
+	{
+		layerName = _T("Mur");
+	}
+	else if (entity == "IfcSlab")
+	{
+		layerName = _T("Dalle");
+	}
+	else if (entity == "IfcRoof")
+	{
+		layerName = _T("Toit");
+	}
+	else if (entity == "IfcCovering")
+	{
+		layerName = _T("Revêtement");
+	}
+	else if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	else if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
+	else if (entity == "IfcBuildingElementProxy")
+	{
+		layerName = _T("Proxy");
+	}
+	else if (entity == "IfcDoor")
+	{
+		layerName = _T("Porte");
+	}
+	else if (entity == "IfcSite")
+	{
+		layerName = _T("Site");
+	}
+	else if (entity == "IfcStair")
+	{
+		layerName = _T("Escalier");
+	}
+	else if (entity == "IfcRailling")
+	{
+		layerName = _T("Balustrade");
+	}
+	else if (entity == "IfcWindow")
+	{
+		layerName = _T("Fenêtre");
+	}
+
 
 	if (!pLayerTable->has(layerName))
 	{
