@@ -307,20 +307,58 @@ void test()
         }
     }
 
-    int count2 = 0;
+    for (auto& mappedItems : expressDataSet->getAllIfcMappedItem())
+    {
+        int key = (int)mappedItems.getKey();
+        std::string entity = mappedItems.getType().getName();
+
+        //if (key != 18016) continue;
+        //if (key != 4574) continue;
+
+        CreateConstructionPointVisitor visitor1;
+
+        mappedItems.acceptVisitor(&visitor1);
+        mappedItems.acceptVisitor(&placementVisitor);
+
+        MappedItem mappedItem;
+
+        mappedItem.nameItemsMap = visitor1.getNameItems();
+        mappedItem.keyItemsMap = visitor1.getListKeyItem();
+        mappedItem.points1Map = visitor1.getPoints();
+        mappedItem.outerCurveNameMap = visitor1.getOuterCurveName();
+        mappedItem.ListNbArgMap = visitor1.getNbArgPolyline();
+        mappedItem.VecteurExtrusionMap = visitor1.getVectorDirection();
+        mappedItem.hauteurExtrusionMap = visitor1.getHauteurExtrusion();
+        mappedItem.listPlanMap = visitor1.getPlanPolygonal();
+        mappedItem.listLocationPolygonalMap = visitor1.getLocationPolygonal();
+        mappedItem.AgreementHalfMap = visitor1.getAgreementHalfBool();
+        mappedItem.AgreementPolygonalMap = visitor1.getAgreementPolygonalBool();
+        mappedItem.listEntityHalfMap = visitor1.getListEntityHalf();
+        mappedItem.listEntityPolygonalMap = visitor1.getListEntityPolygonal();
+        mappedItem._compositeCurveMap = visitor1.getCompositeCurveSegment();
+        mappedItem.nbPolylineCompositeMap = visitor1.getnbPolylineCompositeCurve();
+        mappedItem.boxMap = visitor1.getBox();        
+        mappedItem.transform1Map = placementVisitor.getTransformation();
+        mappedItem.transformationMap = visitor1.getTransformation();
+        mappedItem.transformFaceMap = mappedItem.transform1Map;
+        mappedItem.isMappedItemMap = visitor1.getIsMappedItem();
+        mappedItem.transformationOperator3DMap = visitor1.getTransformationOperator3D();
+
+        std::vector<MappedItem> listMappedItem;
+
+        listMappedItem.push_back(mappedItem);
+    }
+
     for (auto& buildingElement : expressDataSet->getAllIfcBuildingElement())
     {
-        count2++;
+        
         int key = (int)buildingElement.getKey();
         std::string entity = buildingElement.getType().getName();
 
         //if (key != 18016) continue;
         //if (key != 4574) continue;
-        //if (entity != "IfcSlab") continue;
-        acutPrintf(_T("    => Element %d\n"), count2);
 
         CreateConstructionPointVisitor visitor1;
-        acutPrintf(_T("Index : %i\n"), key);
 
         buildingElement.acceptVisitor(&visitor1);
 
@@ -328,15 +366,10 @@ void test()
         std::vector<int> keyItems = visitor1.getListKeyItem();
 
         std::list<Vec3> points1 = visitor1.getPoints();
-        /*for (const auto& point : points1)
-        {
-            acutPrintf(_T("[ %f, %f, %f ]\n"), point.x(), point.y(), point.z());
-        }*/
         std::string outerCurveName = visitor1.getOuterCurveName();
         std::vector<int> ListNbArg = visitor1.getNbArgPolyline();
 
         Vec3 VecteurExtrusion = visitor1.getVectorDirection();
-        acutPrintf(_T("Vecteur extrusion : [ %f, %f , %f]\n"), VecteurExtrusion.x(), VecteurExtrusion.y(), VecteurExtrusion.z());
         float hauteurExtrusion = visitor1.getHauteurExtrusion();
 
         std::list<Matrix4> listPlan = visitor1.getPlanPolygonal();
@@ -359,15 +392,8 @@ void test()
         Matrix4 transformation = visitor1.getTransformation();
         Matrix4 transformFace = transform1;
 
-        transform1 *= transformation;
-
         bool isMappedItem = visitor1.getIsMappedItem();
         Matrix4 transformationOperator3D = visitor1.getTransformationOperator3D();
-
-        /*if (mappedItem = true)
-        {
-            transform1 = visitor1.getTransformationOperator3D();
-        }*/
 
         if (keyItems.size() > 0)
         {
@@ -385,11 +411,50 @@ void test()
         
         for (int i = 0; i < nameItems.size(); i++)
         {
-            if (entity != "IfcColumn" && entity != "IfcBeam")
+            if (entity == "IfcBuildingElementProxy")
             {
                 std::string NameProfilDef = visitor1.getNameProfildef();
                 if (nameItems[i] == "IfcExtrudedAreaSolid")
                 {
+                    transform1 *= transformation;
+
+                    if (NameProfilDef != "IfcArbitraryClosedProfileDef")
+                    {
+                        dessinProfilDef(NameProfilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, visitor1, points1, transformFace, nameItems, i, styleDessin, isMappedItem, transformationOperator3D);
+                    }
+                    else
+                        extrusion(key, entity, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, styleDessin, isMappedItem, transformationOperator3D);
+                }
+                else if (nameItems[i] == "IfcBooleanClippingResult")
+                {
+                    transform1 *= transformation;
+
+                    extrusion(key, entity, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, styleDessin, isMappedItem, transformationOperator3D);
+                }
+                else if (nameItems[i] == "IfcFacetedBrep" || nameItems[i] == "IfcFaceBasedSurfaceModel" || nameItems[i] == "IfcShellBasedSurfaceModel")
+                {
+                    transform1 *= transformation;
+
+                    std::vector<int> ListNbArg = visitor1.getListNbArgFace();
+                    bool orientation = visitor1.getOrientatationFace();
+                    createFaceSolid(entity, points1, ListNbArg, orientation, transformFace, styleDessin, isMappedItem, transformationOperator3D);
+                }
+                else if (nameItems[i] == "IfcBoundingBox")
+                {
+                    createBoundingBox(box, entity, styleDessin);
+                }
+                else if (nameItems[i] == "IfcMappedItem")
+                {
+
+                }
+            }
+            else if (entity != "IfcColumn" && entity != "IfcBeam")
+            {
+                std::string NameProfilDef = visitor1.getNameProfildef();
+                if (nameItems[i] == "IfcExtrudedAreaSolid")
+                {
+                    transform1 *= transformation;
+
                     if (NameProfilDef != "IfcArbitraryClosedProfileDef")
                     {
                         dessinProfilDef(NameProfilDef,entity, VecteurExtrusion, hauteurExtrusion, transform1, visitor1, points1, transformFace, nameItems, i, styleDessin, isMappedItem, transformationOperator3D);
@@ -399,10 +464,14 @@ void test()
                 }
                 else if (nameItems[i] == "IfcBooleanClippingResult")
                 {
+                    transform1 *= transformation;
+
                     extrusion(key, entity, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, styleDessin, isMappedItem, transformationOperator3D);
                 }
                 else if (nameItems[i] == "IfcFacetedBrep" || nameItems[i] == "IfcFaceBasedSurfaceModel"  || nameItems[i] == "IfcShellBasedSurfaceModel")
                 {
+                    transform1 *= transformation;
+
                     std::vector<int> ListNbArg = visitor1.getListNbArgFace();
                     bool orientation = visitor1.getOrientatationFace();
                     createFaceSolid(entity,points1, ListNbArg, orientation, transformFace, styleDessin, isMappedItem, transformationOperator3D);
@@ -411,7 +480,6 @@ void test()
                 {
                     createBoundingBox(box, entity, styleDessin);
                 }
-
             }
             else if (entity == "IfcColumn" || entity == "IfcBeam")
             {
@@ -424,17 +492,12 @@ void test()
 
     for (auto& mappedItem : expressDataSet->getAllIfcMappedItem())
     {
-        count2++;
+        
         int key = (int)mappedItem.getKey();
         std::string entity = mappedItem.getType().getName();
 
-        //if (key != 18016) continue;
-        //if (key != 4574) continue;
-        //if (entity != "IfcSlab") continue;
-        acutPrintf(_T("    => Element %d\n"), count2);
 
         CreateConstructionPointVisitor visitor1;
-        acutPrintf(_T("Index : %i\n"), key);
 
         mappedItem.acceptVisitor(&visitor1);
 
@@ -442,15 +505,10 @@ void test()
         std::vector<int> keyItems = visitor1.getListKeyItem();
 
         std::list<Vec3> points1 = visitor1.getPoints();
-        /*for (const auto& point : points1)
-        {
-            acutPrintf(_T("[ %f, %f, %f ]\n"), point.x(), point.y(), point.z());
-        }*/
         std::string outerCurveName = visitor1.getOuterCurveName();
         std::vector<int> ListNbArg = visitor1.getNbArgPolyline();
 
         Vec3 VecteurExtrusion = visitor1.getVectorDirection();
-        acutPrintf(_T("Vecteur extrusion : [ %f, %f , %f]\n"), VecteurExtrusion.x(), VecteurExtrusion.y(), VecteurExtrusion.z());
         float hauteurExtrusion = visitor1.getHauteurExtrusion();
 
         std::list<Matrix4> listPlan = visitor1.getPlanPolygonal();
@@ -470,18 +528,16 @@ void test()
 
         mappedItem.acceptVisitor(&placementVisitor);
         Matrix4 transform1 = placementVisitor.getTransformation();
+        Matrix4 transformationProxy = placementVisitor.getTransformationProxy();
         Matrix4 transformation = visitor1.getTransformation();
         Matrix4 transformFace = transform1;
-
-        transform1 *= transformation;
 
         bool isMappedItem = visitor1.getIsMappedItem();
         Matrix4 transformationOperator3D = visitor1.getTransformationOperator3D();
 
-        /*if (mappedItem = true)
-        {
-            transform1 = visitor1.getTransformationOperator3D();
-        }*/
+        transform1 *= transformation;
+
+        //transformationOperator3D *= transformationProxy;
 
         if (keyItems.size() > 0)
         {
@@ -523,7 +579,7 @@ void test()
                 }
                 else if (nameItems[i] == "IfcBoundingBox")
                 {
-                    createBoundingBox(box,entity, styleDessin);
+                    createBoundingBox(box, entity, styleDessin);
                 }
 
             }

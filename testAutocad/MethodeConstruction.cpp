@@ -3577,7 +3577,7 @@ void createBoundingBox(Box box,std::string entity, Style styleDessin) {
 
 	AcDb3dSolid* box3d = new AcDb3dSolid();
 
-	box3d->createBox(box.XDimBox, box.YDimBox, box.ZDimBox);  /// Creation de la box au point 0,0,0 avec les dimensions
+	es = box3d->createBox(box.XDimBox, box.YDimBox, box.ZDimBox);  /// Creation de la box au point 0,0,0 avec les dimensions
 
 	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
 
@@ -3592,19 +3592,22 @@ void createBoundingBox(Box box,std::string entity, Style styleDessin) {
 	box3d->setLayer(layerName, Adesk::kFalse, false);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
-	AcDbDatabase* pDb = curDoc()->database();
-	AcDbObjectId modelId;
-	modelId = acdbSymUtil()->blockModelSpaceId(pDb);
 
-	AcDbBlockTableRecord* pBlockTableRecord;
-	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
 
-	
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
 
-	pBlockTableRecord->appendAcDbEntity(box3d);
-	pBlockTableRecord->close();
-	box3d->close();
 
+
+		pBlockTableRecord->appendAcDbEntity(box3d);
+		pBlockTableRecord->close();
+		box3d->close();
+	}
 }
 
 void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D) {
