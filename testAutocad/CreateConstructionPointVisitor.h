@@ -16,164 +16,20 @@
 #include <string>
 #include <ifc2x3/InheritVisitor.h>
 
-#include <vectorial/config.h>
-#include <vectorial/vectorial.h>
-#include <vectorial/simd4f.h>
-#include <mathfu/vector_3.h>
-#include <mathfu/matrix_4x4.h>
+#include "Object.h"
+#include "ProfilDef.h"
 
 typedef mathfu::Vector<float, 3> Vec3;
 typedef mathfu::Matrix<float, 4> Matrix4;
 
-struct I_profilDef
-{
-    float OverallWidth;
-    float OverallDepth;
-    float webThickness;
-    float flangeThickness;
-    float filletRadius;
-    float flangeEdgeRadius;
-    float FlangeSlope;
-    int nbArg;
-};
-
-struct L_profilDef
-{
-    float Depth;
-    float Width;
-    float Thickness;
-    float FilletRadius;
-    float EdgeRadius;
-    float LegSlope;
-    int nbArg;
-};
-
-struct T_profilDef
-{
-    float Depth;
-    float FlangeWidth;
-    float WebThickness;
-    float FlangeThickness;
-    float FilletRadius;
-    float FlangeEdgeRadius;
-    float WebEdgeRadius;
-    float WebSlope;
-    float FlangeSlope;
-    int nbArg;
-};
-
-struct U_profilDef
-{
-    float Depth;
-    float FlangeWidth;
-    float WebThickness;
-    float FlangeThickness;
-    float FilletRadius;
-    float EdgeRadius;
-    float FlangeSlope;
-    int nbArg;
-};
-
-struct C_profilDef
-{
-    float Depth;
-    float Width;
-    float WallThickness;
-    float Girth;
-    float InternalFilletRadius;
-};
-
-struct Z_profilDef
-{
-    float Depth;
-    float FlangeWidth;
-    float WebThickness;
-    float FlangeThickness;
-    float FilletRadius;
-    float EdgeRadius;
-};
-
-struct AsymmetricI_profilDef
-{
-    float OverallWidth;
-    float OverallDepth;
-    float WebThickness;
-    float FlangeThickness;
-    float FlangeFilletRadius;
-    float TopFlangeWidth;
-    float TopFlangeThickness;
-    float TopFlangeFilletRadius;
-};
-
-struct CircleHollow_profilDef
-{
-    float Radius;
-    float WallThickness;
-};
-
-struct RectangleHollow_profilDef
-{
-    float XDim;
-    float YDim;
-    float WallThickness;
-    float InnerFilletRadius;
-    float OuteerFilletRadius;
-};
-
-struct Rectangle_profilDef
-{
-    float XDim;
-    float YDim;
-};
-
-struct Circle_profilDef
-{
-    float Radius;
-};
-
-struct TrimmedCurve
-{
-    Vec3 centreCircle;
-    float radius;
-    int trim1;
-    int trim2;
-    bool senseArgreement;
-};
-
-struct CompositeCurveSegment
-{
-    std::vector<std::vector<Vec3>> listPolyligne;
-    std::vector<TrimmedCurve> listTrimmedCurve;
-    std::vector<std::string> listParentCurve;
-};
-
-struct Style
-{
-    int keyItem;
-    double red;
-    double green;
-    double blue;
-    double transparence;
-};
-
-struct Box
-{
-    Vec3 Corner;
-    int XDimBox;
-    int YDimBox;
-    int ZDimBox;
-};
-
 //style
 static Style style;
 static Style styleDessin;
-static std::vector<Style> listStyle;
-
+static std::map<int, Style> listStyle;
 
 class CreateConstructionPointVisitor : public ifc2x3::InheritVisitor
 {
 private:
-
     Matrix4 _transformation{ Matrix4::Identity() };
     Matrix4 transform;
     Matrix4 transformationOperator3D;
@@ -215,17 +71,7 @@ private:
     
     //profilDef
     std::string NameProfilDef;
-    I_profilDef IprofilDef;
-    L_profilDef LprofilDef;
-    T_profilDef TprofilDef;
-    U_profilDef UprofilDef;
-    C_profilDef CprofilDef;
-    Z_profilDef ZprofilDef;
-    AsymmetricI_profilDef AsymmetricIprofilDef; 
-    CircleHollow_profilDef CircleHollowprofilDef;
-    RectangleHollow_profilDef RectangleHollowprofilDef;
-    Circle_profilDef CircleprofilDef;
-    Rectangle_profilDef RectangleprofilDef;
+    std::shared_ptr<ProfilDef> _profilDef;
 
     TrimmedCurve _trimmedCurve;
     CompositeCurveSegment _compositeCurveSegment;
@@ -235,8 +81,7 @@ private:
     std::vector<int> nbArgFace;
 
     //Box
-    Box box;
-    
+    Box box;    
 
 public:
     //! Constructor
@@ -297,6 +142,8 @@ public:
     bool visitIfcFaceBound(ifc2x3::IfcFaceBound* value) override;
     bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value) override;
 
+    Object GetObjectData();
+
     std::list<Vec3> getPoints() const;
     Vec3 getVectorDirection() const;
     float getHauteurExtrusion() const;
@@ -318,17 +165,7 @@ public:
     std::vector<std::string> getListEntityPolygonal() const;
 
     //get profilDef
-    I_profilDef getIprofilDef() const;
-    L_profilDef getLprofilDef() const;
-    T_profilDef getTprofilDef() const;
-    U_profilDef getUprofilDef() const;
-    C_profilDef getCprofilDef() const;
-    Z_profilDef getZprofilDef() const;
-    AsymmetricI_profilDef getAsymmetricIprofilDef() const;
-    CircleHollow_profilDef getCircleHollowprofilDef() const;
-    RectangleHollow_profilDef getRectangleHollowprofilDef() const;
-    Circle_profilDef getCircleprofilDef() const;
-    Rectangle_profilDef getRectangleprofilDef() const;
+    std::shared_ptr<ProfilDef> getProfilDef();
     std::string getNameProfildef() const;
 
     int getkeyForVoid() const;
@@ -345,5 +182,4 @@ public:
     Vec3 SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);
     Vec3 SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);
     void transformPoints(const Matrix4& transform);
-
 };

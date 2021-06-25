@@ -15,9 +15,7 @@ const wchar_t* GetWCM(const char* c, ...)
 	return wc;
 }
 
-
-
-void extrusion(int key, std::string entity, std::vector<std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf,  std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
+void extrusion(int key, std::string entity, Object object, std::vector<ObjectVoid> listVoid)
 {
 
 	// Open the Layer table for read
@@ -90,26 +88,26 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
 
-	if (outerCurveName == "IfcCompositeCurve")
+	if (object.OuterCurveName == "IfcCompositeCurve")
 	{
-		pRegion = createCompositeCurve(_compositeCurveSegment, transform1, isMappedItem, transformationOperator3D);
+		pRegion = createCompositeCurve(object.CompositeCurveSegment, object.Transform, object.IsMappedItem, object.TransformationOperator3D);
 	}
-	else if (outerCurveName == "IfcPolyline")
+	else if (object.OuterCurveName == "IfcPolyline")
 	{
-		if (ListNbArg.size() > 1)
+		if (object.ListNbArg.size() > 1)
 		{
-			ListNbArg.erase(ListNbArg.begin());
-			points1.pop_front();
+			object.ListNbArg.erase(object.ListNbArg.begin());
+			object.Points.pop_front();
 		}
 
-		ptArr.setLogicalLength(ListNbArg[0]);
-		Vec3 pointOrigine = { transform1[12], transform1[13] , transform1[14] };
+		ptArr.setLogicalLength(object.ListNbArg[0]);
+		Vec3 pointOrigine = { object.Transform[12], object.Transform[13] , object.Transform[14] };
 
 		int i = 0;
 
-		for (const auto& point : points1)
+		for (const auto& point : object.Points)
 		{
-			if (i == ListNbArg[0])
+			if (i == object.ListNbArg[0])
 			{
 				break;
 			}
@@ -147,7 +145,7 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 		pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 	}
 
-	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)object.VecteurExtrusion.x() * object.HauteurExtrusion, (double)object.VecteurExtrusion.y() * object.HauteurExtrusion, (double)object.VecteurExtrusion.z() * object.HauteurExtrusion);
 	AcDbSweepOptions options;
     // Extrude the region to create a solid.
     AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -164,32 +162,32 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
         delete (AcRxObject*)regions[ii];
     }
 
-	int nbPlan = listPlan.size();
+	int nbPlan = object.ListPlan.size();
 
 
-	if (ListNbArg.size() > 0)
+	if (object.ListNbArg.size() > 0)
 	{
-		for (int i = 0; i < ListNbArg[0]; i++)
+		for (int i = 0; i < object.ListNbArg[0]; i++)
 		{
-			points1.pop_front();
+			object.Points.pop_front();
 		}
 	}
 
-	ListNbArg.erase(ListNbArg.begin());
+	object.ListNbArg.erase(object.ListNbArg.begin());
 
 	for (int a = 0; a < nbPlan; a++)
 	{
-			CreationSection(pSolid, VecteurExtrusion, hauteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, _compositeCurveSegment, transform1, nbPolylineComposite, isMappedItem, transformationOperator3D);
+			CreationSection(pSolid, object);
 	
-			listPlan.pop_front();
+			object.ListPlan.pop_front();
 	}
 
-	if (isMappedItem)
+	if (object.IsMappedItem)
 	{
-		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3DMappedItem(pSolid, object.TransformationOperator3D);
 	}		
 	else
-		DeplacementObjet3D(pSolid, transform1);
+		DeplacementObjet3D(pSolid, object.Transform);
 
 	for (int v = 0; v < listVoid.size(); v++)
 	{
@@ -197,17 +195,17 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 		{
 			if (listVoid[v].NameProfilDef == "IfcArbitraryClosedProfileDef")
 			{
-				CreationVoid(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, isMappedItem, transformationOperator3D);
+				CreationVoid(pSolid, listVoid[v], object.CompositeCurveSegment, object.Transform, object.NbPolylineComposite, object.IsMappedItem, object.TransformationOperator3D);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 			else if (listVoid[v].NameProfilDef == "IfcCircleProfileDef")
 			{
-				CreationVoidCircle(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, isMappedItem, transformationOperator3D);
+				CreationVoidCircle(pSolid, listVoid[v], object.CompositeCurveSegment, object.Transform, object.NbPolylineComposite, object.IsMappedItem, object.TransformationOperator3D);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 			else if (listVoid[v].NameProfilDef == "IfcRectangleProfileDef")
 			{
-				CreationVoidRectangle(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, isMappedItem, transformationOperator3D);
+				CreationVoidRectangle(pSolid, listVoid[v], object.CompositeCurveSegment, object.Transform, object.NbPolylineComposite, object.IsMappedItem, object.TransformationOperator3D);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 		}
@@ -452,8 +450,7 @@ static void DeplacementObjet3DMappedItem(AcDbSubDMesh* pSubDMesh, Matrix4 transf
 
 }
 
-static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float hauteurExtrusion, std::list<Vec3>& points1, std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal, std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal,
-	std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, bool isMappedItem, Matrix4 transformationOperator3D)
+static void CreationSection(AcDb3dSolid* extrusion, Object object)
 {
 
 	AcGeVector3d v1 = AcGeVector3d::AcGeVector3d(0, 0, 0);             // Vector 1 (x,y,z) & Vector 2 (x,y,z)
@@ -498,30 +495,30 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 
 	////Coordonnées du repère du plan
 
-	p0x = listPlan.front()[12];  //x																		
-	p0y = listPlan.front()[13]; //y
-	p0z = listPlan.front()[14]; //z
+	p0x = object.ListPlan.front()[12];  //x																		
+	p0y = object.ListPlan.front()[13]; //y
+	p0z = object.ListPlan.front()[14]; //z
 
 	p0 = AcGePoint3d::AcGePoint3d(p0x, p0y, p0z);
-	acutPrintf(_T("Coordonnées du repère du plan : [ %f, %f, %f]\n"), listPlan.front()[12], listPlan.front()[13], listPlan.front()[14]);
+	acutPrintf(_T("Coordonnées du repère du plan : [ %f, %f, %f]\n"), object.ListPlan.front()[12], object.ListPlan.front()[13], object.ListPlan.front()[14]);
 
 
 	///Direction1 plan
-	p1x = listPlan.front()[8];  //x
-	p1y = listPlan.front()[9]; //y
-	p1z = listPlan.front()[10]; //z
+	p1x = object.ListPlan.front()[8];  //x
+	p1y = object.ListPlan.front()[9]; //y
+	p1z = object.ListPlan.front()[10]; //z
 
 	V1 = AcGeVector3d::AcGeVector3d(p1x, p1y, p1z);
 	V2 = V1.normal();
 	p3 = AcGePoint3d::AcGePoint3d(V2.x + p0x, V2.y + p0y, V2.z + p0z);
-	acutPrintf(_T("Direction1 plan : [ %f, %f, %f]\n"), listPlan.front()[8], listPlan.front()[9], listPlan.front()[10]);
+	acutPrintf(_T("Direction1 plan : [ %f, %f, %f]\n"), object.ListPlan.front()[8], object.ListPlan.front()[9], object.ListPlan.front()[10]);
 
 	///Direction2 plan
-	p2x = listPlan.front()[0];  //x
-	p2y = listPlan.front()[1]; //y
-	p2z = listPlan.front()[2]; //z
+	p2x = object.ListPlan.front()[0];  //x
+	p2y = object.ListPlan.front()[1]; //y
+	p2z = object.ListPlan.front()[2]; //z
 
-	acutPrintf(_T("Direction2 plan : [ %f, %f, %f]\n"), listPlan.front()[0], listPlan.front()[1], listPlan.front()[2]);
+	acutPrintf(_T("Direction2 plan : [ %f, %f, %f]\n"), object.ListPlan.front()[0], object.ListPlan.front()[1], object.ListPlan.front()[2]);
 
 	p1xx = p0x + p1x;
 	p1yy = p0x + p1x;
@@ -547,14 +544,14 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 
 	Poly_plane.set(Poly_plane.pointOnPlane(), Poly_plane.normal().negate());
 	
-	if (listEntityHalf.size() > 0)
+	if (object.ListEntityHalf.size() > 0)
 	{
-		extrusion->getSlice(Poly_plane, AgreementHalf.at(0), negSolid);
+		extrusion->getSlice(Poly_plane, object.AgreementHalf.at(0), negSolid);
 
-		if (listEntityHalf.size() > 0)
+		if (object.ListEntityHalf.size() > 0)
 		{
-			listEntityHalf.erase(listEntityHalf.begin());
-			AgreementHalf.erase(AgreementHalf.begin());
+			object.ListEntityHalf.erase(object.ListEntityHalf.begin());
+			object.AgreementHalf.erase(object.AgreementHalf.begin());
 		}
 	}
 	else
@@ -562,13 +559,13 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 		Acad::ErrorStatus es;
 
 		AcGePoint3dArray ptArr;
-		ptArr.setLogicalLength((int)((nbArg.front())));
+		ptArr.setLogicalLength((int)((object.ListNbArg.front())));
 
 		int i = 0;
 
-		for (const auto& point : points1)
+		for (const auto& point : object.Points)
 		{
-			if (i == nbArg[0])
+			if (i == object.ListNbArg[0])
 			{
 				break;
 			}
@@ -607,13 +604,13 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 
 		AcDbRegion* pRegion;
 
-		if (_compositeCurveSegment.listPolyligne.size() > 0 || _compositeCurveSegment.listTrimmedCurve.size() > 0 ||
-			_compositeCurveSegment.listParentCurve.size() > 0)
-			pRegion = createCompositeCurve(_compositeCurveSegment, transform, isMappedItem, transformationOperator3D);
+		if (object.CompositeCurveSegment.listPolyligne.size() > 0 || object.CompositeCurveSegment.listTrimmedCurve.size() > 0 ||
+			object.CompositeCurveSegment.listParentCurve.size() > 0)
+			pRegion = createCompositeCurve(object.CompositeCurveSegment, object.Transform, object.IsMappedItem, object.TransformationOperator3D);
 		else
 			pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
-		AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+		AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)object.VecteurExtrusion.x() * object.HauteurExtrusion, (double)object.VecteurExtrusion.y() * object.HauteurExtrusion, (double)object.VecteurExtrusion.z() * object.HauteurExtrusion);
 		AcDbSweepOptions options;
 		// Extrude the region to create a solid.
 		AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -628,38 +625,38 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 			delete (AcRxObject*)regions[ii];
 		}
 
-		if (isMappedItem)
-			DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		if (object.IsMappedItem)
+			DeplacementObjet3DMappedItem(pSolid, object.TransformationOperator3D);
 		else
-			DeplacementObjet3D(pSolid, listLocationPolygonal.front());
+			DeplacementObjet3D(pSolid, object.ListLocationPolygonal.front());
 
 		AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
 		pSolid->close();
 
-		extrusion->getSlice(Poly_plane, AgreementPolygonal.at(0), pSolid);
+		extrusion->getSlice(Poly_plane, object.AgreementPolygonal.at(0), pSolid);
 		extrusion->booleanOper(AcDb::kBoolSubtract, pSolid);
 
-		if (nbPolylineComposite > 0)
+		if (object.NbPolylineComposite > 0)
 		{
-			for (int j = 0; j < nbPolylineComposite; j++)
+			for (int j = 0; j < object.NbPolylineComposite; j++)
 			{
-				for (size_t i = 0; i < nbArg[0]; i++)
+				for (size_t i = 0; i < object.ListNbArg[0]; i++)
 				{
-					points1.pop_front();
+					object.Points.pop_front();
 				}
 
-				nbArg.erase(nbArg.begin());
+				object.ListNbArg.erase(object.ListNbArg.begin());
 			}
 		}
 		else 
 		{
-			for (size_t i = 0; i < nbArg[0]; i++)
+			for (size_t i = 0; i < object.ListNbArg[0]; i++)
 			{
-				points1.pop_front();
+				object.Points.pop_front();
 			}
 
-			nbArg.erase(nbArg.begin());
+			object.ListNbArg.erase(object.ListNbArg.begin());
 		}
 		
 		
@@ -760,12 +757,25 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurve
 
 		if (Void.points1.size() > 0 && Void.nbArg.size() > 0)
 		{
-			CreationSection(extrusion_void, Void.VecteurExtrusion,Void.hauteurExtrusion, Void.points1,
-				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
-			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
-				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
+			Object object;
+			object.VecteurExtrusion = Void.VecteurExtrusion;
+			object.HauteurExtrusion = Void.hauteurExtrusion;
+			object.Points = Void.points1;
+			object.ListNbArg = Void.nbArg;
+			object.ListPlan = Void.listPlan;
+			object.ListLocationPolygonal = Void.listLocationPolygonal;
+			object.AgreementHalf = Void.AgreementHalf;
+			object.AgreementPolygonal = Void.AgreementPolygonal;
+			object.ListEntityHalf = Void.listEntityHalf;
+			object.ListEntityHalf = Void.listEntityPolygonal;
+			object.CompositeCurveSegment = _compositeCurveSegment;
+			object.Transform = transform;
+			object.NbPolylineComposite = nbPolylineComposite;
+			object.IsMappedItem = isMappedItem;
+			object.TransformationOperator3D = transformationOperator3D;
+
+			CreationSection(extrusion_void, object);
+			CreationSection(extrusion_void2, object);
 
 			Void.listPlan.pop_front();
 		}
@@ -882,12 +892,25 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, Composi
 
 		if (Void.points1.size() > 0 && Void.nbArg.size() > 0)
 		{
-			CreationSection(extrusion_void, Void.VecteurExtrusion,Void.hauteurExtrusion, Void.points1,
-				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
-			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
-				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal,  _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
+			Object object;
+			object.VecteurExtrusion = Void.VecteurExtrusion;
+			object.HauteurExtrusion = Void.hauteurExtrusion;
+			object.Points = Void.points1;
+			object.ListNbArg = Void.nbArg;
+			object.ListPlan = Void.listPlan;
+			object.ListLocationPolygonal = Void.listLocationPolygonal;
+			object.AgreementHalf = Void.AgreementHalf;
+			object.AgreementPolygonal = Void.AgreementPolygonal;
+			object.ListEntityHalf = Void.listEntityHalf;
+			object.ListEntityHalf = Void.listEntityPolygonal;
+			object.CompositeCurveSegment = _compositeCurveSegment;
+			object.Transform = transform;
+			object.NbPolylineComposite = nbPolylineComposite;
+			object.IsMappedItem = isMappedItem;
+			object.TransformationOperator3D = transformationOperator3D;
+
+			CreationSection(extrusion_void, object);
+			CreationSection(extrusion_void2, object);
 
 			Void.listPlan.pop_front();
 		}
@@ -1021,12 +1044,25 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void, Comp
 
 		if (Void.points1.size() > 0 && Void.nbArg.size() > 0)
 		{
-			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
-				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
-			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
-				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
+			Object object;
+			object.VecteurExtrusion = Void.VecteurExtrusion;
+			object.HauteurExtrusion = Void.hauteurExtrusion;
+			object.Points = Void.points1;
+			object.ListNbArg = Void.nbArg;
+			object.ListPlan = Void.listPlan;
+			object.ListLocationPolygonal = Void.listLocationPolygonal;
+			object.AgreementHalf = Void.AgreementHalf;
+			object.AgreementPolygonal = Void.AgreementPolygonal;
+			object.ListEntityHalf = Void.listEntityHalf;
+			object.ListEntityHalf = Void.listEntityPolygonal;
+			object.CompositeCurveSegment = _compositeCurveSegment;
+			object.Transform = transform;
+			object.NbPolylineComposite = nbPolylineComposite;
+			object.IsMappedItem = isMappedItem;
+			object.TransformationOperator3D = transformationOperator3D;
+
+			CreationSection(extrusion_void, object);
+			CreationSection(extrusion_void2, object);
 
 			Void.listPlan.pop_front();
 		}
@@ -1155,33 +1191,32 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 
 //*** ProfilDef ***
 
-void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
+void createSolid3dProfilIPE(I_profilDef IprofilDef, Style styleDessin)
 {
-
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 	AcDbLayerTable* pLayerTable;
 	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
-	const ACHAR* layerName = GetWCM((entity.c_str()));
+	const ACHAR* layerName = GetWCM((IprofilDef.Entity.c_str()));
 	// Check to see if the layer exists
-	if (entity == "IfcBeam")
+	if (IprofilDef.Entity == "IfcBeam")
 	{
 		layerName = _T("Poutre");
 	}
-	if (entity == "IfcColumn")
+	if (IprofilDef.Entity == "IfcColumn")
 	{
 		layerName = _T("Colonne");
 	}
-	if (entity == "IfcPlate")
+	if (IprofilDef.Entity == "IfcPlate")
 	{
 		layerName = _T("Plaque");
 	}
-	if (entity == "IfcFooting")
+	if (IprofilDef.Entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
 	}
-	if (entity == "IfcMappedItem")
+	if (IprofilDef.Entity == "IfcMappedItem")
 	{
 		layerName = _T("Element");
 	}
@@ -1268,7 +1303,7 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, Vec3 Vec
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
-	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)IprofilDef.VecteurExtrusion.x() * IprofilDef.HauteurExtrusion, (double)IprofilDef.VecteurExtrusion.y() * IprofilDef.HauteurExtrusion, (double)IprofilDef.VecteurExtrusion.z() * IprofilDef.HauteurExtrusion);
 	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -1284,10 +1319,10 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, Vec3 Vec
 		delete (AcRxObject*)regions[ii];
 	}
 
-	if (isMappedItem)
-		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	if (IprofilDef.IsMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, IprofilDef.TransformationOperator3D);
 	else
-		DeplacementObjet3D(pSolid, transform1);
+		DeplacementObjet3D(pSolid, IprofilDef.Transform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -1318,33 +1353,33 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, Vec3 Vec
 	}
 }
 
-void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
+void createSolid3dProfilIPN(I_profilDef IprofilDef, Style styleDessin)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 	AcDbLayerTable* pLayerTable;
 	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
-	const ACHAR* layerName = GetWCM((entity.c_str()));
+	const ACHAR* layerName = GetWCM((IprofilDef.Entity.c_str()));
 	// Check to see if the layer exists
 
-	if (entity == "IfcBeam")
+	if (IprofilDef.Entity == "IfcBeam")
 	{
 		layerName = _T("Poutre");
 	}
-	if (entity == "IfcColumn")
+	if (IprofilDef.Entity == "IfcColumn")
 	{
 		layerName = _T("Colonne");
 	}
-	if (entity == "IfcPlate")
+	if (IprofilDef.Entity == "IfcPlate")
 	{
 		layerName = _T("Plaque");
 	}
-	if (entity == "IfcFooting")
+	if (IprofilDef.Entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
 	}
-	if (entity == "IfcMappedItem")
+	if (IprofilDef.Entity == "IfcMappedItem")
 	{
 		layerName = _T("Element");
 	}
@@ -1432,7 +1467,7 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, Vec3 Vec
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
-	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)IprofilDef.VecteurExtrusion.x() * IprofilDef.HauteurExtrusion, (double)IprofilDef.VecteurExtrusion.y() * IprofilDef.HauteurExtrusion, (double)IprofilDef.VecteurExtrusion.z() * IprofilDef.HauteurExtrusion);
 	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -1448,10 +1483,10 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, Vec3 Vec
 		delete (AcRxObject*)regions[ii];
 	}
 
-	if (isMappedItem)
-		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	if (IprofilDef.IsMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, IprofilDef.TransformationOperator3D);
 	else
-		DeplacementObjet3D(pSolid, transform1);
+		DeplacementObjet3D(pSolid, IprofilDef.Transform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -1482,33 +1517,33 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, Vec3 Vec
 	}
 }
 
-void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
+void createSolid3dProfilL8(L_profilDef LprofilDef, Style styleDessin)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 	AcDbLayerTable* pLayerTable;
 	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
-	const ACHAR* layerName = GetWCM((entity.c_str()));
+	const ACHAR* layerName = GetWCM((LprofilDef.Entity.c_str()));
 	// Check to see if the layer exists
 
-	if (entity == "IfcBeam")
+	if (LprofilDef.Entity == "IfcBeam")
 	{
 		layerName = _T("Poutre");
 	}
-	if (entity == "IfcColumn")
+	if (LprofilDef.Entity == "IfcColumn")
 	{
 		layerName = _T("Colonne");
 	}
-	if (entity == "IfcPlate")
+	if (LprofilDef.Entity == "IfcPlate")
 	{
 		layerName = _T("Plaque");
 	}
-	if (entity == "IfcFooting")
+	if (LprofilDef.Entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
 	}
-	if (entity == "IfcMappedItem")
+	if (LprofilDef.Entity == "IfcMappedItem")
 	{
 		layerName = _T("Element");
 	}
@@ -1588,7 +1623,7 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, Vec3 Vect
 	}
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
-	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)LprofilDef.VecteurExtrusion.x() * LprofilDef.HauteurExtrusion, (double)LprofilDef.VecteurExtrusion.y() * LprofilDef.HauteurExtrusion, (double)LprofilDef.VecteurExtrusion.z() * LprofilDef.HauteurExtrusion);
 	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -1604,10 +1639,10 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, Vec3 Vect
 		delete (AcRxObject*)regions[ii];
 	}
 
-	if (isMappedItem)
-		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	if (LprofilDef.IsMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, LprofilDef.TransformationOperator3D);
 	else
-		DeplacementObjet3D(pSolid, transform1);
+		DeplacementObjet3D(pSolid, LprofilDef.Transform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -1638,33 +1673,33 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, Vec3 Vect
 	}
 }
 
-void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
+void createSolid3dProfilL9(L_profilDef LprofilDef, Style styleDessin)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 	AcDbLayerTable* pLayerTable;
 	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
-	const ACHAR* layerName = GetWCM((entity.c_str()));
+	const ACHAR* layerName = GetWCM((LprofilDef.Entity.c_str()));
 	// Check to see if the layer exists
 
-	if (entity == "IfcBeam")
+	if (LprofilDef.Entity == "IfcBeam")
 	{
 		layerName = _T("Poutre");
 	}
-	if (entity == "IfcColumn")
+	if (LprofilDef.Entity == "IfcColumn")
 	{
 		layerName = _T("Colonne");
 	}
-	if (entity == "IfcPlate")
+	if (LprofilDef.Entity == "IfcPlate")
 	{
 		layerName = _T("Plaque");
 	}
-	if (entity == "IfcFooting")
+	if (LprofilDef.Entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
 	}
-	if (entity == "IfcMappedItem")
+	if (LprofilDef.Entity == "IfcMappedItem")
 	{
 		layerName = _T("Element");
 	}
@@ -1747,7 +1782,7 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, Vec3 Vect
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
-	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)LprofilDef.VecteurExtrusion.x() * LprofilDef.HauteurExtrusion, (double)LprofilDef.VecteurExtrusion.y() * LprofilDef.HauteurExtrusion, (double)LprofilDef.VecteurExtrusion.z() * LprofilDef.HauteurExtrusion);
 	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -1763,10 +1798,10 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, Vec3 Vect
 		delete (AcRxObject*)regions[ii];
 	}
 
-	if (isMappedItem)
-		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	if (LprofilDef.IsMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, LprofilDef.TransformationOperator3D);
 	else
-		DeplacementObjet3D(pSolid, transform1);
+		DeplacementObjet3D(pSolid, LprofilDef.Transform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -1797,33 +1832,33 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, Vec3 Vect
 	}
 }
 
-void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
+void createSolid3dProfilT10(T_profilDef TprofilDef, Style styleDessin)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 	AcDbLayerTable* pLayerTable;
 	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
-	const ACHAR* layerName = GetWCM((entity.c_str()));
+	const ACHAR* layerName = GetWCM((TprofilDef.Entity.c_str()));
 	// Check to see if the layer exists
 
-	if (entity == "IfcBeam")
+	if (TprofilDef.Entity == "IfcBeam")
 	{
 		layerName = _T("Poutre");
 	}
-	if (entity == "IfcColumn")
+	if (TprofilDef.Entity == "IfcColumn")
 	{
 		layerName = _T("Colonne");
 	}
-	if (entity == "IfcPlate")
+	if (TprofilDef.Entity == "IfcPlate")
 	{
 		layerName = _T("Plaque");
 	}
-	if (entity == "IfcFooting")
+	if (TprofilDef.Entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
 	}
-	if (entity == "IfcMappedItem")
+	if (TprofilDef.Entity == "IfcMappedItem")
 	{
 		layerName = _T("Element");
 	}
@@ -1907,7 +1942,7 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, Vec3 Vec
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
-	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)TprofilDef.VecteurExtrusion.x() * TprofilDef.HauteurExtrusion, (double)TprofilDef.VecteurExtrusion.y() * TprofilDef.HauteurExtrusion, (double)TprofilDef.VecteurExtrusion.z() * TprofilDef.HauteurExtrusion);
 	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -1923,10 +1958,10 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, Vec3 Vec
 		delete (AcRxObject*)regions[ii];
 	}
 
-	if (isMappedItem)
-		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	if (TprofilDef.IsMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, TprofilDef.TransformationOperator3D);
 	else
-		DeplacementObjet3D(pSolid, transform1);
+		DeplacementObjet3D(pSolid, TprofilDef.Transform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -1957,33 +1992,33 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, Vec3 Vec
 	}
 }
 
-void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
+void createSolid3dProfilT12(T_profilDef TprofilDef, Style styleDessin)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 	AcDbLayerTable* pLayerTable;
 	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
-	const ACHAR* layerName = GetWCM((entity.c_str()));
+	const ACHAR* layerName = GetWCM((TprofilDef.Entity.c_str()));
 	// Check to see if the layer exists
 
-	if (entity == "IfcBeam")
+	if (TprofilDef.Entity == "IfcBeam")
 	{
 		layerName = _T("Poutre");
 	}
-	if (entity == "IfcColumn")
+	if (TprofilDef.Entity == "IfcColumn")
 	{
 		layerName = _T("Colonne");
 	}
-	if (entity == "IfcPlate")
+	if (TprofilDef.Entity == "IfcPlate")
 	{
 		layerName = _T("Plaque");
 	}
-	if (entity == "IfcFooting")
+	if (TprofilDef.Entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
 	}
-	if (entity == "IfcMappedItem")
+	if (TprofilDef.Entity == "IfcMappedItem")
 	{
 		layerName = _T("Element");
 	}
@@ -2072,7 +2107,7 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, Vec3 Vec
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
-	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)TprofilDef.VecteurExtrusion.x() * TprofilDef.HauteurExtrusion, (double)TprofilDef.VecteurExtrusion.y() * TprofilDef.HauteurExtrusion, (double)TprofilDef.VecteurExtrusion.z() * TprofilDef.HauteurExtrusion);
 	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -2088,10 +2123,10 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, Vec3 Vec
 		delete (AcRxObject*)regions[ii];
 	}
 
-	if (isMappedItem)
-		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	if (TprofilDef.IsMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, TprofilDef.TransformationOperator3D);
 	else
-		DeplacementObjet3D(pSolid, transform1);
+		DeplacementObjet3D(pSolid, TprofilDef.Transform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -2122,33 +2157,33 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, Vec3 Vec
 	}
 }
 
-void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
+void createSolid3dProfilUPE(U_profilDef UprofilDef, Style styleDessin)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 	AcDbLayerTable* pLayerTable;
 	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
-	const ACHAR* layerName = GetWCM((entity.c_str()));
+	const ACHAR* layerName = GetWCM((UprofilDef.Entity.c_str()));
 	// Check to see if the layer exists
 
-	if (entity == "IfcBeam")
+	if (UprofilDef.Entity == "IfcBeam")
 	{
 		layerName = _T("Poutre");
 	}
-	if (entity == "IfcColumn")
+	if (UprofilDef.Entity == "IfcColumn")
 	{
 		layerName = _T("Colonne");
 	}
-	if (entity == "IfcPlate")
+	if (UprofilDef.Entity == "IfcPlate")
 	{
 		layerName = _T("Plaque");
 	}
-	if (entity == "IfcFooting")
+	if (UprofilDef.Entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
 	}
-	if (entity == "IfcMappedItem")
+	if (UprofilDef.Entity == "IfcMappedItem")
 	{
 		layerName = _T("Element");
 	}
@@ -2231,7 +2266,7 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, Vec3 Vec
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
-	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)UprofilDef.VecteurExtrusion.x() * UprofilDef.HauteurExtrusion, (double)UprofilDef.VecteurExtrusion.y() * UprofilDef.HauteurExtrusion, (double)UprofilDef.VecteurExtrusion.z() * UprofilDef.HauteurExtrusion);
 	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -2247,10 +2282,10 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, Vec3 Vec
 		delete (AcRxObject*)regions[ii];
 	}
 
-	if (isMappedItem)
-		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	if (UprofilDef.IsMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, UprofilDef.TransformationOperator3D);
 	else
-		DeplacementObjet3D(pSolid, transform1);
+		DeplacementObjet3D(pSolid, UprofilDef.Transform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -2281,33 +2316,33 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, Vec3 Vec
 	}
 }
 
-void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
+void createSolid3dProfilUPN(U_profilDef UprofilDef, Style styleDessin)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 	AcDbLayerTable* pLayerTable;
 	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
-	const ACHAR* layerName = GetWCM((entity.c_str()));
+	const ACHAR* layerName = GetWCM((UprofilDef.Entity.c_str()));
 	// Check to see if the layer exists
 
-	if (entity == "IfcBeam")
+	if (UprofilDef.Entity == "IfcBeam")
 	{
 		layerName = _T("Poutre");
 	}
-	if (entity == "IfcColumn")
+	if (UprofilDef.Entity == "IfcColumn")
 	{
 		layerName = _T("Colonne");
 	}
-	if (entity == "IfcPlate")
+	if (UprofilDef.Entity == "IfcPlate")
 	{
 		layerName = _T("Plaque");
 	}
-	if (entity == "IfcFooting")
+	if (UprofilDef.Entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
 	}
-	if (entity == "IfcMappedItem")
+	if (UprofilDef.Entity == "IfcMappedItem")
 	{
 		layerName = _T("Element");
 	}
@@ -2390,7 +2425,7 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, Vec3 Vec
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
-	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)UprofilDef.VecteurExtrusion.x() * UprofilDef.HauteurExtrusion, (double)UprofilDef.VecteurExtrusion.y() * UprofilDef.HauteurExtrusion, (double)UprofilDef.VecteurExtrusion.z() * UprofilDef.HauteurExtrusion);
 	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -2406,10 +2441,10 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, Vec3 Vec
 		delete (AcRxObject*)regions[ii];
 	}
 
-	if (isMappedItem)
-		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	if (UprofilDef.IsMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, UprofilDef.TransformationOperator3D);
 	else
-		DeplacementObjet3D(pSolid, transform1);
+		DeplacementObjet3D(pSolid, UprofilDef.Transform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -2440,33 +2475,33 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, Vec3 Vec
 	}
 }
 
-void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
+void createSolid3dProfilC(C_profilDef CprofilDef, Style styleDessin)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 	AcDbLayerTable* pLayerTable;
 	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
-	const ACHAR* layerName = GetWCM((entity.c_str()));
+	const ACHAR* layerName = GetWCM((CprofilDef.Entity.c_str()));
 	// Check to see if the layer exists
 
-	if (entity == "IfcBeam")
+	if (CprofilDef.Entity == "IfcBeam")
 	{
 		layerName = _T("Poutre");
 	}
-	if (entity == "IfcColumn")
+	if (CprofilDef.Entity == "IfcColumn")
 	{
 		layerName = _T("Colonne");
 	}
-	if (entity == "IfcPlate")
+	if (CprofilDef.Entity == "IfcPlate")
 	{
 		layerName = _T("Plaque");
 	}
-	if (entity == "IfcFooting")
+	if (CprofilDef.Entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
 	}
-	if (entity == "IfcMappedItem")
+	if (CprofilDef.Entity == "IfcMappedItem")
 	{
 		layerName = _T("Element");
 	}
@@ -2552,8 +2587,8 @@ void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, Vec3 Vecte
 	}
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
-
-	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)CprofilDef.VecteurExtrusion.x() * CprofilDef.HauteurExtrusion, (double)CprofilDef.VecteurExtrusion.y() * CprofilDef.HauteurExtrusion, (double)CprofilDef.VecteurExtrusion.z() * CprofilDef.HauteurExtrusion);
 	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -2569,10 +2604,10 @@ void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, Vec3 Vecte
 		delete (AcRxObject*)regions[ii];
 	}
 
-	if (isMappedItem)
-		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	if (CprofilDef.IsMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, CprofilDef.TransformationOperator3D);
 	else
-		DeplacementObjet3D(pSolid, transform1);
+		DeplacementObjet3D(pSolid, CprofilDef.Transform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -2603,33 +2638,33 @@ void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, Vec3 Vecte
 	}
 }
 
-void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
+void createSolid3dProfilZ(Z_profilDef ZprofilDef, Style styleDessin)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 	AcDbLayerTable* pLayerTable;
 	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
-	const ACHAR* layerName = GetWCM((entity.c_str()));
+	const ACHAR* layerName = GetWCM((ZprofilDef.Entity.c_str()));
 	// Check to see if the layer exists
 
-	if (entity == "IfcBeam")
+	if (ZprofilDef.Entity == "IfcBeam")
 	{
 		layerName = _T("Poutre");
 	}
-	if (entity == "IfcColumn")
+	if (ZprofilDef.Entity == "IfcColumn")
 	{
 		layerName = _T("Colonne");
 	}
-	if (entity == "IfcPlate")
+	if (ZprofilDef.Entity == "IfcPlate")
 	{
 		layerName = _T("Plaque");
 	}
-	if (entity == "IfcFooting")
+	if (ZprofilDef.Entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
 	}
-	if (entity == "IfcMappedItem")
+	if (ZprofilDef.Entity == "IfcMappedItem")
 	{
 		layerName = _T("Element");
 	}
@@ -2713,7 +2748,7 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, Vec3 Vecte
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
-	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)ZprofilDef.VecteurExtrusion.x() * ZprofilDef.HauteurExtrusion, (double)ZprofilDef.VecteurExtrusion.y() * ZprofilDef.HauteurExtrusion, (double)ZprofilDef.VecteurExtrusion.z() * ZprofilDef.HauteurExtrusion);
 	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -2729,10 +2764,10 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, Vec3 Vecte
 		delete (AcRxObject*)regions[ii];
 	}
 
-	if (isMappedItem)
-		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	if (ZprofilDef.IsMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, ZprofilDef.TransformationOperator3D);
 	else
-		DeplacementObjet3D(pSolid, transform1);
+		DeplacementObjet3D(pSolid, ZprofilDef.Transform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -2763,33 +2798,33 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, Vec3 Vecte
 	}
 }
 
-void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
+void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Style styleDessin)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 	AcDbLayerTable* pLayerTable;
 	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
-	const ACHAR* layerName = GetWCM((entity.c_str()));
+	const ACHAR* layerName = GetWCM((AsymmetricIprofilDef.Entity.c_str()));
 	// Check to see if the layer exists
 
-	if (entity == "IfcBeam")
+	if (AsymmetricIprofilDef.Entity == "IfcBeam")
 	{
 		layerName = _T("Poutre");
 	}
-	if (entity == "IfcColumn")
+	if (AsymmetricIprofilDef.Entity == "IfcColumn")
 	{
 		layerName = _T("Colonne");
 	}
-	if (entity == "IfcPlate")
+	if (AsymmetricIprofilDef.Entity == "IfcPlate")
 	{
 		layerName = _T("Plaque");
 	}
-	if (entity == "IfcFooting")
+	if (AsymmetricIprofilDef.Entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
 	}
-	if (entity == "IfcMappedItem")
+	if (AsymmetricIprofilDef.Entity == "IfcMappedItem")
 	{
 		layerName = _T("Element");
 	}
@@ -2881,7 +2916,7 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::st
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
 
-	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)AsymmetricIprofilDef.VecteurExtrusion.x() * AsymmetricIprofilDef.HauteurExtrusion, (double)AsymmetricIprofilDef.VecteurExtrusion.y() * AsymmetricIprofilDef.HauteurExtrusion, (double)AsymmetricIprofilDef.VecteurExtrusion.z() * AsymmetricIprofilDef.HauteurExtrusion);
 	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -2897,10 +2932,10 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::st
 		delete (AcRxObject*)regions[ii];
 	}
 
-	if (isMappedItem)
-		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	if (AsymmetricIprofilDef.IsMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, AsymmetricIprofilDef.TransformationOperator3D);
 	else
-		DeplacementObjet3D(pSolid, transform1);
+		DeplacementObjet3D(pSolid, AsymmetricIprofilDef.Transform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -2931,33 +2966,33 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::st
 	}
 }
 
-void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D) {
+void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, Style styleDessin) {
 	
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 	AcDbLayerTable* pLayerTable;
 	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
-	const ACHAR* layerName = GetWCM((entity.c_str()));
+	const ACHAR* layerName = GetWCM((CircleHollowprofilDef.Entity.c_str()));
 	// Check to see if the layer exists
 
-	if (entity == "IfcBeam")
+	if (CircleHollowprofilDef.Entity == "IfcBeam")
 	{
 		layerName = _T("Poutre");
 	}
-	if (entity == "IfcColumn")
+	if (CircleHollowprofilDef.Entity == "IfcColumn")
 	{
 		layerName = _T("Colonne");
 	}
-	if (entity == "IfcPlate")
+	if (CircleHollowprofilDef.Entity == "IfcPlate")
 	{
 		layerName = _T("Plaque");
 	}
-	if (entity == "IfcFooting")
+	if (CircleHollowprofilDef.Entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
 	}
-	if (entity == "IfcMappedItem")
+	if (CircleHollowprofilDef.Entity == "IfcMappedItem")
 	{
 		layerName = _T("Element");
 	}
@@ -3071,7 +3106,7 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 
 	pRegion1->booleanOper(AcDb::kBoolSubtract, pRegion2);
 
-	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)CircleHollowprofilDef.VecteurExtrusion.x() * CircleHollowprofilDef.HauteurExtrusion, (double)CircleHollowprofilDef.VecteurExtrusion.y() * CircleHollowprofilDef.HauteurExtrusion, (double)CircleHollowprofilDef.VecteurExtrusion.z() * CircleHollowprofilDef.HauteurExtrusion);
 	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -3087,10 +3122,10 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 		delete (AcRxObject*)regions1[ii];
 	}
 
-	if (isMappedItem)
-		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	if (CircleHollowprofilDef.IsMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, CircleHollowprofilDef.TransformationOperator3D);
 	else
-		DeplacementObjet3D(pSolid, transform1);
+		DeplacementObjet3D(pSolid, CircleHollowprofilDef.Transform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -3122,33 +3157,33 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 
 }
 
-void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D) {
+void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Style styleDessin) {
 
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 	AcDbLayerTable* pLayerTable;
 	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
-	const ACHAR* layerName = GetWCM((entity.c_str()));
+	const ACHAR* layerName = GetWCM((RectangleHollowprofilDef.Entity.c_str()));
 	// Check to see if the layer exists
 
-	if (entity == "IfcBeam")
+	if (RectangleHollowprofilDef.Entity == "IfcBeam")
 	{
 		layerName = _T("Poutre");
 	}
-	if (entity == "IfcColumn")
+	if (RectangleHollowprofilDef.Entity == "IfcColumn")
 	{
 		layerName = _T("Colonne");
 	}
-	if (entity == "IfcPlate")
+	if (RectangleHollowprofilDef.Entity == "IfcPlate")
 	{
 		layerName = _T("Plaque");
 	}
-	if (entity == "IfcFooting")
+	if (RectangleHollowprofilDef.Entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
 	}
-	if (entity == "IfcMappedItem")
+	if (RectangleHollowprofilDef.Entity == "IfcMappedItem")
 	{
 		layerName = _T("Element");
 	}
@@ -3277,7 +3312,7 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 
 	pRegion1->booleanOper(AcDb::kBoolSubtract, pRegion2);
 
-	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)RectangleHollowprofilDef.VecteurExtrusion.x() * RectangleHollowprofilDef.HauteurExtrusion, (double)RectangleHollowprofilDef.VecteurExtrusion.y() * RectangleHollowprofilDef.HauteurExtrusion, (double)RectangleHollowprofilDef.VecteurExtrusion.z() * RectangleHollowprofilDef.HauteurExtrusion);
 	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -3303,10 +3338,10 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 		delete (AcRxObject*)regions2[yy];
 	}
 
-	if (isMappedItem)
-		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	if (RectangleHollowprofilDef.IsMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, RectangleHollowprofilDef.TransformationOperator3D);
 	else
-		DeplacementObjet3D(pSolid, transform1);
+		DeplacementObjet3D(pSolid, RectangleHollowprofilDef.Transform);
 
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -3339,33 +3374,33 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 
 }
 
-void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D) {
+void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Style styleDessin) {
 
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 	AcDbLayerTable* pLayerTable;
 	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
-	const ACHAR* layerName = GetWCM((entity.c_str()));
+	const ACHAR* layerName = GetWCM((CircleprofilDef.Entity.c_str()));
 	// Check to see if the layer exists
 
-	if (entity == "IfcBeam")
+	if (CircleprofilDef.Entity == "IfcBeam")
 	{
 		layerName = _T("Poutre");
 	}
-	if (entity == "IfcColumn")
+	if (CircleprofilDef.Entity == "IfcColumn")
 	{
 		layerName = _T("Colonne");
 	}
-	if (entity == "IfcPlate")
+	if (CircleprofilDef.Entity == "IfcPlate")
 	{
 		layerName = _T("Plaque");
 	}
-	if (entity == "IfcFooting")
+	if (CircleprofilDef.Entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
 	}
-	if (entity == "IfcMappedItem")
+	if (CircleprofilDef.Entity == "IfcMappedItem")
 	{
 		layerName = _T("Element");
 	}
@@ -3436,7 +3471,7 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string ent
 	}
 	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
 
-	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)CircleprofilDef.VecteurExtrusion.x() * CircleprofilDef.HauteurExtrusion, (double)CircleprofilDef.VecteurExtrusion.y() * CircleprofilDef.HauteurExtrusion, (double)CircleprofilDef.VecteurExtrusion.z() * CircleprofilDef.HauteurExtrusion);
 	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -3452,10 +3487,10 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string ent
 		delete (AcRxObject*)regions1[ii];
 	}
 
-	if (isMappedItem)
-		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	if (CircleprofilDef.IsMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, CircleprofilDef.TransformationOperator3D);
 	else
-		DeplacementObjet3D(pSolid, transform1);
+		DeplacementObjet3D(pSolid, CircleprofilDef.Transform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
@@ -3489,33 +3524,33 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string ent
 
 }
 
-void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D) {
+void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Style styleDessin) {
 
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 	AcDbLayerTable* pLayerTable;
 	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
-	const ACHAR* layerName = GetWCM((entity.c_str()));
+	const ACHAR* layerName = GetWCM((RectangleprofilDef.Entity.c_str()));
 	// Check to see if the layer exists
 
-	if (entity == "IfcBeam")
+	if (RectangleprofilDef.Entity == "IfcBeam")
 	{
 		layerName = _T("Poutre");
 	}
-	if (entity == "IfcColumn")
+	if (RectangleprofilDef.Entity == "IfcColumn")
 	{
 		layerName = _T("Colonne");
 	}
-	if (entity == "IfcPlate")
+	if (RectangleprofilDef.Entity == "IfcPlate")
 	{
 		layerName = _T("Plaque");
 	}
-	if (entity == "IfcFooting")
+	if (RectangleprofilDef.Entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
 	}
-	if (entity == "IfcMappedItem")
+	if (RectangleprofilDef.Entity == "IfcMappedItem")
 	{
 		layerName = _T("Element");
 	}
@@ -3591,7 +3626,7 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::s
 	}
 	AcDbRegion* pRegion1 = AcDbRegion::cast((AcRxObject*)regions1[0]);
 
-	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)VecteurExtrusion.x() * hauteurExtrusion, (double)VecteurExtrusion.y() * hauteurExtrusion, (double)VecteurExtrusion.z() * hauteurExtrusion);
+	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d((double)RectangleprofilDef.VecteurExtrusion.x() * RectangleprofilDef.HauteurExtrusion, (double)RectangleprofilDef.VecteurExtrusion.y() * RectangleprofilDef.HauteurExtrusion, (double)RectangleprofilDef.VecteurExtrusion.z() * RectangleprofilDef.HauteurExtrusion);
 	AcDbSweepOptions options;
 	// Extrude the region to create a solid.
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
@@ -3606,10 +3641,10 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::s
 		delete (AcRxObject*)regions1[ii];
 	}
 
-	if (isMappedItem)
-		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	if (RectangleprofilDef.IsMappedItem)
+		DeplacementObjet3DMappedItem(pSolid, RectangleprofilDef.TransformationOperator3D);
 	else
-		DeplacementObjet3D(pSolid, transform1);
+		DeplacementObjet3D(pSolid, RectangleprofilDef.Transform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
@@ -3639,8 +3674,6 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::s
 	}
 
 }
-
-
 
 void createBoundingBox(Box box,std::string entity, Style styleDessin) {
 	
@@ -3780,7 +3813,7 @@ void createBoundingBox(Box box,std::string entity, Style styleDessin) {
 
 }
 
-void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D) {
+void createFaceSolid(std::string entity, Object object, Style styleDessin) {
 
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -3879,7 +3912,7 @@ void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<in
 	AcDb3dSolid* pSolid = new AcDb3dSolid();
 
 	AcGePoint3dArray ptArr;
-	int sizeNbArg = ListNbArg.size();
+	int sizeNbArg = object.ListNbArg.size();
 	int k = 0;
 
 	////test
@@ -3952,7 +3985,7 @@ void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<in
 	//}
 	//fin test
 
-	for (const auto& point : points1)
+	for (const auto& point : object.Points)
 	{
 		AcGePoint3d point3d = AcGePoint3d::AcGePoint3d(point.x(), point.y(), point.z());
 		ptArr.append(point3d);
@@ -3960,13 +3993,13 @@ void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<in
 
 	for (int i = 0; i < sizeNbArg; i++)
 	{
-		faceArray.append(ListNbArg[0]);
-		for (int j = 0; j < ListNbArg[0]; j++)
+		faceArray.append(object.ListNbArg[0]);
+		for (int j = 0; j < object.ListNbArg[0]; j++)
 		{
 			faceArray.append(k);
 			k++;
 		}
-		ListNbArg.erase(ListNbArg.begin());
+		object.ListNbArg.erase(object.ListNbArg.begin());
 	}
 
 	es = pSubDMesh->setSubDMesh(ptArr, faceArray, 0);
@@ -3977,12 +4010,12 @@ void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<in
 		return;
 	}
 
-	if (isMappedItem)
+	if (object.IsMappedItem)
 	{
-		DeplacementObjet3DMappedItem(pSubDMesh, transformationOperator3D);
+		DeplacementObjet3DMappedItem(pSubDMesh, object.TransformationOperator3D);
 	}
 	else
-		DeplacementObjet3D(pSubDMesh, transform1);
+		DeplacementObjet3D(pSubDMesh, object.Transform);
 
 
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();

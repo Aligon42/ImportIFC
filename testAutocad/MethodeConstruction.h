@@ -21,9 +21,7 @@
 #include "CreateConstructionPointVisitor.h"
 #include "dbSubD.h"
 
-
 #define PI 3.141592653589793
-
 
 struct ObjectVoid
 {
@@ -50,16 +48,13 @@ static ObjectVoid _objectVoid;
 
 const wchar_t* GetWCM(const char* c, ...);
 
-void extrusion(int key, std::string entity, std::vector <std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> nbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal,	std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal,	std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal,	std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
+void extrusion(int key, std::string entity, Object object, std::vector<ObjectVoid> listVoid);
 void createBoundingBox(Box box,std::string entity, Style styleDessin);
 static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1);
 static void DeplacementObjet3D(AcDbSubDMesh* pSubDMesh, Matrix4 transform1);
 static void DeplacementObjet3DMappedItem(AcDb3dSolid* pSolid, Matrix4 transformationOperator3D);
 static void DeplacementObjet3DMappedItem(AcDbSubDMesh* pSubDMesh, Matrix4 transformationOperator3D);
-static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float hauteurExtrusion, std::list<Vec3>& points1,
-	std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal,
-	std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal, std::vector<std::string>& listEntityHalf,
-	std::vector<std::string>& listEntityPolygonal, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, bool isMappedItem, Matrix4 transformationOperator3D);
+static void CreationSection(AcDb3dSolid* extrusion, Object object);
 
 //Void
 static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, bool isMappedItem, Matrix4 transformationOperator3D);
@@ -67,21 +62,21 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion, ObjectVoid Void, Composit
 static void CreationVoidRectangle(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, bool isMappedItem, Matrix4 transformationOperator3D);
 
 //profilDef
-void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
-void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
-void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
-void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
-void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
-void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
-void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
-void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
-void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
-void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
-void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
-void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
-void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
-void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
-void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
-void createFaceSolid(std::string entity,std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transformFace, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
+void createSolid3dProfilIPE(I_profilDef IprofilDef, Style styleDessin);
+void createSolid3dProfilIPN(I_profilDef IprofilDef, Style styleDessin);
+void createSolid3dProfilL8(L_profilDef LprofilDef, Style styleDessin);
+void createSolid3dProfilL9(L_profilDef LprofilDef, Style styleDessin);
+void createSolid3dProfilT10(T_profilDef TprofilDef, Style styleDessin);
+void createSolid3dProfilT12(T_profilDef TprofilDef, Style styleDessin);
+void createSolid3dProfilUPE(U_profilDef UprofilDef, Style styleDessin);
+void createSolid3dProfilUPN(U_profilDef UprofilDef, Style styleDessin);
+void createSolid3dProfilC(C_profilDef CprofilDef, Style styleDessin);
+void createSolid3dProfilZ(Z_profilDef ZprofilDef, Style styleDessin);
+void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, Style styleDessin);
+void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, Style styleDessin);
+void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Style styleDessin);
+void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Style styleDessin);
+void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Style styleDessin);
+void createFaceSolid(std::string entity, Object object, Style styleDessin);
 AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, bool isMappedItem, Matrix4 transformationOperator3D);
 float roundoff(float value, unsigned char prec);
