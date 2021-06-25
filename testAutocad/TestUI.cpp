@@ -302,7 +302,7 @@ void test()
             }
             else if (nameItems[i] == "IfcBoundingBox")
             {
-                createBoundingBox(box, styleDessin);
+                createBoundingBox(box, entity, styleDessin);
             }
         }
     }
@@ -409,7 +409,7 @@ void test()
                 }
                 else if (nameItems[i] == "IfcBoundingBox")
                 {
-                    createBoundingBox(box, styleDessin);
+                    createBoundingBox(box, entity, styleDessin);
                 }
 
             }
@@ -523,7 +523,7 @@ void test()
                 }
                 else if (nameItems[i] == "IfcBoundingBox")
                 {
-                    createBoundingBox(box, styleDessin);
+                    createBoundingBox(box,entity, styleDessin);
                 }
 
             }

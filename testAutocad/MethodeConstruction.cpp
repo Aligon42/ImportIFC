@@ -3482,8 +3482,95 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::s
 
 
 
-void createBoundingBox(Box box, Style styleDessin) {
+void createBoundingBox(Box box,std::string entity, Style styleDessin) {
+	
+	// Open the Layer table for read
+	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
+	AcDbLayerTable* pLayerTable;
+	pDb->getLayerTable(pLayerTable, AcDb::kForRead);
 
+	const ACHAR* layerName = GetWCM((entity.c_str()));
+	// Check to see if the layer exists
+
+
+	if (entity == "IfcBeam")
+	{
+		layerName = _T("Poutre");
+	}
+	else if (entity == "IfcColumn")
+	{
+		layerName = _T("Colonne");
+	}
+	else if (entity == "IfcWallStandardCase")
+	{
+		layerName = _T("Mur");
+	}
+	else if (entity == "IfcWall")
+	{
+		layerName = _T("Mur");
+	}
+	else if (entity == "IfcSlab")
+	{
+		layerName = _T("Dalle");
+	}
+	else if (entity == "IfcRoof")
+	{
+		layerName = _T("Toit");
+	}
+	else if (entity == "IfcCovering")
+	{
+		layerName = _T("Revêtement");
+	}
+	else if (entity == "IfcPlate")
+	{
+		layerName = _T("Plaque");
+	}
+	else if (entity == "IfcFooting")
+	{
+		layerName = _T("Pied");
+	}
+	else if (entity == "IfcBuildingElementProxy")
+	{
+		layerName = _T("Proxy");
+	}
+	else if (entity == "IfcDoor")
+	{
+		layerName = _T("Porte");
+	}
+	else if (entity == "IfcSite")
+	{
+		layerName = _T("Site");
+	}
+	else if (entity == "IfcStair")
+	{
+		layerName = _T("Escalier");
+	}
+	else if (entity == "IfcRailling")
+	{
+		layerName = _T("Balustrade");
+	}
+	else if (entity == "IfcWindow")
+	{
+		layerName = _T("Fenêtre");
+	}
+
+
+	if (!pLayerTable->has(layerName))
+	{
+		// Open the Layer table for write
+		pLayerTable->upgradeOpen();
+
+		// Create the new layer and assign it the name 'OBJ'
+		AcDbLayerTableRecord* pLayerTableRecord = new AcDbLayerTableRecord();
+		pLayerTableRecord->setName(layerName);
+
+		// Add the new layer to the Layer table
+		pLayerTable->add(pLayerTableRecord);
+
+		// Close the Layer table and record
+		pLayerTableRecord->close();
+	}
+	pLayerTable->close();
 	Acad::ErrorStatus es;
 
 	// Extrude the region to create a solid.
@@ -3502,6 +3589,7 @@ void createBoundingBox(Box box, Style styleDessin) {
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	box3d->setColor(couleurRGB, false);
+	box3d->setLayer(layerName, Adesk::kFalse, false);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 	AcDbDatabase* pDb = curDoc()->database();
