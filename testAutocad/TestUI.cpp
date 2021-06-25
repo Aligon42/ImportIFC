@@ -224,7 +224,7 @@ void test()
         style.red = visitor1.getStyle().red;
         style.green = visitor1.getStyle().green;
         style.blue = visitor1.getStyle().blue;
-
+        style.transparence = visitor1.getStyle().transparence;
         listStyle.push_back(style);
     }
 
@@ -273,6 +273,7 @@ void test()
                     styleDessin.red = listStyle[i].red;
                     styleDessin.green = listStyle[i].green;
                     styleDessin.blue = listStyle[i].blue;
+                    styleDessin.transparence = listStyle[i].transparence;
                     listStyle.erase(listStyle.begin() + i);
                 }
             }
@@ -378,6 +379,7 @@ void test()
                     styleDessin.red = listStyle[i].red;
                     styleDessin.green = listStyle[i].green;
                     styleDessin.blue = listStyle[i].blue;
+                    styleDessin.transparence = listStyle[i].transparence;
                     listStyle.erase(listStyle.begin() + i);
                 }
             }
@@ -492,6 +494,7 @@ void test()
                     styleDessin.red = listStyle[i].red;
                     styleDessin.green = listStyle[i].green;
                     styleDessin.blue = listStyle[i].blue;
+                    styleDessin.transparence = listStyle[i].transparence;
                     listStyle.erase(listStyle.begin() + i);
                 }
             }

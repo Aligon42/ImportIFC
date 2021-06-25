@@ -153,6 +153,7 @@ struct Style
     double red;
     double green;
     double blue;
+    double transparence;
 };
 
 struct Box

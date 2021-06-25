@@ -56,6 +56,11 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 	{
 		layerName = _T("Pied");
 	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
+	}
+
 	
 
 
@@ -211,6 +216,11 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
    AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -1171,6 +1181,10 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, Vec3 Vec
 	{
 		layerName = _T("Pied");
 	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
+	}
 
 	if (!pLayerTable->has(layerName))
 	{
@@ -1280,6 +1294,12 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, Vec3 Vec
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
+
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
@@ -1323,6 +1343,10 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, Vec3 Vec
 	if (entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
+	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -1434,6 +1458,12 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, Vec3 Vec
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
+
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
@@ -1477,6 +1507,10 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, Vec3 Vect
 	if (entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
+	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -1580,6 +1614,12 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, Vec3 Vect
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
+
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
@@ -1623,6 +1663,10 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, Vec3 Vect
 	if (entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
+	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -1729,6 +1773,12 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, Vec3 Vect
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
+
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
@@ -1772,6 +1822,10 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, Vec3 Vec
 	if (entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
+	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -1879,6 +1933,12 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, Vec3 Vec
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
+
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
@@ -1922,6 +1982,10 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, Vec3 Vec
 	if (entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
+	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -2034,6 +2098,12 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, Vec3 Vec
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
+
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
@@ -2078,6 +2148,10 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, Vec3 Vec
 	{
 		layerName = _T("Pied");
 	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
+	}
 
 	if (!pLayerTable->has(layerName))
 	{
@@ -2183,6 +2257,12 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, Vec3 Vec
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
+
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
@@ -2227,6 +2307,10 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, Vec3 Vec
 	{
 		layerName = _T("Pied");
 	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
+	}
 
 	if (!pLayerTable->has(layerName))
 	{
@@ -2332,6 +2416,12 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, Vec3 Vec
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
+
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
@@ -2375,6 +2465,10 @@ void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, Vec3 Vecte
 	if (entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
+	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -2485,6 +2579,12 @@ void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, Vec3 Vecte
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
+
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
@@ -2528,6 +2628,10 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, Vec3 Vecte
 	if (entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
+	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -2635,6 +2739,12 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, Vec3 Vecte
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
+
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
@@ -2678,6 +2788,10 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::st
 	if (entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
+	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -2793,6 +2907,12 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::st
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
+
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
@@ -2836,6 +2956,10 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	if (entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
+	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -2973,6 +3097,12 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
+
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
@@ -3017,6 +3147,10 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 	if (entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
+	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -3180,6 +3314,12 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
+
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
@@ -3224,6 +3364,10 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string ent
 	if (entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
+	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -3318,6 +3462,12 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string ent
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
+
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
@@ -3364,6 +3514,10 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::s
 	if (entity == "IfcFooting")
 	{
 		layerName = _T("Pied");
+	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -3461,6 +3615,12 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::s
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
+
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
 	{
@@ -3553,6 +3713,10 @@ void createBoundingBox(Box box,std::string entity, Style styleDessin) {
 	{
 		layerName = _T("Fenêtre");
 	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
+	}
 
 
 	if (!pLayerTable->has(layerName))
@@ -3577,7 +3741,7 @@ void createBoundingBox(Box box,std::string entity, Style styleDessin) {
 
 	AcDb3dSolid* box3d = new AcDb3dSolid();
 
-	box3d->createBox(box.XDimBox, box.YDimBox, box.ZDimBox);  /// Creation de la box au point 0,0,0 avec les dimensions
+	es =box3d->createBox(box.XDimBox, box.YDimBox, box.ZDimBox);  /// Creation de la box au point 0,0,0 avec les dimensions
 
 	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
 
@@ -3589,21 +3753,30 @@ void createBoundingBox(Box box,std::string entity, Style styleDessin) {
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	box3d->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	box3d->setTransparency(transparence);
+
 	box3d->setLayer(layerName, Adesk::kFalse, false);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
-	AcDbDatabase* pDb = curDoc()->database();
-	AcDbObjectId modelId;
-	modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+	if (Acad::eOk == es)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId;
+		modelId = acdbSymUtil()->blockModelSpaceId(pDb);
 
-	AcDbBlockTableRecord* pBlockTableRecord;
-	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
 
-	
 
-	pBlockTableRecord->appendAcDbEntity(box3d);
-	pBlockTableRecord->close();
-	box3d->close();
+
+		pBlockTableRecord->appendAcDbEntity(box3d);
+		pBlockTableRecord->close();
+		box3d->close();
+	}
 
 }
 
@@ -3677,6 +3850,10 @@ void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<in
 	else if (entity == "IfcWindow")
 	{
 		layerName = _T("Fenêtre");
+	}
+	if (entity == "IfcMappedItem")
+	{
+		layerName = _T("Element");
 	}
 
 
@@ -3811,6 +3988,12 @@ void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<in
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 	couleurRGB.setRGB(styleDessin.red * 255, styleDessin.green * 255, styleDessin.blue * 255);
 	pSubDMesh->setColor(couleurRGB, false);
+
+	double opa = abs((styleDessin.transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSubDMesh->setTransparency(transparence);
+
 	pSubDMesh->setLayer(layerName, Adesk::kFalse, false);
 
 	if (Acad::eOk == es)

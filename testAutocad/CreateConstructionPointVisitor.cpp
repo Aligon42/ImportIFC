@@ -404,6 +404,11 @@ bool CreateConstructionPointVisitor::visitIfcSurfaceStyleRendering(
     {
         value->getSurfaceColour()->acceptVisitor(this);
     }
+
+    if (value->testTransparency())
+    {
+        style.transparence = value->getTransparency();
+    }
     return true;
 }
 
