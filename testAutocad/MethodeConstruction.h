@@ -21,6 +21,8 @@
 #include "CreateConstructionPointVisitor.h"
 #include "dbSubD.h"
 
+#include "Object.h"
+
 #define PI 3.141592653589793
 
 struct ObjectVoid
@@ -44,11 +46,10 @@ struct ObjectVoid
 };
 
 static std::vector<ObjectVoid> listVoid;
-static ObjectVoid _objectVoid;
 
 const wchar_t* GetWCM(const char* c, ...);
 
-void extrusion(int key, std::string entity, Object object, std::vector<ObjectVoid> listVoid);
+void extrusion(int key, std::string entity, Object& object, std::vector<ObjectVoid>& listVoid, Style styleDessin);
 void createBoundingBox(Box box,std::string entity, Style styleDessin);
 static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1);
 static void DeplacementObjet3D(AcDbSubDMesh* pSubDMesh, Matrix4 transform1);
@@ -77,6 +78,6 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Style styleDessin);
 void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Style styleDessin);
 void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Style styleDessin);
-void createFaceSolid(std::string entity, Object object, Style styleDessin);
+void createFaceSolid(std::string entity, Object& object, std::map<int, Style>* listStyles);
 AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, bool isMappedItem, Matrix4 transformationOperator3D);
 float roundoff(float value, unsigned char prec);

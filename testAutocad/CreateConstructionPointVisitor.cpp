@@ -89,10 +89,7 @@ bool CreateConstructionPointVisitor::visitIfcShapeRepresentation(
     {
         nameItems.push_back(item->getType().getName());
         keyItems.push_back(item->getKey());
-        if(!item->acceptVisitor(this))
-        {
-            return false;
-        }
+        item->acceptVisitor(this);
     }
 
     return true;
@@ -314,7 +311,7 @@ bool CreateConstructionPointVisitor::visitIfcStyledItem(
 {
     if (value->testItem())
     {
-        style.keyItem = value->getItem()->getKey();
+        _style.keyItem = value->getItem()->getKey();
     }
     if (value->testStyles())
     {
@@ -350,8 +347,7 @@ bool CreateConstructionPointVisitor::visitIfcPresentationStyleAssignment(
             case ifc2x3::IfcPresentationStyleSelect::IFCSURFACESTYLE:
                 styles->getIfcSurfaceStyle()->acceptVisitor(this);
                 break;
-            }
-            
+            }            
         }
     }
 
@@ -368,8 +364,7 @@ bool CreateConstructionPointVisitor::visitIfcSurfaceStyle(
     if (value->testStyles())
     {
         for (auto styles : value->getStyles())
-        {
-            
+        {            
             switch (styles->currentType())
             {
             case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLELIGHTING:
@@ -407,7 +402,7 @@ bool CreateConstructionPointVisitor::visitIfcSurfaceStyleRendering(
 
     if (value->testTransparency())
     {
-        style.transparence = value->getTransparency();
+        _style.transparence = value->getTransparency();
     }
     return true;
 }
@@ -417,15 +412,15 @@ bool CreateConstructionPointVisitor::visitIfcColourRgb(
 {
     if (value->testRed())
     {
-        style.red = value->getRed();
+        _style.red = value->getRed();
     }
     if (value->testGreen())
     {
-        style.green = value->getGreen();
+        _style.green = value->getGreen();
     }
     if (value->testBlue())
     {
-        style.blue = value->getBlue();
+        _style.blue = value->getBlue();
     }
     return true;
 }
@@ -473,7 +468,6 @@ bool CreateConstructionPointVisitor::visitIfcPolygonalBoundedHalfSpace(
             }
 
             entityPolygonal.push_back(value->getClassType().getName());
-
             
             return true;
         }
@@ -524,8 +518,7 @@ bool CreateConstructionPointVisitor::visitIfcCompositeCurve(
             {
                 _compositeCurveSegment.listPolyligne.push_back(points);
                 nbPolylineCompositeCurve++;
-            }
-            
+            }            
 
             /*
             for (int x = 0; x < nb; x++)
@@ -1103,6 +1096,7 @@ Object CreateConstructionPointVisitor::GetObjectData()
     obj.KeyItems = getListKeyItem();
     obj.OuterCurveName = getOuterCurveName();
     obj.ListNbArg = getNbArgPolyline();
+    obj.ListNbArgFace = getListNbArgFace();
     obj.ListPlan = getPlanPolygonal();
     obj.ListLocationPolygonal = getLocationPolygonal();
     obj.AgreementHalf = getAgreementHalfBool();
@@ -1111,6 +1105,9 @@ Object CreateConstructionPointVisitor::GetObjectData()
     obj.ListEntityPolygonal = getListEntityPolygonal();
     obj.CompositeCurveSegment = getCompositeCurveSegment();
     obj.NbPolylineComposite = getnbPolylineCompositeCurve();
+    obj.Orientation = getOrientatationFace();
+    obj.Box = getBox();
+    obj.ProfilDef = _profilDef != nullptr ? getProfilDef() : nullptr;
 
     return obj;
 }
@@ -1279,7 +1276,7 @@ Box CreateConstructionPointVisitor::getBox() const
 
 Style CreateConstructionPointVisitor::getStyle() const
 {
-    return style;
+    return _style;
 }
 
 bool CreateConstructionPointVisitor::getOrientatationFace() const
