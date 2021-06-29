@@ -3968,7 +3968,6 @@ void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<in
 		}
 		ListNbArg.erase(ListNbArg.begin());
 	}
-
 	es = pSubDMesh->setSubDMesh(ptArr, faceArray, 0);
 	if (Acad::eOk != es)
 	{
