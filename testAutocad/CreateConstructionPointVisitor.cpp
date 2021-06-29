@@ -689,7 +689,7 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
             transformation = ComputePlacementVisitor::getTransformation(
                                          value->getPosition());
 
-            transformPoints(transformation);
+            //transformPoints(transformation);
 
             NameProfilDef = value->getSweptArea()->getType().getName();
 

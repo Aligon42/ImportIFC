@@ -864,7 +864,13 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 
 		AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-		
+		if (AgreementPolygonal.at(0))
+		{
+			AgreementPolygonal.at(0) = false;
+		}
+		else {
+			AgreementPolygonal.at(0) = true;
+		}
 		extrusion->getSlice(Poly_plane, AgreementPolygonal.at(0), pSolid);
 		extrusion->booleanOper(AcDb::kBoolSubtract, pSolid);
 

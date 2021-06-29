@@ -47,10 +47,13 @@ struct ObjectVoid
 
 static std::vector<ObjectVoid> listVoid;
 static ObjectVoid _objectVoid;
+static bool passagePolylineComposite = false;
+
 
 const wchar_t* GetWCM(const char* c, ...);
 
 void extrusion(int key, std::string entity, std::vector <std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> nbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal,	std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal,	std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal,	std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
+void extrusion(int key, std::string entity, std::vector<std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
 void createBoundingBox(Box box,std::string entity, Style styleDessin);
 static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1);
 static void DeplacementObjet3D(AcDbSubDMesh* pSubDMesh, Matrix4 transform1);

@@ -313,7 +313,7 @@ void test()
         int key = (int)mappedItems.getKey();
         std::string entity = mappedItems.getType().getName();
 
-        //if (key != 18016) continue;
+        if (key != 1) continue;
         //if (key != 4574) continue;
 
         CreateConstructionPointVisitor visitor1;
@@ -356,8 +356,7 @@ void test()
         int key = (int)buildingElement.getKey();
         std::string entity = buildingElement.getType().getName();
 
-        if (entity != "IfcSlab") continue;
-        acutPrintf(_T("    => Element %d\n"), count2);
+        //if (key != 108778) continue;
 
         CreateConstructionPointVisitor visitor1;
 
@@ -413,7 +412,7 @@ void test()
         
         for (int i = 0; i < nameItems.size(); i++)
         {
-            if (entity == "IfcBuildingElementProxy")
+            /*if (entity == "IfcBuildingElementProxy")
             {
                 std::string NameProfilDef = visitor1.getNameProfildef();
                 if (nameItems[i] == "IfcExtrudedAreaSolid")
@@ -429,9 +428,9 @@ void test()
                 }
                 else if (nameItems[i] == "IfcBooleanClippingResult")
                 {
-                    transform1 *= transformation;
+                    //transform1 *= transformation;
 
-                    extrusion(key, entity, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, styleDessin, isMappedItem, transformationOperator3D);
+                    extrusion(key, entity, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1,transformation, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, styleDessin, isMappedItem, transformationOperator3D);
                 }
                 else if (nameItems[i] == "IfcFacetedBrep" || nameItems[i] == "IfcFaceBasedSurfaceModel" || nameItems[i] == "IfcShellBasedSurfaceModel")
                 {
@@ -450,7 +449,7 @@ void test()
 
                 }
             }
-            else if (entity != "IfcColumn" && entity != "IfcBeam")
+            else*/ if (entity != "IfcColumn" && entity != "IfcBeam")
             {
                 std::string NameProfilDef = visitor1.getNameProfildef();
                 if (nameItems[i] == "IfcExtrudedAreaSolid")
@@ -466,9 +465,9 @@ void test()
                 }
                 else if (nameItems[i] == "IfcBooleanClippingResult")
                 {
-                    transform1 *= transformation;
+                    //transform1 *= transformation;
 
-                    extrusion(key, entity, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, styleDessin, isMappedItem, transformationOperator3D);
+                    extrusion(key, entity, nameItems, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, transformation, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, styleDessin, isMappedItem, transformationOperator3D);
                 }
                 else if (nameItems[i] == "IfcFacetedBrep" || nameItems[i] == "IfcFaceBasedSurfaceModel"  || nameItems[i] == "IfcShellBasedSurfaceModel")
                 {
