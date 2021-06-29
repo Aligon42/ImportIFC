@@ -17,6 +17,19 @@ bool ComputePlacementVisitor::visitIfcProduct(
     return true;
 }
 
+bool ComputePlacementVisitor::visitIfcBuildingElementProxy(
+    ifc2x3::IfcBuildingElementProxy* value)
+{
+    isProxy = true;
+
+    if (value->testObjectPlacement())
+    {
+        return value->getObjectPlacement()->acceptVisitor(this);
+    }
+
+    return true;
+}
+
 bool ComputePlacementVisitor::visitIfcSite(
     ifc2x3::IfcSite* value)
 {
@@ -45,6 +58,11 @@ bool ComputePlacementVisitor::visitIfcLocalPlacement(
     if(value->testRelativePlacement())
     {
         _transformation = getTransformation(value);
+
+        if (isProxy)
+        {
+            transformationProxy = getTransformation(value);
+        }
     }
 
     return true;
@@ -192,4 +210,9 @@ Vec3 ComputePlacementVisitor::getOrigin() const
 Matrix4 ComputePlacementVisitor::getTransformation() const
 {
     return _transformation;
+}
+
+Matrix4 ComputePlacementVisitor::getTransformationProxy() const
+{
+    return transformationProxy;
 }

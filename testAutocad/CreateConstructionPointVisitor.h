@@ -164,6 +164,31 @@ struct Box
     int ZDimBox;
 };
 
+struct MappedItem
+{
+    std::vector<std::string> nameItemsMap;
+    std::vector<int> keyItemsMap;
+    std::list<Vec3> points1Map;
+    std::string outerCurveNameMap;
+    std::vector<int> ListNbArgMap;
+    Vec3 VecteurExtrusionMap;
+    float hauteurExtrusionMap;
+    std::list<Matrix4> listPlanMap;
+    std::list<Matrix4> listLocationPolygonalMap;
+    std::vector<bool> AgreementHalfMap;
+    std::vector<bool> AgreementPolygonalMap;
+    std::vector<std::string> listEntityHalfMap;
+    std::vector<std::string> listEntityPolygonalMap;
+    CompositeCurveSegment _compositeCurveMap;
+    int nbPolylineCompositeMap;
+    Box boxMap;
+    Matrix4 transform1Map;
+    Matrix4 transformationMap;
+    Matrix4 transformFaceMap;
+    bool isMappedItemMap;
+    Matrix4 transformationOperator3DMap;
+};
+
 //style
 static Style style;
 static Style styleDessin;
@@ -236,6 +261,9 @@ private:
 
     //Box
     Box box;
+
+    //MappedItem
+    MappedItem mappedItem;
     
 
 public:

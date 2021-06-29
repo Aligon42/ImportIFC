@@ -14,12 +14,15 @@ typedef mathfu::Matrix<float, 4> Matrix4;
 class ComputePlacementVisitor : public ifc2x3::InheritVisitor
 {
     Matrix4 _transformation{ Matrix4::Identity() };
+    bool isProxy = false;
+    Matrix4 transformationProxy;
 
 public:
     //! Constructor
     ComputePlacementVisitor();
 
     bool visitIfcProduct(ifc2x3::IfcProduct* value) override;
+    bool visitIfcBuildingElementProxy(ifc2x3::IfcBuildingElementProxy* value) override;
     bool visitIfcSite(ifc2x3::IfcSite* value) override;
     bool visitIfcRelVoidsElement(ifc2x3::IfcRelVoidsElement* value) override;
     bool visitIfcLocalPlacement(ifc2x3::IfcLocalPlacement* value) override;
@@ -32,4 +35,5 @@ public:
 
     Vec3 getOrigin() const;
     Matrix4 getTransformation() const;
+    Matrix4 getTransformationProxy() const;
 };
