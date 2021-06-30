@@ -4056,7 +4056,7 @@ void createBoundingBox(Box box,std::string entity, Style styleDessin) {
 
 }
 
-void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transform1, Matrix4 transformation, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D) {
+void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transformFace, Matrix4 transform1, Matrix4 transformation, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D) {
 
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -4254,11 +4254,11 @@ void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<in
 
 	if (isMappedItem)
 	{
-		//DeplacementObjet3D(pSubDMesh, transformation);
+		DeplacementObjet3D(pSubDMesh, transform1);
 		DeplacementObjet3DMappedItem(pSubDMesh, transformationOperator3D);
 	}
 	else
-		DeplacementObjet3D(pSubDMesh, transform1);
+		DeplacementObjet3D(pSubDMesh, transformFace);
 
 
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();

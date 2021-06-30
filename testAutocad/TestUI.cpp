@@ -302,7 +302,7 @@ void test()
             {
                 std::vector<int> ListNbArg = visitor1.getListNbArgFace();
                 bool orientation = visitor1.getOrientatationFace();
-                createFaceSolid(entity,points1, ListNbArg, orientation, transformFace, transformation, styleDessin, isMappedItem, transformationOperator3D);
+                createFaceSolid(entity,points1, ListNbArg, orientation, transformFace, transform1, transformation, styleDessin, isMappedItem, transformationOperator3D);
             }
             else if (nameItems[i] == "IfcBoundingBox")
             {
@@ -362,7 +362,8 @@ void test()
         int key = (int)buildingElement.getKey();
         std::string entity = buildingElement.getType().getName();
         //if (/*key != 108852 && key != 110815 && */key != 108907 /*&& key != 110867*/) continue;
-        if (key != 5557) continue;
+        //if (key != 5557) continue;
+        //if (key != 119599) continue;
 
         CreateConstructionPointVisitor visitor1;
 
@@ -446,7 +447,7 @@ void test()
                 {
                     std::vector<int> ListNbArg = visitor1.getListNbArgFace();
                     bool orientation = visitor1.getOrientatationFace();
-                    createFaceSolid(entity, points1, listNbArgFace, orientation, transformFace, transformation, styleDessin, isMappedItem, transformationOperator3D);
+                    createFaceSolid(entity, points1, listNbArgFace, orientation, transformFace, transform1, transformation, styleDessin, isMappedItem, transformationOperator3D);
                 }
                 else if (nameItems[i] == "IfcBoundingBox")
                 {
@@ -481,9 +482,10 @@ void test()
                         }
                         else if (map.nameItemsMap[0] == "IfcFacetedBrep" || map.nameItemsMap[0] == "IfcFaceBasedSurfaceModel" || map.nameItemsMap[0] == "IfcShellBasedSurfaceModel")
                         {
+                            
                             std::vector<int> ListNbArg = visitor1.getListNbArgFace();
                             bool orientation = visitor1.getOrientatationFace();
-                            createFaceSolid(entity, map.points1Map, map.listNbArgFaceMap, orientation, map.transformFaceMap, transformation, styleDessin, isMappedItem, map.transformationOperator3DMap);
+                            createFaceSolid(entity, map.points1Map, map.listNbArgFaceMap, orientation, map.transformFaceMap, transform1, transformation, styleDessin, isMappedItem, map.transformationOperator3DMap);
                         }
                         else if (map.nameItemsMap[0] == "IfcBoundingBox")
                         {
@@ -601,10 +603,9 @@ void dessinProfilDef(std::string NameProfilDef, std::string entity, Vec3 Vecteur
     }
     else if (nameItems[i] == "IfcFacetedBrep")
     {
-        //if (key != 20924) continue;
         std::vector<int> ListNbArg = visitor1.getListNbArgFace();
         bool orientation = visitor1.getOrientatationFace();
-        createFaceSolid(entity,points1, ListNbArg, orientation, transformFace, transformation, styleDessin, isMappedItem, transformationOperator3D);
+        createFaceSolid(entity,points1, ListNbArg, orientation, transformFace, transform1, transformation, styleDessin, isMappedItem, transformationOperator3D);
     }
 }
 
