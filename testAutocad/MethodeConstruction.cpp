@@ -4254,7 +4254,7 @@ void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<in
 
 	if (isMappedItem)
 	{
-		DeplacementObjet3D(pSubDMesh, transformation);
+		//DeplacementObjet3D(pSubDMesh, transformation);
 		DeplacementObjet3DMappedItem(pSubDMesh, transformationOperator3D);
 	}
 	else
