@@ -398,7 +398,7 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 	}
 	ListNbArg.erase(ListNbArg.begin());
 
-	//DeplacementObjet3D(pSolid, transformation);
+	DeplacementObjet3D(pSolid, transformation);
 
 	for (int a = 0; a < nbPlan; a++)
 	{
@@ -885,7 +885,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 			delete (AcRxObject*)regions[ii];
 		}
 
-		//pSolid->close();
+		pSolid->close();
 
 		if (isMappedItem)
 			DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
@@ -900,20 +900,20 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 		pSolid->getSlice(Poly_plane, agreementPoly, pSolid);
 		extrusion->booleanOper(AcDb::kBoolSubtract, pSolid);
 		
-		/*if (Acad::eOk == es)
-		{
-			AcDbDatabase* pDb = curDoc()->database();
-			AcDbObjectId modelId;
-			modelId = acdbSymUtil()->blockModelSpaceId(pDb);
-			AcDbBlockTableRecord* pBlockTableRecord;
-			acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
-			pBlockTableRecord->appendAcDbEntity(pSolid);
-			pBlockTableRecord->close();
+		//if (Acad::eOk == es)
+		//{
+		//	AcDbDatabase* pDb = curDoc()->database();
+		//	AcDbObjectId modelId;
+		//	modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		//	AcDbBlockTableRecord* pBlockTableRecord;
+		//	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		//	pBlockTableRecord->appendAcDbEntity(pSolid);
+		//	pBlockTableRecord->close();
 
-			//pSolid->getSlice(Poly_plane, agreementPoly, pSolid);
-			pSolid->close();
+		//	//pSolid->getSlice(Poly_plane, agreementPoly, pSolid);
+		//	pSolid->close();
 
-		}*/
+		//}
 
 		if (nbPolylineComposite > 0)
 		{
@@ -4056,7 +4056,7 @@ void createBoundingBox(Box box,std::string entity, Style styleDessin) {
 
 }
 
-void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D) {
+void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transform1, Matrix4 transformation, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D) {
 
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -4254,6 +4254,7 @@ void createFaceSolid(std::string entity, std::list<Vec3> points1, std::vector<in
 
 	if (isMappedItem)
 	{
+		DeplacementObjet3D(pSubDMesh, transformation);
 		DeplacementObjet3DMappedItem(pSubDMesh, transformationOperator3D);
 	}
 	else

@@ -10,8 +10,6 @@ CreateConstructionPointVisitor::CreateConstructionPointVisitor() :
 bool CreateConstructionPointVisitor::visitIfcProduct(
     ifc2x3::IfcProduct* value)
 {
-    isMappedItem = false;
-
     if(value->testRepresentation())
     {
         return value->getRepresentation()->acceptVisitor(this);
@@ -87,8 +85,18 @@ bool CreateConstructionPointVisitor::visitIfcShapeRepresentation(
 {
     for(auto item : value->getItems())
     {
-        nameItems.push_back(item->getType().getName());
         keyItems.push_back(item->getKey());
+        
+        if (!isMappedItem)
+        {
+            nameItems.push_back(item->getType().getName());
+        }
+        else
+        {
+            nameItemsMap.push_back(item->getType().getName());
+            isMappedItem = false;
+        }
+        
         if(!item->acceptVisitor(this))
         {
             return false;
@@ -224,6 +232,22 @@ bool CreateConstructionPointVisitor::visitIfcShellBasedSurfaceModel(
     return true;
 }
 
+bool CreateConstructionPointVisitor::visitIfcShell(
+    ifc2x3::IfcShell* value)
+{
+    switch (value->currentType())
+    {
+    case value->IFCCLOSEDSHELL:
+        value->getIfcClosedShell()->acceptVisitor(this);
+        break;
+    case value->IFCOPENSHELL:
+        value->getIfcOpenShell()->acceptVisitor(this);
+        break;
+    }
+
+    return true;
+}
+
 bool CreateConstructionPointVisitor::visitIfcOpenShell(
     ifc2x3::IfcOpenShell* value)
 {
@@ -245,6 +269,8 @@ bool CreateConstructionPointVisitor::visitIfcMappedItem(
     ifc2x3::IfcMappedItem* value)
 {
     isMappedItem = true;
+
+    keyMappedItem.push_back(value->getKey());
 
     if (value->testMappingSource())
     {
@@ -608,7 +634,8 @@ bool CreateConstructionPointVisitor::visitIfcCircle(
     return true;
 }
 
-bool CreateConstructionPointVisitor::visitIfcAxis2Placement(ifc2x3::IfcAxis2Placement* value)
+bool CreateConstructionPointVisitor::visitIfcAxis2Placement(
+    ifc2x3::IfcAxis2Placement* value)
 {
     switch (value->currentType())
     {
@@ -1079,8 +1106,8 @@ bool CreateConstructionPointVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value
 
     for (auto point : value->getPolygon())
     {
-        auto v = ComputePlacementVisitor::getPoint(point.get());
-        _points.push_back(v);
+        _points.push_back(ComputePlacementVisitor::getPoint(point.get()));
+        
     }
 
     return _points.empty() == false;
@@ -1291,6 +1318,16 @@ CompositeCurveSegment CreateConstructionPointVisitor::getCompositeCurveSegment()
 int CreateConstructionPointVisitor::getNbCompositeCurve() const
 {
     return nbCompositeCurve;
+}
+
+std::vector<int> CreateConstructionPointVisitor::getKeyMappedItem() const
+{
+    return keyMappedItem;
+}
+
+std::vector<std::string> CreateConstructionPointVisitor::getNameItemsMap() const
+{
+    return nameItemsMap;
 }
 
 std::vector<int> CreateConstructionPointVisitor::getListNbArgFace() const

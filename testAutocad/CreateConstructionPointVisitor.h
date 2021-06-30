@@ -167,10 +167,12 @@ struct Box
 struct MappedItem
 {
     std::vector<std::string> nameItemsMap;
+    std::string NameProfilDefMap;
     std::vector<int> keyItemsMap;
     std::list<Vec3> points1Map;
     std::string outerCurveNameMap;
     std::vector<int> ListNbArgMap;
+    std::vector<int> listNbArgFaceMap;
     Vec3 VecteurExtrusionMap;
     float hauteurExtrusionMap;
     std::list<Matrix4> listPlanMap;
@@ -265,6 +267,8 @@ private:
 
     //MappedItem
     MappedItem mappedItem;
+    std::vector<int> keyMappedItem;
+    std::vector<std::string> nameItemsMap;
     
 
 public:
@@ -282,6 +286,7 @@ public:
     bool visitIfcFaceBasedSurfaceModel(ifc2x3::IfcFaceBasedSurfaceModel* value) override;
     bool visitIfcConnectedFaceSet(ifc2x3::IfcConnectedFaceSet* value) override;
     bool visitIfcShellBasedSurfaceModel(ifc2x3::IfcShellBasedSurfaceModel* value) override;
+    bool visitIfcShell(ifc2x3::IfcShell* value) override;
     bool visitIfcOpenShell(ifc2x3::IfcOpenShell* value) override;
     bool visitIfcMappedItem(ifc2x3::IfcMappedItem* value) override;
     bool visitIfcCartesianTransformationOperator3D(ifc2x3::IfcCartesianTransformationOperator3D* value) override;
@@ -364,6 +369,8 @@ public:
     int getnbPolylineCompositeCurve() const;
     CompositeCurveSegment getCompositeCurveSegment() const;
     int getNbCompositeCurve() const;
+    std::vector<int> getKeyMappedItem() const;
+    std::vector<std::string> getNameItemsMap() const;
 
     std::vector<int> getListNbArgFace() const;
     std::vector<int> getListKeyItem() const;

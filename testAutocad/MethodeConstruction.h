@@ -87,7 +87,7 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
 void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
 void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
-void createFaceSolid(std::string entity,std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transformFace, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
+void createFaceSolid(std::string entity,std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transformFace, Matrix4 transformation, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D);
 AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, bool isMappedItem, Matrix4 transformationOperator3D);
 float roundoff(float value, unsigned char prec);
 bool BoolToBool(Step::Boolean boool);
