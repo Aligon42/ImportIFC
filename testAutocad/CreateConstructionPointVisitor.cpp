@@ -163,7 +163,7 @@ bool CreateConstructionPointVisitor::visitIfcRepresentationMap(
                 Matrix4 transformation = ComputePlacementVisitor::getTransformation(
                     value->getMappingOrigin()->getIfcAxis2Placement3D());
 
-                transformPoints(transformation);
+                //transformPoints(transformation);
             }
 
             return true;
@@ -452,12 +452,13 @@ bool CreateConstructionPointVisitor::visitIfcPolygonalBoundedHalfSpace(
 {
     if (value->testPolygonalBoundary())
     {
+        
         if (value->getPolygonalBoundary()->acceptVisitor(this))
         {
             if (value->testPosition())
             {
                 transform = ComputePlacementVisitor::getTransformation(value->getPosition());
-                transformPoints(transform);
+                //transformPoints(transform);
 
                 listLocationPolygonal.push_back(transform);
             }
@@ -472,7 +473,7 @@ bool CreateConstructionPointVisitor::visitIfcPolygonalBoundedHalfSpace(
                 value->getBaseSurface()->acceptVisitor(this);
             }
 
-            entityPolygonal.push_back(value->getClassType().getName());
+            entityHalf.push_back(value->getClassType().getName());
 
             
             return true;
@@ -485,7 +486,7 @@ bool CreateConstructionPointVisitor::visitIfcCompositeCurve(
     ifc2x3::IfcCompositeCurve* value) 
 {
     isCompositeCurve = true;
-
+    nbCompositeCurve = 0;
     if (value->testSelfIntersect())
     {
         AgreementCompositeCurve.push_back(value->getSelfIntersect());
@@ -534,7 +535,7 @@ bool CreateConstructionPointVisitor::visitIfcCompositeCurve(
             }*/
         }
     }
-
+    nbCompositeCurve++;
     return true;
 }
 
@@ -1161,12 +1162,12 @@ std::string CreateConstructionPointVisitor::getOuterCurveName() const
 
 //***** BOOLEAN *****
 
-std::vector<bool> CreateConstructionPointVisitor::getAgreementHalfBool() const
+std::vector<Step::Boolean> CreateConstructionPointVisitor::getAgreementHalfBool() const
 {
     return AgreementHalf;
 }
 
-std::vector<bool> CreateConstructionPointVisitor::getAgreementPolygonalBool() const
+std::vector<Step::Boolean> CreateConstructionPointVisitor::getAgreementPolygonalBool() const
 {
     return AgreementPolygonal;
 }
@@ -1285,6 +1286,11 @@ int CreateConstructionPointVisitor::getnbPolylineCompositeCurve() const
 CompositeCurveSegment CreateConstructionPointVisitor::getCompositeCurveSegment() const
 {
     return _compositeCurveSegment;
+}
+
+int CreateConstructionPointVisitor::getNbCompositeCurve() const
+{
+    return nbCompositeCurve;
 }
 
 std::vector<int> CreateConstructionPointVisitor::getListNbArgFace() const

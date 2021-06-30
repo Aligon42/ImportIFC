@@ -175,8 +175,8 @@ struct MappedItem
     float hauteurExtrusionMap;
     std::list<Matrix4> listPlanMap;
     std::list<Matrix4> listLocationPolygonalMap;
-    std::vector<bool> AgreementHalfMap;
-    std::vector<bool> AgreementPolygonalMap;
+    std::vector<Step::Boolean> AgreementHalfMap;
+    std::vector<Step::Boolean> AgreementPolygonalMap;
     std::vector<std::string> listEntityHalfMap;
     std::vector<std::string> listEntityPolygonalMap;
     CompositeCurveSegment _compositeCurveMap;
@@ -215,6 +215,7 @@ private:
     bool isMappedItem = false;
 
     int nbPolylineCompositeCurve = 0;
+    int nbCompositeCurve;
     int nbSupport = 0;
     int scale = 0;
 
@@ -222,9 +223,9 @@ private:
     std::vector<int> keyItems;
 
     //opération boolean
-    std::vector<bool> AgreementHalf;
+    std::vector<Step::Boolean> AgreementHalf;
     std::vector<std::string> entityHalf;
-    std::vector<bool> AgreementPolygonal;
+    std::vector<Step::Boolean> AgreementPolygonal;
     std::vector<std::string> entityPolygonal;
     std::vector<bool> AgreementCompositeCurve;
     std::vector<ifc2x3::IfcTransitionCode> transitionCompositeCurveSegment;
@@ -337,8 +338,8 @@ public:
     std::string getOuterCurveName() const;
 
     //get opération boolean
-    std::vector<bool> getAgreementHalfBool() const;
-    std::vector<bool> getAgreementPolygonalBool() const;
+    std::vector<Step::Boolean> getAgreementHalfBool() const;
+    std::vector<Step::Boolean> getAgreementPolygonalBool() const;
     std::list<Matrix4> getPlanPolygonal();
     std::list<Matrix4> getLocationPolygonal() const;
     std::vector<int> getNbArgPolyline() const;
@@ -362,6 +363,7 @@ public:
     int getkeyForVoid() const;
     int getnbPolylineCompositeCurve() const;
     CompositeCurveSegment getCompositeCurveSegment() const;
+    int getNbCompositeCurve() const;
 
     std::vector<int> getListNbArgFace() const;
     std::vector<int> getListKeyItem() const;

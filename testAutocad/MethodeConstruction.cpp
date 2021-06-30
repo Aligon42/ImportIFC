@@ -17,7 +17,7 @@ const wchar_t* GetWCM(const char* c, ...)
 
 
 
-void extrusion(int key, std::string entity, std::vector<std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf,  std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
+void extrusion(int key, std::string entity, std::vector<std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf,  std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 
 	// Open the Layer table for read
@@ -177,12 +177,12 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 
 	ListNbArg.erase(ListNbArg.begin());
 
-	for (int a = 0; a < nbPlan; a++)
+	/*for (int a = 0; a < nbPlan; a++)
 	{
 			CreationSection(pSolid, VecteurExtrusion, hauteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, _compositeCurveSegment, transform1, nbPolylineComposite, isMappedItem, transformationOperator3D);
 	
 			listPlan.pop_front();
-	}
+	}*/
 
 	if (isMappedItem)
 	{
@@ -197,17 +197,17 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 		{
 			if (listVoid[v].NameProfilDef == "IfcArbitraryClosedProfileDef")
 			{
-				CreationVoid(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, isMappedItem, transformationOperator3D);
+				CreationVoid(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, nbCompositeCurve, isMappedItem, transformationOperator3D);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 			else if (listVoid[v].NameProfilDef == "IfcCircleProfileDef")
 			{
-				CreationVoidCircle(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, isMappedItem, transformationOperator3D);
+				CreationVoidCircle(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, nbCompositeCurve, isMappedItem, transformationOperator3D);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 			else if (listVoid[v].NameProfilDef == "IfcRectangleProfileDef")
 			{
-				CreationVoidRectangle(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, isMappedItem, transformationOperator3D);
+				CreationVoidRectangle(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, nbCompositeCurve, isMappedItem, transformationOperator3D);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 		}
@@ -243,7 +243,7 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
     }
 }
 
-void extrusion(int key, std::string entity, std::vector<std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<bool> AgreementHalf, std::vector<bool> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
+void extrusion(int key, std::string entity, std::vector<std::string> nameItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, Style styleDessin, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 
 
@@ -398,17 +398,44 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 	}
 	ListNbArg.erase(ListNbArg.begin());
 
-	DeplacementObjet3D(pSolid, transformation);
+	//DeplacementObjet3D(pSolid, transformation);
 
 	for (int a = 0; a < nbPlan; a++)
 	{
-		CreationSection(pSolid, VecteurExtrusion, hauteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, _compositeCurveSegment, transform1, nbPolylineComposite, isMappedItem, transformationOperator3D);
+		CreationSection(pSolid, VecteurExtrusion, hauteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, _compositeCurveSegment, transform1, nbPolylineComposite, nbCompositeCurve, isMappedItem, transformationOperator3D);
 
 		listPlan.pop_front();
+		
+		if (passagePolygonal)
+		{
+			if (listLocationPolygonal.size() > 0)
+			{
+				listLocationPolygonal.pop_front();
+			}
+			if (AgreementPolygonal.size() > 0)
+			{
+				AgreementPolygonal.erase(AgreementPolygonal.begin());
+			}
+		}
+		if (listEntityHalf.size() > 0)
+		{
+			listEntityHalf.erase(listEntityHalf.begin());
+		}
+		if (passageHalfSpaceSolid)
+		{
+			if (AgreementHalf.size() > 0)
+			{
+				AgreementHalf.erase(AgreementHalf.begin());
+			}
+		}
 		if (passagePolylineComposite)
 		{
 			nbPolylineComposite = 0;
 		}
+		nbCompositeCurve--;
+		passagePolylineComposite = false;
+		passageHalfSpaceSolid = false;
+		passagePolygonal = false;
 	}
 
 	if (isMappedItem)
@@ -422,17 +449,17 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 		{
 			if (listVoid[v].NameProfilDef == "IfcArbitraryClosedProfileDef")
 			{
-				CreationVoid(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, isMappedItem, transformationOperator3D);
+				CreationVoid(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, nbCompositeCurve, isMappedItem, transformationOperator3D);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 			else if (listVoid[v].NameProfilDef == "IfcCircleProfileDef")
 			{
-				CreationVoidCircle(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, isMappedItem, transformationOperator3D);
+				CreationVoidCircle(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, nbCompositeCurve, isMappedItem, transformationOperator3D);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 			else if (listVoid[v].NameProfilDef == "IfcRectangleProfileDef")
 			{
-				CreationVoidRectangle(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, isMappedItem, transformationOperator3D);
+				CreationVoidRectangle(pSolid, listVoid[v], _compositeCurveSegment, transform1, nbPolylineComposite, nbCompositeCurve, isMappedItem, transformationOperator3D);
 				//listVoid.erase(listVoid.begin() + v);
 			}
 		}
@@ -676,8 +703,8 @@ static void DeplacementObjet3DMappedItem(AcDbSubDMesh* pSubDMesh, Matrix4 transf
 
 }
 
-static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float hauteurExtrusion, std::list<Vec3>& points1, std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal, std::vector<bool>& AgreementHalf, std::vector<bool>& AgreementPolygonal,
-	std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, bool isMappedItem, Matrix4 transformationOperator3D)
+static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float hauteurExtrusion, std::list<Vec3>& points1, std::vector<int>& nbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal, std::vector<Step::Boolean>& AgreementHalf, std::vector<Step::Boolean>& AgreementPolygonal,
+	std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, int nbCompositeCurve, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 
 	AcGeVector3d v1 = AcGeVector3d::AcGeVector3d(0, 0, 0);             // Vector 1 (x,y,z) & Vector 2 (x,y,z)
@@ -771,18 +798,15 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 
 	Poly_plane.set(Poly_plane.pointOnPlane(), Poly_plane.normal().negate());
 	
-	if (listEntityHalf.size() > 0)
+	if (listEntityHalf.at(0) == "IfcHalfSpaceSolid")
 	{
-		extrusion->getSlice(Poly_plane, AgreementHalf.at(0), negSolid);
-
-		if (listEntityHalf.size() > 0)
-		{
-			listEntityHalf.erase(listEntityHalf.begin());
-			AgreementHalf.erase(AgreementHalf.begin());
-		}
+		passageHalfSpaceSolid = true;
+		bool agreementPoly = BoolToBool(AgreementHalf.at(0));
+		extrusion->getSlice(Poly_plane, agreementPoly, negSolid);
 	}
-	else
+	else if (listEntityHalf.at(0) == "IfcPolygonalBoundedHalfSpace")
 	{
+		passagePolygonal = true;
 		Acad::ErrorStatus es;
 
 		AcGePoint3dArray ptArr;
@@ -797,8 +821,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 				break;
 			}
 
-			ptArr[i].set(point.x() * -1.0f, point.y() * -1.0f, point.z() * -1.0f);
-			acutPrintf(_T("point : [%f, %f, %f]\n"), point.x() * -1.0f, point.y() * -1.0f, point.z() * -1.0f);
+			ptArr[i].set(point.x(), point.y(), point.z());
 			i++;
 		}
 
@@ -831,9 +854,16 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 
 		AcDbRegion* pRegion;
 
-		if (_compositeCurveSegment.listPolyligne.size() > 0 || _compositeCurveSegment.listTrimmedCurve.size() > 0 ||
-			_compositeCurveSegment.listParentCurve.size() > 0)
-			pRegion = createCompositeCurve(_compositeCurveSegment, transform, isMappedItem, transformationOperator3D);
+		if (nbCompositeCurve > 0)
+		{
+			if (_compositeCurveSegment.listPolyligne.size() > 0 || _compositeCurveSegment.listTrimmedCurve.size() > 0 ||
+				_compositeCurveSegment.listParentCurve.size() > 0)
+			{
+				pRegion = createCompositeCurve(_compositeCurveSegment, transform, isMappedItem, transformationOperator3D);
+			}
+			else
+				pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
+		}
 		else
 			pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
@@ -855,7 +885,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 			delete (AcRxObject*)regions[ii];
 		}
 
-		pSolid->close();
+		//pSolid->close();
 
 		if (isMappedItem)
 			DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
@@ -863,10 +893,27 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 			DeplacementObjet3D(pSolid, listLocationPolygonal.front());
 
 		AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
-
 		
-		extrusion->getSlice(Poly_plane, AgreementPolygonal.at(0), pSolid);
+		bool agreementPoly = BoolToBool(AgreementPolygonal.at(0));
+		
+
+		pSolid->getSlice(Poly_plane, agreementPoly, pSolid);
 		extrusion->booleanOper(AcDb::kBoolSubtract, pSolid);
+		
+		/*if (Acad::eOk == es)
+		{
+			AcDbDatabase* pDb = curDoc()->database();
+			AcDbObjectId modelId;
+			modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+			AcDbBlockTableRecord* pBlockTableRecord;
+			acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+			pBlockTableRecord->appendAcDbEntity(pSolid);
+			pBlockTableRecord->close();
+
+			//pSolid->getSlice(Poly_plane, agreementPoly, pSolid);
+			pSolid->close();
+
+		}*/
 
 		if (nbPolylineComposite > 0)
 		{
@@ -896,7 +943,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 	
 }
 
-static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, bool isMappedItem, Matrix4 transformationOperator3D)
+static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, int nbCompositeCurve, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 	Acad::ErrorStatus es;
 	ads_name polyName;
@@ -991,10 +1038,10 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurve
 		{
 			CreationSection(extrusion_void, Void.VecteurExtrusion,Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, nbCompositeCurve, isMappedItem, transformationOperator3D);
 			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, nbCompositeCurve, isMappedItem, transformationOperator3D);
 
 			Void.listPlan.pop_front();
 		}
@@ -1026,7 +1073,7 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurve
 	extrusion_void2->close();
 }
 
-static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, bool isMappedItem, Matrix4 transformationOperator3D)
+static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, int nbCompositeCurve, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 
 	Acad::ErrorStatus es;
@@ -1113,10 +1160,10 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, Composi
 		{
 			CreationSection(extrusion_void, Void.VecteurExtrusion,Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, nbCompositeCurve, isMappedItem, transformationOperator3D);
 			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal,  _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal,  _compositeCurveSegment, transform, nbPolylineComposite, nbCompositeCurve, isMappedItem, transformationOperator3D);
 
 			Void.listPlan.pop_front();
 		}
@@ -1148,7 +1195,7 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, Composi
 	extrusion_void2->close();
 }
 
-static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, bool isMappedItem, Matrix4 transformationOperator3D)
+static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, int nbCompositeCurve, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 
 	Acad::ErrorStatus es;
@@ -1252,10 +1299,10 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void, Comp
 		{
 			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, nbCompositeCurve, isMappedItem, transformationOperator3D);
 			CreationSection(extrusion_void2, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
 				Void.nbArg, Void.listPlan, Void.listLocationPolygonal, Void.AgreementHalf,
-				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, isMappedItem, transformationOperator3D);
+				Void.AgreementPolygonal, Void.listEntityHalf, Void.listEntityPolygonal, _compositeCurveSegment, transform, nbPolylineComposite, nbCompositeCurve, isMappedItem, transformationOperator3D);
 
 			Void.listPlan.pop_front();
 		}
@@ -4246,4 +4293,16 @@ float roundoff(float value, unsigned char prec)
 {
 	float pow_10 = pow(10.0f, (float)prec);
 	return round(value * pow_10) / pow_10;
+}
+
+bool BoolToBool(Step::Boolean boool)
+{
+	if (boool == Step::Boolean::BFalse)
+	{
+		return true;
+	}
+	else if (boool == Step::Boolean::BTrue)
+	{
+		return false;
+	}
 }
