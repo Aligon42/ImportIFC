@@ -194,7 +194,7 @@ struct MappedItem
 //style
 static Style style;
 static Style styleDessin;
-static std::vector<Style> listStyle;
+static std::map<int, Style> listStyle;
 
 
 class CreateConstructionPointVisitor : public ifc2x3::InheritVisitor
