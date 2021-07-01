@@ -358,7 +358,7 @@ void test()
         std::string entity = buildingElement.getType().getName();
         //if (/*key != 108852 && key != 110815 && */key != 108907 /*&& key != 110867*/) continue;
         //if (key != 5557) continue;
-        if (key != 119516) continue;
+        //if (key != 119516) continue;
 
         CreateConstructionPointVisitor visitor1;
 
@@ -390,6 +390,7 @@ void test()
         int nbCompositeCurve = visitor1.getNbCompositeCurve();
 
         std::vector<int> keyMappedItem = visitor1.getKeyMappedItem();       
+        std::vector<int> keyShapeMap = visitor1.getkeyShapeMap();       
 
         Box box = visitor1.getBox();
 
@@ -403,11 +404,25 @@ void test()
         Matrix4 transformationOperator3D = visitor1.getTransformationOperator3D();
 
         std::vector<Style> vectorStyle;
-        if (keyItems.size() > 0)
+        int sizeItem = keyItems.size();
+        if (isMappedItemMethode)
+        {
+            sizeItem = sizeItem / 2;
+        }
+        if (sizeItem > 0)
         {
             for (int i = 0; i < keyItems.size(); i++)
             {
-                vectorStyle.push_back(listStyle[keyItems[i]]);
+                if (isMappedItemMethode)
+                {
+                    Style pushStyle = listStyle[keyShapeMap[i]];
+                    vectorStyle.push_back(pushStyle);
+                }
+                else
+                {
+                    vectorStyle.push_back(listStyle[keyItems[i]]);
+                }
+                
             }
         }
         

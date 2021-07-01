@@ -94,6 +94,7 @@ bool CreateConstructionPointVisitor::visitIfcShapeRepresentation(
         else
         {
             nameItemsMap.push_back(item->getType().getName());
+            keyShapeMap.push_back(item->getKey());
             isMappedItem = false;
         }
         
@@ -1335,6 +1336,12 @@ std::vector<std::string> CreateConstructionPointVisitor::getNameItemsMap() const
 {
     return nameItemsMap;
 }
+
+std::vector<int> CreateConstructionPointVisitor::getkeyShapeMap() const
+{
+    return keyShapeMap;
+}
+
 
 std::vector<int> CreateConstructionPointVisitor::getListNbArgFace() const
 {

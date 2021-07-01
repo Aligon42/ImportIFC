@@ -214,10 +214,7 @@ void extrusion(int key, std::string entity, std::vector <std::string> nameItems,
 	}
 
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	Adesk::UInt8 red = round(vectorStyle.at(0).red * 255);
-	Adesk::UInt8 green = round(vectorStyle.at(0).green * 255);
-	Adesk::UInt8 blue = round(vectorStyle.at(0).blue * 255);
-	couleurRGB.setRGB(red, green, blue);
+	couleurRGB.setRGB(vectorStyle.at(0).red * 255, vectorStyle.at(0).green * 255, vectorStyle.at(0).blue * 255);
 	pSolid->setColor(couleurRGB, false);
 
 	double opa = abs((vectorStyle.at(0).transparence * 255) - 255);

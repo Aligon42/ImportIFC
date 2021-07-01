@@ -270,6 +270,7 @@ private:
     MappedItem mappedItem;
     std::vector<int> keyMappedItem;
     std::vector<std::string> nameItemsMap;
+    std::vector<int> keyShapeMap;
     
 
 public:
@@ -342,6 +343,7 @@ public:
     bool getIsMappedItemMethode() const;
     bool getScale() const;
     std::vector<std::string> getNameItems() const;
+    std::vector<int> getkeyShapeMap() const;
     std::string getOuterCurveName() const;
 
     //get opération boolean
