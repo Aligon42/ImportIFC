@@ -215,6 +215,7 @@ private:
     bool isCompositeCurve = false;
     bool isBoolean = false;
     bool isMappedItem = false;
+    bool isMappedItemMethode = false;
 
     int nbPolylineCompositeCurve = 0;
     int nbCompositeCurve;
@@ -338,6 +339,7 @@ public:
     Matrix4 getTransformationOperator3D() const;
     float getDetermiantOperator3D() const;
     bool getIsMappedItem() const;
+    bool getIsMappedItemMethode() const;
     bool getScale() const;
     std::vector<std::string> getNameItems() const;
     std::string getOuterCurveName() const;

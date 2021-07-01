@@ -269,6 +269,7 @@ bool CreateConstructionPointVisitor::visitIfcMappedItem(
     ifc2x3::IfcMappedItem* value)
 {
     isMappedItem = true;
+    isMappedItemMethode = true;
 
     keyMappedItem.push_back(value->getKey());
 
@@ -1170,6 +1171,11 @@ float CreateConstructionPointVisitor::getDetermiantOperator3D() const
 bool CreateConstructionPointVisitor::getIsMappedItem() const
 {
     return isMappedItem;
+}
+
+bool CreateConstructionPointVisitor::getIsMappedItemMethode() const
+{
+    return isMappedItemMethode;
 }
 
 bool CreateConstructionPointVisitor::getScale() const
