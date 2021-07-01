@@ -37,4 +37,4 @@ static int success_results=0;
 	++success_results; \
 }
 
-void dessinProfilDef(std::string NameProfilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, CreateConstructionPointVisitor visitor1, std::list<Vec3> points1, Matrix4 transformFace, std::vector<std::string> nameItems, int keyItems, int i, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D);
+void dessinProfilDef(std::string NameProfilDef, std::string entity, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, CreateConstructionPointVisitor visitor1, std::list<Vec3> points1, Matrix4 transformFace, std::vector<std::string> nameItems, int keyItem, std::vector<int> keyItems, int i, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D);
