@@ -444,7 +444,11 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 	}
 
 	if (isMappedItem)
+	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
+	}
+		
 	else
 		DeplacementObjet3D(pSolid, transform1);
 
@@ -1060,12 +1064,20 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurve
 	}
 
 	if (isMappedItem)
+	{
+		
 		DeplacementObjet3DMappedItem(extrusion_void, transformationOperator3D);
+		DeplacementObjet3D(extrusion_void, Void.transform1);
+	}
 	else
 		DeplacementObjet3D(extrusion_void, Void.transform1);
 
 	if (isMappedItem)
+	{
+		
 		DeplacementObjet3DMappedItem(extrusion_void2, transformationOperator3D);
+		DeplacementObjet3D(extrusion_void2, Void.transform1);
+	}
 	else
 		DeplacementObjet3D(extrusion_void2, Void.transform1);
 
@@ -1182,12 +1194,18 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion,  ObjectVoid Void, Composi
 	}
 
 	if (isMappedItem)
+	{
 		DeplacementObjet3DMappedItem(extrusion_void, transformationOperator3D);
+		DeplacementObjet3D(extrusion_void, Void.transform1);
+	}
 	else
 		DeplacementObjet3D(extrusion_void, Void.transform1);
 
 	if (isMappedItem)
+	{
 		DeplacementObjet3DMappedItem(extrusion_void2, transformationOperator3D);
+		DeplacementObjet3D(extrusion_void2, Void.transform1);
+	}
 	else
 		DeplacementObjet3D(extrusion_void2, Void.transform1);
 
@@ -1321,12 +1339,18 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion,  ObjectVoid Void, Comp
 	}
 
 	if (isMappedItem)
+	{
 		DeplacementObjet3DMappedItem(extrusion_void, transformationOperator3D);
+		DeplacementObjet3D(extrusion_void, Void.transform1);
+	}
 	else
 		DeplacementObjet3D(extrusion_void, Void.transform1);
 
 	if (isMappedItem)
+	{
 		DeplacementObjet3DMappedItem(extrusion_void2, transformationOperator3D);
+		DeplacementObjet3D(extrusion_void2, Void.transform1);
+	}
 	else
 		DeplacementObjet3D(extrusion_void2, Void.transform1);
 
@@ -1573,7 +1597,10 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, int keyI
 	}
 
 	if (isMappedItem)
+	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
+	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
 
@@ -1744,8 +1771,8 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, int keyI
 
 	if (isMappedItem)
 	{
-		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
 	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
@@ -1909,8 +1936,8 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, int keyIt
 
 	if (isMappedItem)
 	{
-		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
 	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
@@ -2077,8 +2104,8 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, int keyIt
 
 	if (isMappedItem)
 	{
-		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
 	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
@@ -2246,8 +2273,8 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, int keyI
 
 	if (isMappedItem)
 	{
-		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
 	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
@@ -2420,8 +2447,8 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, int keyI
 
 	if (isMappedItem)
 	{
-		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
 	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
@@ -2588,8 +2615,8 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, int keyI
 
 	if (isMappedItem)
 	{
-		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
 	}		
 	else
 		DeplacementObjet3D(pSolid, transform1);
@@ -2756,8 +2783,8 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, int keyI
 
 	if (isMappedItem)
 	{
-		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
 	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
@@ -2928,8 +2955,8 @@ void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, int keyIte
 
 	if (isMappedItem)
 	{
-		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
 	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
@@ -3097,8 +3124,8 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, int keyIte
 
 	if (isMappedItem)
 	{
-		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
 	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
@@ -3274,8 +3301,8 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::st
 
 	if (isMappedItem)
 	{
-		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
 	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
@@ -3473,8 +3500,8 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 
 	if (isMappedItem)
 	{
-		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
 	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
@@ -3698,8 +3725,8 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 
 	if (isMappedItem)
 	{
-		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
 	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
@@ -3856,8 +3883,8 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string ent
 
 	if (isMappedItem)
 	{
-		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
 	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
@@ -4019,8 +4046,8 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::s
 
 	if (isMappedItem)
 	{
-		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
 	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
@@ -4427,8 +4454,8 @@ void createFaceSolid(std::string entity, std::vector<int> keyItems, std::list<Ve
 
 	if (isMappedItem)
 	{
-		DeplacementObjet3DMappedItem(pSubDMesh, transformationOperator3D);
-		DeplacementObjet3D(pSubDMesh, transform1);
+		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+		DeplacementObjet3D(pSolid, transform1);
 	}
 	else
 		DeplacementObjet3D(pSubDMesh, transformFace);

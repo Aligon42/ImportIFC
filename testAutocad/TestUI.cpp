@@ -360,7 +360,7 @@ void test()
         std::string entity = buildingElement.getType().getName();
         //if (/*key != 108852 && key != 110815 && */key != 108907 /*&& key != 110867*/) continue;
         //if (key != 5557) continue;
-        //if (key != 45698) continue;
+        if (key != 49612) continue;
 
         CreateConstructionPointVisitor visitor1;
 
@@ -472,21 +472,18 @@ void test()
 
                         if (map.nameItemsMap[0] == "IfcExtrudedAreaSolid")
                         {
-                            map.transform1Map *= transform1;
-                            map.transform1Map *= transformation;
-
                             if (NameProfilDef != "IfcArbitraryClosedProfileDef")
                             {
-                                dessinProfilDef(map.NameProfilDefMap, entity, map.VecteurExtrusionMap, map.hauteurExtrusionMap, map.transform1Map, transformation, visitor1, map.points1Map, map.transformFaceMap, map.nameItemsMap, map.keyItemsMap[j], map.keyItemsMap, i, vectorStyle, map.isMappedItemMap, map.transformationOperator3DMap, scale);
+                                dessinProfilDef(map.NameProfilDefMap, entity, map.VecteurExtrusionMap, map.hauteurExtrusionMap, transform1, transformation, visitor1, map.points1Map, transformFace, map.nameItemsMap, map.keyItemsMap[j], map.keyItemsMap, i, vectorStyle, map.isMappedItemMap, map.transformationOperator3DMap, scale);
                             }
                             else
-                                extrusion(key, entity, map.nameItemsMap, map.keyItemsMap[j], map.outerCurveNameMap, map.points1Map, map.ListNbArgMap, map.VecteurExtrusionMap, map.hauteurExtrusionMap, map.transform1Map, map.listPlanMap, map.listLocationPolygonalMap, map.AgreementHalfMap, map.AgreementPolygonalMap, map.listEntityHalfMap, map.listEntityPolygonalMap, listVoid, map._compositeCurveMap, map.nbPolylineCompositeMap, nbCompositeCurve, vectorStyle, isMappedItemMethode, map.transformationOperator3DMap);
+                                extrusion(key, entity, map.nameItemsMap, map.keyItemsMap[j], map.outerCurveNameMap, map.points1Map, map.ListNbArgMap, map.VecteurExtrusionMap, map.hauteurExtrusionMap, transform1, transformation, map.listPlanMap, map.listLocationPolygonalMap, map.AgreementHalfMap, map.AgreementPolygonalMap, map.listEntityHalfMap, map.listEntityPolygonalMap, listVoid, map._compositeCurveMap, map.nbPolylineCompositeMap, nbCompositeCurve, vectorStyle, isMappedItemMethode, map.transformationOperator3DMap);
                         }
                         else if (map.nameItemsMap[0] == "IfcBooleanClippingResult")
                         {
                             //transform1 *= transformation;
 
-                            extrusion(key, entity, map.nameItemsMap, map.keyItemsMap[j], map.outerCurveNameMap, map.points1Map, map.ListNbArgMap, map.VecteurExtrusionMap, map.hauteurExtrusionMap, map.transform1Map, map.transformationMap, map.listPlanMap, map.listLocationPolygonalMap, map.AgreementHalfMap, map.AgreementPolygonalMap, map.listEntityHalfMap, map.listEntityPolygonalMap, listVoid, map._compositeCurveMap, map.nbPolylineCompositeMap, nbCompositeCurve, vectorStyle, isMappedItemMethode, map.transformationOperator3DMap);
+                            extrusion(key, entity, map.nameItemsMap, map.keyItemsMap[j], map.outerCurveNameMap, map.points1Map, map.ListNbArgMap, map.VecteurExtrusionMap, map.hauteurExtrusionMap, transform1, transformation, map.listPlanMap, map.listLocationPolygonalMap, map.AgreementHalfMap, map.AgreementPolygonalMap, map.listEntityHalfMap, map.listEntityPolygonalMap, listVoid, map._compositeCurveMap, map.nbPolylineCompositeMap, nbCompositeCurve, vectorStyle, isMappedItemMethode, map.transformationOperator3DMap);
                         }
                         else if (map.nameItemsMap[0] == "IfcFacetedBrep" || map.nameItemsMap[0] == "IfcFaceBasedSurfaceModel" || map.nameItemsMap[0] == "IfcShellBasedSurfaceModel")
                         {
