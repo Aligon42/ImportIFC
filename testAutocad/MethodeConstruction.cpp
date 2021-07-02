@@ -1743,7 +1743,10 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, int keyI
 	}
 
 	if (isMappedItem)
+	{
+		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
 
@@ -1905,7 +1908,10 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, int keyIt
 	}
 
 	if (isMappedItem)
+	{
+		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
 
@@ -2070,7 +2076,10 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, int keyIt
 	}
 
 	if (isMappedItem)
+	{
+		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
 
@@ -2236,7 +2245,10 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, int keyI
 	}
 
 	if (isMappedItem)
+	{
+		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
 
@@ -2407,7 +2419,10 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, int keyI
 	}
 
 	if (isMappedItem)
+	{
+		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
 
@@ -2572,7 +2587,10 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, int keyI
 	}
 
 	if (isMappedItem)
+	{
+		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	}		
 	else
 		DeplacementObjet3D(pSolid, transform1);
 
@@ -2737,7 +2755,10 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, int keyI
 	}
 
 	if (isMappedItem)
+	{
+		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
 
@@ -2906,7 +2927,10 @@ void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, int keyIte
 	}
 
 	if (isMappedItem)
+	{
+		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
 
@@ -3072,7 +3096,10 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, int keyIte
 	}
 
 	if (isMappedItem)
+	{
+		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
 
@@ -3246,7 +3273,10 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::st
 	}
 
 	if (isMappedItem)
+	{
+		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
 
@@ -3442,7 +3472,10 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	}
 
 	if (isMappedItem)
+	{
+		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
 
@@ -3664,7 +3697,10 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 	}
 
 	if (isMappedItem)
+	{
+		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
 
@@ -3819,7 +3855,10 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string ent
 	}
 
 	if (isMappedItem)
+	{
+		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
 
@@ -3979,7 +4018,10 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::s
 	}
 
 	if (isMappedItem)
+	{
+		DeplacementObjet3D(pSolid, transform1);
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
+	}
 	else
 		DeplacementObjet3D(pSolid, transform1);
 
