@@ -189,6 +189,7 @@ struct MappedItem
     Matrix4 transformFaceMap;
     bool isMappedItemMap;
     Matrix4 transformationOperator3DMap;
+    double scale;
 };
 
 //style
@@ -220,7 +221,7 @@ private:
     int nbPolylineCompositeCurve = 0;
     int nbCompositeCurve;
     int nbSupport = 0;
-    int scale = 0;
+    double scale = 0;
 
     int keyForVoid;
     std::vector<int> keyItems;
@@ -341,7 +342,7 @@ public:
     float getDetermiantOperator3D() const;
     bool getIsMappedItem() const;
     bool getIsMappedItemMethode() const;
-    bool getScale() const;
+    double getScale() const;
     std::vector<std::string> getNameItems() const;
     std::vector<int> getkeyShapeMap() const;
     std::string getOuterCurveName() const;

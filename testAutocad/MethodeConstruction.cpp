@@ -398,8 +398,10 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 		{
 			points1.pop_front();
 		}
+		ListNbArg.erase(ListNbArg.begin());
 	}
-	ListNbArg.erase(ListNbArg.begin());
+
+	
 
 	DeplacementObjet3D(pSolid, transformation);
 
@@ -4161,7 +4163,7 @@ void createBoundingBox(Box box,std::string entity, int keyItems, std::vector<Sty
 
 }
 
-void createFaceSolid(std::string entity, std::vector<int> keyItems, std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transformFace, Matrix4 transform1, Matrix4 transformation, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D)
+void createFaceSolid(std::string entity, std::vector<int> keyItems, std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transformFace, Matrix4 transform1, Matrix4 transformation, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, double scale)
 	{
 
 	// Open the Layer table for read
@@ -4350,6 +4352,21 @@ void createFaceSolid(std::string entity, std::vector<int> keyItems, std::list<Ve
 		}
 		ListNbArg.erase(ListNbArg.begin());
 	}
+
+	/*for (int z = 0; z < vectorStyle.size(); z++)
+	{
+		for (int i = 0; i < keyItems.size(); i++)
+		{
+			if (keyItems[i] == vectorStyle.at(z).keyItem)
+			{
+				AcCmColor couleurRGB = AcCmColor::AcCmColor();
+				couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
+				pSolid->setColor(couleurRGB, false);
+
+			}
+		}
+	}*/
+
 	es = pSubDMesh->setSubDMesh(ptArr, faceArray, 0);
 	if (Acad::eOk != es)
 	{
@@ -4358,29 +4375,26 @@ void createFaceSolid(std::string entity, std::vector<int> keyItems, std::list<Ve
 		return;
 	}
 
+	if (scale > 0)
+	{
+		AcGeMatrix3d matrix = AcGeMatrix3d::AcGeMatrix3d();
+		matrix.setToScaling(scale);
+		pSubDMesh->transformBy(matrix);
+		//transformationOperator3D *= scale;
+	}
+
 	if (isMappedItem)
 	{
-		DeplacementObjet3D(pSubDMesh, transform1);
 		DeplacementObjet3DMappedItem(pSubDMesh, transformationOperator3D);
+		DeplacementObjet3D(pSubDMesh, transform1);
 	}
 	else
 		DeplacementObjet3D(pSubDMesh, transformFace);
 
-
-	/*for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
-
-			double opa = abs((styleDessin.transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}*/
+	double opa = abs((vectorStyle.at(0).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSubDMesh->setLayer(layerName, Adesk::kFalse, false);
 

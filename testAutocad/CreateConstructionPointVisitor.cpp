@@ -1179,7 +1179,7 @@ bool CreateConstructionPointVisitor::getIsMappedItemMethode() const
     return isMappedItemMethode;
 }
 
-bool CreateConstructionPointVisitor::getScale() const
+double CreateConstructionPointVisitor::getScale() const
 {
     return scale;
 }
