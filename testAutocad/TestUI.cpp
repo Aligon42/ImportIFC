@@ -504,6 +504,17 @@ void test()
                 std::string NameProfilDef = visitor1.getNameProfildef();
                 dessinProfilDef(NameProfilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, transformation, visitor1, points1, transformFace, nameItems, keyItems[i], keyItems, i, vectorStyle, isMappedItemMethode, transformationOperator3D);
 
+                if (nameItems[i] == "IfcMappedItem" && isMappedItemMethode)
+                {
+                    MappedItem map;
+                    for (int j = 0; j < keyMappedItem.size(); j++)
+                    {
+                        map = dicoMappedItem[keyMappedItem[j]];
+
+                        dessinProfilDef(map.NameProfilDefMap, entity, map.VecteurExtrusionMap, map.hauteurExtrusionMap, transform1, transformation, visitor1, map.points1Map, transformFace, map.nameItemsMap, keyItems[i], keyItems, i, vectorStyle, isMappedItemMethode, map.transformationOperator3DMap);
+                    }
+                }
+
             }
             if (isMappedItemMethode) break;
         }
