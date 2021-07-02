@@ -360,7 +360,7 @@ void test()
         std::string entity = buildingElement.getType().getName();
         //if (/*key != 108852 && key != 110815 && */key != 108907 /*&& key != 110867*/) continue;
         //if (key != 5557) continue;
-        //if (key != 8326) continue;
+        //if (key != 45698) continue;
 
         CreateConstructionPointVisitor visitor1;
 
@@ -514,7 +514,10 @@ void test()
             else if (entity == "IfcColumn" || entity == "IfcBeam")
             {
                 std::string NameProfilDef = visitor1.getNameProfildef();
-                dessinProfilDef(NameProfilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, transformation, visitor1, points1, transformFace, nameItems, keyItems[i], keyItems, i, vectorStyle, isMappedItemMethode, transformationOperator3D, scale);
+                if (!isMappedItemMethode)
+                {
+                    dessinProfilDef(NameProfilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, transformation, visitor1, points1, transformFace, nameItems, keyItems[i], keyItems, i, vectorStyle, isMappedItemMethode, transformationOperator3D, scale);
+                }
 
                 if (nameItems[i] == "IfcMappedItem" && isMappedItemMethode)
                 {
