@@ -456,6 +456,10 @@ void test()
                     std::vector<int> ListNbArg = visitor1.getListNbArgFace();
                     bool orientation = visitor1.getOrientatationFace();
                     createFaceSolid(entity, keyItems, points1, listNbArgFace, orientation, transformFace, transform1, transformation, vectorStyle, isMappedItemMethode, transformationOperator3D, scale);
+                    if (keyItems.size() > 0)
+                    {
+                        keyItems.erase(keyItems.begin());
+                    }
                 }
                 else if (nameItems[i] == "IfcBoundingBox" && !isMappedItemMethode)
                 {
@@ -491,6 +495,11 @@ void test()
                             std::vector<int> ListNbArg = visitor1.getListNbArgFace();
                             bool orientation = visitor1.getOrientatationFace();
                             createFaceSolid(entity, map.keyItemsMap, map.points1Map, map.listNbArgFaceMap, orientation, map.transformFaceMap, transform1, transformation, vectorStyle, isMappedItemMethode, map.transformationOperator3DMap, map.scale);
+                            if (keyItems.size() > 0)
+                            {
+                                keyItems.erase(keyItems.begin());
+                            }
+                            
                         }
                         else if (map.nameItemsMap[0] == "IfcBoundingBox")
                         {
