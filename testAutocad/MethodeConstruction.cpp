@@ -213,14 +213,20 @@ void extrusion(int key, std::string entity, std::vector <std::string> nameItems,
 		}
 	}
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(0).red * 255, vectorStyle.at(0).green * 255, vectorStyle.at(0).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	for (int z = 0; z < vectorStyle.size(); z++)
+	{
+		if (keyItems == vectorStyle.at(z).keyItem)
+		{
+			AcCmColor couleurRGB = AcCmColor::AcCmColor();
+			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
+			pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(0).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+			double opa = abs((styleDessin.transparence * 255) - 255);
+			Adesk::UInt8 alpha = opa;
+			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+			pSolid->setTransparency(transparence);
+		}
+	}
 	
 
 	
