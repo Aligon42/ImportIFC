@@ -663,6 +663,8 @@ bool CreateConstructionPointVisitor::visitIfcAxis2Placement2D(
         _trimmedCurve.centreCircle.x() = coordonnees.at(0);
         _trimmedCurve.centreCircle.y() = coordonnees.at(1);
         _trimmedCurve.centreCircle.z() = 0.0;
+
+
     }
 
     return true;

@@ -27,6 +27,7 @@ typedef mathfu::Matrix<float, 4> Matrix4;
 
 struct I_profilDef
 {
+    Matrix4 location2D;
     float OverallWidth;
     float OverallDepth;
     float webThickness;
@@ -39,6 +40,7 @@ struct I_profilDef
 
 struct L_profilDef
 {
+    Matrix4 location2D;
     float Depth;
     float Width;
     float Thickness;
@@ -50,6 +52,7 @@ struct L_profilDef
 
 struct T_profilDef
 {
+    Matrix4 location2D;
     float Depth;
     float FlangeWidth;
     float WebThickness;
@@ -64,6 +67,7 @@ struct T_profilDef
 
 struct U_profilDef
 {
+    Matrix4 location2D;
     float Depth;
     float FlangeWidth;
     float WebThickness;
@@ -76,6 +80,7 @@ struct U_profilDef
 
 struct C_profilDef
 {
+    Matrix4 location2D;
     float Depth;
     float Width;
     float WallThickness;
@@ -85,6 +90,7 @@ struct C_profilDef
 
 struct Z_profilDef
 {
+    Matrix4 location2D;
     float Depth;
     float FlangeWidth;
     float WebThickness;
@@ -95,6 +101,7 @@ struct Z_profilDef
 
 struct AsymmetricI_profilDef
 {
+    Matrix4 location2D;
     float OverallWidth;
     float OverallDepth;
     float WebThickness;
@@ -107,12 +114,14 @@ struct AsymmetricI_profilDef
 
 struct CircleHollow_profilDef
 {
+    Matrix4 location2D;
     float Radius;
     float WallThickness;
 };
 
 struct RectangleHollow_profilDef
 {
+    Matrix4 location2D;
     float XDim;
     float YDim;
     float WallThickness;
@@ -122,12 +131,14 @@ struct RectangleHollow_profilDef
 
 struct Rectangle_profilDef
 {
+    Matrix4 location2D;
     float XDim;
     float YDim;
 };
 
 struct Circle_profilDef
 {
+    Matrix4 location2D;
     float Radius;
 };
 
