@@ -665,6 +665,8 @@ bool CreateConstructionPointVisitor::visitIfcAxis2Placement2D(
         _trimmedCurve.centreCircle.z() = 0.0;
     }
 
+
+
     return true;
 }
 
@@ -771,7 +773,8 @@ bool CreateConstructionPointVisitor::visitIfcIShapeProfileDef(
 {
     if (value->testPosition())
     {
-        value->getPosition()->acceptVisitor(this);
+        transformation2D = ComputePlacementVisitor::getTransformation2D(
+            value->getPosition());
     }
 
     IprofilDef.OverallWidth = (float) value->getOverallWidth();
@@ -789,7 +792,8 @@ bool CreateConstructionPointVisitor::visitIfcLShapeProfileDef(
 {
     if (value->testPosition())
     {
-        value->getPosition()->acceptVisitor(this);
+        transformation2D = ComputePlacementVisitor::getTransformation2D(
+            value->getPosition());
     }
 
    
@@ -814,7 +818,8 @@ bool CreateConstructionPointVisitor::visitIfcTShapeProfileDef(
 {
     if (value->testPosition())
     {
-        value->getPosition()->acceptVisitor(this);
+        transformation2D = ComputePlacementVisitor::getTransformation2D(
+            value->getPosition());
     }
 
     
@@ -841,7 +846,8 @@ bool CreateConstructionPointVisitor::visitIfcUShapeProfileDef(
 {
     if (value->testPosition())
     {
-        value->getPosition()->acceptVisitor(this);
+        transformation2D = ComputePlacementVisitor::getTransformation2D(
+            value->getPosition());
     }
 
     
@@ -867,7 +873,8 @@ bool CreateConstructionPointVisitor::visitIfcCShapeProfileDef(
 {
     if (value->testPosition())
     {
-        value->getPosition()->acceptVisitor(this);
+        transformation2D = ComputePlacementVisitor::getTransformation2D(
+            value->getPosition());
     }
 
     
@@ -885,7 +892,8 @@ bool CreateConstructionPointVisitor::visitIfcZShapeProfileDef(
 {
     if (value->testPosition())
     {
-        value->getPosition()->acceptVisitor(this);
+        transformation2D = ComputePlacementVisitor::getTransformation2D(
+            value->getPosition());
     }
 
     
@@ -904,7 +912,8 @@ bool CreateConstructionPointVisitor::visitIfcAsymmetricIShapeProfileDef(
 {
     if (value->testPosition())
     {
-        value->getPosition()->acceptVisitor(this);
+        transformation2D = ComputePlacementVisitor::getTransformation2D(
+            value->getPosition());
     }
 
     
@@ -925,7 +934,8 @@ bool CreateConstructionPointVisitor::visitIfcCircleHollowProfileDef(
 {
     if (value->testPosition())
     {
-        value->getPosition()->acceptVisitor(this);
+        transformation2D = ComputePlacementVisitor::getTransformation2D(
+            value->getPosition());
     }
 
     
@@ -940,7 +950,8 @@ bool CreateConstructionPointVisitor::visitIfcRectangleHollowProfileDef(
 {
     if (value->testPosition())
     {
-        value->getPosition()->acceptVisitor(this);
+        transformation2D = ComputePlacementVisitor::getTransformation2D(
+            value->getPosition());
     }
 
     
@@ -958,7 +969,8 @@ bool CreateConstructionPointVisitor::visitIfcRectangleProfileDef(
 {
     if (value->testPosition())
     {
-        value->getPosition()->acceptVisitor(this);
+        transformation2D = ComputePlacementVisitor::getTransformation2D(
+            value->getPosition());
     }
 
     
@@ -973,7 +985,8 @@ bool CreateConstructionPointVisitor::visitIfcCircleProfileDef(
 {
     if (value->testPosition())
     {
-        value->getPosition()->acceptVisitor(this);
+        transformation2D = ComputePlacementVisitor::getTransformation2D(
+            value->getPosition());
     }
 
     
@@ -1157,6 +1170,11 @@ float CreateConstructionPointVisitor::getHauteurExtrusion() const
 Matrix4 CreateConstructionPointVisitor::getTransformation() const
 {
     return transformation;
+}
+
+Matrix4 CreateConstructionPointVisitor::getTransformation2D() const
+{
+    return transformation2D;
 }
 
 Matrix4 CreateConstructionPointVisitor::getTransformationOperator3D() const

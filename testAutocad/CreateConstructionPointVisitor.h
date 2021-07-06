@@ -186,6 +186,7 @@ struct MappedItem
     Box boxMap;
     Matrix4 transform1Map;
     Matrix4 transformationMap;
+    Matrix4 transformation2DMap;
     Matrix4 transformFaceMap;
     bool isMappedItemMap;
     Matrix4 transformationOperator3DMap;
@@ -206,6 +207,7 @@ private:
     Matrix4 transform;
     Matrix4 transformationOperator3D;
     float determinantMatrixOperator3D;
+    Matrix4 transformation2D;
 
     std::list<Vec3> _points;
     Vec3 extrusionVector;
@@ -338,6 +340,7 @@ public:
     Vec3 getVectorDirection() const;
     float getHauteurExtrusion() const;
     Matrix4 getTransformation() const;
+    Matrix4 getTransformation2D() const;
     Matrix4 getTransformationOperator3D() const;
     float getDetermiantOperator3D() const;
     bool getIsMappedItem() const;

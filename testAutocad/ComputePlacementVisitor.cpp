@@ -132,6 +132,38 @@ Matrix4 ComputePlacementVisitor::getTransformation(
     return transformation;
 }
 
+Matrix4 ComputePlacementVisitor::getTransformation2D(
+    ifc2x3::IfcAxis2Placement2D* value)
+{
+    Vec3 location(0.f);
+
+    if (value->testLocation())
+    {
+        location = getPoint(value->getLocation());
+    }
+
+    Vec3 refDirection(1.0f, 0.0f, 0.0f);
+
+    if (value->testRefDirection())
+    {
+        refDirection = getDirection(value->getRefDirection());
+        refDirection.Normalize();
+    }
+
+    Vec3 axis(0.0f, 0.0f, 1.0f);
+
+    Vec3 yAxis = Vec3::CrossProduct(axis, refDirection);
+
+    Matrix4 transformation2D(
+        refDirection.x(), refDirection.y(), refDirection.z(), 0.0f,
+        yAxis.x(), yAxis.y(), yAxis.z(), 0.0f,
+        axis.x(), axis.y(), axis.z(), 0.0f,
+        location.x(), location.y(), location.z(), 1.0f
+    );
+
+    return transformation2D;
+}
+
 Vec3 ComputePlacementVisitor::getPoint(
     ifc2x3::IfcCartesianPoint* point)
 {
