@@ -158,6 +158,57 @@ bool CreateConstructionPointVisitor::visitIfcBooleanClippingResult(
     return r1 && r2;
 }
 
+bool CreateConstructionPointVisitor::visitIfcBooleanResult(
+    ifc2x3::IfcBooleanResult* value)
+{
+    bool r1 = false, r2 = false;
+    isBoolean = true;
+
+    if (value->testFirstOperand())
+    {
+        auto op1 = value->getFirstOperand();
+
+        switch (op1->currentType())
+        {
+        case ifc2x3::IfcBooleanOperand::IFCBOOLEANRESULT:
+            r1 = op1->getIfcBooleanResult()->acceptVisitor(this);
+            break;
+        case ifc2x3::IfcBooleanOperand::IFCCSGPRIMITIVE3D:
+            r1 = op1->getIfcCsgPrimitive3D()->acceptVisitor(this);
+            break;
+        case ifc2x3::IfcBooleanOperand::IFCHALFSPACESOLID:
+            r1 = op1->getIfcHalfSpaceSolid()->acceptVisitor(this);
+            break;
+        case ifc2x3::IfcBooleanOperand::IFCSOLIDMODEL:
+            r1 = op1->getIfcSolidModel()->acceptVisitor(this);
+            break;
+        }
+    }
+
+    if (value->testSecondOperand())
+    {
+        auto op2 = value->getSecondOperand();
+
+        switch (op2->currentType())
+        {
+        case ifc2x3::IfcBooleanOperand::IFCBOOLEANRESULT:
+            r2 = op2->getIfcBooleanResult()->acceptVisitor(this);
+            break;
+        case ifc2x3::IfcBooleanOperand::IFCCSGPRIMITIVE3D:
+            r2 = op2->getIfcCsgPrimitive3D()->acceptVisitor(this);
+            break;
+        case ifc2x3::IfcBooleanOperand::IFCHALFSPACESOLID:
+            r2 = op2->getIfcHalfSpaceSolid()->acceptVisitor(this);
+            break;
+        case ifc2x3::IfcBooleanOperand::IFCSOLIDMODEL:
+            r2 = op2->getIfcSolidModel()->acceptVisitor(this);
+            break;
+        }
+    }
+
+    return r1 && r2;
+}
+
 bool CreateConstructionPointVisitor::visitIfcRepresentationMap(
     ifc2x3::IfcRepresentationMap* value)
 {
@@ -714,30 +765,68 @@ bool CreateConstructionPointVisitor::visitIfcPlane(
 bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
     ifc2x3::IfcExtrudedAreaSolid* value)
 {
+    if (isBoolean && isExtrud)
+    {
+        entityHalf.push_back(value->getClassType().getName());
+    }
+
     if(value->testSweptArea())
     {
         if(value->getSweptArea()->acceptVisitor(this))
         {
-            transformation = ComputePlacementVisitor::getTransformation(
-                                         value->getPosition());
+
+            if (isBoolean)
+            {
+                transformationBoolExtrud.push_back(ComputePlacementVisitor::getTransformation(
+                    value->getPosition()));
+            }
+            if (!isExtrud)
+            {
+                transformation = ComputePlacementVisitor::getTransformation(
+                    value->getPosition());
+            }
+            
 
             //transformPoints(transformation);
 
-            NameProfilDef = value->getSweptArea()->getType().getName();
+            if (!isExtrud)
+            {
+                NameProfilDef = value->getSweptArea()->getType().getName();
+            }
+            
 
             if(value->testExtrudedDirection())
             {
-                extrusionVector = ComputePlacementVisitor::getDirection(
-                                      value->getExtrudedDirection());
+                if (isBoolean)
+                {
+                    extrusionVectorBool.push_back(ComputePlacementVisitor::getDirection(
+                        value->getExtrudedDirection()));
+                }
+                if (!isExtrud)
+                {
+                    extrusionVector = ComputePlacementVisitor::getDirection(
+                        value->getExtrudedDirection());
+                }
+                
             }
             if (value->testDepth())
             {
-                hauteurExtrusion = value->getDepth();
+                if (isBoolean)
+                {
+                    hauteurExtrusionBool.push_back(value->getDepth());
+                }
+                if (!isExtrud)
+                {
+                    hauteurExtrusion = value->getDepth();
+                }
+                
             }
-
+            isExtrud = true;
             return true;
         }
     }
+
+    
 
     return false;
 }
@@ -1162,9 +1251,19 @@ Vec3 CreateConstructionPointVisitor::getVectorDirection() const
     return extrusionVector;
 }
 
+std::vector<Vec3> CreateConstructionPointVisitor::getVectorDirectionBool() const
+{
+    return extrusionVectorBool;
+}
+
 float CreateConstructionPointVisitor::getHauteurExtrusion() const
 {
     return hauteurExtrusion;
+}
+
+std::vector<float>  CreateConstructionPointVisitor::getHauteurExtrusionBool() const
+{
+    return hauteurExtrusionBool;
 }
 
 Matrix4 CreateConstructionPointVisitor::getTransformation() const
@@ -1175,6 +1274,11 @@ Matrix4 CreateConstructionPointVisitor::getTransformation() const
 Matrix4 CreateConstructionPointVisitor::getTransformation2D() const
 {
     return transformation2D;
+}
+
+std::vector<Matrix4> CreateConstructionPointVisitor::getTransformationBoolExtrud() const
+{
+    return transformationBoolExtrud;
 }
 
 Matrix4 CreateConstructionPointVisitor::getTransformationOperator3D() const

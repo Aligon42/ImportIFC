@@ -818,16 +818,46 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 
 	AcDb3dSolid* negSolid = new AcDb3dSolid();
 
-	Poly_plane.set(Poly_plane.pointOnPlane(), Poly_plane.normal().negate());
+	/*bool agreementPoly = true;
+	bool agreementHalf = true;
+
+	if (AgreementPolygonal.size() > 0)
+	{
+		agreementPoly = BoolToBool(AgreementPolygonal.at(0));
+	}
+	if (AgreementHalf.size() > 0)
+	{
+		agreementHalf = BoolToBool(AgreementHalf.at(0));
+	}*/
+
+	
 
 	if (listEntityHalf.at(0) == "IfcHalfSpaceSolid")
 	{
 		passageHalfSpaceSolid = true;
-		bool agreementPoly = BoolToBool(AgreementHalf.at(0));
-		extrusion->getSlice(Poly_plane, agreementPoly, extrusion);
+		bool agreementHalf = BoolToBool(AgreementHalf.at(0));
+		if (agreementHalf == false)
+		{
+			Poly_plane.set(Poly_plane.pointOnPlane(), Poly_plane.normal().negate());
+		}
+		else
+		{
+			Poly_plane.set(Poly_plane.pointOnPlane(), Poly_plane.normal());
+		}
+		extrusion->getSlice(Poly_plane, agreementHalf, extrusion);
 	}
 	else if (listEntityHalf.at(0) == "IfcPolygonalBoundedHalfSpace")
 	{
+		
+		bool agreementPoly = BoolToBool(AgreementPolygonal.at(0));
+		if (agreementPoly == false)
+		{
+			Poly_plane.set(Poly_plane.pointOnPlane(), Poly_plane.normal().negate());
+		}
+		else 
+		{
+			Poly_plane.set(Poly_plane.pointOnPlane(), Poly_plane.normal());
+		}
 		passagePolygonal = true;
 		Acad::ErrorStatus es;
 
@@ -919,7 +949,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 
 		AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-		bool agreementPoly = BoolToBool(AgreementPolygonal.at(0));
+		
 
 
 		pSolid->getSlice(Poly_plane, agreementPoly, pSolid);
@@ -1474,7 +1504,7 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 
 //*** ProfilDef ***
 
-void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D)
+void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D)
 {
 
 	// Open the Layer table for read
@@ -4616,10 +4646,11 @@ bool BoolToBool(Step::Boolean boool)
 {
 	if (boool == Step::Boolean::BFalse)
 	{
-		return true;
+		return false;
 	}
 	else if (boool == Step::Boolean::BTrue)
 	{
-		return false;
+		return true;
 	}
 }
+
