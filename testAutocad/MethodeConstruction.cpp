@@ -412,6 +412,9 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 
 	DeplacementObjet3D(pSolid, transformation);
 
+	// Temp pour des tests
+	//ListNbArg
+
 	for (int a = 0; a < nbPlan; a++)
 	{
 		CreationSection(pSolid, VecteurExtrusion, hauteurExtrusion, points1, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, _compositeCurveSegment, transform1, nbPolylineComposite, nbCompositeCurve, isMappedItem, transformationOperator3D);
@@ -816,8 +819,6 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 
 	AcGePlane Poly_plane = AcGePlane::AcGePlane(p0, p5, p2);
 
-	AcDb3dSolid* negSolid = new AcDb3dSolid();
-
 	/*bool agreementPoly = true;
 	bool agreementHalf = true;
 
@@ -829,9 +830,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 	{
 		agreementHalf = BoolToBool(AgreementHalf.at(0));
 	}*/
-
 	
-
 	if (listEntityHalf.at(0) == "IfcHalfSpaceSolid")
 	{
 		passageHalfSpaceSolid = true;
@@ -847,10 +846,9 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 		extrusion->getSlice(Poly_plane, agreementHalf, extrusion);
 	}
 	else if (listEntityHalf.at(0) == "IfcPolygonalBoundedHalfSpace")
-	{
-		
-		bool agreementPoly = BoolToBool(AgreementPolygonal.at(0));
-		if (agreementPoly == false)
+	{		
+		bool agreementPoly = !BoolToBool(AgreementPolygonal.at(0));
+		if (nbPolylineComposite == 0 || agreementPoly)
 		{
 			Poly_plane.set(Poly_plane.pointOnPlane(), Poly_plane.normal().negate());
 		}
@@ -949,10 +947,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 
 		AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-		
-
-
-		pSolid->getSlice(Poly_plane, agreementPoly, pSolid);
+		pSolid->getSlice(Poly_plane, nbPolylineComposite > 0 ? !agreementPoly : agreementPoly, pSolid);
 		extrusion->booleanOper(AcDb::kBoolSubtract, pSolid);
 
 		//if (Acad::eOk == es)
@@ -992,10 +987,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 
 			nbArg.erase(nbArg.begin());
 		}
-
-
 	}
-
 }
 
 static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, int nbCompositeCurve, bool isMappedItem, Matrix4 transformationOperator3D)
