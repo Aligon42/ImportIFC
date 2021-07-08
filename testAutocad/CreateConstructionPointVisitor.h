@@ -186,6 +186,7 @@ struct MappedItem
     Box boxMap;
     Matrix4 transform1Map;
     Matrix4 transformationMap;
+    Matrix4 transformation2DMap;
     Matrix4 transformFaceMap;
     bool isMappedItemMap;
     Matrix4 transformationOperator3DMap;
@@ -206,15 +207,20 @@ private:
     Matrix4 transform;
     Matrix4 transformationOperator3D;
     float determinantMatrixOperator3D;
+    Matrix4 transformation2D;
 
     std::list<Vec3> _points;
     Vec3 extrusionVector;
+    std::vector<Vec3> extrusionVectorBool;
     float hauteurExtrusion;
+    std::vector<float> hauteurExtrusionBool;
     Matrix4 transformation;
+    std::vector<Matrix4> transformationBoolExtrud;
     std::vector<std::string> nameItems;
     std::string outerCurveName;
     bool isCompositeCurve = false;
     bool isBoolean = false;
+    bool isExtrud = false;
     bool isMappedItem = false;
     bool isMappedItemMethode = false;
 
@@ -285,6 +291,7 @@ public:
     bool visitIfcProductDefinitionShape(ifc2x3::IfcProductDefinitionShape* value) override;
     bool visitIfcShapeRepresentation(ifc2x3::IfcShapeRepresentation* value) override;
     bool visitIfcBooleanClippingResult(ifc2x3::IfcBooleanClippingResult* value) override;
+    bool visitIfcBooleanResult(ifc2x3::IfcBooleanResult* value) override;
     bool visitIfcRepresentationMap(ifc2x3::IfcRepresentationMap* value) override;
     bool visitIfcFaceBasedSurfaceModel(ifc2x3::IfcFaceBasedSurfaceModel* value) override;
     bool visitIfcConnectedFaceSet(ifc2x3::IfcConnectedFaceSet* value) override;
@@ -336,8 +343,12 @@ public:
 
     std::list<Vec3> getPoints() const;
     Vec3 getVectorDirection() const;
+    std::vector<Vec3> getVectorDirectionBool() const;
     float getHauteurExtrusion() const;
+    std::vector<float>  getHauteurExtrusionBool() const;
     Matrix4 getTransformation() const;
+    Matrix4 getTransformation2D() const;
+    std::vector<Matrix4> getTransformationBoolExtrud() const;
     Matrix4 getTransformationOperator3D() const;
     float getDetermiantOperator3D() const;
     bool getIsMappedItem() const;

@@ -29,6 +29,7 @@ public:
 
     static Matrix4 getTransformation(ifc2x3::IfcLocalPlacement* value);
     static Matrix4 getTransformation(ifc2x3::IfcAxis2Placement3D* value); 
+    static Matrix4 getTransformation2D(ifc2x3::IfcAxis2Placement2D* value);
     static Matrix4 getTransformation(ifc2x3::IfcCartesianTransformationOperator* value);
     static Vec3 getPoint(ifc2x3::IfcCartesianPoint* point);
     static Vec3 getDirection(ifc2x3::IfcDirection* direction);
