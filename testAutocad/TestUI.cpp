@@ -601,84 +601,84 @@ void dessinProfilDef(std::string NameProfilDef, std::string entity, Vec3 Vecteur
     }
     else if (NameProfilDef == "IfcLShapeProfileDef")
     {
-        transform1 *= transformation;
+        //transform1 *= transformation;
         L_profilDef LprofilDef = visitor1.getLprofilDef();
         if (LprofilDef.nbArg == 5)
         {
-            createSolid3dProfilL8(LprofilDef, entity, keyItem, VecteurExtrusion, hauteurExtrusion, transform1, transformation2D, vectorStyle, isMappedItem, transformationOperator3D);
+            createSolid3dProfilL8(LprofilDef, entity, keyItem, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, transformation, transformation2D, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, vectorStyle, isMappedItem, transformationOperator3D);
         }
         else
         {
-            createSolid3dProfilL9(LprofilDef, entity, keyItem, VecteurExtrusion, hauteurExtrusion, transform1, transformation2D, vectorStyle, isMappedItem, transformationOperator3D);
+            createSolid3dProfilL9(LprofilDef, entity, keyItem, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, transformation, transformation2D, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, vectorStyle, isMappedItem, transformationOperator3D);
         }
     }
     else if (NameProfilDef == "IfcTShapeProfileDef")
     {
-        transform1 *= transformation;
+        //transform1 *= transformation;
         T_profilDef TprofilDef = visitor1.getTprofilDef();
         if (TprofilDef.nbArg == 7)
         {
-            createSolid3dProfilT10(TprofilDef, entity, keyItem, VecteurExtrusion, hauteurExtrusion, transform1, transformation2D, vectorStyle, isMappedItem, transformationOperator3D);
+            createSolid3dProfilT10(TprofilDef, entity, keyItem, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, transformation, transformation2D, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, vectorStyle, isMappedItem, transformationOperator3D);
         }
         else
         {
-            createSolid3dProfilT12(TprofilDef, entity, keyItem, VecteurExtrusion, hauteurExtrusion, transform1, transformation2D, vectorStyle, isMappedItem, transformationOperator3D);
+            createSolid3dProfilT12(TprofilDef, entity, keyItem, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, transformation, transformation2D, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, vectorStyle, isMappedItem, transformationOperator3D);
         }
     }
     else if (NameProfilDef == "IfcUShapeProfileDef")
     {
-        transform1 *= transformation;
+        //transform1 *= transformation;
         U_profilDef UprofilDef = visitor1.getUprofilDef();
         if (UprofilDef.nbArg == 5)
         {
-            createSolid3dProfilUPE(UprofilDef, entity, keyItem, VecteurExtrusion, hauteurExtrusion, transform1, transformation2D, vectorStyle, isMappedItem, transformationOperator3D);
+            createSolid3dProfilUPE(UprofilDef, entity, keyItem, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, transformation, transformation2D, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, vectorStyle, isMappedItem, transformationOperator3D);
         }
         else
         {
-            createSolid3dProfilUPN(UprofilDef, entity, keyItem, VecteurExtrusion, hauteurExtrusion, transform1, transformation2D, vectorStyle, isMappedItem, transformationOperator3D);
+            createSolid3dProfilUPN(UprofilDef, entity, keyItem, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, transformation, transformation2D, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, vectorStyle, isMappedItem, transformationOperator3D);
         }
     }
     else if (NameProfilDef == "IfcCShapeProfileDef")
     {
-        transform1 *= transformation;
+        //transform1 *= transformation;
         C_profilDef CprofilDef = visitor1.getCprofilDef();
-        createSolid3dProfilC(CprofilDef, entity, keyItem, VecteurExtrusion, hauteurExtrusion, transform1, transformation2D, vectorStyle, isMappedItem, transformationOperator3D);
+        createSolid3dProfilC(CprofilDef, entity, keyItem, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, transformation, transformation2D, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, vectorStyle, isMappedItem, transformationOperator3D);
     }
     else if (NameProfilDef == "IfcZShapeProfileDef")
     {
-        transform1 *= transformation;
+        //transform1 *= transformation;
         Z_profilDef ZprofilDef = visitor1.getZprofilDef();
-        createSolid3dProfilZ(ZprofilDef, entity, keyItem, VecteurExtrusion, hauteurExtrusion, transform1, transformation2D, vectorStyle, isMappedItem, transformationOperator3D);
+        createSolid3dProfilZ(ZprofilDef, entity, keyItem, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, transformation, transformation2D, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, vectorStyle, isMappedItem, transformationOperator3D);
     }
     else if (NameProfilDef == "IfcAsymmetricIShapeProfileDef")
     {
-        transform1 *= transformation;
+        //transform1 *= transformation;
         AsymmetricI_profilDef AsymmetricIprofilDef = visitor1.getAsymmetricIprofilDef();
-        createSolid3dProfilAsyI(AsymmetricIprofilDef, entity, keyItem, VecteurExtrusion, hauteurExtrusion, transform1, transformation2D, vectorStyle, isMappedItem, transformationOperator3D);
+        createSolid3dProfilAsyI(AsymmetricIprofilDef, entity, keyItem, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, transformation, transformation2D, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, vectorStyle, isMappedItem, transformationOperator3D);
     }
     else if (NameProfilDef == "IfcCircleHollowProfileDef")
     {
-        transform1 *= transformation;
+        //transform1 *= transformation;
         CircleHollow_profilDef CircleHollowProfilDef = visitor1.getCircleHollowprofilDef();
-        createSolid3dProfilCircHollow(CircleHollowProfilDef, entity, keyItem, VecteurExtrusion, hauteurExtrusion, transform1, transformation2D, vectorStyle, isMappedItem, transformationOperator3D);
+        createSolid3dProfilCircHollow(CircleHollowProfilDef, entity, keyItem, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, transformation, transformation2D, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, vectorStyle, isMappedItem, transformationOperator3D);
     }
     else if (NameProfilDef == "IfcRectangleHollowProfileDef")
     {
-        transform1 *= transformation;
+        //transform1 *= transformation;
         RectangleHollow_profilDef RectangleHollowProfilDef = visitor1.getRectangleHollowprofilDef();
-        createSolid3dProfilRectHollow(RectangleHollowProfilDef, entity, keyItem, VecteurExtrusion, hauteurExtrusion, transform1, transformation2D, vectorStyle, isMappedItem, transformationOperator3D);
+        createSolid3dProfilRectHollow(RectangleHollowProfilDef, entity, keyItem, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, transformation, transformation2D, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, vectorStyle, isMappedItem, transformationOperator3D);
     }
     else if (NameProfilDef == "IfcCircleProfileDef")
     {
-        transform1 *= transformation;
+        //transform1 *= transformation;
         Circle_profilDef CircleProfilDef = visitor1.getCircleprofilDef();
-        createSolid3dProfilCircle(CircleProfilDef, entity, keyItem, VecteurExtrusion, hauteurExtrusion, transform1, transformation2D, vectorStyle, isMappedItem, transformationOperator3D);
+        createSolid3dProfilCircle(CircleProfilDef, entity, keyItem, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, transformation, transformation2D, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, vectorStyle, isMappedItem, transformationOperator3D);
     }
     else if (NameProfilDef == "IfcRectangleProfileDef")
     {
-        transform1 *= transformation;
+        //transform1 *= transformation;
         Rectangle_profilDef RectangleProfilDef = visitor1.getRectangleprofilDef();
-        createSolid3dProfilRectangle(RectangleProfilDef, entity, keyItem, VecteurExtrusion, hauteurExtrusion, transform1, transformation2D, vectorStyle, isMappedItem, transformationOperator3D);
+        createSolid3dProfilRectangle(RectangleProfilDef, entity, keyItem, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, transformation, transformation2D, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, vectorStyle, isMappedItem, transformationOperator3D);
     }
     else if (nameItems[i] == "IfcFacetedBrep")
     {
