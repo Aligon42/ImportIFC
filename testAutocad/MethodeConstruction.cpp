@@ -818,16 +818,25 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 
 	AcDb3dSolid* negSolid = new AcDb3dSolid();
 
-	Poly_plane.set(Poly_plane.pointOnPlane(), Poly_plane.normal().negate());
+	
 
 	if (listEntityHalf.at(0) == "IfcHalfSpaceSolid")
 	{
 		passageHalfSpaceSolid = true;
 		bool agreementPoly = BoolToBool(AgreementHalf.at(0));
+		if (agreementPoly == false)
+		{
+			Poly_plane.set(Poly_plane.pointOnPlane(), Poly_plane.normal().negate());
+		}
 		extrusion->getSlice(Poly_plane, agreementPoly, extrusion);
 	}
 	else if (listEntityHalf.at(0) == "IfcPolygonalBoundedHalfSpace")
 	{
+		bool agreementPoly = BoolToBool(AgreementPolygonal.at(0));
+		if (agreementPoly == false)
+		{
+			Poly_plane.set(Poly_plane.pointOnPlane(), Poly_plane.normal().negate());
+		}
 		passagePolygonal = true;
 		Acad::ErrorStatus es;
 
@@ -919,7 +928,7 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 
 		AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-		bool agreementPoly = BoolToBool(AgreementPolygonal.at(0));
+		
 
 
 		pSolid->getSlice(Poly_plane, agreementPoly, pSolid);
@@ -4555,10 +4564,10 @@ bool BoolToBool(Step::Boolean boool)
 {
 	if (boool == Step::Boolean::BFalse)
 	{
-		return true;
+		return false;
 	}
 	else if (boool == Step::Boolean::BTrue)
 	{
-		return false;
+		return true;
 	}
 }
