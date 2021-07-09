@@ -793,7 +793,8 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
             {
                 NameProfilDef = value->getSweptArea()->getType().getName();
             }
-            
+            else
+                NameProfilDefBool.push_back(value->getSweptArea()->getType().getName());
 
             if(value->testExtrudedDirection())
             {
@@ -1065,6 +1066,8 @@ bool CreateConstructionPointVisitor::visitIfcRectangleProfileDef(
     
     RectangleprofilDef.XDim = (float)value->getXDim();
     RectangleprofilDef.YDim = (float)value->getYDim();
+
+    RectangleprofilDefBool.push_back(RectangleprofilDef);
 
     return true;
 }
@@ -1422,11 +1425,21 @@ Rectangle_profilDef CreateConstructionPointVisitor::getRectangleprofilDef() cons
     return RectangleprofilDef;
 }
 
+std::vector<Rectangle_profilDef> CreateConstructionPointVisitor::getRectangleprofilDefBool() const
+{
+
+    return RectangleprofilDefBool;
+}
+
 std::string CreateConstructionPointVisitor::getNameProfildef() const
 {
     return NameProfilDef;
 }
 
+std::vector<std::string> CreateConstructionPointVisitor::getNameProfildefBool() const
+{
+    return NameProfilDefBool;
+}
 
 int CreateConstructionPointVisitor::getkeyForVoid() const
 {

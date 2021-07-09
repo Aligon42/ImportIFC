@@ -251,6 +251,7 @@ private:
     
     //profilDef
     std::string NameProfilDef;
+    std::vector<std::string> NameProfilDefBool;
     I_profilDef IprofilDef;
     L_profilDef LprofilDef;
     T_profilDef TprofilDef;
@@ -262,6 +263,7 @@ private:
     RectangleHollow_profilDef RectangleHollowprofilDef;
     Circle_profilDef CircleprofilDef;
     Rectangle_profilDef RectangleprofilDef;
+    std::vector<Rectangle_profilDef> RectangleprofilDefBool;
 
     TrimmedCurve _trimmedCurve;
     CompositeCurveSegment _compositeCurveSegment;
@@ -379,7 +381,9 @@ public:
     RectangleHollow_profilDef getRectangleHollowprofilDef() const;
     Circle_profilDef getCircleprofilDef() const;
     Rectangle_profilDef getRectangleprofilDef() const;
+    std::vector<Rectangle_profilDef> getRectangleprofilDefBool() const;
     std::string getNameProfildef() const;
+    std::vector<std::string> getNameProfildefBool() const;
 
     int getkeyForVoid() const;
     int getnbPolylineCompositeCurve() const;
