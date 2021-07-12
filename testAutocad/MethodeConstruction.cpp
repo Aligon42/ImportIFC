@@ -326,7 +326,11 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 	}
 	else if (outerCurveName == "IfcPolyline")
 	{
-		
+		if (ListNbArg[0] == 1)
+		{
+			ListNbArg.erase(ListNbArg.begin());
+			points1.erase(points1.begin());
+		}
 
 		ptArr.setLogicalLength(ListNbArg[0]);
 		Vec3 pointOrigine = { transform1[12], transform1[13] , transform1[14] };
@@ -874,7 +878,10 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 		{
 			Poly_plane.set(Poly_plane.pointOnPlane(), Poly_plane.normal());
 		}
+
 		extrusion->getSlice(Poly_plane, agreementHalf, extrusion);
+
+
 	}
 	else if (listEntityHalf.at(0) == "IfcPolygonalBoundedHalfSpace")
 	{		

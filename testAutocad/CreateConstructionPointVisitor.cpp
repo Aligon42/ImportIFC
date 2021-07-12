@@ -1131,9 +1131,6 @@ bool CreateConstructionPointVisitor::visitIfcPolyline(ifc2x3::IfcPolyline* value
         
     }
 
-    
-    
-
     listNbArgPolyline.push_back(_points.size() - size);
 
     return _points.empty() == false;
