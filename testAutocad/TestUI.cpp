@@ -387,7 +387,7 @@ void test()
         //if (key != 8513) continue;
         //if (key != 59641) continue;
         //if (key != 1309) continue;
-        if (key != 68584) continue;
+        if (key != 77564) continue;
 
         CreateConstructionPointVisitor visitor1;
 

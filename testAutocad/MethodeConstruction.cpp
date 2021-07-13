@@ -2,6 +2,7 @@
 #include "CreateConstructionPointVisitor.h"
 #include "tchar.h"
 #include "tests.h"
+#include <cmath>
 #include <vector>
 #include <iterator>
 
@@ -567,7 +568,182 @@ static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1) {
 	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
 	AcGePoint3d srcpt3 = AcGePoint3d::AcGePoint3d(1, 0, 0);
 
-	double x1 = roundoff(transform1.operator()(12),4);  //PointDeplacement x
+	double x1 = roundoff(transform1.operator()(12), 3);  //PointDeplacement x
+	double y1 = roundoff(transform1.operator()(13), 3); //PointDeplacement y
+	double z1 = roundoff(transform1.operator()(14), 3); //PointDeplacement z
+	double x2 = roundoff(transform1.operator()(8),  3); //Direction1 x
+	double y2 = roundoff(transform1.operator()(9),  3); //Direction1 y
+	double z2 = roundoff(transform1.operator()(10), 3); //Direction1 z
+	double x3 = roundoff(transform1.operator()(0),  3); //Direction2 x
+	double y3 = roundoff(transform1.operator()(1),  3); //Direction2 y
+	double z3 = roundoff(transform1.operator()(2),  3); //Direction2 z
+	//double x4 = roundoff(transform1.operator()(4), 3); //Direction3 x
+	//double y4 = roundoff(transform1.operator()(5), 3); //Direction3 y
+	//double z4 = roundoff(transform1.operator()(6), 3); //Direction3 z
+
+	// 3 destination points
+	AcGePoint3d destpt1 = AcGePoint3d::AcGePoint3d(x1, y1, z1);
+	AcGePoint3d destpt2 = AcGePoint3d::AcGePoint3d(x1 + x2, y1 + y2, z1 + z2);
+	AcGePoint3d destpt3 = AcGePoint3d::AcGePoint3d(x1 + x3, y1 + y3, z1 + z3);
+
+	AcGePoint3d fromOrigin = srcpt1;
+	AcGeVector3d fromXaxis = srcpt2 - srcpt1;
+	AcGeVector3d fromYaxis = srcpt3 - srcpt1;
+	AcGeVector3d fromZaxis = fromXaxis.crossProduct(fromYaxis);
+
+	AcGePoint3d toOrigin = destpt1;
+	AcGeVector3d toXaxis = (destpt2 - destpt1).normal() * (fromXaxis.length());
+	AcGeVector3d toYaxis = (destpt3 - destpt1).normal() * (fromYaxis.length());
+	AcGeVector3d toZaxis = toXaxis.crossProduct(toYaxis);
+
+
+	// Get the transformation matrix for aligning coordinate systems
+	AcGeMatrix3d mat = AcGeMatrix3d::AcGeMatrix3d();
+	mat = mat.alignCoordSys(fromOrigin, fromXaxis, fromYaxis, fromZaxis, toOrigin, toXaxis, toYaxis, toZaxis);
+
+	es = pSolid->transformBy(mat);
+
+}
+
+static void DeplacementObjet3D(AcDbSubDMesh* pSubDMesh, Matrix4 transform1) {
+
+	// 3 source points
+	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
+	AcGePoint3d srcpt3 = AcGePoint3d::AcGePoint3d(1, 0, 0);
+
+	float x1 = roundoff(transform1.operator()(12), 4);  //PointDeplacement x
+	float y1 = roundoff(transform1.operator()(13), 4); //PointDeplacement y
+	float z1 = roundoff(transform1.operator()(14), 4); //PointDeplacement z
+	float x2 = roundoff(transform1.operator()(8), 4); //Direction1 x
+	float y2 = roundoff(transform1.operator()(9), 4); //Direction1 y
+	float z2 = roundoff(transform1.operator()(10), 4); //Direction1 z
+	float x3 = roundoff(transform1.operator()(0), 4); //Direction2 x
+	float y3 = roundoff(transform1.operator()(1), 4); //Direction2 y
+	float z3 = roundoff(transform1.operator()(2), 4); //Direction2 z
+
+	// 3 destination points
+	AcGePoint3d destpt1 = AcGePoint3d::AcGePoint3d(x1, y1, z1);
+	AcGePoint3d destpt2 = AcGePoint3d::AcGePoint3d(x1 + x2, y1 + y2, z1 + z2);
+	AcGePoint3d destpt3 = AcGePoint3d::AcGePoint3d(x1 + x3, y1 + y3, z1 + z3);
+
+	AcGePoint3d fromOrigin = srcpt1;
+	AcGeVector3d fromXaxis = srcpt2 - srcpt1;
+	AcGeVector3d fromYaxis = srcpt3 - srcpt1;
+	AcGeVector3d fromZaxis = fromXaxis.crossProduct(fromYaxis);
+
+	AcGePoint3d toOrigin = destpt1;
+	AcGeVector3d toXaxis = (destpt2 - destpt1).normal() * (fromXaxis.length());
+	AcGeVector3d toYaxis = (destpt3 - destpt1).normal() * (fromYaxis.length());
+	AcGeVector3d toZaxis = toXaxis.crossProduct(toYaxis);
+
+	// Get the transformation matrix for aligning coordinate systems
+	AcGeMatrix3d mat = AcGeMatrix3d::AcGeMatrix3d();
+	mat = mat.alignCoordSys(fromOrigin, fromXaxis, fromYaxis, fromZaxis, toOrigin, toXaxis, toYaxis, toZaxis);
+
+	pSubDMesh->transformBy(mat);
+
+}
+
+static void DeplacementObjet3DMappedItem(AcDb3dSolid* pSolid, Matrix4 transformationOperator3D) {
+
+	// 3 source points
+	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
+	AcGePoint3d srcpt3 = AcGePoint3d::AcGePoint3d(1, 0, 0);
+	AcGePoint3d srcpt4 = AcGePoint3d::AcGePoint3d(0, 1, 0);
+
+	float x1 = roundoff(transformationOperator3D.operator()(3), 4);  //PointDeplacement x
+	float y1 = roundoff(transformationOperator3D.operator()(7), 4); //PointDeplacement y
+	float z1 = roundoff(transformationOperator3D.operator()(11), 4); //PointDeplacement z
+	float x2 = roundoff(transformationOperator3D.operator()(0), 4); //Direction1 x
+	float y2 = roundoff(transformationOperator3D.operator()(4), 4); //Direction1 y
+	float z2 = roundoff(transformationOperator3D.operator()(8), 4); //Direction1 z
+	float x3 = roundoff(transformationOperator3D.operator()(1), 4); //Direction2 x
+	float y3 = roundoff(transformationOperator3D.operator()(5), 4); //Direction2 y
+	float z3 = roundoff(transformationOperator3D.operator()(9), 4); //Direction2 z
+	float x4 = roundoff(transformationOperator3D.operator()(2), 4); //Direction3 x
+	float y4 = roundoff(transformationOperator3D.operator()(6), 4); //Direction3 y
+	float z4 = roundoff(transformationOperator3D.operator()(10), 4); //Direction3 z
+
+	// 3 destination points
+	AcGePoint3d destpt1 = AcGePoint3d::AcGePoint3d(x1, y1, z1);
+	AcGePoint3d destpt2 = AcGePoint3d::AcGePoint3d(x1 + x2, y1 + y2, z1 + z2);
+	AcGePoint3d destpt3 = AcGePoint3d::AcGePoint3d(x1 + x3, y1 + y3, z1 + z3);
+	AcGePoint3d destpt4 = AcGePoint3d::AcGePoint3d(x1 + x4, y1 + y4, z1 + z4);
+
+	AcGePoint3d fromOrigin = srcpt1;
+	AcGeVector3d fromXaxis = srcpt2 - srcpt1;
+	AcGeVector3d fromYaxis = srcpt3 - srcpt1;
+	AcGeVector3d fromZaxis = srcpt4 - srcpt1;
+
+	AcGePoint3d toOrigin = destpt1;
+	AcGeVector3d toXaxis = (destpt2 - destpt1).normal() * (fromXaxis.length());
+	AcGeVector3d toYaxis = (destpt3 - destpt1).normal() * (fromYaxis.length());
+	AcGeVector3d toZaxis = (destpt4 - destpt1).normal() * (fromZaxis.length());
+
+	// Get the transformation matrix for aligning coordinate systems
+	AcGeMatrix3d mat = AcGeMatrix3d::AcGeMatrix3d();
+	mat = mat.alignCoordSys(fromOrigin, fromXaxis, fromYaxis, fromZaxis, toOrigin, toXaxis, toYaxis, toZaxis);
+
+	pSolid->transformBy(mat);
+
+}
+
+static void DeplacementObjet3DMappedItem(AcDbSubDMesh* pSubDMesh, Matrix4 transformationOperator3D) {
+
+	// 3 source points
+	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
+	AcGePoint3d srcpt3 = AcGePoint3d::AcGePoint3d(1, 0, 0);
+	AcGePoint3d srcpt4 = AcGePoint3d::AcGePoint3d(0, 1, 0);
+
+	float x1 = roundoff(transformationOperator3D.operator()(3), 4);  //PointDeplacement x
+	float y1 = roundoff(transformationOperator3D.operator()(7), 4); //PointDeplacement y
+	float z1 = roundoff(transformationOperator3D.operator()(11), 4); //PointDeplacement z
+	float x2 = roundoff(transformationOperator3D.operator()(0), 4); //Direction1 x
+	float y2 = roundoff(transformationOperator3D.operator()(4), 4); //Direction1 y
+	float z2 = roundoff(transformationOperator3D.operator()(8), 4); //Direction1 z
+	float x3 = roundoff(transformationOperator3D.operator()(1), 4); //Direction2 x
+	float y3 = roundoff(transformationOperator3D.operator()(5), 4); //Direction2 y
+	float z3 = roundoff(transformationOperator3D.operator()(9), 4); //Direction2 z
+	float x4 = roundoff(transformationOperator3D.operator()(2), 4); //Direction3 x
+	float y4 = roundoff(transformationOperator3D.operator()(6), 4); //Direction3 y
+	float z4 = roundoff(transformationOperator3D.operator()(10), 4); //Direction3 z
+
+	// 3 destination points
+	AcGePoint3d destpt1 = AcGePoint3d::AcGePoint3d(x1, y1, z1);
+	AcGePoint3d destpt2 = AcGePoint3d::AcGePoint3d(x1 + x2, y1 + y2, z1 + z2);
+	AcGePoint3d destpt3 = AcGePoint3d::AcGePoint3d(x1 + x3, y1 + y3, z1 + z3);
+	AcGePoint3d destpt4 = AcGePoint3d::AcGePoint3d(x1 + x4, y1 + y4, z1 + z4);
+
+	AcGePoint3d fromOrigin = srcpt1;
+	AcGeVector3d fromXaxis = srcpt2 - srcpt1;
+	AcGeVector3d fromYaxis = srcpt3 - srcpt1;
+	AcGeVector3d fromZaxis = srcpt4 - srcpt1;
+
+	AcGePoint3d toOrigin = destpt1;
+	AcGeVector3d toXaxis = (destpt2 - destpt1).normal() * (fromXaxis.length());
+	AcGeVector3d toYaxis = (destpt3 - destpt1).normal() * (fromYaxis.length());
+	AcGeVector3d toZaxis = (destpt4 - destpt1).normal() * (fromZaxis.length());
+
+	// Get the transformation matrix for aligning coordinate systems
+	AcGeMatrix3d mat = AcGeMatrix3d::AcGeMatrix3d();
+	mat = mat.alignCoordSys(fromOrigin, fromXaxis, fromYaxis, fromZaxis, toOrigin, toXaxis, toYaxis, toZaxis);
+
+	pSubDMesh->transformBy(mat);
+
+}
+
+static void DeplacementObjet2D(AcDb3dSolid* pSolid, Matrix4 transform1) {
+
+	Acad::ErrorStatus es;
+	// 3 source points
+	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
+	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
+	AcGePoint3d srcpt3 = AcGePoint3d::AcGePoint3d(1, 0, 0);
+
+	double x1 = roundoff(transform1.operator()(12), 4);  //PointDeplacement x
 
 	double y1 = roundoff(transform1.operator()(13), 4); //PointDeplacement y
 
@@ -609,163 +785,41 @@ static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1) {
 
 }
 
-static void DeplacementObjet3D(AcDbSubDMesh* pSubDMesh, Matrix4 transform1) {
+static void DeplacementObjet2D(AcDbSubDMesh* pSubDMesh, Matrix4 transform1) {
 
+	Acad::ErrorStatus es;
 	// 3 source points
-	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
-	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
-	AcGePoint3d srcpt3 = AcGePoint3d::AcGePoint3d(1, 0, 0);
+	AcGePoint2d srcpt1 = AcGePoint2d::AcGePoint2d(0, 0);
+	AcGePoint2d srcpt2 = AcGePoint2d::AcGePoint2d(0, 0);
+	AcGePoint2d srcpt3 = AcGePoint2d::AcGePoint2d(1, 0);
 
 	double x1 = roundoff(transform1.operator()(12), 4);  //PointDeplacement x
 
 	double y1 = roundoff(transform1.operator()(13), 4); //PointDeplacement y
 
-	double z1 = roundoff(transform1.operator()(14), 4); //PointDeplacement z
-
 	double x2 = roundoff(transform1.operator()(8), 4); //Direction1 x
 
 	double y2 = roundoff(transform1.operator()(9), 4); //Direction1 y
 
-	double z2 = roundoff(transform1.operator()(10), 4); //Direction1 z
-
-	double x3 = roundoff(transform1.operator()(0), 4); //Direction2 x
-
-	double y3 = roundoff(transform1.operator()(1), 4); //Direction2 y
-
-	double z3 = roundoff(transform1.operator()(2), 4); //Direction2 z
-
 	// 3 destination points
-	AcGePoint3d destpt1 = AcGePoint3d::AcGePoint3d(x1, y1, z1);
-	AcGePoint3d destpt2 = AcGePoint3d::AcGePoint3d(x1 + x2, y1 + y2, z1 + z2);
-	AcGePoint3d destpt3 = AcGePoint3d::AcGePoint3d(x1 + x3, y1 + y3, z1 + z3);
+	AcGePoint2d destpt1 = AcGePoint2d::AcGePoint2d(x1, y1);
+	AcGePoint2d destpt2 = AcGePoint2d::AcGePoint2d(x1 + x2, y1 + y2);
+	AcGePoint2d destpt3 = AcGePoint2d::AcGePoint2d(x1, y1);
 
-	AcGePoint3d fromOrigin = srcpt1;
-	AcGeVector3d fromXaxis = srcpt2 - srcpt1;
-	AcGeVector3d fromYaxis = srcpt3 - srcpt1;
-	AcGeVector3d fromZaxis = fromXaxis.crossProduct(fromYaxis);
+	AcGePoint2d fromOrigin = srcpt1;
+	AcGeVector2d fromXaxis = srcpt2 - srcpt1;
+	AcGeVector2d fromYaxis = srcpt3 - srcpt1;
 
-	AcGePoint3d toOrigin = destpt1;
-	AcGeVector3d toXaxis = (destpt2 - destpt1).normal() * (fromXaxis.length());
-	AcGeVector3d toYaxis = (destpt3 - destpt1).normal() * (fromYaxis.length());
-	AcGeVector3d toZaxis = toXaxis.crossProduct(toYaxis);
+	AcGePoint2d toOrigin = destpt1;
+	AcGeVector2d toXaxis = (destpt2 - destpt1).normal() * (fromXaxis.length());
+	AcGeVector2d toYaxis = (destpt3 - destpt1).normal() * (fromYaxis.length());
+
 
 	// Get the transformation matrix for aligning coordinate systems
-	AcGeMatrix3d mat = AcGeMatrix3d::AcGeMatrix3d();
-	mat = mat.alignCoordSys(fromOrigin, fromXaxis, fromYaxis, fromZaxis, toOrigin, toXaxis, toYaxis, toZaxis);
+	AcGeMatrix2d mat = AcGeMatrix2d::AcGeMatrix2d();
+	mat = mat.alignCoordSys(fromOrigin, fromXaxis, fromYaxis, toOrigin, toXaxis, toYaxis);
 
-	pSubDMesh->transformBy(mat);
-
-}
-
-static void DeplacementObjet3DMappedItem(AcDb3dSolid* pSolid, Matrix4 transformationOperator3D) {
-
-	// 3 source points
-	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
-	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
-	AcGePoint3d srcpt3 = AcGePoint3d::AcGePoint3d(1, 0, 0);
-	AcGePoint3d srcpt4 = AcGePoint3d::AcGePoint3d(0, 1, 0);
-
-	double x1 = roundoff(transformationOperator3D.operator()(3), 4);  //PointDeplacement x
-
-	double y1 = roundoff(transformationOperator3D.operator()(7), 4); //PointDeplacement y
-
-	double z1 = roundoff(transformationOperator3D.operator()(11), 4); //PointDeplacement z
-
-	double x2 = roundoff(transformationOperator3D.operator()(0), 4); //Direction1 x
-
-	double y2 = roundoff(transformationOperator3D.operator()(4), 4); //Direction1 y
-
-	double z2 = roundoff(transformationOperator3D.operator()(8), 4); //Direction1 z
-
-	double x3 = roundoff(transformationOperator3D.operator()(1), 4); //Direction2 x
-
-	double y3 = roundoff(transformationOperator3D.operator()(5), 4); //Direction2 y
-
-	double z3 = roundoff(transformationOperator3D.operator()(9), 4); //Direction2 z
-
-	double x4 = roundoff(transformationOperator3D.operator()(2), 4); //Direction3 x
-
-	double y4 = roundoff(transformationOperator3D.operator()(6), 4); //Direction3 y
-
-	double z4 = roundoff(transformationOperator3D.operator()(10), 4); //Direction3 z
-
-	// 3 destination points
-	AcGePoint3d destpt1 = AcGePoint3d::AcGePoint3d(x1, y1, z1);
-	AcGePoint3d destpt2 = AcGePoint3d::AcGePoint3d(x1 + x2, y1 + y2, z1 + z2);
-	AcGePoint3d destpt3 = AcGePoint3d::AcGePoint3d(x1 + x3, y1 + y3, z1 + z3);
-	AcGePoint3d destpt4 = AcGePoint3d::AcGePoint3d(x1 + x4, y1 + y4, z1 + z4);
-
-	AcGePoint3d fromOrigin = srcpt1;
-	AcGeVector3d fromXaxis = srcpt2 - srcpt1;
-	AcGeVector3d fromYaxis = srcpt3 - srcpt1;
-	AcGeVector3d fromZaxis = srcpt4 - srcpt1;
-
-	AcGePoint3d toOrigin = destpt1;
-	AcGeVector3d toXaxis = (destpt2 - destpt1).normal() * (fromXaxis.length());
-	AcGeVector3d toYaxis = (destpt3 - destpt1).normal() * (fromYaxis.length());
-	AcGeVector3d toZaxis = (destpt4 - destpt1).normal() * (fromZaxis.length());
-
-	// Get the transformation matrix for aligning coordinate systems
-	AcGeMatrix3d mat = AcGeMatrix3d::AcGeMatrix3d();
-	mat = mat.alignCoordSys(fromOrigin, fromXaxis, fromYaxis, fromZaxis, toOrigin, toXaxis, toYaxis, toZaxis);
-
-	pSolid->transformBy(mat);
-
-}
-
-static void DeplacementObjet3DMappedItem(AcDbSubDMesh* pSubDMesh, Matrix4 transformationOperator3D) {
-
-	// 3 source points
-	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
-	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
-	AcGePoint3d srcpt3 = AcGePoint3d::AcGePoint3d(1, 0, 0);
-	AcGePoint3d srcpt4 = AcGePoint3d::AcGePoint3d(0, 1, 0);
-
-	double x1 = roundoff(transformationOperator3D.operator()(3), 4);  //PointDeplacement x
-				
-	double y1 = roundoff(transformationOperator3D.operator()(7), 4); //PointDeplacement y
-				
-	double z1 = roundoff(transformationOperator3D.operator()(11), 4); //PointDeplacement z
-				
-	double x2 = roundoff(transformationOperator3D.operator()(0), 4); //Direction1 x
-				
-	double y2 = roundoff(transformationOperator3D.operator()(4), 4); //Direction1 y
-				
-	double z2 = roundoff(transformationOperator3D.operator()(8), 4); //Direction1 z
-				
-	double x3 = roundoff(transformationOperator3D.operator()(1), 4); //Direction2 x
-				
-	double y3 = roundoff(transformationOperator3D.operator()(5), 4); //Direction2 y
-				
-	double z3 = roundoff(transformationOperator3D.operator()(9), 4); //Direction2 z
-				
-	double x4 = roundoff(transformationOperator3D.operator()(2), 4); //Direction3 x
-				
-	double y4 = roundoff(transformationOperator3D.operator()(6), 4); //Direction3 y
-				
-	double z4 = roundoff(transformationOperator3D.operator()(10), 4); //Direction3 z
-
-	// 3 destination points
-	AcGePoint3d destpt1 = AcGePoint3d::AcGePoint3d(x1, y1, z1);
-	AcGePoint3d destpt2 = AcGePoint3d::AcGePoint3d(x1 + x2, y1 + y2, z1 + z2);
-	AcGePoint3d destpt3 = AcGePoint3d::AcGePoint3d(x1 + x3, y1 + y3, z1 + z3);
-	AcGePoint3d destpt4 = AcGePoint3d::AcGePoint3d(x1 + x4, y1 + y4, z1 + z4);
-
-	AcGePoint3d fromOrigin = srcpt1;
-	AcGeVector3d fromXaxis = srcpt2 - srcpt1;
-	AcGeVector3d fromYaxis = srcpt3 - srcpt1;
-	AcGeVector3d fromZaxis = srcpt4 - srcpt1;
-
-	AcGePoint3d toOrigin = destpt1;
-	AcGeVector3d toXaxis = (destpt2 - destpt1).normal() * (fromXaxis.length());
-	AcGeVector3d toYaxis = (destpt3 - destpt1).normal() * (fromYaxis.length());
-	AcGeVector3d toZaxis = (destpt4 - destpt1).normal() * (fromZaxis.length());
-
-	// Get the transformation matrix for aligning coordinate systems
-	AcGeMatrix3d mat = AcGeMatrix3d::AcGeMatrix3d();
-	mat = mat.alignCoordSys(fromOrigin, fromXaxis, fromYaxis, fromZaxis, toOrigin, toXaxis, toYaxis, toZaxis);
-
-	pSubDMesh->transformBy(mat);
+	//es = pSubDMesh->transformBy(mat);
 
 }
 
@@ -6481,10 +6535,12 @@ void createFaceSolid(std::string entity, std::vector<int> keyItems, std::list<Ve
 	}
 }
 
-float roundoff(float value, unsigned char prec)
+double roundoff(double value, int prec)
 {
-	float pow_10 = pow(10.0f, (float)prec);
-	return round(value * pow_10) / pow_10;
+	int pow_10 = pow(10.0f, prec);
+	int valueR = round(value * pow_10);
+	double valueF = (double)valueR / pow_10;
+	return valueF;
 }
 
 bool BoolToBool(Step::Boolean boool)
