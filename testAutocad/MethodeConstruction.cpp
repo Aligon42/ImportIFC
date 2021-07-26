@@ -15,7 +15,7 @@ const wchar_t* GetWCM(const char* c, ...)
 	return wc;
 }
 
-void extrusion(int key, std::string entity, Object& object, std::vector<ObjectVoid>& listVoid, Style styleDessin)
+void extrusion(int key, std::string entity, IFCObject& object, std::vector<ObjectVoid>& listVoid, Style styleDessin)
 {
 
 	// Open the Layer table for read
@@ -450,7 +450,7 @@ static void DeplacementObjet3DMappedItem(AcDbSubDMesh* pSubDMesh, Matrix4 transf
 
 }
 
-static void CreationSection(AcDb3dSolid* extrusion, Object object)
+static void CreationSection(AcDb3dSolid* extrusion, IFCObject object)
 {
 
 	AcGeVector3d v1 = AcGeVector3d::AcGeVector3d(0, 0, 0);             // Vector 1 (x,y,z) & Vector 2 (x,y,z)
@@ -757,7 +757,7 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurve
 
 		if (Void.points1.size() > 0 && Void.nbArg.size() > 0)
 		{
-			Object object;
+			IFCObject object;
 			object.VecteurExtrusion = Void.VecteurExtrusion;
 			object.HauteurExtrusion = Void.hauteurExtrusion;
 			object.Points = Void.points1;
@@ -892,7 +892,7 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion, ObjectVoid Void, Composit
 
 		if (Void.points1.size() > 0 && Void.nbArg.size() > 0)
 		{
-			Object object;
+			IFCObject object;
 			object.VecteurExtrusion = Void.VecteurExtrusion;
 			object.HauteurExtrusion = Void.hauteurExtrusion;
 			object.Points = Void.points1;
@@ -1044,7 +1044,7 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion, ObjectVoid Void, Compo
 
 		if (Void.points1.size() > 0 && Void.nbArg.size() > 0)
 		{
-			Object object;
+			IFCObject object;
 			object.VecteurExtrusion = Void.VecteurExtrusion;
 			object.HauteurExtrusion = Void.hauteurExtrusion;
 			object.Points = Void.points1;
@@ -3812,7 +3812,7 @@ void createBoundingBox(Box box, std::string entity, Style styleDessin) {
 
 }
 
-void createFaceSolid(std::string entity, Object& object, std::map<int, Style>* listStyles) {
+void createFaceSolid(std::string entity, IFCObject& object, std::map<int, Style>* listStyles) {
 
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();

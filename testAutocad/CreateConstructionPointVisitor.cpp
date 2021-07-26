@@ -74,9 +74,7 @@ bool CreateConstructionPointVisitor::visitIfcProductDefinitionShape(
 {
     for (auto representation : value->getRepresentations())
     {
-        if (!representation->acceptVisitor(this)) {
-            return false;
-        }
+        representation->acceptVisitor(this);
     }
 
     return true;
@@ -1082,9 +1080,9 @@ bool CreateConstructionPointVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value
     return _points.empty() == false;
 }
 
-Object CreateConstructionPointVisitor::GetObjectData()
+IFCObject CreateConstructionPointVisitor::GetObjectData()
 {
-    Object obj;
+    IFCObject obj;
     obj.NameItems = getNameItems();
     obj.Points = getPoints();
     obj.VecteurExtrusion = getVectorDirection();

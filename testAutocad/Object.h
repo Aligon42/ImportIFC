@@ -188,7 +188,7 @@ struct Circle_profilDef : public ProfilDef
     void createSolid3dProfil(Style styleDessin) override;
 };
 
-struct Object
+struct IFCObject
 {
     int Key;
     std::string Entity;
@@ -217,4 +217,40 @@ struct Object
     int NbPolylineComposite;
     Box Box;
     std::shared_ptr<ProfilDef> ProfilDef;
+};
+
+struct IFCShapeRepresentation
+{
+    int Key;
+    std::string EntityType;
+    std::string RepresentationIdentifier;
+    std::string RepresentationType;
+
+    IFCShapeRepresentation(int key, const std::string& type, const std::string& representationIdentifier, const std::string& representationType)
+        : Key(key), EntityType(type), RepresentationIdentifier(representationIdentifier), RepresentationType(representationType) { }
+};
+
+struct IFCExtrudedAreaSolid : public IFCShapeRepresentation
+{
+    std::string ProfilDefName;
+    Matrix4 Transformation;
+    Vec3 ExtrusionVector;
+    double ExtrusionHeight;
+    std::list<Vec3> Points;
+
+    IFCExtrudedAreaSolid(int key, const std::string& type, const std::string& representationIdentifier, const std::string& representationType, const std::string& profilDefName, const Matrix4& tranform, const Vec3& extrusionVector, double extrusionHeight, const std::list<Vec3>& points)
+        : ProfilDefName(profilDefName), Transformation(tranform), ExtrusionVector(extrusionVector), ExtrusionHeight(extrusionHeight), Points(points), IFCShapeRepresentation(key, type, representationIdentifier, representationType) { }
+};
+
+struct IFCBooleanClippingResult
+{
+    IFCShapeRepresentation* FirstOperand;
+    IFCShapeRepresentation* SecondOperand;
+};
+
+struct IFCObjTemp
+{
+    int Key;
+    std::string Entity;
+    std::vector<IFCShapeRepresentation*> ShapeRepresentations;
 };

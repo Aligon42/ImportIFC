@@ -49,13 +49,13 @@ static std::vector<ObjectVoid> listVoid;
 
 const wchar_t* GetWCM(const char* c, ...);
 
-void extrusion(int key, std::string entity, Object& object, std::vector<ObjectVoid>& listVoid, Style styleDessin);
+void extrusion(int key, std::string entity, IFCObject& object, std::vector<ObjectVoid>& listVoid, Style styleDessin);
 void createBoundingBox(Box box,std::string entity, Style styleDessin);
 static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1);
 static void DeplacementObjet3D(AcDbSubDMesh* pSubDMesh, Matrix4 transform1);
 static void DeplacementObjet3DMappedItem(AcDb3dSolid* pSolid, Matrix4 transformationOperator3D);
 static void DeplacementObjet3DMappedItem(AcDbSubDMesh* pSubDMesh, Matrix4 transformationOperator3D);
-static void CreationSection(AcDb3dSolid* extrusion, Object object);
+static void CreationSection(AcDb3dSolid* extrusion, IFCObject object);
 
 //Void
 static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, int nbPolylineComposite, bool isMappedItem, Matrix4 transformationOperator3D);
@@ -78,6 +78,6 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, Style styleDessin);
 void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, Style styleDessin);
 void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, Style styleDessin);
-void createFaceSolid(std::string entity, Object& object, std::map<int, Style>* listStyles);
+void createFaceSolid(std::string entity, IFCObject& object, std::map<int, Style>* listStyles);
 AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, Matrix4 transform, bool isMappedItem, Matrix4 transformationOperator3D);
 float roundoff(float value, unsigned char prec);

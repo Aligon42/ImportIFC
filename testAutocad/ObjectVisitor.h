@@ -1,4 +1,5 @@
- #pragma once
+#pragma once
+
 #include "tchar.h"
 #include "aced.h"
 #include "rxregsvc.h"
@@ -27,66 +28,11 @@
 typedef mathfu::Vector<float, 3> Vec3;
 typedef mathfu::Matrix<float, 4> Matrix4;
 
-class CreateConstructionPointVisitor : public ifc2x3::InheritVisitor
+class ObjectVisitor : public ifc2x3::InheritVisitor
 {
-private:
-    Matrix4 _transformation{ Matrix4::Identity() };
-    Matrix4 transform;
-    Matrix4 transformationOperator3D;
-    float determinantMatrixOperator3D;
-
-    std::list<Vec3> _points;
-    Vec3 extrusionVector;
-    float hauteurExtrusion;
-    Matrix4 transformation;
-    std::vector<std::string> nameItems;
-    std::string outerCurveName;
-    bool isCompositeCurve = false;
-    bool isBoolean = false;
-    bool isMappedItem = false;
-
-    int nbPolylineCompositeCurve = 0;
-    int nbSupport = 0;
-    int scale = 0;
-
-    int keyForVoid;
-    std::vector<int> keyItems;
-    Style _style;
-
-    //opération boolean
-    std::vector<bool> AgreementHalf;
-    std::vector<std::string> entityHalf;
-    std::vector<bool> AgreementPolygonal;
-    std::vector<std::string> entityPolygonal;
-    std::vector<bool> AgreementCompositeCurve;
-    std::vector<ifc2x3::IfcTransitionCode> transitionCompositeCurveSegment;
-    std::vector<bool> sameSenseCompositeCurveSegment;
-    std::vector<int> trim1TrimmedCurve;
-    std::vector<int> trim2TrimmedCurve;
-    std::vector<bool> senseAgreementTrimmedCurve;
-    std::string nameParentCurve;
-    std::vector<int> radiusCircle;
-    std::list<Matrix4> listPlan;
-    std::list<Matrix4> listLocationPolygonal;
-    std::vector<int> listNbArgPolyline;
-    
-    //profilDef
-    std::string NameProfilDef;
-    std::shared_ptr<ProfilDef> _profilDef;
-
-    TrimmedCurve _trimmedCurve;
-    CompositeCurveSegment _compositeCurveSegment;
-
-    //face
-    bool orientationFace;
-    std::vector<int> nbArgFace;
-
-    //Box
-    Box box;    
-
 public:
     //! Constructor
-    CreateConstructionPointVisitor();
+    ObjectVisitor();
 
     bool visitIfcProduct(ifc2x3::IfcProduct* value) override;
     bool visitIfcSite(ifc2x3::IfcSite* value) override;
@@ -107,7 +53,7 @@ public:
     bool visitIfcCompositeCurve(ifc2x3::IfcCompositeCurve* value) override;
     bool visitIfcCompositeCurveSegment(ifc2x3::IfcCompositeCurveSegment* value) override;
     bool visitIfcTrimmedCurve(ifc2x3::IfcTrimmedCurve* value) override;
-    bool visitIfcCircle(ifc2x3::IfcCircle* value) override; 
+    bool visitIfcCircle(ifc2x3::IfcCircle* value) override;
     bool visitIfcPlane(ifc2x3::IfcPlane* value) override;
     bool visitIfcAxis2Placement(ifc2x3::IfcAxis2Placement* value) override;
     bool visitIfcAxis2Placement2D(ifc2x3::IfcAxis2Placement2D* value) override;
@@ -143,44 +89,24 @@ public:
     bool visitIfcFaceBound(ifc2x3::IfcFaceBound* value) override;
     bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value) override;
 
-    IFCObject GetObjectData();
+    IFCObjTemp getIfcObject();
 
-    std::list<Vec3> getPoints() const;
-    Vec3 getVectorDirection() const;
-    float getHauteurExtrusion() const;
-    Matrix4 getTransformation() const;
-    Matrix4 getTransformationOperator3D() const;
-    float getDetermiantOperator3D() const;
-    bool getIsMappedItem() const;
-    bool getScale() const;
-    std::vector<std::string> getNameItems() const;
-    std::string getOuterCurveName() const;
-
-    //get opération boolean
-    std::vector<bool> getAgreementHalfBool() const;
-    std::vector<bool> getAgreementPolygonalBool() const;
-    std::list<Matrix4> getPlanPolygonal();
-    std::list<Matrix4> getLocationPolygonal() const;
-    std::vector<int> getNbArgPolyline() const;
-    std::vector<std::string> getListEntityHalf() const;
-    std::vector<std::string> getListEntityPolygonal() const;
-
-    //get profilDef
-    std::shared_ptr<ProfilDef> getProfilDef();
-    std::string getNameProfildef() const;
-
-    int getkeyForVoid() const;
-    int getnbPolylineCompositeCurve() const;
-    CompositeCurveSegment getCompositeCurveSegment() const;
-
-    std::vector<int> getListNbArgFace() const;
-    std::vector<int> getListKeyItem() const;
-    bool getOrientatationFace() const;
-
-    Box getBox() const;
-    Style getStyle() const;
-
-    Vec3 SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);
-    Vec3 SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);
+private:
     void transformPoints(const Matrix4& transform);
+
+    IFCShapeRepresentation* getShapeRepresentation();
+
+private:
+    Matrix4 m_Transformation;
+    std::list<Vec3> m_Points;
+    std::string m_NameProfilDef;
+    Vec3 m_ExtrusionVector;
+    double m_ExtrusionHeight = 0.0;
+    int m_Key = 0;
+    std::string m_Entity;
+    std::string m_RepresentationIdentifier;
+    std::string m_RepresentationType;
+    IFCBooleanClippingResult m_BooleanClippingResult;
+    
+    std::vector<IFCShapeRepresentation*> m_ShapeRepresentations;
 };
