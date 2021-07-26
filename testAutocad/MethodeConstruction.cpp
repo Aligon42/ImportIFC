@@ -5,6 +5,9 @@
 #include <cmath>
 #include <vector>
 #include <iterator>
+#include <iostream>
+#include <iomanip>
+#include <float.h>
 
 
 const wchar_t* GetWCM(const char* c, ...)
@@ -562,24 +565,26 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 
 static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1) {
 
+	AcGeContext::gTol.setEqualPoint(0.001);
+	AcGeContext::gTol.setEqualVector(0.001);
+
 	Acad::ErrorStatus es;
 	// 3 source points
 	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
 	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
 	AcGePoint3d srcpt3 = AcGePoint3d::AcGePoint3d(1, 0, 0);
 
-	double x1 = roundoff(transform1.operator()(12), 3);  //PointDeplacement x
-	double y1 = roundoff(transform1.operator()(13), 3); //PointDeplacement y
-	double z1 = roundoff(transform1.operator()(14), 3); //PointDeplacement z
-	double x2 = roundoff(transform1.operator()(8),  3); //Direction1 x
-	double y2 = roundoff(transform1.operator()(9),  3); //Direction1 y
-	double z2 = roundoff(transform1.operator()(10), 3); //Direction1 z
-	double x3 = roundoff(transform1.operator()(0),  3); //Direction2 x
-	double y3 = roundoff(transform1.operator()(1),  3); //Direction2 y
-	double z3 = roundoff(transform1.operator()(2),  3); //Direction2 z
-	//double x4 = roundoff(transform1.operator()(4), 3); //Direction3 x
-	//double y4 = roundoff(transform1.operator()(5), 3); //Direction3 y
-	//double z4 = roundoff(transform1.operator()(6), 3); //Direction3 z
+	double x1 = transform1.operator()(12);  //PointDeplacement x
+	double y1 = transform1.operator()(13); //PointDeplacement y
+	double z1 = transform1.operator()(14); //PointDeplacement z
+	double x2 = transform1.operator()(8); //Direction1 x
+	double y2 = transform1.operator()(9); //Direction1 y
+	double z2 = transform1.operator()(10); //Direction1 z
+	double x3 = transform1.operator()(0); //Direction2 x
+	double y3 = transform1.operator()(1); //Direction2 y
+	double z3 = transform1.operator()(2); //Direction2 z
+
+	
 
 	// 3 destination points
 	AcGePoint3d destpt1 = AcGePoint3d::AcGePoint3d(x1, y1, z1);
@@ -607,20 +612,23 @@ static void DeplacementObjet3D(AcDb3dSolid* pSolid, Matrix4 transform1) {
 
 static void DeplacementObjet3D(AcDbSubDMesh* pSubDMesh, Matrix4 transform1) {
 
+	AcGeContext::gTol.setEqualPoint(0.001);
+	AcGeContext::gTol.setEqualVector(0.001);
+
 	// 3 source points
 	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
 	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
 	AcGePoint3d srcpt3 = AcGePoint3d::AcGePoint3d(1, 0, 0);
 
-	float x1 = roundoff(transform1.operator()(12), 4);  //PointDeplacement x
-	float y1 = roundoff(transform1.operator()(13), 4); //PointDeplacement y
-	float z1 = roundoff(transform1.operator()(14), 4); //PointDeplacement z
-	float x2 = roundoff(transform1.operator()(8), 4); //Direction1 x
-	float y2 = roundoff(transform1.operator()(9), 4); //Direction1 y
-	float z2 = roundoff(transform1.operator()(10), 4); //Direction1 z
-	float x3 = roundoff(transform1.operator()(0), 4); //Direction2 x
-	float y3 = roundoff(transform1.operator()(1), 4); //Direction2 y
-	float z3 = roundoff(transform1.operator()(2), 4); //Direction2 z
+	float x1 = transform1.operator()(12);  //PointDeplacement x
+	float y1 = transform1.operator()(13); //PointDeplacement y
+	float z1 = transform1.operator()(14); //PointDeplacement z
+	float x2 = transform1.operator()(8) ; //Direction1 x
+	float y2 = transform1.operator()(9) ; //Direction1 y
+	float z2 = transform1.operator()(10); //Direction1 z
+	float x3 = transform1.operator()(0) ; //Direction2 x
+	float y3 = transform1.operator()(1) ; //Direction2 y
+	float z3 = transform1.operator()(2) ; //Direction2 z
 
 	// 3 destination points
 	AcGePoint3d destpt1 = AcGePoint3d::AcGePoint3d(x1, y1, z1);
@@ -647,24 +655,27 @@ static void DeplacementObjet3D(AcDbSubDMesh* pSubDMesh, Matrix4 transform1) {
 
 static void DeplacementObjet3DMappedItem(AcDb3dSolid* pSolid, Matrix4 transformationOperator3D) {
 
+	AcGeContext::gTol.setEqualPoint(0.001);
+	AcGeContext::gTol.setEqualVector(0.001);
+
 	// 3 source points
 	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
 	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
 	AcGePoint3d srcpt3 = AcGePoint3d::AcGePoint3d(1, 0, 0);
 	AcGePoint3d srcpt4 = AcGePoint3d::AcGePoint3d(0, 1, 0);
 
-	float x1 = roundoff(transformationOperator3D.operator()(3), 4);  //PointDeplacement x
-	float y1 = roundoff(transformationOperator3D.operator()(7), 4); //PointDeplacement y
-	float z1 = roundoff(transformationOperator3D.operator()(11), 4); //PointDeplacement z
-	float x2 = roundoff(transformationOperator3D.operator()(0), 4); //Direction1 x
-	float y2 = roundoff(transformationOperator3D.operator()(4), 4); //Direction1 y
-	float z2 = roundoff(transformationOperator3D.operator()(8), 4); //Direction1 z
-	float x3 = roundoff(transformationOperator3D.operator()(1), 4); //Direction2 x
-	float y3 = roundoff(transformationOperator3D.operator()(5), 4); //Direction2 y
-	float z3 = roundoff(transformationOperator3D.operator()(9), 4); //Direction2 z
-	float x4 = roundoff(transformationOperator3D.operator()(2), 4); //Direction3 x
-	float y4 = roundoff(transformationOperator3D.operator()(6), 4); //Direction3 y
-	float z4 = roundoff(transformationOperator3D.operator()(10), 4); //Direction3 z
+	float x1 = transformationOperator3D.operator()(3) ;  //PointDeplacement x
+	float y1 = transformationOperator3D.operator()(7) ; //PointDeplacement y
+	float z1 = transformationOperator3D.operator()(11); //PointDeplacement z
+	float x2 = transformationOperator3D.operator()(0) ; //Direction1 x
+	float y2 = transformationOperator3D.operator()(4) ; //Direction1 y
+	float z2 = transformationOperator3D.operator()(8) ; //Direction1 z
+	float x3 = transformationOperator3D.operator()(1) ; //Direction2 x
+	float y3 = transformationOperator3D.operator()(5) ; //Direction2 y
+	float z3 = transformationOperator3D.operator()(9) ; //Direction2 z
+	float x4 = transformationOperator3D.operator()(2) ; //Direction3 x
+	float y4 = transformationOperator3D.operator()(6) ; //Direction3 y
+	float z4 = transformationOperator3D.operator()(10); //Direction3 z
 
 	// 3 destination points
 	AcGePoint3d destpt1 = AcGePoint3d::AcGePoint3d(x1, y1, z1);
@@ -692,24 +703,27 @@ static void DeplacementObjet3DMappedItem(AcDb3dSolid* pSolid, Matrix4 transforma
 
 static void DeplacementObjet3DMappedItem(AcDbSubDMesh* pSubDMesh, Matrix4 transformationOperator3D) {
 
+	AcGeContext::gTol.setEqualPoint(0.001);
+	AcGeContext::gTol.setEqualVector(0.001);
+
 	// 3 source points
 	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
 	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
 	AcGePoint3d srcpt3 = AcGePoint3d::AcGePoint3d(1, 0, 0);
 	AcGePoint3d srcpt4 = AcGePoint3d::AcGePoint3d(0, 1, 0);
 
-	float x1 = roundoff(transformationOperator3D.operator()(3), 4);  //PointDeplacement x
-	float y1 = roundoff(transformationOperator3D.operator()(7), 4); //PointDeplacement y
-	float z1 = roundoff(transformationOperator3D.operator()(11), 4); //PointDeplacement z
-	float x2 = roundoff(transformationOperator3D.operator()(0), 4); //Direction1 x
-	float y2 = roundoff(transformationOperator3D.operator()(4), 4); //Direction1 y
-	float z2 = roundoff(transformationOperator3D.operator()(8), 4); //Direction1 z
-	float x3 = roundoff(transformationOperator3D.operator()(1), 4); //Direction2 x
-	float y3 = roundoff(transformationOperator3D.operator()(5), 4); //Direction2 y
-	float z3 = roundoff(transformationOperator3D.operator()(9), 4); //Direction2 z
-	float x4 = roundoff(transformationOperator3D.operator()(2), 4); //Direction3 x
-	float y4 = roundoff(transformationOperator3D.operator()(6), 4); //Direction3 y
-	float z4 = roundoff(transformationOperator3D.operator()(10), 4); //Direction3 z
+	float x1 = transformationOperator3D.operator()(3) ;  //PointDeplacement x
+	float y1 = transformationOperator3D.operator()(7) ; //PointDeplacement y
+	float z1 = transformationOperator3D.operator()(11); //PointDeplacement z
+	float x2 = transformationOperator3D.operator()(0) ; //Direction1 x
+	float y2 = transformationOperator3D.operator()(4) ; //Direction1 y
+	float z2 = transformationOperator3D.operator()(8) ; //Direction1 z
+	float x3 = transformationOperator3D.operator()(1) ; //Direction2 x
+	float y3 = transformationOperator3D.operator()(5) ; //Direction2 y
+	float z3 = transformationOperator3D.operator()(9) ; //Direction2 z
+	float x4 = transformationOperator3D.operator()(2) ; //Direction3 x
+	float y4 = transformationOperator3D.operator()(6) ; //Direction3 y
+	float z4 = transformationOperator3D.operator()(10); //Direction3 z
 
 	// 3 destination points
 	AcGePoint3d destpt1 = AcGePoint3d::AcGePoint3d(x1, y1, z1);
@@ -737,29 +751,24 @@ static void DeplacementObjet3DMappedItem(AcDbSubDMesh* pSubDMesh, Matrix4 transf
 
 static void DeplacementObjet2D(AcDb3dSolid* pSolid, Matrix4 transform1) {
 
+	AcGeContext::gTol.setEqualPoint(0.001);
+	AcGeContext::gTol.setEqualVector(0.001);
+
 	Acad::ErrorStatus es;
 	// 3 source points
 	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
 	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
 	AcGePoint3d srcpt3 = AcGePoint3d::AcGePoint3d(1, 0, 0);
 
-	double x1 = roundoff(transform1.operator()(12), 4);  //PointDeplacement x
-
-	double y1 = roundoff(transform1.operator()(13), 4); //PointDeplacement y
-
-	double z1 = roundoff(transform1.operator()(14), 4); //PointDeplacement z
-
-	double x2 = roundoff(transform1.operator()(8), 4); //Direction1 x
-
-	double y2 = roundoff(transform1.operator()(9), 4); //Direction1 y
-
-	double z2 = roundoff(transform1.operator()(10), 4); //Direction1 z
-
-	double x3 = roundoff(transform1.operator()(0), 4); //Direction2 x
-
-	double y3 = roundoff(transform1.operator()(1), 4); //Direction2 y
-
-	double z3 = roundoff(transform1.operator()(2), 4); //Direction2 z
+	double x1 = transform1.operator()(12);  //PointDeplacement x
+	double y1 = transform1.operator()(13); //PointDeplacement y
+	double z1 = transform1.operator()(14); //PointDeplacement z
+	double x2 = transform1.operator()(8) ; //Direction1 x
+	double y2 = transform1.operator()(9) ; //Direction1 y
+	double z2 = transform1.operator()(10); //Direction1 z
+	double x3 = transform1.operator()(0) ; //Direction2 x
+	double y3 = transform1.operator()(1) ; //Direction2 y
+	double z3 = transform1.operator()(2) ; //Direction2 z
 
 	// 3 destination points
 	AcGePoint3d destpt1 = AcGePoint3d::AcGePoint3d(x1, y1, z1);
@@ -787,20 +796,20 @@ static void DeplacementObjet2D(AcDb3dSolid* pSolid, Matrix4 transform1) {
 
 static void DeplacementObjet2D(AcDbSubDMesh* pSubDMesh, Matrix4 transform1) {
 
+	AcGeContext::gTol.setEqualPoint(0.001);
+	AcGeContext::gTol.setEqualVector(0.001);
+
 	Acad::ErrorStatus es;
 	// 3 source points
 	AcGePoint2d srcpt1 = AcGePoint2d::AcGePoint2d(0, 0);
 	AcGePoint2d srcpt2 = AcGePoint2d::AcGePoint2d(0, 0);
 	AcGePoint2d srcpt3 = AcGePoint2d::AcGePoint2d(1, 0);
 
-	double x1 = roundoff(transform1.operator()(12), 4);  //PointDeplacement x
-
-	double y1 = roundoff(transform1.operator()(13), 4); //PointDeplacement y
-
-	double x2 = roundoff(transform1.operator()(8), 4); //Direction1 x
-
-	double y2 = roundoff(transform1.operator()(9), 4); //Direction1 y
-
+	double x1 = transform1.operator()(12);  //PointDeplacement x
+	double y1 = transform1.operator()(13); //PointDeplacement y
+	double x2 = transform1.operator()(8) ; //Direction1 x
+	double y2 = transform1.operator()(9) ; //Direction1 y
+	 
 	// 3 destination points
 	AcGePoint2d destpt1 = AcGePoint2d::AcGePoint2d(x1, y1);
 	AcGePoint2d destpt2 = AcGePoint2d::AcGePoint2d(x1 + x2, y1 + y2);
@@ -6535,11 +6544,11 @@ void createFaceSolid(std::string entity, std::vector<int> keyItems, std::list<Ve
 	}
 }
 
-double roundoff(double value, int prec)
+float roundoff(float value, int prec)
 {
 	int pow_10 = pow(10.0f, prec);
 	int valueR = round(value * pow_10);
-	double valueF = (double)valueR / pow_10;
+	float valueF = (float)valueR / pow_10;
 	return valueF;
 }
 

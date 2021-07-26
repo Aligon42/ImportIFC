@@ -232,7 +232,7 @@ void test()
     {
         
         int key = (int)site.getKey();
-        if (key != 1) continue;
+        //if (key != 1) continue;
         std::string entity = site.getType().getName();
         CreateConstructionPointVisitor visitor1;
         site.acceptVisitor(&visitor1);
@@ -387,7 +387,7 @@ void test()
         //if (key != 8513) continue;
         //if (key != 59641) continue;
         //if (key != 1309) continue;
-        if (key != 77564) continue;
+        //if (key != 77564) continue;
 
         CreateConstructionPointVisitor visitor1;
 

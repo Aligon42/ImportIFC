@@ -349,6 +349,7 @@ bool CreateConstructionPointVisitor::visitIfcCartesianTransformationOperator3D(
     if (value->testAxis1())
     {
        Axis1 = SwitchIfcDirectionToVecteur3D(value->getAxis1(), Axis1);
+       Axis1.Normalize();
     }
 
     Vec3 Axis2(0.0f, 1.0f, 0.0f);
@@ -356,6 +357,7 @@ bool CreateConstructionPointVisitor::visitIfcCartesianTransformationOperator3D(
     if (value->testAxis2())
     {
         Axis2 = SwitchIfcDirectionToVecteur3D(value->getAxis2(), Axis2);
+        Axis2.Normalize();
     }
 
     Vec3 Axis3(0.0f, 0.0f, 1.0f);
@@ -363,6 +365,7 @@ bool CreateConstructionPointVisitor::visitIfcCartesianTransformationOperator3D(
     if (value->testAxis3())
     {
         Axis3 = SwitchIfcDirectionToVecteur3D(value->getAxis3(), Axis3);
+        Axis3.Normalize();
     }
 
     Vec3 localOrigine(0.0f, 0.0f, 0.0f);
