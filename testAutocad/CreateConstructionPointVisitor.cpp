@@ -721,6 +721,8 @@ bool CreateConstructionPointVisitor::visitIfcAxis2Placement2D(
 
 
 
+
+
     return true;
 }
 

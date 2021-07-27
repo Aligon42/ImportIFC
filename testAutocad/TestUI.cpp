@@ -382,6 +382,7 @@ void test()
     {
         
         int key = (int)buildingElement.getKey();
+        
         std::string entity = buildingElement.getType().getName();
         //if (key != 108852 /*&& key != 110815 && key != 108907 && key != 110867*/) continue;
         //if (key != 8513) continue;
