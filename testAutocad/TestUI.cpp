@@ -388,8 +388,8 @@ void test()
         //if (key != 108852 /*&& key != 110815 && key != 108907 && key != 110867*/) continue;
         //if (key != 8513) continue;
         //if (key != 59641) continue;
-        if (key != 503) continue;
-        if (key != 653) continue;
+        if (key != 503 && key != 653) continue;
+        //if (key != 653) continue;
         //if (key != 68782) continue;
 
         CreateConstructionPointVisitor visitor1;

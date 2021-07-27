@@ -415,6 +415,7 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 
 
 
+	DeplacementObjet2D(pSolid, transformation2D);
 	DeplacementObjet3D(pSolid, transformation);
 
 	// Temp pour des tests
@@ -506,12 +507,10 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 
 	for (int v = 0; v < listVoid.size(); v++)
@@ -1424,6 +1423,9 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurve
 
 		Void.nbArg.erase(Void.nbArg.begin());
 
+		DeplacementObjet2D(extrusion_void, Void.transformation2D);
+		DeplacementObjet2D(extrusion_void2, Void.transformation2D);
+
 		if (Void.points1.size() > 0 && Void.nbArg.size() > 0)
 		{
 			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
@@ -1514,24 +1516,20 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurve
 	{
 		DeplacementObjet3DMappedItem(extrusion_void, transformationOperator3D);
 		DeplacementObjet3D(extrusion_void, Void.transform1);
-		DeplacementObjet2D(extrusion_void, Void.transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(extrusion_void, Void.transform1);
-		DeplacementObjet2D(extrusion_void, Void.transformation2D);
 	}
 
 	if (isMappedItem)
 	{
 		DeplacementObjet3DMappedItem(extrusion_void2, transformationOperator3D);
 		DeplacementObjet3D(extrusion_void2, Void.transform1);
-		DeplacementObjet2D(extrusion_void2, Void.transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(extrusion_void2, Void.transform1);
-		DeplacementObjet2D(extrusion_void2, Void.transformation2D);
 	}
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -1633,6 +1631,9 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion, ObjectVoid Void, Composit
 
 		Void.nbArg.erase(Void.nbArg.begin());
 
+		DeplacementObjet2D(extrusion_void, Void.transformation2D);
+		DeplacementObjet2D(extrusion_void2, Void.transformation2D);
+
 		if (Void.points1.size() > 0 && Void.nbArg.size() > 0)
 		{
 			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
@@ -1723,24 +1724,20 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion, ObjectVoid Void, Composit
 	{
 		DeplacementObjet3DMappedItem(extrusion_void, transformationOperator3D);
 		DeplacementObjet3D(extrusion_void, Void.transform1);
-		DeplacementObjet2D(extrusion_void, Void.transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(extrusion_void, Void.transform1);
-		DeplacementObjet2D(extrusion_void, Void.transformation2D);
 	}
 
 	if (isMappedItem)
 	{
 		DeplacementObjet3DMappedItem(extrusion_void2, transformationOperator3D);
 		DeplacementObjet3D(extrusion_void2, Void.transform1);
-		DeplacementObjet2D(extrusion_void2, Void.transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(extrusion_void2, Void.transform1);
-		DeplacementObjet2D(extrusion_void2, Void.transformation2D);
 	}
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -1859,6 +1856,9 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion, ObjectVoid Void, Compo
 
 		Void.nbArg.erase(Void.nbArg.begin());
 
+		DeplacementObjet2D(extrusion_void, Void.transformation2D);
+		DeplacementObjet2D(extrusion_void2, Void.transformation2D);
+
 		if (Void.points1.size() > 0 && Void.nbArg.size() > 0)
 		{
 			CreationSection(extrusion_void, Void.VecteurExtrusion, Void.hauteurExtrusion, Void.points1,
@@ -1950,24 +1950,20 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion, ObjectVoid Void, Compo
 	{
 		DeplacementObjet3DMappedItem(extrusion_void, transformationOperator3D);
 		DeplacementObjet3D(extrusion_void, Void.transform1);
-		DeplacementObjet2D(extrusion_void, Void.transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(extrusion_void, Void.transform1);
-		DeplacementObjet2D(extrusion_void, Void.transformation2D);
 	}
 
 	if (isMappedItem)
 	{
 		DeplacementObjet3DMappedItem(extrusion_void2, transformationOperator3D);
 		DeplacementObjet3D(extrusion_void2, Void.transform1);
-		DeplacementObjet2D(extrusion_void2, Void.transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(extrusion_void2, Void.transform1);
-		DeplacementObjet2D(extrusion_void2, Void.transformation2D);
 	}
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -2223,6 +2219,7 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, int keyI
 	}*/
 
 
+	DeplacementObjet2D(pSolid, transformation2D);
 	DeplacementObjet3D(pSolid, transformation);
 
 	for (int a = 0; a < nbEntity; a++)
@@ -2309,12 +2306,10 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, int keyI
 	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -2494,6 +2489,7 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, int keyI
 	}
 
 
+	DeplacementObjet2D(pSolid, transformation2D);
 	DeplacementObjet3D(pSolid, transformation);
 
 	for (int a = 0; a < nbEntity; a++)
@@ -2581,12 +2577,10 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, int keyI
 	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -2757,6 +2751,7 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, int keyIt
 	}
 
 
+	DeplacementObjet2D(pSolid, transformation2D);
 	DeplacementObjet3D(pSolid, transformation);
 
 	for (int a = 0; a < nbEntity; a++)
@@ -2845,12 +2840,10 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, int keyIt
 	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -3024,6 +3017,7 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, int keyIt
 	}
 
 
+	DeplacementObjet2D(pSolid, transformation2D);
 	DeplacementObjet3D(pSolid, transformation);
 
 	for (int a = 0; a < nbEntity; a++)
@@ -3112,12 +3106,10 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, int keyIt
 	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -3292,6 +3284,7 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, int keyI
 	}
 
 
+	DeplacementObjet2D(pSolid, transformation2D);
 	DeplacementObjet3D(pSolid, transformation);
 
 	for (int a = 0; a < nbEntity; a++)
@@ -3380,12 +3373,10 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, int keyI
 	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -3565,6 +3556,7 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, int keyI
 	}
 
 
+	DeplacementObjet2D(pSolid, transformation2D);
 	DeplacementObjet3D(pSolid, transformation);
 
 	for (int a = 0; a < nbEntity; a++)
@@ -3652,12 +3644,10 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, int keyI
 	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -3831,6 +3821,7 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, int keyI
 	}
 
 
+	DeplacementObjet2D(pSolid, transformation2D);
 	DeplacementObjet3D(pSolid, transformation);
 
 	for (int a = 0; a < nbEntity; a++)
@@ -3918,12 +3909,10 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, int keyI
 	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -4097,6 +4086,7 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, int keyI
 	}
 
 
+	DeplacementObjet2D(pSolid, transformation2D);
 	DeplacementObjet3D(pSolid, transformation);
 
 	for (int a = 0; a < nbEntity; a++)
@@ -4184,12 +4174,10 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, int keyI
 	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -4367,6 +4355,7 @@ void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, int keyIte
 	}
 
 
+	DeplacementObjet2D(pSolid, transformation2D);
 	DeplacementObjet3D(pSolid, transformation);
 
 	for (int a = 0; a < nbEntity; a++)
@@ -4454,12 +4443,10 @@ void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, int keyIte
 	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -4634,6 +4621,7 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, int keyIte
 	}
 
 
+	DeplacementObjet2D(pSolid, transformation2D);
 	DeplacementObjet3D(pSolid, transformation);
 
 	for (int a = 0; a < nbEntity; a++)
@@ -4721,12 +4709,10 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, int keyIte
 	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -4909,6 +4895,7 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::st
 	}
 
 
+	DeplacementObjet2D(pSolid, transformation2D);
 	DeplacementObjet3D(pSolid, transformation);
 
 	for (int a = 0; a < nbEntity; a++)
@@ -4996,12 +4983,10 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::st
 	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -5207,6 +5192,7 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	}
 
 
+	DeplacementObjet2D(pSolid, transformation2D);
 	DeplacementObjet3D(pSolid, transformation);
 
 	for (int a = 0; a < nbEntity; a++)
@@ -5294,12 +5280,10 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -5531,6 +5515,7 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 	}
 
 
+	DeplacementObjet2D(pSolid, transformation2D);
 	DeplacementObjet3D(pSolid, transformation);
 
 	for (int a = 0; a < nbEntity; a++)
@@ -5618,12 +5603,10 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 
 
@@ -5787,6 +5770,7 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string ent
 	}
 
 
+	DeplacementObjet2D(pSolid, transformation2D);
 	DeplacementObjet3D(pSolid, transformation);
 
 	for (int a = 0; a < nbEntity; a++)
@@ -5874,12 +5858,10 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string ent
 	{
 		DeplacementObjet3DMappedItem(pSolid, transformationOperator3D);
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(pSolid, transform1);
-		DeplacementObjet2D(pSolid, transformation2D);
 	}
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -6543,12 +6525,10 @@ void createFaceSolid(std::string entity, std::vector<int> keyItems, std::list<Ve
 	{
 		DeplacementObjet3DMappedItem(pSubDMesh, transformationOperator3D);
 		DeplacementObjet3D(pSubDMesh, transform1);
-		DeplacementObjet2D(pSubDMesh, transformation2D);
 	}
 	else
 	{
 		DeplacementObjet3D(pSubDMesh, transformFace);
-		DeplacementObjet2D(pSubDMesh, transformation2D);
 	}
 
 
