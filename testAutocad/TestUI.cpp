@@ -23,44 +23,14 @@
 #include "ComputePlacementVisitor.h"
 #include "ObjectVisitor.h"
 #include "MethodeConstruction.h"
-#include "tests.h"
+#include "Construction.h"
+
 #include <adscodes.h>
 
 #include <iostream>
 #include <thread>
 
-#define DISTANCE_TOLERANCE 0.001
-
 void dessinProfilDef(IFCObject object, const std::string& entity, int index, std::map<int, Style>* listStyles);
-
-bool equals(const Vec3& lhs, const Vec3& rhs)
-{
-	return (lhs - rhs).Length() < DISTANCE_TOLERANCE;
-}
-
-std::ostream& operator<<(std::ostream& os, const Vec3& v)
-{
-	os << "[ " << v.x() << ", "
-		<< v.y() << ", "
-		<< v.z() << " ]";
-	return os;
-}
-
-#define PRINT_VALUE(x) \
-    Log("    %s = %s\n", #x, x)
-
-class ConsoleCallBack : public Step::CallBack
-{
-public:
-	ConsoleCallBack() : _max(1) {}
-	virtual void setMaximum(size_t max) { _max = max; }
-	virtual void setProgress(size_t progress) { std::cerr << double(progress) / double(_max) * 100.0 << "%" << std::endl; }
-	virtual bool stop() const { return false; }
-
-protected:
-	size_t _max;
-};
-
 void initApp();
 void unloadApp();
 
@@ -72,12 +42,6 @@ const wchar_t* GetWC(const char* c, ...)
 
 	return wc;
 }
-
-#define Log(x, ...) \
-    acutPrintf(_T(x), ...)
-
-#define Log(x) \
-    acutPrintf(_T(x))
 
 void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vector<IFCObject>& objects)
 {
@@ -141,7 +105,6 @@ void loadIfc()
 	_tcscpy(fname, rb->resval.rstring);
 	acutRelRb(rb);
 
-	Log("Simple read/write example of Ifc2x3 SDK\n");
 	bool shouldWrite = false;
 	bool inMemory = false;
 
@@ -150,7 +113,6 @@ void loadIfc()
 	ifcFile.open(fname);
 
 	ifc2x3::SPFReader reader;
-	ConsoleCallBack cb;
 	//    reader.setCallBack(&cb);
 
 	if (ifcFile.is_open())
@@ -174,7 +136,6 @@ void loadIfc()
 		acutPrintf(_T("OK!!\n"));
 	else
 	{
-		Log("Ho no, there is a PROBLEM!!\n");
 		std::vector<std::string> errors = reader.errors();
 		std::vector<std::string>::iterator it = errors.begin();
 		while (it != errors.end())
@@ -222,69 +183,69 @@ void loadIfc()
 	std::vector<std::thread> threads;
 	std::map<int, Style> listStyles;
 
-	//threads.push_back(std::thread([&]()
-	//{
-	//	// IfcRelVoidsElement
-	//	for (auto& voids : expressDataSet->getAllIfcRelVoidsElement())
-	//	{
-	//		CreateConstructionPointVisitor visitor;
-	//		int key = (int)voids.getKey();
+	threads.push_back(std::thread([&]()
+	{
+		// IfcRelVoidsElement
+		for (auto& voids : expressDataSet->getAllIfcRelVoidsElement())
+		{
+			CreateConstructionPointVisitor visitor;
+			int key = (int)voids.getKey();
 
-	//		voids.acceptVisitor(&visitor);
+			voids.acceptVisitor(&visitor);
 
-	//		ObjectVoid objectVoid;
-	//		objectVoid.keyForVoid = visitor.getkeyForVoid();
-	//		objectVoid.NameProfilDef = visitor.getNameProfildef();
-	//		if (objectVoid.NameProfilDef == "IfcArbitraryClosedProfileDef")
-	//		{
-	//			objectVoid.points1 = visitor.getPoints();
-	//			objectVoid.nbArg = visitor.getNbArgPolyline();
-	//		}
-	//		else if (objectVoid.NameProfilDef == "IfcCircleProfileDef")
-	//		{
-	//			objectVoid.radius = (static_cast<Circle_profilDef*>(visitor.getProfilDef().get()))->Radius;
-	//		}
-	//		else if (objectVoid.NameProfilDef == "IfcRectangleProfileDef")
-	//		{
-	//			objectVoid.XDim = (static_cast<Rectangle_profilDef*>(visitor.getProfilDef().get()))->XDim;
-	//			objectVoid.YDim = (static_cast<Rectangle_profilDef*>(visitor.getProfilDef().get()))->YDim;
-	//		}
-	//		objectVoid.VecteurExtrusion = visitor.getVectorDirection();
-	//		objectVoid.hauteurExtrusion = visitor.getHauteurExtrusion();
-	//		objectVoid.listPlan = visitor.getPlanPolygonal();
-	//		objectVoid.listLocationPolygonal = visitor.getLocationPolygonal();
-	//		objectVoid.AgreementHalf = visitor.getAgreementHalfBool();
-	//		objectVoid.AgreementPolygonal = visitor.getAgreementPolygonalBool();
-	//		objectVoid.listEntityHalf = visitor.getListEntityHalf();
-	//		objectVoid.listEntityPolygonal = visitor.getListEntityPolygonal();
+			ObjectVoid objectVoid;
+			objectVoid.keyForVoid = visitor.getkeyForVoid();
+			objectVoid.NameProfilDef = visitor.getNameProfildef();
+			if (objectVoid.NameProfilDef == "IfcArbitraryClosedProfileDef")
+			{
+				objectVoid.points1 = visitor.getPoints();
+				objectVoid.nbArg = visitor.getNbArgPolyline();
+			}
+			else if (objectVoid.NameProfilDef == "IfcCircleProfileDef")
+			{
+				objectVoid.radius = (static_cast<Circle_profilDef*>(visitor.getProfilDef().get()))->Radius;
+			}
+			else if (objectVoid.NameProfilDef == "IfcRectangleProfileDef")
+			{
+				objectVoid.XDim = (static_cast<Rectangle_profilDef*>(visitor.getProfilDef().get()))->XDim;
+				objectVoid.YDim = (static_cast<Rectangle_profilDef*>(visitor.getProfilDef().get()))->YDim;
+			}
+			objectVoid.VecteurExtrusion = visitor.getVectorDirection();
+			objectVoid.hauteurExtrusion = visitor.getHauteurExtrusion();
+			objectVoid.listPlan = visitor.getPlanPolygonal();
+			objectVoid.listLocationPolygonal = visitor.getLocationPolygonal();
+			objectVoid.AgreementHalf = visitor.getAgreementHalfBool();
+			objectVoid.AgreementPolygonal = visitor.getAgreementPolygonalBool();
+			objectVoid.listEntityHalf = visitor.getListEntityHalf();
+			objectVoid.listEntityPolygonal = visitor.getListEntityPolygonal();
 
-	//		voids.acceptVisitor(&placementVisitor);
-	//		objectVoid.transform1 = placementVisitor.getTransformation();
-	//		Matrix4 transformation = visitor.getTransformation();
+			voids.acceptVisitor(&placementVisitor);
+			objectVoid.transform1 = placementVisitor.getTransformation();
+			Matrix4 transformation = visitor.getTransformation();
 
-	//		objectVoid.transform1 *= transformation;
+			objectVoid.transform1 *= transformation;
 
-	//		listVoid.push_back(objectVoid);
-	//	}
-	//}));
+			Construction::s_ObjectVoids.insert(std::make_pair(objectVoid.keyForVoid, objectVoid));
+		}
+	}));
 
-	//threads.push_back(std::thread([&]()
-	//{
-	//	// IfcStyledItem
-	//	for (auto& styles : expressDataSet->getAllIfcStyledItem())
-	//	{
-	//		CreateConstructionPointVisitor visitor1;
-	//		int key = styles.getKey();
+	threads.push_back(std::thread([&]()
+	{
+		// IfcStyledItem
+		for (auto& styles : expressDataSet->getAllIfcStyledItem())
+		{
+			CreateConstructionPointVisitor visitor1;
+			int key = styles.getKey();
 
-	//		styles.acceptVisitor(&visitor1);
-	//		Style style = visitor1.getStyle();
-	//		listStyles.emplace(std::make_pair(style.keyItem, style));
-	//	}
-	//}));
+			styles.acceptVisitor(&visitor1);
+			Style style = visitor1.getStyle();
+			listStyles.emplace(std::make_pair(style.keyItem, style));
+		}
+	}));
 
 	std::map<std::string, std::vector<IFCObject>> objects;
 
-	/*for (auto ifcSite : expressDataSet->getAllIfcSite().m_refList)
+	for (auto ifcSite : expressDataSet->getAllIfcSite().m_refList)
 	{
 		if (ifcSite->size() > 0)
 		{
@@ -295,7 +256,7 @@ void loadIfc()
 
 			threads.push_back(std::thread(ExploreElement, ifcSite, std::ref(objects[type])));
 		}
-	}*/
+	}
 
 	for (auto element : expressDataSet->getAllIfcWall().m_refList)
 	{
@@ -392,8 +353,6 @@ void loadIfc()
 			}
 		}
 	}
-
-	acutPrintf(_T("\nFailure : %d\nSuccess : %d\n"), failure_results, success_results);
 
 	//if (shouldWrite)
 	//{

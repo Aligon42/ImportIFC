@@ -11,23 +11,23 @@
 
 #include "Object.h"
 
-typedef mathfu::Vector<float, 3> Vec3;
-typedef mathfu::Matrix<float, 4> Matrix4;
+typedef mathfu::Vector<double, 3> Vec3;
+typedef mathfu::Matrix<double, 4> Matrix4;
 
 struct TrimmedCurve
 {
     Vec3 centreCircle;
-    float radius;
-    int trim1;
-    int trim2;
-    bool senseArgreement;
+    float Radius;
+    int Trim1;
+    int Trim2;
+    bool SenseAgreement;
 };
 
 struct CompositeCurveSegment
 {
-    std::vector<std::vector<Vec3>> listPolyligne;
-    std::vector<TrimmedCurve> listTrimmedCurve;
-    std::vector<std::string> listParentCurve;
+    std::vector<Vec3> PointsPolyligne;
+    TrimmedCurve* TrimmedCurves;
+    std::string ParentCurve;
 };
 
 struct Style
@@ -225,32 +225,50 @@ struct IFCShapeRepresentation
     std::string EntityType;
     std::string RepresentationIdentifier;
     std::string RepresentationType;
-
-    IFCShapeRepresentation(int key, const std::string& type, const std::string& representationIdentifier, const std::string& representationType)
-        : Key(key), EntityType(type), RepresentationIdentifier(representationIdentifier), RepresentationType(representationType) { }
-};
-
-struct IFCExtrudedAreaSolid : public IFCShapeRepresentation
-{
     std::string ProfilDefName;
-    Matrix4 Transformation;
     Vec3 ExtrusionVector;
-    double ExtrusionHeight;
+    double ExtrusionHeight = 0.0;
     std::list<Vec3> Points;
-
-    IFCExtrudedAreaSolid(int key, const std::string& type, const std::string& representationIdentifier, const std::string& representationType, const std::string& profilDefName, const Matrix4& tranform, const Vec3& extrusionVector, double extrusionHeight, const std::list<Vec3>& points)
-        : ProfilDefName(profilDefName), Transformation(tranform), ExtrusionVector(extrusionVector), ExtrusionHeight(extrusionHeight), Points(points), IFCShapeRepresentation(key, type, representationIdentifier, representationType) { }
-};
-
-struct IFCBooleanClippingResult
-{
-    IFCShapeRepresentation* FirstOperand;
-    IFCShapeRepresentation* SecondOperand;
+    Matrix4 Plan;
+    Step::Boolean AgreementHalf;
+    Step::Boolean AgreementPolygonal;
+    Matrix4 LocationPolygonal;
+    Matrix4 TransformBoolean;
+    std::vector<CompositeCurveSegment> CompositeCurve;
+    ProfilDef* ProfilDef;
 };
 
 struct IFCObjTemp
 {
     int Key;
+    bool IsMappedItem;
     std::string Entity;
-    std::vector<IFCShapeRepresentation*> ShapeRepresentations;
+    std::string OuterCurveName;
+    Matrix4 LocalTransform;
+    Matrix4 Transformation;
+    Matrix4 Transformation2D;
+    Matrix4 TransformationOperator3D;
+    std::vector<IFCShapeRepresentation> ShapeRepresentations;
+};
+
+struct ObjectVoid
+{
+    int KeyForVoid;
+    std::string NameProfilDef;
+    Vec3 VecteurExtrusion;
+    double HauteurExtrusion;
+    std::list<Vec3> Points;
+    std::vector<int> Args;
+    double XDim;
+    double YDim;
+    double Radius;
+    std::list<Matrix4> Plans;
+    std::list<Matrix4> LocationsPolygonal;
+    std::vector<Step::Boolean> AgreementHalf;
+    std::vector<Step::Boolean> AgreementPolygonal;
+    std::vector<std::string> EntitiesHalf;
+    std::vector<std::string> EntitiesPolygonal;
+    Matrix4 Transform;
+    Matrix4 Transform2D;
+    std::vector<IFCShapeRepresentation> ShapeRepresentations;
 };

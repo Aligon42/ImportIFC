@@ -24,8 +24,8 @@
 
 #include "Object.h"
 
-typedef mathfu::Vector<float, 3> Vec3;
-typedef mathfu::Matrix<float, 4> Matrix4;
+typedef mathfu::Vector<double, 3> Vec3;
+typedef mathfu::Matrix<double, 4> Matrix4;
 
 class CreateConstructionPointVisitor : public ifc2x3::InheritVisitor
 {

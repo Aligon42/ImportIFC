@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ComputePlacementVisitor.cpp" />
+    <ClCompile Include="Construction.cpp" />
     <ClCompile Include="CreateConstructionPointVisitor.cpp" />
     <ClCompile Include="MethodeConstruction.cpp" />
     <ClCompile Include="Object.cpp" />
@@ -165,11 +166,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ComputePlacementVisitor.h" />
+    <ClInclude Include="Construction.h" />
     <ClInclude Include="CreateConstructionPointVisitor.h" />
     <ClInclude Include="MethodeConstruction.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectVisitor.h" />
-    <ClInclude Include="tests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
