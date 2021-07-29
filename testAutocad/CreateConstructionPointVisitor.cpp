@@ -270,6 +270,8 @@ bool CreateConstructionPointVisitor::visitIfcConnectedFaceSet(
 bool CreateConstructionPointVisitor::visitIfcShellBasedSurfaceModel(
     ifc2x3::IfcShellBasedSurfaceModel* value)
 {
+    keyProfilDef = value->getKey();
+
     if (value->testSbsmBoundary())
     {
         for (auto face : value->getSbsmBoundary())
@@ -794,6 +796,8 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
 
             //transformPoints(transformation);
 
+            keyProfilDef = value->getKey();
+
             if (!isExtrud)
             {
                 NameProfilDef = value->getSweptArea()->getType().getName();
@@ -1143,6 +1147,8 @@ bool CreateConstructionPointVisitor::visitIfcPolyline(ifc2x3::IfcPolyline* value
 
 bool CreateConstructionPointVisitor::visitIfcFacetedBrep(ifc2x3::IfcFacetedBrep* value)
 {
+    keyProfilDef = value->getKey();
+
     if (value->testOuter())
     {
         return value->getOuter()->acceptVisitor(this);
@@ -1436,6 +1442,11 @@ std::vector<Rectangle_profilDef> CreateConstructionPointVisitor::getRectanglepro
 std::string CreateConstructionPointVisitor::getNameProfildef() const
 {
     return NameProfilDef;
+}
+
+int CreateConstructionPointVisitor::getKeyProfildef() const
+{
+    return keyProfilDef;
 }
 
 std::vector<std::string> CreateConstructionPointVisitor::getNameProfildefBool() const

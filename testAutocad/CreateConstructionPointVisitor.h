@@ -250,6 +250,7 @@ private:
     std::vector<int> listNbArgPolyline;
     
     //profilDef
+    int keyProfilDef;
     std::string NameProfilDef;
     std::vector<std::string> NameProfilDefBool;
     I_profilDef IprofilDef;
@@ -383,6 +384,7 @@ public:
     Rectangle_profilDef getRectangleprofilDef() const;
     std::vector<Rectangle_profilDef> getRectangleprofilDefBool() const;
     std::string getNameProfildef() const;
+    int getKeyProfildef() const;
     std::vector<std::string> getNameProfildefBool() const;
 
     int getkeyForVoid() const;

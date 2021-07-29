@@ -21,7 +21,7 @@ const wchar_t* GetWCM(const char* c, ...)
 
 
 
-void extrusion(int key, std::string entity, std::vector <std::string> nameItems, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> nbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, Matrix4 transformation2D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
+void extrusion(int key, std::string entity, std::vector <std::string> nameItems, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> nbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, Matrix4 transformation2D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
 {
 
 	// Open the Layer table for read
@@ -219,23 +219,14 @@ void extrusion(int key, std::string entity, std::vector <std::string> nameItems,
 		}
 	}
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
-
-
-
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -258,7 +249,7 @@ void extrusion(int key, std::string entity, std::vector <std::string> nameItems,
 	}
 }
 
-void extrusion(int key, std::string entity, std::vector<std::string> nameItems, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, Matrix4 transformation2D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
+void extrusion(int key, std::string entity, std::vector<std::string> nameItems, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, Matrix4 transformation2D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
 {
 
 
@@ -535,20 +526,14 @@ void extrusion(int key, std::string entity, std::vector<std::string> nameItems, 
 		}
 	}
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -1232,11 +1217,6 @@ static void CreationSection(AcDb3dSolid* extrusion, Vec3 VecteurExtrusion, float
 			{
 				points1.pop_front();
 			}
-
-			if (nbArg.size() > 0)
-			{
-				nbArg.erase(nbArg.begin());
-			}
 		}
 		else if (NameProfilDefBool.at(0) == "IfcRectangleProfileDef")
 		{
@@ -1538,8 +1518,8 @@ static void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid Void, CompositeCurve
 	modelId = acdbSymUtil()->blockModelSpaceId(pDb);
 	AcDbBlockTableRecord* pBlockTableRecord;
 	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
-	pBlockTableRecord->appendAcDbEntity(extrusion_void);
-	pBlockTableRecord->appendAcDbEntity(extrusion_void2);
+	//pBlockTableRecord->appendAcDbEntity(extrusion_void);
+	//pBlockTableRecord->appendAcDbEntity(extrusion_void2);
 	pBlockTableRecord->close();
 
 	extrusion->booleanOper(AcDb::kBoolSubtract, extrusion_void);
@@ -1746,8 +1726,8 @@ static void CreationVoidCircle(AcDb3dSolid* extrusion, ObjectVoid Void, Composit
 	modelId = acdbSymUtil()->blockModelSpaceId(pDb);
 	AcDbBlockTableRecord* pBlockTableRecord;
 	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
-	pBlockTableRecord->appendAcDbEntity(extrusion_void);
-	pBlockTableRecord->appendAcDbEntity(extrusion_void2);
+	//pBlockTableRecord->appendAcDbEntity(extrusion_void);
+	//pBlockTableRecord->appendAcDbEntity(extrusion_void2);
 	pBlockTableRecord->close();
 
 	extrusion->booleanOper(AcDb::kBoolSubtract, extrusion_void);
@@ -1820,9 +1800,6 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion, ObjectVoid Void, Compo
 		pNewPline->close();
 		acutPrintf(L"\nFailed to create region\n");
 		return;
-
-
-
 	}
 	AcDbRegion* pRegion = AcDbRegion::cast((AcRxObject*)regions[0]);
 
@@ -1972,8 +1949,8 @@ static void CreationVoidRectangle(AcDb3dSolid* extrusion, ObjectVoid Void, Compo
 	modelId = acdbSymUtil()->blockModelSpaceId(pDb);
 	AcDbBlockTableRecord* pBlockTableRecord;
 	acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
-	pBlockTableRecord->appendAcDbEntity(extrusion_void);
-	pBlockTableRecord->appendAcDbEntity(extrusion_void2);
+	//pBlockTableRecord->appendAcDbEntity(extrusion_void);
+	//pBlockTableRecord->appendAcDbEntity(extrusion_void2);
 	pBlockTableRecord->close();
 
 	extrusion->booleanOper(AcDb::kBoolSubtract, extrusion_void);
@@ -2079,7 +2056,7 @@ AcDbRegion* createCompositeCurve(CompositeCurveSegment _compositeCurveSegment, M
 
 //*** ProfilDef ***
 
-void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
+void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
 {
 
 	// Open the Layer table for read
@@ -2314,20 +2291,14 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, int keyI
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -2347,7 +2318,7 @@ void createSolid3dProfilIPE(I_profilDef IprofilDef, std::string entity, int keyI
 	}
 }
 
-void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
+void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -2479,14 +2450,14 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, int keyI
 
 	int nbEntity = listEntityHalf.size();
 
-	if (ListNbArg.size() > 0)
+	/*if (ListNbArg.size() > 0)
 	{
 		for (int i = 0; i < ListNbArg[0]; i++)
 		{
 			points1.pop_front();
 		}
 		ListNbArg.erase(ListNbArg.begin());
-	}
+	}*/
 
 
 	DeplacementObjet2D(pSolid, transformation2D);
@@ -2585,20 +2556,14 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, int keyI
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -2618,7 +2583,7 @@ void createSolid3dProfilIPN(I_profilDef IprofilDef, std::string entity, int keyI
 	}
 }
 
-void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
+void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -2741,14 +2706,14 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, int keyIt
 	}
 	int nbEntity = listEntityHalf.size();
 
-	if (ListNbArg.size() > 0)
+	/*if (ListNbArg.size() > 0)
 	{
 		for (int i = 0; i < ListNbArg[0]; i++)
 		{
 			points1.pop_front();
 		}
 		ListNbArg.erase(ListNbArg.begin());
-	}
+	}*/
 
 
 	DeplacementObjet2D(pSolid, transformation2D);
@@ -2848,20 +2813,14 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, int keyIt
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -2881,7 +2840,7 @@ void createSolid3dProfilL8(L_profilDef LprofilDef, std::string entity, int keyIt
 	}
 }
 
-void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
+void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -3007,14 +2966,14 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, int keyIt
 	}
 	int nbEntity = listEntityHalf.size();
 
-	if (ListNbArg.size() > 0)
+	/*if (ListNbArg.size() > 0)
 	{
 		for (int i = 0; i < ListNbArg[0]; i++)
 		{
 			points1.pop_front();
 		}
 		ListNbArg.erase(ListNbArg.begin());
-	}
+	}*/
 
 
 	DeplacementObjet2D(pSolid, transformation2D);
@@ -3114,20 +3073,14 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, int keyIt
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -3147,7 +3100,7 @@ void createSolid3dProfilL9(L_profilDef LprofilDef, std::string entity, int keyIt
 	}
 }
 
-void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
+void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -3274,14 +3227,14 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, int keyI
 	}
 	int nbEntity = listEntityHalf.size();
 
-	if (ListNbArg.size() > 0)
+	/*if (ListNbArg.size() > 0)
 	{
 		for (int i = 0; i < ListNbArg[0]; i++)
 		{
 			points1.pop_front();
 		}
 		ListNbArg.erase(ListNbArg.begin());
-	}
+	}*/
 
 
 	DeplacementObjet2D(pSolid, transformation2D);
@@ -3381,20 +3334,14 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, int keyI
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -3414,7 +3361,7 @@ void createSolid3dProfilT10(T_profilDef TprofilDef, std::string entity, int keyI
 	}
 }
 
-void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D,  std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
+void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D,  std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -3546,14 +3493,14 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, int keyI
 	}
 	int nbEntity = listEntityHalf.size();
 
-	if (ListNbArg.size() > 0)
+	/*if (ListNbArg.size() > 0)
 	{
 		for (int i = 0; i < ListNbArg[0]; i++)
 		{
 			points1.pop_front();
 		}
 		ListNbArg.erase(ListNbArg.begin());
-	}
+	}*/
 
 
 	DeplacementObjet2D(pSolid, transformation2D);
@@ -3652,20 +3599,14 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, int keyI
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -3685,7 +3626,7 @@ void createSolid3dProfilT12(T_profilDef TprofilDef, std::string entity, int keyI
 	}
 }
 
-void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D,  std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
+void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D,  std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -3811,14 +3752,14 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, int keyI
 	}
 	int nbEntity = listEntityHalf.size();
 
-	if (ListNbArg.size() > 0)
+	/*if (ListNbArg.size() > 0)
 	{
 		for (int i = 0; i < ListNbArg[0]; i++)
 		{
 			points1.pop_front();
 		}
 		ListNbArg.erase(ListNbArg.begin());
-	}
+	}*/
 
 
 	DeplacementObjet2D(pSolid, transformation2D);
@@ -3917,20 +3858,14 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, int keyI
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -3950,7 +3885,7 @@ void createSolid3dProfilUPE(U_profilDef UprofilDef, std::string entity, int keyI
 	}
 }
 
-void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
+void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -4076,14 +4011,14 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, int keyI
 	}
 	int nbEntity = listEntityHalf.size();
 
-	if (ListNbArg.size() > 0)
+	/*if (ListNbArg.size() > 1)
 	{
 		for (int i = 0; i < ListNbArg[0]; i++)
 		{
 			points1.pop_front();
 		}
 		ListNbArg.erase(ListNbArg.begin());
-	}
+	}*/
 
 
 	DeplacementObjet2D(pSolid, transformation2D);
@@ -4182,20 +4117,14 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, int keyI
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -4215,7 +4144,7 @@ void createSolid3dProfilUPN(U_profilDef UprofilDef, std::string entity, int keyI
 	}
 }
 
-void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
+void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -4345,14 +4274,14 @@ void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, int keyIte
 	}
 	int nbEntity = listEntityHalf.size();
 
-	if (ListNbArg.size() > 0)
+	/*if (ListNbArg.size() > 0)
 	{
 		for (int i = 0; i < ListNbArg[0]; i++)
 		{
 			points1.pop_front();
 		}
 		ListNbArg.erase(ListNbArg.begin());
-	}
+	}*/
 
 
 	DeplacementObjet2D(pSolid, transformation2D);
@@ -4451,20 +4380,14 @@ void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, int keyIte
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -4484,7 +4407,7 @@ void createSolid3dProfilC(C_profilDef CprofilDef, std::string entity, int keyIte
 	}
 }
 
-void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
+void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -4611,14 +4534,14 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, int keyIte
 	}
 	int nbEntity = listEntityHalf.size();
 
-	if (ListNbArg.size() > 0)
+	/*if (ListNbArg.size() > 0)
 	{
 		for (int i = 0; i < ListNbArg[0]; i++)
 		{
 			points1.pop_front();
 		}
 		ListNbArg.erase(ListNbArg.begin());
-	}
+	}*/
 
 
 	DeplacementObjet2D(pSolid, transformation2D);
@@ -4717,20 +4640,14 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, int keyIte
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -4750,7 +4667,7 @@ void createSolid3dProfilZ(Z_profilDef ZprofilDef, std::string entity, int keyIte
 	}
 }
 
-void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
+void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
 {
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -4885,14 +4802,14 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::st
 	}
 	int nbEntity = listEntityHalf.size();
 
-	if (ListNbArg.size() > 0)
+	/*if (ListNbArg.size() > 0)
 	{
 		for (int i = 0; i < ListNbArg[0]; i++)
 		{
 			points1.pop_front();
 		}
 		ListNbArg.erase(ListNbArg.begin());
-	}
+	}*/
 
 
 	DeplacementObjet2D(pSolid, transformation2D);
@@ -4991,20 +4908,14 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::st
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -5024,7 +4935,7 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef AsymmetricIprofilDef, std::st
 	}
 }
 
-void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
+void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
 {
 
 	// Open the Layer table for read
@@ -5182,14 +5093,14 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 	}
 	int nbEntity = listEntityHalf.size();
 
-	if (ListNbArg.size() > 0)
+	/*if (ListNbArg.size() > 0)
 	{
 		for (int i = 0; i < ListNbArg[0]; i++)
 		{
 			points1.pop_front();
 		}
 		ListNbArg.erase(ListNbArg.begin());
-	}
+	}*/
 
 
 	DeplacementObjet2D(pSolid, transformation2D);
@@ -5288,20 +5199,14 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -5322,7 +5227,7 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef CircleHollowprofilDef,
 
 }
 
-void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
+void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool)
 {
 
 	// Open the Layer table for read
@@ -5505,14 +5410,14 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 	}
 	int nbEntity = listEntityHalf.size();
 
-	if (ListNbArg.size() > 0)
+	/*if (ListNbArg.size() > 0)
 	{
 		for (int i = 0; i < ListNbArg[0]; i++)
 		{
 			points1.pop_front();
 		}
 		ListNbArg.erase(ListNbArg.begin());
-	}
+	}*/
 
 
 	DeplacementObjet2D(pSolid, transformation2D);
@@ -5612,20 +5517,14 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -5646,7 +5545,7 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef RectangleHollowprof
 
 }
 
-void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool) {
+void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool) {
 
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -5760,14 +5659,14 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string ent
 	}
 	int nbEntity = listEntityHalf.size();
 
-	if (ListNbArg.size() > 0)
+	/*if (ListNbArg.size() > 0)
 	{
 		for (int i = 0; i < ListNbArg[0]; i++)
 		{
 			points1.pop_front();
 		}
 		ListNbArg.erase(ListNbArg.begin());
-	}
+	}*/
 
 
 	DeplacementObjet2D(pSolid, transformation2D);
@@ -5866,20 +5765,14 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string ent
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -5902,7 +5795,7 @@ void createSolid3dProfilCircle(Circle_profilDef CircleprofilDef, std::string ent
 
 }
 
-void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool) {
+void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::string entity, int keyItems, std::string outerCurveName, std::list<Vec3> points1, std::vector<int> ListNbArg, Vec3 VecteurExtrusion, float hauteurExtrusion, Matrix4 transform1, Matrix4 transformation, Matrix4 transformation2D, std::list<Matrix4> listPlan, std::list<Matrix4> listLocationPolygonal, std::vector<Step::Boolean> AgreementHalf, std::vector<Step::Boolean> AgreementPolygonal, std::vector<std::string> listEntityHalf, std::vector<std::string> listEntityPolygonal, std::vector<ObjectVoid> listVoid, CompositeCurveSegment _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, std::vector<Vec3> VecteurExtrusionBool, std::vector<float> hauteurExtrusionBool, std::vector<Matrix4> transformationBoolExtrud, std::vector<std::string> NameProfilDefBool, std::vector<Rectangle_profilDef> RectangleProfilDefBool) {
 
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -6020,14 +5913,14 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::s
 	}
 	int nbEntity = listEntityHalf.size();
 
-	if (ListNbArg.size() > 0)
+	/*if (ListNbArg.size() > 0)
 	{
 		for (int i = 0; i < ListNbArg[0]; i++)
 		{
 			points1.pop_front();
 		}
 		ListNbArg.erase(ListNbArg.begin());
-	}
+	}*/
 
 	DeplacementObjet2D(pSolid, transformation2D);
 	DeplacementObjet3D(pSolid, transformation);
@@ -6124,20 +6017,14 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::s
 	}
 		
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			pSolid->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			pSolid->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -6160,7 +6047,7 @@ void createSolid3dProfilRectangle(Rectangle_profilDef RectangleprofilDef, std::s
 
 
 
-void createBoundingBox(Box box, std::string entity, int keyItems, std::vector<Style> vectorStyle) {
+void createBoundingBox(Box box, std::string entity, int keyItems, std::map<int, Style> vectorStyle) {
 
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
@@ -6268,20 +6155,14 @@ void createBoundingBox(Box box, std::string entity, int keyItems, std::vector<St
 	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
 	box3d->transformBy(matrix3d.translation(acVec3d));
 
-	for (int z = 0; z < vectorStyle.size(); z++)
-	{
-		if (keyItems == vectorStyle.at(z).keyItem)
-		{
-			AcCmColor couleurRGB = AcCmColor::AcCmColor();
-			couleurRGB.setRGB(vectorStyle.at(z).red * 255, vectorStyle.at(z).green * 255, vectorStyle.at(z).blue * 255);
-			box3d->setColor(couleurRGB, false);
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	box3d->setColor(couleurRGB, false);
 
-			double opa = abs((vectorStyle.at(z).transparence * 255) - 255);
-			Adesk::UInt8 alpha = opa;
-			AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-			box3d->setTransparency(transparence);
-		}
-	}
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	box3d->setTransparency(transparence);
 
 	box3d->setLayer(layerName, Adesk::kFalse, false);
 
@@ -6304,9 +6185,9 @@ void createBoundingBox(Box box, std::string entity, int keyItems, std::vector<St
 
 }
 
-void createFaceSolid(std::string entity, std::vector<int> keyItems, std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transformFace, Matrix4 transform1, Matrix4 transformation, std::vector<Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, Matrix4 transformation2D, double scale)
+void createFaceSolid(std::string entity, int keyItems, std::list<Vec3> points1, std::vector<int> ListNbArg, bool orientation, Matrix4 transformFace, Matrix4 transform1, Matrix4 transformation, std::map<int, Style> vectorStyle, bool isMappedItem, Matrix4 transformationOperator3D, Matrix4 transformation2D, double scale)
 {
-	Style style;
+	/*Style style;
 	for (int p = 0; p < vectorStyle.size(); p++)
 	{
 		if (keyItems.at(0) == vectorStyle.at(p).keyItem)
@@ -6314,7 +6195,7 @@ void createFaceSolid(std::string entity, std::vector<int> keyItems, std::list<Ve
 			style = vectorStyle.at(p);
 			break;
 		}
-	}
+	}*/
 	// Open the Layer table for read
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 	AcDbLayerTable* pLayerTable;
@@ -6322,7 +6203,6 @@ void createFaceSolid(std::string entity, std::vector<int> keyItems, std::list<Ve
 
 	const ACHAR* layerName = GetWCM((entity.c_str()));
 	// Check to see if the layer exists
-
 
 	if (entity == "IfcBeam")
 	{
@@ -6415,75 +6295,6 @@ void createFaceSolid(std::string entity, std::vector<int> keyItems, std::list<Ve
 	int sizeNbArg = ListNbArg.size();
 	int k = 0;
 
-	////test
-	//int indexNbArg = 0;
-	//std::vector<int> listIndexNbArg;
-	//int arg = ListNbArg[0];
-	//int arg2 = 0;
-	//std::vector<int> newListNbArg;
-	//newListNbArg.push_back(arg);
-	//std::vector<Vec3> newPoints;
-	//std::vector<std::vector<Vec3>> listPointsFace;
-	//std::vector<Vec3> pontPoints;
-	//auto iterator = pontPoints.begin();
-	//int newIterator = 0;
-	//int differentesFaces = 1;
-	//int sizePoints = points1.size();
-	//int sizePontPoints = pontPoints.size();
-
-	//for (int i = 0; i < sizePoints; i++)
-	//{
-	//	pontPoints.push_back(points1.front());
-	//	points1.pop_front();
-	//}
-
-	//for (int i = 0; i < ListNbArg.size(); i++)
-	//{
-	//	if (ListNbArg[0] != ListNbArg[i + 1])
-	//	{
-	//		differentesFaces++;
-	//	}
-	//}
-
-	//for (int j = 0; j < sizePontPoints; j++)
-	//{
-	//	newPoints.push_back(pontPoints.front());
-	//	pontPoints.erase(pontPoints.begin());
-	//}
-
-	//for (int face = 0; face < differentesFaces; face++)
-	//{
-	//	std::vector<Vec3> points;
-	//	for (int i = 1; i < ListNbArg.size(); i++)
-	//	{
-	//		if (arg = ListNbArg[i])
-	//		{
-	//			for (int j = 0; j < ListNbArg[i]; j++)
-	//			{
-	//				points.push_back(newPoints.at(newIterator));
-	//				newPoints.erase(iterator);
-	//			}
-	//			indexNbArg++;
-	//			
-	//		}
-	//		else
-	//		{
-	//			for (int it = 0; it < ListNbArg[i]; it++)
-	//			{
-	//				iterator++;
-	//				newIterator++;
-	//			}
-	//			if (i = sizeNbArg - 1)
-	//			{
-	//				arg2 = ListNbArg[i];
-	//			}
-	//		}
-	//	}
-	//	listPointsFace.push_back(points);
-	//	arg = arg2;
-	//	newListNbArg.push_back(arg);
-	//}
-	//fin test
 
 	for (const auto& point : points1)
 	{
@@ -6501,9 +6312,6 @@ void createFaceSolid(std::string entity, std::vector<int> keyItems, std::list<Ve
 		}
 		ListNbArg.erase(ListNbArg.begin());
 	}
-
-
-	
 
 	es = pSubDMesh->setSubDMesh(ptArr, faceArray, 0);
 	if (Acad::eOk != es)
@@ -6533,10 +6341,10 @@ void createFaceSolid(std::string entity, std::vector<int> keyItems, std::list<Ve
 
 
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(style.red * 255, style.green * 255, style.blue * 255);
+	couleurRGB.setRGB(vectorStyle[keyItems].red * 255, vectorStyle[keyItems].green * 255, vectorStyle[keyItems].blue * 255);
 	pSubDMesh->setColor(couleurRGB, false);
 
-	double opa = abs((style.transparence * 255) - 255);
+	double opa = abs((vectorStyle[keyItems].transparence * 255) - 255);
 	Adesk::UInt8 alpha = opa;
 	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
 	pSubDMesh->setTransparency(transparence);
