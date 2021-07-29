@@ -236,6 +236,12 @@ bool CreateConstructionPointVisitor::visitIfcRepresentationMap(
 bool CreateConstructionPointVisitor::visitIfcFaceBasedSurfaceModel(
     ifc2x3::IfcFaceBasedSurfaceModel* value)
 {
+    if (!KeyProfilDefDone)
+    {
+        keyProfilDef = value->getKey();
+        KeyProfilDefDone = true;
+    }
+
     if (value->testFbsmFaces())
     {
         for (auto face : value->getFbsmFaces())
