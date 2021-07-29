@@ -223,6 +223,7 @@ private:
     bool isExtrud = false;
     bool isMappedItem = false;
     bool isMappedItemMethode = false;
+    bool KeyProfilDefDone = false;
 
     int nbPolylineCompositeCurve = 0;
     int nbCompositeCurve;

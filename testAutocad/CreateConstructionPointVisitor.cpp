@@ -14,7 +14,7 @@ bool CreateConstructionPointVisitor::visitIfcProduct(
     {
         return value->getRepresentation()->acceptVisitor(this);
     }
-
+    KeyProfilDefDone = false;
     return true;
 }
 
@@ -270,7 +270,11 @@ bool CreateConstructionPointVisitor::visitIfcConnectedFaceSet(
 bool CreateConstructionPointVisitor::visitIfcShellBasedSurfaceModel(
     ifc2x3::IfcShellBasedSurfaceModel* value)
 {
-    keyProfilDef = value->getKey();
+    if (!KeyProfilDefDone)
+    {
+        keyProfilDef = value->getKey();
+        KeyProfilDefDone = true;
+    }
 
     if (value->testSbsmBoundary())
     {
@@ -796,7 +800,11 @@ bool CreateConstructionPointVisitor::visitIfcExtrudedAreaSolid(
 
             //transformPoints(transformation);
 
-            keyProfilDef = value->getKey();
+            if (!KeyProfilDefDone)
+            {
+                keyProfilDef = value->getKey();
+                KeyProfilDefDone = true;
+            }
 
             if (!isExtrud)
             {
@@ -1147,7 +1155,11 @@ bool CreateConstructionPointVisitor::visitIfcPolyline(ifc2x3::IfcPolyline* value
 
 bool CreateConstructionPointVisitor::visitIfcFacetedBrep(ifc2x3::IfcFacetedBrep* value)
 {
-    keyProfilDef = value->getKey();
+    if (!KeyProfilDefDone)
+    {
+        keyProfilDef = value->getKey();
+        KeyProfilDefDone = true;
+    }
 
     if (value->testOuter())
     {
