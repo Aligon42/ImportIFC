@@ -239,7 +239,7 @@ void test()
     {
         
         int key = (int)site.getKey();
-        //if (key != 1) continue;
+        if (key != 1) continue;
         std::string entity = site.getType().getName();
         CreateConstructionPointVisitor visitor1;
         site.acceptVisitor(&visitor1);
@@ -311,12 +311,12 @@ void test()
 
                 if (NameProfilDef != "IfcArbitraryClosedProfileDef")
                 {
-                    dessinProfilDef(NameProfilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, transformation, transformation2D, visitor1, points1, transformFace, nameItems, keyItems[i], keyItems, outerCurveName, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, i, listStyle, isMappedItemMethode, transformationOperator3D, scale, VecteurExtrusionBool, hauteurExtrusionBool, transformationBoolExtrud, NameProfilDefBool, RectangleProfilDefBool);
+                    dessinProfilDef(NameProfilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, transformation, transformation2D, visitor1, points1, transformFace, nameItems, keyProfilDef, keyItems, outerCurveName, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, i, listStyle, isMappedItemMethode, transformationOperator3D, scale, VecteurExtrusionBool, hauteurExtrusionBool, transformationBoolExtrud, NameProfilDefBool, RectangleProfilDefBool);
                 }
                 else
                 {
                     transform1 *= transformation;
-                    extrusion(key, entity, nameItems, keyItems[i], outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, listStyle, isMappedItem, transformationOperator3D, transformation2D, VecteurExtrusionBool, hauteurExtrusionBool, transformationBoolExtrud, NameProfilDefBool, RectangleProfilDefBool);
+                    extrusion(key, entity, nameItems, keyProfilDef, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, listStyle, isMappedItem, transformationOperator3D, transformation2D, VecteurExtrusionBool, hauteurExtrusionBool, transformationBoolExtrud, NameProfilDefBool, RectangleProfilDefBool);
                 }
                     
             }
@@ -324,7 +324,7 @@ void test()
             {
                 //transform1 *= transformation;
 
-                extrusion(key, entity, nameItems, keyItems[i], outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, transformation, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, listStyle, isMappedItem, transformationOperator3D, transformation2D, VecteurExtrusionBool, hauteurExtrusionBool, transformationBoolExtrud, NameProfilDefBool, RectangleProfilDefBool);
+                extrusion(key, entity, nameItems, keyProfilDef, outerCurveName, points1, ListNbArg, VecteurExtrusion, hauteurExtrusion, transform1, transformation, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, listStyle, isMappedItem, transformationOperator3D, transformation2D, VecteurExtrusionBool, hauteurExtrusionBool, transformationBoolExtrud, NameProfilDefBool, RectangleProfilDefBool);
             }
             else if (nameItems[i] == "IfcFacetedBrep" || nameItems[i] == "IfcFaceBasedSurfaceModel" || nameItems[i] == "IfcShellBasedSurfaceModel")
             {
@@ -334,7 +334,7 @@ void test()
             }
             else if (nameItems[i] == "IfcBoundingBox")
             {
-                createBoundingBox(box, entity, keyItems[i], listStyle);
+                createBoundingBox(box, entity, keyProfilDef, listStyle);
             }
         }
     }

@@ -219,14 +219,17 @@ void extrusion(int key, std::string& entity, std::vector<std::string>& nameItems
 		}
 	}
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -526,14 +529,17 @@ void extrusion(int key, std::string& entity, std::vector<std::string>& nameItems
 		}
 	}
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
@@ -2291,14 +2297,17 @@ void createSolid3dProfilIPE(I_profilDef& IprofilDef, std::string& entity, int ke
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -2556,14 +2565,17 @@ void createSolid3dProfilIPN(I_profilDef& IprofilDef, std::string& entity, int ke
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -2813,14 +2825,17 @@ void createSolid3dProfilL8(L_profilDef& LprofilDef, std::string& entity, int key
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -3073,14 +3088,17 @@ void createSolid3dProfilL9(L_profilDef& LprofilDef, std::string& entity, int key
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -3334,14 +3352,17 @@ void createSolid3dProfilT10(T_profilDef& TprofilDef, std::string& entity, int ke
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -3599,14 +3620,17 @@ void createSolid3dProfilT12(T_profilDef& TprofilDef, std::string& entity, int ke
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -3858,14 +3882,17 @@ void createSolid3dProfilUPE(U_profilDef& UprofilDef, std::string& entity, int ke
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -4117,14 +4144,17 @@ void createSolid3dProfilUPN(U_profilDef& UprofilDef, std::string& entity, int ke
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -4380,14 +4410,17 @@ void createSolid3dProfilC(C_profilDef& CprofilDef, std::string& entity, int keyI
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -4640,14 +4673,17 @@ void createSolid3dProfilZ(Z_profilDef& ZprofilDef, std::string& entity, int keyI
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -4908,14 +4944,17 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef& AsymmetricIprofilDef, std::s
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -5199,14 +5238,17 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef& CircleHollowprofilDef
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -5517,14 +5559,17 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef& RectangleHollowpro
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -5765,14 +5810,17 @@ void createSolid3dProfilCircle(Circle_profilDef& CircleprofilDef, std::string& e
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -6016,15 +6064,17 @@ void createSolid3dProfilRectangle(Rectangle_profilDef& RectangleprofilDef, std::
 		DeplacementObjet3D(pSolid, transform1);
 	}
 		
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSolid->setColor(couleurRGB, false);
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	pSolid->setColor(couleurRGB, false);
-
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSolid->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSolid->setTransparency(transparence);
+	}
 
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	if (Acad::eOk == es)
@@ -6155,14 +6205,17 @@ void createBoundingBox(Box& box, std::string& entity, int keyItems, std::map<int
 	AcGeVector3d acVec3d = pointDeplacement3D.asVector();
 	box3d->transformBy(matrix3d.translation(acVec3d));
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
-	box3d->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		box3d->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	box3d->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		box3d->setTransparency(transparence);
+	}
 
 	box3d->setLayer(layerName, Adesk::kFalse, false);
 
@@ -6340,14 +6393,17 @@ void createFaceSolid(std::string& entity, int keyItems, std::list<Vec3>& points1
 	}
 
 
-	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(vectorStyle[keyItems].red * 255, vectorStyle[keyItems].green * 255, vectorStyle[keyItems].blue * 255);
-	pSubDMesh->setColor(couleurRGB, false);
+	if (vectorStyle.find(keyItems) != vectorStyle.end())
+	{
+		AcCmColor couleurRGB = AcCmColor::AcCmColor();
+		couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+		pSubDMesh->setColor(couleurRGB, false);
 
-	double opa = abs((vectorStyle[keyItems].transparence * 255) - 255);
-	Adesk::UInt8 alpha = opa;
-	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
-	pSubDMesh->setTransparency(transparence);
+		double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+		Adesk::UInt8 alpha = opa;
+		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+		pSubDMesh->setTransparency(transparence);
+	}
 
 	pSubDMesh->setLayer(layerName, Adesk::kFalse, false);
 
@@ -6389,3 +6445,16 @@ bool BoolToBool(Step::Boolean boool)
 	}
 }
 
+AcDb3dSolid* CouleurSolid(AcDb3dSolid* pSolid, std::map<int, Style>& vectorStyle, int keyItems)
+{
+	AcCmColor couleurRGB = AcCmColor::AcCmColor();
+	couleurRGB.setRGB(vectorStyle.at(keyItems).red * 255, vectorStyle.at(keyItems).green * 255, vectorStyle.at(keyItems).blue * 255);
+	pSolid->setColor(couleurRGB, false);
+
+	double opa = abs((vectorStyle.at(keyItems).transparence * 255) - 255);
+	Adesk::UInt8 alpha = opa;
+	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
+	pSolid->setTransparency(transparence);
+
+	return pSolid;
+}

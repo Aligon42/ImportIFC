@@ -94,3 +94,4 @@ void createFaceSolid(std::string& entity, int keyItems, std::list<Vec3>& points1
 AcDbRegion* createCompositeCurve(CompositeCurveSegment& _compositeCurveSegment, Matrix4& transform, bool isMappedItem, Matrix4& transformationOperator3D, Matrix4& transformation2D);
 float roundoff(float value, int prec);
 bool BoolToBool(Step::Boolean boool);
+AcDb3dSolid* CouleurSolid(AcDb3dSolid* pSolid, std::map<int, Style>& vectorStyle, int keyItems);
