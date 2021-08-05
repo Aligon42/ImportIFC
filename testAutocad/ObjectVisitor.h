@@ -33,6 +33,7 @@ class ObjectVisitor : public ifc2x3::InheritVisitor
 public:
     //! Constructor
     ObjectVisitor();
+    ObjectVisitor(IFCObject* obj);
 
     bool visitIfcProduct(ifc2x3::IfcProduct* value) override;
     bool visitIfcSite(ifc2x3::IfcSite* value) override;
@@ -89,24 +90,19 @@ public:
     bool visitIfcFaceBound(ifc2x3::IfcFaceBound* value) override;
     bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value) override;
 
-    IFCObjTemp getIfcObject();
+    IFCObject* getIfcObject();
 
 private:
     void transformPoints(const Matrix4& transform);
+    void SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);
+    void SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);
 
-    IFCShapeRepresentation* getShapeRepresentation();
+    IFCShapeRepresentation getShapeRepresentation();
 
 private:
-    Matrix4 m_Transformation;
-    std::list<Vec3> m_Points;
-    std::string m_NameProfilDef;
-    Vec3 m_ExtrusionVector;
-    double m_ExtrusionHeight = 0.0;
-    int m_Key = 0;
-    std::string m_Entity;
-    std::string m_RepresentationIdentifier;
-    std::string m_RepresentationType;
-    IFCBooleanClippingResult m_BooleanClippingResult;
-    
-    std::vector<IFCShapeRepresentation*> m_ShapeRepresentations;
+    bool m_VisitingCompositeCurve = false;
+
+    IFCShapeRepresentation m_IfcShapeRepresentation;
+    std::vector<IFCShapeRepresentation> m_ShapeRepresentations;
+    IFCObject* m_IfcObject;
 };

@@ -30,7 +30,6 @@
 #include <iostream>
 #include <thread>
 
-void dessinProfilDef(IFCObject object, const std::string& entity, int index, std::map<int, Style>* listStyles);
 void initApp();
 void unloadApp();
 
@@ -43,7 +42,7 @@ const wchar_t* GetWC(const char* c, ...)
 	return wc;
 }
 
-void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vector<IFCObject>& objects)
+void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vector<IFCObject*>& objects)
 {
 	ComputePlacementVisitor placementVisitor;
 	auto it = elements->begin();
@@ -55,32 +54,15 @@ void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vect
 		int key = it->first;
 		std::string entity = buildingElement.getType().getName();
 
-		//CreateConstructionPointVisitor visitor;
 		ObjectVisitor visitor;
 		buildingElement.acceptVisitor(&visitor);
 
 		auto obj = visitor.getIfcObject();
 
-		//IFCObject obj = visitor.GetObjectData();
-		//obj.Key = key;
-		//obj.Entity = entity;
+		buildingElement.acceptVisitor(&placementVisitor);
+		obj->LocalTransform = placementVisitor.getTransformation();
 
-		//buildingElement.acceptVisitor(&placementVisitor);
-		//obj.TransformFace = placementVisitor.getTransformation();
-		//obj.Transform = obj.TransformFace * obj.Transform;
-
-		//if (obj.ProfilDef)
-		//{
-		//	obj.ProfilDef->Entity = entity;
-		//	obj.ProfilDef->Transform = obj.Transform;
-		//}
-
-		///*if (mappedItem = true)
-		//{
-		//	transform1 = visitor1.getTransformationOperator3D();
-		//}*/
-
-		//objects.push_back(obj);
+		objects.push_back(obj);
 
 		it++;
 	}
@@ -182,70 +164,71 @@ void loadIfc()
 	ComputePlacementVisitor placementVisitor;
 	std::vector<std::thread> threads;
 	std::map<int, Style> listStyles;
+	std::map<int, MappedItem> dicoMappedItem;
 
-	threads.push_back(std::thread([&]()
-	{
-		// IfcRelVoidsElement
-		for (auto& voids : expressDataSet->getAllIfcRelVoidsElement())
-		{
-			CreateConstructionPointVisitor visitor;
-			int key = (int)voids.getKey();
+	//threads.push_back(std::thread([&]()
+	//{
+	//	// IfcRelVoidsElement
+	//	for (auto& voids : expressDataSet->getAllIfcRelVoidsElement())
+	//	{
+	//		CreateConstructionPointVisitor visitor;
+	//		int key = (int)voids.getKey();
 
-			voids.acceptVisitor(&visitor);
+	//		voids.acceptVisitor(&visitor);
 
-			ObjectVoid objectVoid;
-			objectVoid.keyForVoid = visitor.getkeyForVoid();
-			objectVoid.NameProfilDef = visitor.getNameProfildef();
-			if (objectVoid.NameProfilDef == "IfcArbitraryClosedProfileDef")
-			{
-				objectVoid.points1 = visitor.getPoints();
-				objectVoid.nbArg = visitor.getNbArgPolyline();
-			}
-			else if (objectVoid.NameProfilDef == "IfcCircleProfileDef")
-			{
-				objectVoid.radius = (static_cast<Circle_profilDef*>(visitor.getProfilDef().get()))->Radius;
-			}
-			else if (objectVoid.NameProfilDef == "IfcRectangleProfileDef")
-			{
-				objectVoid.XDim = (static_cast<Rectangle_profilDef*>(visitor.getProfilDef().get()))->XDim;
-				objectVoid.YDim = (static_cast<Rectangle_profilDef*>(visitor.getProfilDef().get()))->YDim;
-			}
-			objectVoid.VecteurExtrusion = visitor.getVectorDirection();
-			objectVoid.hauteurExtrusion = visitor.getHauteurExtrusion();
-			objectVoid.listPlan = visitor.getPlanPolygonal();
-			objectVoid.listLocationPolygonal = visitor.getLocationPolygonal();
-			objectVoid.AgreementHalf = visitor.getAgreementHalfBool();
-			objectVoid.AgreementPolygonal = visitor.getAgreementPolygonalBool();
-			objectVoid.listEntityHalf = visitor.getListEntityHalf();
-			objectVoid.listEntityPolygonal = visitor.getListEntityPolygonal();
+	//		ObjectVoid objectVoid;
+	//		objectVoid.keyForVoid = visitor.getkeyForVoid();
+	//		objectVoid.NameProfilDef = visitor.getNameProfildef();
+	//		if (objectVoid.NameProfilDef == "IfcArbitraryClosedProfileDef")
+	//		{
+	//			objectVoid.points1 = visitor.getPoints();
+	//			objectVoid.nbArg = visitor.getNbArgPolyline();
+	//		}
+	//		else if (objectVoid.NameProfilDef == "IfcCircleProfileDef")
+	//		{
+	//			objectVoid.radius = (static_cast<Circle_profilDef*>(visitor.getProfilDef().get()))->Radius;
+	//		}
+	//		else if (objectVoid.NameProfilDef == "IfcRectangleProfileDef")
+	//		{
+	//			objectVoid.XDim = (static_cast<Rectangle_profilDef*>(visitor.getProfilDef().get()))->XDim;
+	//			objectVoid.YDim = (static_cast<Rectangle_profilDef*>(visitor.getProfilDef().get()))->YDim;
+	//		}
+	//		objectVoid.VecteurExtrusion = visitor.getVectorDirection();
+	//		objectVoid.hauteurExtrusion = visitor.getHauteurExtrusion();
+	//		objectVoid.listPlan = visitor.getPlanPolygonal();
+	//		objectVoid.listLocationPolygonal = visitor.getLocationPolygonal();
+	//		objectVoid.AgreementHalf = visitor.getAgreementHalfBool();
+	//		objectVoid.AgreementPolygonal = visitor.getAgreementPolygonalBool();
+	//		objectVoid.listEntityHalf = visitor.getListEntityHalf();
+	//		objectVoid.listEntityPolygonal = visitor.getListEntityPolygonal();
 
-			voids.acceptVisitor(&placementVisitor);
-			objectVoid.transform1 = placementVisitor.getTransformation();
-			Matrix4 transformation = visitor.getTransformation();
+	//		voids.acceptVisitor(&placementVisitor);
+	//		objectVoid.transform1 = placementVisitor.getTransformation();
+	//		Matrix4 transformation = visitor.getTransformation();
 
-			objectVoid.transform1 *= transformation;
+	//		objectVoid.transform1 *= transformation;
 
-			Construction::s_ObjectVoids.insert(std::make_pair(objectVoid.keyForVoid, objectVoid));
-		}
-	}));
+	//		Construction::s_ObjectVoids.insert(std::make_pair(objectVoid.keyForVoid, objectVoid));
+	//	}
+	//}));
 
-	threads.push_back(std::thread([&]()
-	{
-		// IfcStyledItem
-		for (auto& styles : expressDataSet->getAllIfcStyledItem())
-		{
-			CreateConstructionPointVisitor visitor1;
-			int key = styles.getKey();
+	//threads.push_back(std::thread([&]()
+	//{
+	//	// IfcStyledItem
+	//	for (auto& styles : expressDataSet->getAllIfcStyledItem())
+	//	{
+	//		CreateConstructionPointVisitor visitor1;
+	//		int key = styles.getKey();
 
-			styles.acceptVisitor(&visitor1);
-			Style style = visitor1.getStyle();
-			listStyles.emplace(std::make_pair(style.keyItem, style));
-		}
-	}));
+	//		styles.acceptVisitor(&visitor1);
+	//		Style style = visitor1.getStyle();
+	//		listStyles.emplace(std::make_pair(style.keyItem, style));
+	//	}
+	//}));
 
-	std::map<std::string, std::vector<IFCObject>> objects;
+	std::map<std::string, std::vector<IFCObject*>> objects;
 
-	for (auto ifcSite : expressDataSet->getAllIfcSite().m_refList)
+	/*for (auto ifcSite : expressDataSet->getAllIfcSite().m_refList)
 	{
 		if (ifcSite->size() > 0)
 		{
@@ -256,13 +239,13 @@ void loadIfc()
 
 			threads.push_back(std::thread(ExploreElement, ifcSite, std::ref(objects[type])));
 		}
-	}
+	}*/
 
 	for (auto element : expressDataSet->getAllIfcWall().m_refList)
 	{
 		if (element->size() > 0)
 		{
-			std::vector<IFCObject> vector;
+			std::vector<IFCObject*> vector;
 			std::string type = (*element->begin()).second->type();
 
 			objects.emplace(std::make_pair(type, vector));
@@ -293,62 +276,94 @@ void loadIfc()
 	{
 		for (auto& obj : type.second)
 		{
-			for (int i = 0; i < obj.NameItems.size(); i++)
+			for (auto& shape : obj->ShapeRepresentations)
 			{
-				if (type.first != "IfcColumn" && type.first != "IfcBeam")
+				if (obj->Entity != "IfcColumn" && obj->Entity != "IfcBeam")
 				{
-					if (obj.NameItems[i] == "IfcExtrudedAreaSolid")
+					if (shape.EntityType == "IfcExtrudedAreaSolid" && !obj->IsMappedItem)
 					{
-						if (obj.NameProfilDef != "IfcArbitraryClosedProfileDef")
+						if (shape.ProfilDefName != "IfcArbitraryClosedProfileDef")
 						{
-							dessinProfilDef(obj, type.first, i, &listStyles);
+							//shape.ProfilDef->createSolid3dProfil({});
 						}
-						else 
+						else
 						{
-							Style styleDessin;
+							Construction construction(obj);
+							construction.Extrusion();
+						}
+					}
+					else if (shape.EntityType == "IfcBooleanClippingResult" || shape.EntityType == "IfcBooleanResult")
+					{
+						if (shape.ProfilDefName != "IfcArbitraryClosedProfileDef")
+						{
+							//shape.ProfilDef->createSolid3dProfil({});
+						}
+						else
+						{
+							Construction construction(obj);
+							construction.Extrusion();
+						}
+					}
+					else if (shape.EntityType == "IfcFacetedBrep" || shape.EntityType == "IfcFaceBasedSurfaceModel" || shape.EntityType == "IfcShellBasedSurfaceModel" && !obj->IsMappedItem)
+					{
+						Construction construction(obj);
+						construction.CreationFaceSolid();
+					}
+					else if (shape.EntityType == "IfcBoundingBox" && !obj->IsMappedItem)
+					{
+						// TODO createBoundingBox(box, entity, keyProfilDef, listStyle);
+					}
+					else if (shape.EntityType == "IfcMappedItem" && obj->IsMappedItem)
+					{
+						for (int j = 0; j < obj->KeyMappedItems.size(); j++)
+						{
+							MappedItem& map = dicoMappedItem[obj->KeyMappedItems[j]];
 
-							if (listStyles.count(obj.KeyItems[0]))
+							if (map.nameItemsMap[0] == "IfcExtrudedAreaSolid")
 							{
-								styleDessin = listStyles.at(obj.KeyItems[0]);
-								listStyles.erase(obj.KeyItems[0]);
+								map.transform1Map *= obj->LocalTransform;
+								map.transform1Map *= shape.Transformation;
+
+								if (shape.ProfilDefName != "IfcArbitraryClosedProfileDef")
+								{
+									//shape.ProfilDef->createSolid3dProfil({});
+								}
+								else
+								{
+									Construction construction(obj);
+									construction.Extrusion();
+								}
 							}
-
-							extrusion(obj.Key, obj.Entity, obj, listVoid, styleDessin);
+							else if (map.nameItemsMap[0] == "IfcBooleanClippingResult")
+							{
+								Construction construction(obj);
+								construction.Extrusion();
+							}
+							else if (map.nameItemsMap[0] == "IfcFacetedBrep" || map.nameItemsMap[0] == "IfcFaceBasedSurfaceModel" || map.nameItemsMap[0] == "IfcShellBasedSurfaceModel")
+							{
+								//shape.ProfilDef->createSolid3dProfil({});
+							}
+							else if (map.nameItemsMap[0] == "IfcBoundingBox")
+							{
+								// TODO createBoundingBox(map.boxMap, entity, map.keyItemsMap[j], listStyle);
+							}
 						}
-					}
-					else if (obj.NameItems[i] == "IfcBooleanClippingResult")
-					{
-						Style styleDessin;
-
-						if (listStyles.count(obj.KeyItems[0]))
-						{
-							styleDessin = listStyles.at(obj.KeyItems[0]);
-							listStyles.erase(obj.KeyItems[0]);
-						}
-
-						extrusion(obj.Key, type.first, obj, listVoid, styleDessin);
-					}
-					else if (obj.NameItems[i] == "IfcFacetedBrep" || obj.NameItems[i] == "IfcFaceBasedSurfaceModel" || obj.NameItems[i] == "IfcShellBasedSurfaceModel")
-					{
-						createFaceSolid(type.first, obj, &listStyles);
-						break;
-					}
-					else if (obj.NameItems[i] == "IfcBoundingBox")
-					{
-						Style styleDessin;
-
-						if (listStyles.count(obj.KeyItems[0]))
-						{
-							styleDessin = listStyles.at(obj.KeyItems[0]);
-							listStyles.erase(obj.KeyItems[0]);
-						}
-
-						createBoundingBox(obj.Box, type.first, styleDessin);
 					}
 				}
-				else if (type.first == "IfcColumn" || type.first == "IfcBeam")
+				else if (obj->Entity == "IfcColumn" || obj->Entity == "IfcBeam")
 				{
-					dessinProfilDef(obj, type.first, i, &listStyles);
+					if (shape.EntityType == "IfcMappedItem" && obj->IsMappedItem)
+					{
+						for (int j = 0; j < obj->KeyMappedItems.size(); j++)
+						{
+							MappedItem& map = dicoMappedItem[obj->KeyMappedItems[j]];
+							//shape.ProfilDef->createSolid3dProfil({});
+						}
+					}
+					else
+					{
+						//shape.ProfilDef->createSolid3dProfil({});
+					}
 				}
 			}
 		}
@@ -364,29 +379,18 @@ void loadIfc()
 	//    bool status = writer.write(filestream);
 	//    filestream.close();
 	//}
-	listVoid.clear();
+	//listVoid.clear();
+
+	for (auto& type : objects)
+	{
+		for (auto* obj : type.second)
+			delete obj;
+
+		type.second.clear();
+	}
+
 	listStyles.clear();
 	delete expressDataSet;
-}
-
-void dessinProfilDef(IFCObject object, const std::string& entity, int index, std::map<int, Style>* listStyles)
-{
-	if (object.NameProfilDef.find("ProfileDef") != std::string::npos)
-	{
-		Style styleDessin;
-
-		if (listStyles->count(object.KeyItems[0]))
-		{
-			styleDessin = listStyles->at(object.KeyItems[0]);
-			listStyles->erase(object.KeyItems[0]);
-		}
-
-		object.ProfilDef->createSolid3dProfil(styleDessin);
-	}
-	else if (object.NameItems[index] == "IfcFacetedBrep")
-	{
-		createFaceSolid(entity, object, listStyles);
-	}
 }
 
 void initApp()
