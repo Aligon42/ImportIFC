@@ -1,6 +1,7 @@
 ﻿#include "Construction.h"
 
-std::map<int, ObjectVoid> Construction::s_ObjectVoids;
+std::map<int, std::vector<IFCObject*>> Construction::s_ObjectVoids;
+std::map<int, Style> Construction::s_Styles;
 
 Construction::Construction()
 {
@@ -17,24 +18,16 @@ Construction::Construction(IFCObject* ifcObject)
 	AcGeContext::gTol.setEqualVector(0.001);
 }
 
-Construction::Construction(ProfilDef* profilDef)
-	: m_ProfilDef(profilDef)
-{
-	InitLayerTable();
-	AcGeContext::gTol.setEqualPoint(0.001);
-	AcGeContext::gTol.setEqualVector(0.001);
-}
-
 void Construction::Extrusion()
 {
-	const ACHAR* layerName = GetLayerName();
+	const ACHAR* layerName = GetLayerName(m_IfcObject->Entity);
 	AddTableRecord(layerName);
 	DrawExtrusion(layerName);
 }
 
 void Construction::CreationFaceSolid()
 {
-	const ACHAR* layerName = GetLayerName();
+	const ACHAR* layerName = GetLayerName(m_IfcObject->Entity);
 	AddTableRecord(layerName);
 	DrawFaces(layerName);
 }
@@ -70,9 +63,8 @@ Acad::ErrorStatus Construction::AddTableRecord(const ACHAR* layerName)
 	return es;
 }
 
-const ACHAR* Construction::GetLayerName()
+const ACHAR* Construction::GetLayerName(std::string& entity)
 {
-	const std::string& entity = m_IfcObject->Entity;
 	std::string outLayerName = entity;
 
 	if (entity == "IfcWallStandardCase")
@@ -111,25 +103,29 @@ const ACHAR* Construction::GetLayerName()
 	return ConvertToWideChar(outLayerName.c_str());
 }
 
-void Construction::SetColor(AcDb3dSolid* solid)
+void Construction::SetColor(AcDb3dSolid* solid, int colorIndex)
 {
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(m_Style.red * 255, m_Style.green * 255, m_Style.blue * 255);
+
+	RGBA& color = *s_Styles[colorIndex].Styles.begin();
+	couleurRGB.setRGB(color.Red * 255, color.Green * 255, color.Blue * 255);
 	solid->setColor(couleurRGB, false);
 
-	double opa = abs((m_Style.transparence * 255) - 255);
+	double opa = abs((color.Alpha * 255) - 255);
 	Adesk::UInt8 alpha = opa;
 	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
 	solid->setTransparency(transparence);
 }
 
-void Construction::SetColor(AcDbSubDMesh* pSubDMesh)
+void Construction::SetColor(AcDbSubDMesh* pSubDMesh, int colorIndex)
 {
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
-	couleurRGB.setRGB(m_Style.red * 255, m_Style.green * 255, m_Style.blue * 255);
+
+	RGBA& color = *s_Styles[colorIndex].Styles.begin();
+	couleurRGB.setRGB(color.Red * 255, color.Green * 255, color.Blue * 255);
 	pSubDMesh->setColor(couleurRGB, false);
 
-	double opa = abs((m_Style.transparence * 255) - 255);
+	double opa = abs((color.Alpha * 255) - 255);
 	Adesk::UInt8 alpha = opa;
 	AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
 	pSubDMesh->setTransparency(transparence);
@@ -198,49 +194,97 @@ void Construction::DrawExtrusion(const ACHAR* layerName)
 
 	HandleDeplacements(pSolid, shapeRepresentations, !(m_IfcObject->ShapeRepresentations.size() > 1));
 	DrawVoids(pSolid);
-	SetColor(pSolid);
+	SetColor(pSolid, shapeRepresentations.Key);
 	DrawElement(layerName, pSolid, es);
 }
 
 void Construction::DrawFaces(const ACHAR* layerName)
 {
-	Acad::ErrorStatus es;
+	Acad::ErrorStatus es = Acad::ErrorStatus::eOk;
 	AcArray<Adesk::Int32> faceArray;
 	AcDbSubDMesh* pSubDMesh = new AcDbSubDMesh();
 	AcGePoint3dArray ptArr;
+	AcArray<AcCmEntityColor> clrArray;
+	AcCmEntityColor vColor;
+
 	int k = 0;
-	IFCShapeRepresentation& shapeRepresentations = *m_IfcObject->ShapeRepresentations.begin();
 
-	for (auto& shape : shapeRepresentations.IfcFaces)
+	for (auto& shape : m_IfcObject->ShapeRepresentations)
 	{
-		faceArray.append(shape.Points.size());
-		for (const auto& point : shape.Points)
+		for (auto& face : shape.IfcFaces)
 		{
-			AcGePoint3d point3d = AcGePoint3d::AcGePoint3d(point.x(), point.y(), point.z());
-			ptArr.append(point3d);
-			faceArray.append(k++);
+			RGBA& colorRGB = *s_Styles[shape.Key].Styles.begin();
+			Adesk::RGBQuad color((((int)(colorRGB.Red * 255) & 0xff) << 16) + (((int)(colorRGB.Green * 255) & 0xff) << 8) + ((int)(colorRGB.Blue * 255) & 0xff));
+
+			faceArray.append(face.Points.size());
+			for (const auto& point : face.Points)
+			{
+				AcGePoint3d point3d = AcGePoint3d::AcGePoint3d(point.x(), point.y(), point.z());
+				ptArr.append(point3d);
+
+				vColor.setRGB(color);
+				clrArray.append(vColor);
+				faceArray.append(k++);
+			}
 		}
-	}
 
-	es = pSubDMesh->setSubDMesh(ptArr, faceArray, 0);
-	if (Acad::eOk != es)
-	{
-		pSubDMesh->close();
-		acutPrintf(L"\nFailed to set \n");
-		return;
-	}
+		es = pSubDMesh->setSubDMesh(ptArr, faceArray, 0);
+		if (Acad::eOk != es)
+		{
+			pSubDMesh->close();
+			acutPrintf(L"\nFailed to set \n");
+			return;
+		}
 
-	if (shapeRepresentations.Scale > 0.0)
-	{
-		AcGeMatrix3d matrix = AcGeMatrix3d::AcGeMatrix3d();
-		matrix.setToScaling(shapeRepresentations.Scale);
-		pSubDMesh->transformBy(matrix);
-		//transformationOperator3D *= scale;
+		if (shape.Scale > 0.0)
+		{
+			AcGeMatrix3d matrix = AcGeMatrix3d::AcGeMatrix3d();
+			matrix.setToScaling(shape.Scale);
+			pSubDMesh->transformBy(matrix);
+			//transformationOperator3D *= scale;
+		}
+
+		//SetColor(pSubDMesh, shape.Key);
 	}
 
 	HandleDeplacements(pSubDMesh, false);
-	SetColor(pSubDMesh);
-	DrawElement(layerName, pSubDMesh, es);
+
+	pSubDMesh->setLayer(layerName, Adesk::kFalse, false);
+
+	AcDbBlockTable* pBlockTable;
+	AcDbBlockTableRecord* pSpaceRecord;
+
+	es = acdbHostApplicationServices()->workingDatabase()->getSymbolTable(pBlockTable, AcDb::kForRead);
+	es = pBlockTable->getAt(ACDB_MODEL_SPACE, pSpaceRecord, AcDb::kForWrite);
+	es = pBlockTable->close();
+
+	// For Vertex color to work, the SubDMesh must be added
+	// to the database
+
+	AcDbObjectId meshId = AcDbObjectId::kNull;
+	es = pSpaceRecord->appendAcDbEntity(meshId, pSubDMesh);
+	es = pSubDMesh->setVertexColorArray(clrArray);
+	es = pSubDMesh->close();
+	es = pSpaceRecord->close();
+	
+	/*pSubDMesh->setLayer(layerName, Adesk::kFalse, false);
+	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
+	if (es == Acad::eOk)
+	{
+		AcDbDatabase* pDb = curDoc()->database();
+		AcDbObjectId modelId = acdbSymUtil()->blockModelSpaceId(pDb);
+		AcDbBlockTableRecord* pBlockTableRecord;
+		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
+		pBlockTableRecord->appendAcDbEntity(pSubDMesh);
+		pBlockTableRecord->close();
+		pSubDMesh->close();
+	}
+	else
+	{
+		delete pSubDMesh;
+		acutPrintf(_T("Je ne fais rien du tout"));
+		return;
+	}*/
 }
 
 const wchar_t* Construction::ConvertToWideChar(const char* c, ...)
@@ -328,17 +372,22 @@ void Construction::DrawVoids(AcDb3dSolid* solid)
 {
 	if (s_ObjectVoids.find(m_IfcObject->Key) != s_ObjectVoids.end())
 	{
-		if (s_ObjectVoids[m_IfcObject->Key].NameProfilDef == "IfcArbitraryClosedProfileDef")
+		for (auto objectVoid : s_ObjectVoids[m_IfcObject->Key])
 		{
-			CreationVoid(solid, s_ObjectVoids[m_IfcObject->Key]);
-		}
-		else if (s_ObjectVoids[m_IfcObject->Key].NameProfilDef == "IfcCircleProfileDef")
-		{
-			CreationVoidCircle(solid, s_ObjectVoids[m_IfcObject->Key]);
-		}
-		else if (s_ObjectVoids[m_IfcObject->Key].NameProfilDef == "IfcRectangleProfileDef")
-		{
-			CreationVoidRectangle(solid, s_ObjectVoids[m_IfcObject->Key]);
+			IFCShapeRepresentation& shapeRepresentations = *objectVoid->ShapeRepresentations.begin();
+
+			if (shapeRepresentations.ProfilDefName == "IfcArbitraryClosedProfileDef")
+			{
+				CreationVoid(solid, objectVoid);
+			}
+			else if (shapeRepresentations.ProfilDefName == "IfcCircleProfileDef")
+			{
+				CreationVoidCircle(solid, objectVoid);
+			}
+			else if (shapeRepresentations.ProfilDefName == "IfcRectangleProfileDef")
+			{
+				CreationVoidRectangle(solid, objectVoid);
+			}
 		}
 	}
 }
@@ -365,26 +414,26 @@ void Construction::HandleDeplacements(AcDbSubDMesh* pSubDMesh, IFCShapeRepresent
 		DeplacementObjet(pSubDMesh, shape.Transformation2D);
 }
 
-void Construction::HandleDeplacements(AcDb3dSolid* solid, bool move2D)
+void Construction::HandleDeplacements(AcDb3dSolid* solid, bool move2D, ProfilDef* profilDef)
 {
-	if (m_IfcObject->IsMappedItem)
-		DeplacementObjet3DMappedItem(solid, m_ProfilDef->TransformationOperator3D);
+	/*if (m_IfcObject->IsMappedItem)
+		DeplacementObjet3DMappedItem(solid, m_ProfilDef->TransformationOperator3D);*/
 
 	DeplacementObjet(solid, m_IfcObject->LocalTransform);
 
 	if (move2D)
-		DeplacementObjet(solid, m_ProfilDef->Transformation2D);
+		DeplacementObjet(solid, profilDef->Transformation2D);
 }
 
-void Construction::HandleDeplacements(AcDbSubDMesh* pSubDMesh, bool move2D)
+void Construction::HandleDeplacements(AcDbSubDMesh* pSubDMesh, bool move2D, ProfilDef* profilDef)
 {
-	if (m_IfcObject->IsMappedItem)
-		DeplacementObjet3DMappedItem(pSubDMesh, m_ProfilDef->TransformationOperator3D);
+	/*if (m_IfcObject->IsMappedItem)
+		DeplacementObjet3DMappedItem(pSubDMesh, m_ProfilDef->TransformationOperator3D);*/
 
 	DeplacementObjet(pSubDMesh, m_IfcObject->LocalTransform);
 
 	if (move2D)
-		DeplacementObjet(pSubDMesh, m_ProfilDef->Transformation2D);
+		DeplacementObjet(pSubDMesh, profilDef->Transformation2D);
 }
 
 void Construction::DrawElement(const ACHAR* layerName, AcDb3dSolid* pSolid, Acad::ErrorStatus es)
@@ -431,28 +480,21 @@ void Construction::DrawElement(const ACHAR* layerName, AcDbSubDMesh* pSubDMesh, 
 	}
 }
 
-void Construction::CreationVoid(AcDb3dSolid* extrusion, ObjectVoid& objectVoid)
+void Construction::CreationVoid(AcDb3dSolid* extrusion, IFCObject* objectVoid)
 {
 	Acad::ErrorStatus es;
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
 
-	if (objectVoid.Args.size() > 1)
-	{
-		objectVoid.Args.erase(objectVoid.Args.begin());
-		objectVoid.Points.pop_front();
-	}
+	IFCShapeRepresentation& shapeRepresentations = *objectVoid->ShapeRepresentations.begin();
 
-	ptArr.setLogicalLength(objectVoid.Args[0]);
-	Vec3 pointOrigine = { objectVoid.Transform[12], objectVoid.Transform[13] , objectVoid.Transform[14] };
+	ptArr.setLogicalLength(shapeRepresentations.Points.size());
+	Vec3 pointOrigine = { objectVoid->LocalTransform[12], objectVoid->LocalTransform[13] , objectVoid->LocalTransform[14] };
 
 	int i = 0;
-
-	for (const auto& point : objectVoid.Points)
+	for (const auto& point : shapeRepresentations.Points)
 	{
-		if (i == objectVoid.Args[0]) break;
-
 		ptArr[i].set(point.x(), point.y(), point.z());
 		i++;
 	}
@@ -462,7 +504,7 @@ void Construction::CreationVoid(AcDb3dSolid* extrusion, ObjectVoid& objectVoid)
 
 	if (pRegion == nullptr) return;
 
-	AcGeVector3d vecExtru = GetExtrusionVector(objectVoid.VecteurExtrusion, objectVoid.HauteurExtrusion);
+	AcGeVector3d vecExtru = GetExtrusionVector(objectVoid->ExtrusionVector, objectVoid->ExtrusionHeight);
 	AcDbSweepOptions options;
 
 	// Extrude the region to create a solid.
@@ -480,24 +522,26 @@ void Construction::CreationVoid(AcDb3dSolid* extrusion, ObjectVoid& objectVoid)
 		delete (AcRxObject*)regions[ii];
 	}
 
-	if (objectVoid.ShapeRepresentations.size() > 1)
+	if (objectVoid->ShapeRepresentations.size() > 1)
 	{
-		DeplacementObjet(extrusion_void, objectVoid.Transform2D);
-		DeplacementObjet(extrusion_void2, objectVoid.Transform2D);
+		DeplacementObjet(extrusion_void, shapeRepresentations.Transformation2D);
+		DeplacementObjet(extrusion_void2, shapeRepresentations.Transformation2D);
 
-		for (int a = 1; a < objectVoid.ShapeRepresentations.size(); a++)
+		for (int a = 1; a < m_IfcObject->ShapeRepresentations.size(); a++)
 		{
-			if (objectVoid.Points.size() > 0 && objectVoid.Args.size() > 0)
-			{
-				CreationSection(extrusion_void, objectVoid.ShapeRepresentations[a]);
-				CreationSection(extrusion_void2, objectVoid.ShapeRepresentations[a]);
-			}
+			CreationSection(extrusion_void, m_IfcObject->ShapeRepresentations[a]);
+			CreationSection(extrusion_void2, m_IfcObject->ShapeRepresentations[a]);
 		}
 	}
 
-	// TODO Deplacement
-	// HandleDeplacements(extrusion_void);
-	// HandleDeplacements(extrusion_void2);
+	if (objectVoid->IsMappedItem)
+	{
+		DeplacementObjet3DMappedItem(extrusion_void, shapeRepresentations.TransformationOperator3D);
+		DeplacementObjet3DMappedItem(extrusion_void2, shapeRepresentations.TransformationOperator3D);
+	}
+
+	DeplacementObjet(extrusion_void, objectVoid->LocalTransform);
+	DeplacementObjet(extrusion_void2, objectVoid->LocalTransform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 	AcDbDatabase* pDb = curDoc()->database();
@@ -515,13 +559,16 @@ void Construction::CreationVoid(AcDb3dSolid* extrusion, ObjectVoid& objectVoid)
 	extrusion_void2->close();
 }
 
-void Construction::CreationVoidCircle(AcDb3dSolid* extrusion, ObjectVoid& objectVoid)
+void Construction::CreationVoidCircle(AcDb3dSolid* extrusion, IFCObject* objectVoid)
 {
 	Acad::ErrorStatus es;
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
 
-	float radius = objectVoid.Radius;
+	IFCShapeRepresentation& shapeRepresentations = *objectVoid->ShapeRepresentations.begin();
+	auto profilDef = dynamic_cast<Circle_profilDef*>(shapeRepresentations.ProfilDef);
+
+	float radius = profilDef->Radius;
 	AcGePoint3d center = AcGePoint3d::AcGePoint3d(radius, radius, 0);
 
 	AcGeMatrix3d matrix3d = AcGeMatrix3d::AcGeMatrix3d();
@@ -534,7 +581,7 @@ void Construction::CreationVoidCircle(AcDb3dSolid* extrusion, ObjectVoid& object
 
 	if (pRegion == nullptr) return;
 
-	AcGeVector3d vecExtru = GetExtrusionVector(objectVoid.VecteurExtrusion, objectVoid.HauteurExtrusion);
+	AcGeVector3d vecExtru = GetExtrusionVector(profilDef->VecteurExtrusion, profilDef->HauteurExtrusion);
 	AcDbSweepOptions options;
 
 	// Extrude the region to create a solid.
@@ -552,24 +599,26 @@ void Construction::CreationVoidCircle(AcDb3dSolid* extrusion, ObjectVoid& object
 		delete (AcRxObject*)regions[ii];
 	}
 
-	if (objectVoid.ShapeRepresentations.size() > 1)
+	if (objectVoid->ShapeRepresentations.size() > 1)
 	{
-		DeplacementObjet(extrusion_void, objectVoid.Transform2D);
-		DeplacementObjet(extrusion_void2, objectVoid.Transform2D);
+		DeplacementObjet(extrusion_void, profilDef->Transformation2D);
+		DeplacementObjet(extrusion_void2, profilDef->Transformation2D);
 
-		for (int a = 1; a < objectVoid.ShapeRepresentations.size(); a++)
+		for (int a = 1; a < m_IfcObject->ShapeRepresentations.size(); a++)
 		{
-			if (objectVoid.Points.size() > 0 && objectVoid.Args.size() > 0)
-			{
-				CreationSection(extrusion_void, objectVoid.ShapeRepresentations[a]);
-				CreationSection(extrusion_void2, objectVoid.ShapeRepresentations[a]);
-			}
+			CreationSection(extrusion_void, m_IfcObject->ShapeRepresentations[a]);
+			CreationSection(extrusion_void2, m_IfcObject->ShapeRepresentations[a]);
 		}
 	}
 
-	// TODO Déplacement
-	// HandleDeplacements(extrusion_void);
-	// HandleDeplacements(extrusion_void2);
+	if (objectVoid->IsMappedItem)
+	{
+		DeplacementObjet3DMappedItem(extrusion_void, shapeRepresentations.TransformationOperator3D);
+		DeplacementObjet3DMappedItem(extrusion_void2, shapeRepresentations.TransformationOperator3D);
+	}
+
+	DeplacementObjet(extrusion_void, objectVoid->LocalTransform);
+	DeplacementObjet(extrusion_void2, objectVoid->LocalTransform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 	AcDbDatabase* pDb = curDoc()->database();
@@ -587,15 +636,18 @@ void Construction::CreationVoidCircle(AcDb3dSolid* extrusion, ObjectVoid& object
 	extrusion_void2->close();
 }
 
-void Construction::CreationVoidRectangle(AcDb3dSolid* extrusion, ObjectVoid& objectVoid)
+void Construction::CreationVoidRectangle(AcDb3dSolid* extrusion, IFCObject* objectVoid)
 {
 	Acad::ErrorStatus es;
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
 
-	double xDim = objectVoid.XDim;
-	double yDim = objectVoid.YDim;
+	IFCShapeRepresentation& shapeRepresentations = *objectVoid->ShapeRepresentations.begin();
+	auto profilDef = dynamic_cast<Rectangle_profilDef*>(shapeRepresentations.ProfilDef);
+
+	double xDim = profilDef->XDim;
+	double yDim = profilDef->YDim;
 
 	ptArr.setLogicalLength(4);
 
@@ -614,7 +666,7 @@ void Construction::CreationVoidRectangle(AcDb3dSolid* extrusion, ObjectVoid& obj
 
 	if (pRegion == nullptr) return;
 
-	AcGeVector3d vecExtru = GetExtrusionVector(objectVoid.VecteurExtrusion, objectVoid.HauteurExtrusion);
+	AcGeVector3d vecExtru = GetExtrusionVector(profilDef->VecteurExtrusion, profilDef->HauteurExtrusion);
 	AcDbSweepOptions options;
 
 	// Extrude the region to create a solid.
@@ -632,24 +684,26 @@ void Construction::CreationVoidRectangle(AcDb3dSolid* extrusion, ObjectVoid& obj
 		delete (AcRxObject*)regions[ii];
 	}
 
-	if (objectVoid.ShapeRepresentations.size() > 1)
+	if (objectVoid->ShapeRepresentations.size() > 1)
 	{
-		DeplacementObjet(extrusion_void, objectVoid.Transform2D);
-		DeplacementObjet(extrusion_void2, objectVoid.Transform2D);
+		DeplacementObjet(extrusion_void, profilDef->Transformation2D);
+		DeplacementObjet(extrusion_void2, profilDef->Transformation2D);
 
-		for (int a = 1; a < objectVoid.ShapeRepresentations.size(); a++)
+		for (int a = 1; a < m_IfcObject->ShapeRepresentations.size(); a++)
 		{
-			if (objectVoid.Points.size() > 0 && objectVoid.Args.size() > 0)
-			{
-				CreationSection(extrusion_void, objectVoid.ShapeRepresentations[a]);
-				CreationSection(extrusion_void2, objectVoid.ShapeRepresentations[a]);
-			}
+			CreationSection(extrusion_void, m_IfcObject->ShapeRepresentations[a]);
+			CreationSection(extrusion_void2, m_IfcObject->ShapeRepresentations[a]);
 		}
 	}
 
-	// TODO Déplacement
-	// HandleDeplacements(extrusion_void);
-	// HandleDeplacements(extrusion_void2);
+	if (objectVoid->IsMappedItem)
+	{
+		DeplacementObjet3DMappedItem(extrusion_void, shapeRepresentations.TransformationOperator3D);
+		DeplacementObjet3DMappedItem(extrusion_void2, shapeRepresentations.TransformationOperator3D);
+	}
+
+	DeplacementObjet(extrusion_void, objectVoid->LocalTransform);
+	DeplacementObjet(extrusion_void2, objectVoid->LocalTransform);
 
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 	AcDbDatabase* pDb = curDoc()->database();
@@ -945,11 +999,11 @@ void Construction::CreationSection(AcDb3dSolid* extrusion, IFCShapeRepresentatio
 	}
 }
 
-void Construction::CreationProfilDef(AcDbRegion* pRegion, AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions, const AcGeVector3d& vecExtru)
+void Construction::CreationProfilDef(AcDbRegion* pRegion, AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions, const AcGeVector3d& vecExtru, ProfilDef* profilDef)
 {
 	Acad::ErrorStatus es;
 
-	const ACHAR* layerName = GetLayerName();
+	const ACHAR* layerName = GetLayerName(m_IfcObject->Entity);
 	AddTableRecord(layerName);
 
 	AcDbSweepOptions options;
@@ -967,7 +1021,7 @@ void Construction::CreationProfilDef(AcDbRegion* pRegion, AcDbVoidPtrArray& line
 		delete (AcRxObject*)regions[ii];
 	}
 
-	if (m_IfcObject->ShapeRepresentations.size() > 1)
+	if (m_IfcObject != nullptr && m_IfcObject->ShapeRepresentations.size() > 1)
 	{
 		DeplacementObjet(pSolid, m_IfcObject->ShapeRepresentations[0].ProfilDef->Transformation2D);
 		DeplacementObjet(pSolid, m_IfcObject->ShapeRepresentations[0].ProfilDef->Transform);
@@ -978,13 +1032,13 @@ void Construction::CreationProfilDef(AcDbRegion* pRegion, AcDbVoidPtrArray& line
 		}
 	}
 
-	HandleDeplacements(pSolid, false);
+	HandleDeplacements(pSolid, false, profilDef);
 	DrawVoids(pSolid);
-	SetColor(pSolid);
+	SetColor(pSolid, profilDef->Key);
 	DrawElement(layerName, pSolid, es);
 }
 
-void Construction::CreateSolid3dProfilIPE(I_profilDef& profilDef, const Style& styleDessin)
+void Construction::CreateSolid3dProfilIPE(I_profilDef& profilDef)
 {
 	double width = profilDef.OverallWidth;
 	double depth = profilDef.OverallDepth;
@@ -1019,10 +1073,10 @@ void Construction::CreateSolid3dProfilIPE(I_profilDef& profilDef, const Style& s
 
 	AcGeVector3d vecExtru = GetExtrusionVector(profilDef.VecteurExtrusion, profilDef.HauteurExtrusion);
 
-	CreationProfilDef(pRegion, lines, regions, vecExtru);
+	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilIPN(I_profilDef& profilDef, const Style& styleDessin)
+void Construction::CreateSolid3dProfilIPN(I_profilDef& profilDef)
 {
 	double width = profilDef.OverallWidth;
 	double depth = profilDef.OverallDepth;
@@ -1060,10 +1114,10 @@ void Construction::CreateSolid3dProfilIPN(I_profilDef& profilDef, const Style& s
 
 	AcGeVector3d vecExtru = GetExtrusionVector(profilDef.VecteurExtrusion, profilDef.HauteurExtrusion);
 
-	CreationProfilDef(pRegion, lines, regions, vecExtru);
+	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilL8(L_profilDef& profilDef, const Style& styleDessin)
+void Construction::CreateSolid3dProfilL8(L_profilDef& profilDef)
 {
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
@@ -1093,10 +1147,10 @@ void Construction::CreateSolid3dProfilL8(L_profilDef& profilDef, const Style& st
 
 	AcGeVector3d vecExtru = GetExtrusionVector(profilDef.VecteurExtrusion, profilDef.HauteurExtrusion);
 
-	CreationProfilDef(pRegion, lines, regions, vecExtru);
+	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilL9(L_profilDef& profilDef, const Style& styleDessin)
+void Construction::CreateSolid3dProfilL9(L_profilDef& profilDef)
 {
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
@@ -1129,10 +1183,10 @@ void Construction::CreateSolid3dProfilL9(L_profilDef& profilDef, const Style& st
 
 	AcGeVector3d vecExtru = GetExtrusionVector(profilDef.VecteurExtrusion, profilDef.HauteurExtrusion);
 
-	CreationProfilDef(pRegion, lines, regions, vecExtru);
+	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilT10(T_profilDef& profilDef, const Style& styleDessin)
+void Construction::CreateSolid3dProfilT10(T_profilDef& profilDef)
 {
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
@@ -1166,10 +1220,10 @@ void Construction::CreateSolid3dProfilT10(T_profilDef& profilDef, const Style& s
 
 	AcGeVector3d vecExtru = GetExtrusionVector(profilDef.VecteurExtrusion, profilDef.HauteurExtrusion);
 
-	CreationProfilDef(pRegion, lines, regions, vecExtru);
+	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilT12(T_profilDef& profilDef, const Style& styleDessin)
+void Construction::CreateSolid3dProfilT12(T_profilDef& profilDef)
 {
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
@@ -1208,10 +1262,10 @@ void Construction::CreateSolid3dProfilT12(T_profilDef& profilDef, const Style& s
 
 	AcGeVector3d vecExtru = GetExtrusionVector(profilDef.VecteurExtrusion, profilDef.HauteurExtrusion);
 
-	CreationProfilDef(pRegion, lines, regions, vecExtru);
+	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilUPE(U_profilDef& profilDef, const Style& styleDessin)
+void Construction::CreateSolid3dProfilUPE(U_profilDef& profilDef)
 {
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
@@ -1245,10 +1299,10 @@ void Construction::CreateSolid3dProfilUPE(U_profilDef& profilDef, const Style& s
 
 	AcGeVector3d vecExtru = GetExtrusionVector(profilDef.VecteurExtrusion, profilDef.HauteurExtrusion);
 
-	CreationProfilDef(pRegion, lines, regions, vecExtru);
+	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilUPN(U_profilDef& profilDef, const Style& styleDessin)
+void Construction::CreateSolid3dProfilUPN(U_profilDef& profilDef)
 {
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
@@ -1282,10 +1336,10 @@ void Construction::CreateSolid3dProfilUPN(U_profilDef& profilDef, const Style& s
 
 	AcGeVector3d vecExtru = GetExtrusionVector(profilDef.VecteurExtrusion, profilDef.HauteurExtrusion);
 
-	CreationProfilDef(pRegion, lines, regions, vecExtru);
+	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilC(C_profilDef& profilDef, const Style& styleDessin)
+void Construction::CreateSolid3dProfilC(C_profilDef& profilDef)
 {
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
@@ -1322,10 +1376,10 @@ void Construction::CreateSolid3dProfilC(C_profilDef& profilDef, const Style& sty
 
 	AcGeVector3d vecExtru = GetExtrusionVector(profilDef.VecteurExtrusion, profilDef.HauteurExtrusion);
 
-	CreationProfilDef(pRegion, lines, regions, vecExtru);
+	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilZ(Z_profilDef& profilDef, const Style& styleDessin)
+void Construction::CreateSolid3dProfilZ(Z_profilDef& profilDef)
 {
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
@@ -1359,10 +1413,10 @@ void Construction::CreateSolid3dProfilZ(Z_profilDef& profilDef, const Style& sty
 
 	AcGeVector3d vecExtru = GetExtrusionVector(profilDef.VecteurExtrusion, profilDef.HauteurExtrusion);
 
-	CreationProfilDef(pRegion, lines, regions, vecExtru);
+	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilAsyI(AsymmetricI_profilDef& profilDef, const Style& styleDessin)
+void Construction::CreateSolid3dProfilAsyI(AsymmetricI_profilDef& profilDef)
 {
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
@@ -1400,10 +1454,10 @@ void Construction::CreateSolid3dProfilAsyI(AsymmetricI_profilDef& profilDef, con
 
 	AcGeVector3d vecExtru = GetExtrusionVector(profilDef.VecteurExtrusion, profilDef.HauteurExtrusion);
 
-	CreationProfilDef(pRegion, lines, regions, vecExtru);
+	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilCircHollow(CircleHollow_profilDef& profilDef, const Style& styleDessin)
+void Construction::CreateSolid3dProfilCircHollow(CircleHollow_profilDef& profilDef)
 {
 	AcDbVoidPtrArray lines[2];
 	AcDbVoidPtrArray regions[2];
@@ -1431,7 +1485,7 @@ void Construction::CreateSolid3dProfilCircHollow(CircleHollow_profilDef& profilD
 
 	AcGeVector3d vecExtru = GetExtrusionVector(profilDef.VecteurExtrusion, profilDef.HauteurExtrusion);
 
-	CreationProfilDef(pRegion[0], lines[0], regions[0], vecExtru);
+	CreationProfilDef(pRegion[0], lines[0], regions[0], vecExtru, &profilDef);
 
 	for (int i = 0; i < lines[1].length(); i++)
 	{
@@ -1444,7 +1498,7 @@ void Construction::CreateSolid3dProfilCircHollow(CircleHollow_profilDef& profilD
 	}
 }
 
-void Construction::CreateSolid3dProfilRectHollow(RectangleHollow_profilDef& profilDef, const Style& styleDessin)
+void Construction::CreateSolid3dProfilRectHollow(RectangleHollow_profilDef& profilDef)
 {
 	AcGePoint3dArray ptArr[2];
 	AcDbVoidPtrArray lines[2];
@@ -1485,7 +1539,7 @@ void Construction::CreateSolid3dProfilRectHollow(RectangleHollow_profilDef& prof
 
 	AcGeVector3d vecExtru = GetExtrusionVector(profilDef.VecteurExtrusion, profilDef.HauteurExtrusion);
 
-	CreationProfilDef(pRegion[0], lines[0], regions[0], vecExtru);
+	CreationProfilDef(pRegion[0], lines[0], regions[0], vecExtru, &profilDef);
 
 	for (int i = 0; i < lines[1].length(); i++)
 	{
@@ -1498,7 +1552,7 @@ void Construction::CreateSolid3dProfilRectHollow(RectangleHollow_profilDef& prof
 	}
 }
 
-void Construction::CreateSolid3dProfilCircle(Circle_profilDef& profilDef, const Style& styleDessin)
+void Construction::CreateSolid3dProfilCircle(Circle_profilDef& profilDef)
 {
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
@@ -1517,10 +1571,10 @@ void Construction::CreateSolid3dProfilCircle(Circle_profilDef& profilDef, const 
 
 	AcGeVector3d vecExtru = GetExtrusionVector(profilDef.VecteurExtrusion, profilDef.HauteurExtrusion);
 
-	CreationProfilDef(pRegion, lines, regions, vecExtru);
+	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilRectangle(Rectangle_profilDef& profilDef, const Style& styleDessin)
+void Construction::CreateSolid3dProfilRectangle(Rectangle_profilDef& profilDef)
 {
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
@@ -1546,7 +1600,7 @@ void Construction::CreateSolid3dProfilRectangle(Rectangle_profilDef& profilDef, 
 
 	AcGeVector3d vecExtru = GetExtrusionVector(profilDef.VecteurExtrusion, profilDef.HauteurExtrusion);
 
-	CreationProfilDef(pRegion, lines, regions, vecExtru);
+	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
 AcDbRegion* Construction::CreateRegion(AcDb2dPolyline* pNewPline, AcDbVoidPtrArray lines, AcDbVoidPtrArray& regions)

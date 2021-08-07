@@ -32,8 +32,9 @@ class ObjectVisitor : public ifc2x3::InheritVisitor
 {
 public:
     //! Constructor
-    ObjectVisitor();
-    ObjectVisitor(IFCObject* obj);
+    ObjectVisitor(int visitingDepth = 0);
+    ObjectVisitor(IFCObject* obj, int visitingDepth = 0);
+    ObjectVisitor(IFCObject* obj, IFCShapeRepresentation& shape, int visitingDepth = 0);
 
     bool visitIfcProduct(ifc2x3::IfcProduct* value) override;
     bool visitIfcSite(ifc2x3::IfcSite* value) override;
@@ -42,10 +43,12 @@ public:
     bool visitIfcProductDefinitionShape(ifc2x3::IfcProductDefinitionShape* value) override;
     bool visitIfcShapeRepresentation(ifc2x3::IfcShapeRepresentation* value) override;
     bool visitIfcBooleanClippingResult(ifc2x3::IfcBooleanClippingResult* value) override;
+    bool visitIfcBooleanResult(ifc2x3::IfcBooleanResult* value) override;
     bool visitIfcRepresentationMap(ifc2x3::IfcRepresentationMap* value) override;
     bool visitIfcFaceBasedSurfaceModel(ifc2x3::IfcFaceBasedSurfaceModel* value) override;
     bool visitIfcConnectedFaceSet(ifc2x3::IfcConnectedFaceSet* value) override;
     bool visitIfcShellBasedSurfaceModel(ifc2x3::IfcShellBasedSurfaceModel* value) override;
+    bool visitIfcShell(ifc2x3::IfcShell* value) override;
     bool visitIfcOpenShell(ifc2x3::IfcOpenShell* value) override;
     bool visitIfcMappedItem(ifc2x3::IfcMappedItem* value) override;
     bool visitIfcCartesianTransformationOperator3D(ifc2x3::IfcCartesianTransformationOperator3D* value) override;
@@ -91,18 +94,28 @@ public:
     bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value) override;
 
     IFCObject* getIfcObject();
+    inline Style getStyle() const
+    {
+        return m_Style;
+    }
 
 private:
     void transformPoints(const Matrix4& transform);
     void SwitchIfcCartesianPointToVecteur3D(ifc2x3::IfcCartesianPoint* value, Vec3& outOrigine);
     void SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);
 
-    IFCShapeRepresentation getShapeRepresentation();
+    IFCShapeRepresentation& getShapeRepresentation(); 
+    std::vector<IFCShapeRepresentation>& getShapeRepresentations();
 
 private:
+    int m_VisitingDepth;
     bool m_VisitingCompositeCurve = false;
+    bool m_VisitingFaces = false;
 
     IFCShapeRepresentation m_IfcShapeRepresentation;
     std::vector<IFCShapeRepresentation> m_ShapeRepresentations;
     IFCObject* m_IfcObject;
+    Style m_Style;
+    RGBA m_Color;
+    Face m_Face;
 };

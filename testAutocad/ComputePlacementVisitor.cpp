@@ -17,6 +17,19 @@ bool ComputePlacementVisitor::visitIfcProduct(
     return true;
 }
 
+bool ComputePlacementVisitor::visitIfcBuildingElementProxy(
+    ifc2x3::IfcBuildingElementProxy* value)
+{
+    isProxy = true;
+
+    if (value->testObjectPlacement())
+    {
+        return value->getObjectPlacement()->acceptVisitor(this);
+    }
+
+    return true;
+}
+
 bool ComputePlacementVisitor::visitIfcSite(
     ifc2x3::IfcSite* value)
 {
@@ -114,6 +127,38 @@ Matrix4 ComputePlacementVisitor::getTransformation(
     return transformation;
 }
 
+Matrix4 ComputePlacementVisitor::getTransformation2D(
+    ifc2x3::IfcAxis2Placement2D* value)
+{
+    Vec3 location(0.f);
+
+    if (value->testLocation())
+    {
+        location = getPoint(value->getLocation());
+    }
+
+    Vec3 refDirection(1.0f, 0.0f, 0.0f);
+
+    if (value->testRefDirection())
+    {
+        refDirection = getDirection(value->getRefDirection());
+        refDirection.Normalize();
+    }
+
+    Vec3 axis(0.0f, 0.0f, 1.0f);
+
+    Vec3 yAxis = Vec3::CrossProduct(axis, refDirection);
+
+    Matrix4 transformation2D(
+        refDirection.x(), refDirection.y(), refDirection.z(), 0.0f,
+        yAxis.x(), yAxis.y(), yAxis.z(), 0.0f,
+        axis.x(), axis.y(), axis.z(), 0.0f,
+        location.x(), location.y(), location.z(), 1.0f
+    );
+
+    return transformation2D;
+}
+
 Vec3 ComputePlacementVisitor::getPoint(
     ifc2x3::IfcCartesianPoint* point)
 {
@@ -123,15 +168,15 @@ Vec3 ComputePlacementVisitor::getPoint(
         point->getCoordinates();
     const std::size_t size = coor.size();
 
-    vector.x() = static_cast<float>(coor[0]);
+    vector.x() = static_cast<double>(coor[0]);
 
     if(size >= 2)
     {
-        vector.y() = static_cast<float>(coor[1]);
+        vector.y() = static_cast<double>(coor[1]);
 
         if(size >= 3)
         {
-            vector.z() = static_cast<float>(coor[2]);
+            vector.z() = static_cast<double>(coor[2]);
         }
     }
 
@@ -180,8 +225,8 @@ Vec3 ComputePlacementVisitor::getDirection(
     ifc2x3::IfcDirection* direction)
 {
     ifc2x3::List_Real_2_3& dir = direction->getDirectionRatios();
-    return Vec3(static_cast<float>(dir[0]), static_cast<float>(dir[1]),
-                static_cast<float>((dir.size() > 2) ? (dir[2]) : (0.0f)));
+    return Vec3(static_cast<double>(dir[0]), static_cast<double>(dir[1]),
+                static_cast<double>((dir.size() > 2) ? (dir[2]) : (0.0f)));
 }
 
 Vec3 ComputePlacementVisitor::getOrigin() const
@@ -192,4 +237,9 @@ Vec3 ComputePlacementVisitor::getOrigin() const
 Matrix4 ComputePlacementVisitor::getTransformation() const
 {
     return _transformation;
+}
+
+Matrix4 ComputePlacementVisitor::getTransformationProxy() const
+{
+    return transformationProxy;
 }

@@ -31,30 +31,30 @@ class Construction
 public:
 	Construction();
 	Construction(IFCObject* ifcObject);
-	Construction(ProfilDef* profilDef);
 
 	void Extrusion();
 	void CreationFaceSolid();
 
 	// ProfilDef
-	void CreateSolid3dProfilIPE(I_profilDef& profilDef, const Style& styleDessin);
-	void CreateSolid3dProfilIPN(I_profilDef& profilDef, const Style& styleDessin);
-	void CreateSolid3dProfilL8(L_profilDef& profilDef, const Style& styleDessin);
-	void CreateSolid3dProfilL9(L_profilDef& profilDef, const Style& styleDessin);
-	void CreateSolid3dProfilT10(T_profilDef& profilDef, const Style& styleDessin);
-	void CreateSolid3dProfilT12(T_profilDef& profilDef, const Style& styleDessin);
-	void CreateSolid3dProfilUPE(U_profilDef& profilDef, const Style& styleDessin);
-	void CreateSolid3dProfilUPN(U_profilDef& profilDef, const Style& styleDessin);
-	void CreateSolid3dProfilC(C_profilDef& profilDef, const Style& styleDessin);
-	void CreateSolid3dProfilZ(Z_profilDef& profilDef, const Style& styleDessin);
-	void CreateSolid3dProfilAsyI(AsymmetricI_profilDef& profilDef, const Style& styleDessin);
-	void CreateSolid3dProfilCircHollow(CircleHollow_profilDef& profilDef, const Style& styleDessin);
-	void CreateSolid3dProfilRectHollow(RectangleHollow_profilDef& profilDef, const Style& styleDessin);
-	void CreateSolid3dProfilCircle(Circle_profilDef& profilDef, const Style& styleDessin);
-	void CreateSolid3dProfilRectangle(Rectangle_profilDef& profilDef, const Style& styleDessin);
+	void CreateSolid3dProfilIPE(I_profilDef& profilDef);
+	void CreateSolid3dProfilIPN(I_profilDef& profilDef);
+	void CreateSolid3dProfilL8(L_profilDef& profilDef);
+	void CreateSolid3dProfilL9(L_profilDef& profilDef);
+	void CreateSolid3dProfilT10(T_profilDef& profilDef);
+	void CreateSolid3dProfilT12(T_profilDef& profilDef);
+	void CreateSolid3dProfilUPE(U_profilDef& profilDef);
+	void CreateSolid3dProfilUPN(U_profilDef& profilDef);
+	void CreateSolid3dProfilC(C_profilDef& profilDef);
+	void CreateSolid3dProfilZ(Z_profilDef& profilDef);
+	void CreateSolid3dProfilAsyI(AsymmetricI_profilDef& profilDef);
+	void CreateSolid3dProfilCircHollow(CircleHollow_profilDef& profilDef);
+	void CreateSolid3dProfilRectHollow(RectangleHollow_profilDef& profilDef);
+	void CreateSolid3dProfilCircle(Circle_profilDef& profilDef);
+	void CreateSolid3dProfilRectangle(Rectangle_profilDef& profilDef);
 
 public:
-	static std::map<int, ObjectVoid> s_ObjectVoids;
+	static std::map<int, std::vector<IFCObject*>> s_ObjectVoids;
+	static std::map<int, Style> s_Styles;
 
 private:
 	Acad::ErrorStatus InitLayerTable();
@@ -68,18 +68,18 @@ private:
 
 	void HandleDeplacements(AcDb3dSolid* solid, IFCShapeRepresentation shape, bool move2D = false);
 	void HandleDeplacements(AcDbSubDMesh* pSubDMesh, IFCShapeRepresentation shape, bool move2D = false);
-	void HandleDeplacements(AcDb3dSolid* solid, bool move2D = false);
-	void HandleDeplacements(AcDbSubDMesh* pSubDMesh, bool move2D = false);
+	void HandleDeplacements(AcDb3dSolid* solid, bool move2D = false, ProfilDef* profilDef = nullptr);
+	void HandleDeplacements(AcDbSubDMesh* pSubDMesh, bool move2D = false, ProfilDef* profilDef = nullptr);
 	void DeplacementObjet3DMappedItem(AcDb3dSolid* solid, const Matrix4& transform);
 	void DeplacementObjet3DMappedItem(AcDbSubDMesh* pSubDMesh, const Matrix4& transform);
 	void DeplacementObjet(AcDb3dSolid* solid, const Matrix4& transform);
 	void DeplacementObjet(AcDbSubDMesh* pSubDMesh, const Matrix4& transform);
 
-	void CreationVoid(AcDb3dSolid* extrusion, ObjectVoid& objectVoid);
-	void CreationVoidCircle(AcDb3dSolid* extrusion, ObjectVoid& objectVoid);
-	void CreationVoidRectangle(AcDb3dSolid* extrusion, ObjectVoid& objectVoid);
+	void CreationVoid(AcDb3dSolid* extrusion, IFCObject* objectVoid);
+	void CreationVoidCircle(AcDb3dSolid* extrusion, IFCObject* objectVoid);
+	void CreationVoidRectangle(AcDb3dSolid* extrusion, IFCObject* objectVoid);
 	void CreationSection(AcDb3dSolid* extrusion, IFCShapeRepresentation& shapeRepresentation);
-	void CreationProfilDef(AcDbRegion* pRegion, AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions, const AcGeVector3d& vecExtru);
+	void CreationProfilDef(AcDbRegion* pRegion, AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions, const AcGeVector3d& vecExtru, ProfilDef* profilDef = nullptr);
 
 	AcDbRegion* CreateCompositeCurve(const std::vector<CompositeCurveSegment>& compositeCurve, const Matrix4& transform);
 	AcDb2dPolyline* CreatePolyline(AcGePoint3dArray& ptArr, AcDbVoidPtrArray& lines, bool shouldTransform = false, AcGeMatrix3d* matrix3d = nullptr, AcGeVector3d* acVec3d = nullptr);
@@ -88,10 +88,10 @@ private:
 	AcDbRegion* CreateRegion(AcDbCircle* pCircle, AcDbVoidPtrArray lines, AcDbVoidPtrArray& regions);
 	AcDbRegion* CreateRegion(AcDbVoidPtrArray lines, AcDbVoidPtrArray& regions);
 
-	void SetColor(AcDb3dSolid* solid);
-	void SetColor(AcDbSubDMesh* pSubDMesh);
+	void SetColor(AcDb3dSolid* solid, int colorIndex);
+	void SetColor(AcDbSubDMesh* pSubDMesh, int colorIndex);
 
-	const ACHAR* GetLayerName();
+	const ACHAR* GetLayerName(std::string& entity);
 	const wchar_t* ConvertToWideChar(const char* c, ...);
 	AcGeVector3d GetExtrusionVector(const Vec3& vector, double height);
 	inline bool StepBoolToBoolean(Step::Boolean other) { return other - 1; }
@@ -100,6 +100,4 @@ private:
 	AcDbDatabase* m_Database;
 	AcDbLayerTable* m_LayerTable;
 	IFCObject* m_IfcObject;
-	ProfilDef* m_ProfilDef;
-	Style m_Style;
 };

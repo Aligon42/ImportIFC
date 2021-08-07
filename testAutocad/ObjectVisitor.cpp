@@ -1,14 +1,17 @@
 #include "ObjectVisitor.h"
 #include "ComputePlacementVisitor.h"
 
-ObjectVisitor::ObjectVisitor() 
-	: ifc2x3::InheritVisitor() 
+ObjectVisitor::ObjectVisitor(int visitingDepth)
+	: m_VisitingDepth(visitingDepth), ifc2x3::InheritVisitor()
 {
 	m_IfcObject = new IFCObject();
 }
 
-ObjectVisitor::ObjectVisitor(IFCObject* obj)
-	: m_IfcObject(obj), ifc2x3::InheritVisitor() { }
+ObjectVisitor::ObjectVisitor(IFCObject* obj, int visitingDepth)
+	: m_IfcObject(obj), m_VisitingDepth(visitingDepth), ifc2x3::InheritVisitor() { }
+
+ObjectVisitor::ObjectVisitor(IFCObject* obj, IFCShapeRepresentation& shape, int visitingDepth)
+	: m_IfcObject(obj), m_IfcShapeRepresentation(shape), m_VisitingDepth(visitingDepth), ifc2x3::InheritVisitor() { }
 
 bool ObjectVisitor::visitIfcProduct(ifc2x3::IfcProduct* value)
 {
@@ -30,7 +33,19 @@ bool ObjectVisitor::visitIfcSite(ifc2x3::IfcSite* value)
 
 bool ObjectVisitor::visitIfcRelVoidsElement(ifc2x3::IfcRelVoidsElement* value)
 {
-	return false;
+	if (value->testRelatedOpeningElement())
+	{
+		value->getRelatedOpeningElement()->acceptVisitor(this);
+	}
+	if (value->testRelatingBuildingElement())
+	{
+		m_IfcObject->VoidKey = value->getRelatingBuildingElement()->getKey();
+	}
+
+	m_IfcObject->Key = value->getKey();
+	m_IfcObject->Entity = value->type();
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcProductRepresentation(ifc2x3::IfcProductRepresentation* value)
@@ -42,7 +57,12 @@ bool ObjectVisitor::visitIfcProductDefinitionShape(ifc2x3::IfcProductDefinitionS
 {
 	for (auto& representation : value->getRepresentations())
 	{
-		ObjectVisitor visitor(m_IfcObject);
+		auto type = representation->getRepresentationType();
+		auto identifier = representation->getRepresentationIdentifier();
+
+		if (identifier == "Axis" && type == "Curve2D") continue;
+
+		ObjectVisitor visitor(m_IfcObject, m_VisitingDepth + 1);
 		representation->acceptVisitor(&visitor);
 
 		if (visitor.m_ShapeRepresentations.size() > 0)
@@ -53,8 +73,10 @@ bool ObjectVisitor::visitIfcProductDefinitionShape(ifc2x3::IfcProductDefinitionS
 		{
 			auto shape = visitor.getShapeRepresentation();
 
-			if (shape.Key != 0)
+			if (shape.Key != 0 || m_IfcObject->IsMappedItem)
+			{
 				m_ShapeRepresentations.push_back(shape);
+			}
 		}
 	}
 
@@ -70,10 +92,127 @@ bool ObjectVisitor::visitIfcShapeRepresentation(ifc2x3::IfcShapeRepresentation* 
 
 	for (auto& shape : value->getItems())
 	{
-		shape->acceptVisitor(this);
+		if (m_VisitingDepth > 1)
+		{
+			ObjectVisitor visitor(m_IfcObject, m_IfcShapeRepresentation, m_VisitingDepth + 1);
+			shape->acceptVisitor(&visitor);
+
+			if (m_IfcObject->IsMappedItem)
+			{
+				if (m_IfcShapeRepresentation.ProfilDef != nullptr)
+					m_IfcShapeRepresentation.ProfilDef->ParentObject = m_IfcObject;
+			}
+
+			auto shapes = visitor.getShapeRepresentations();
+			if (shapes.size() > 0)
+				m_ShapeRepresentations.insert(m_ShapeRepresentations.end(), shapes.begin(), shapes.end());
+			else
+				m_ShapeRepresentations.push_back(visitor.getShapeRepresentation());
+		}
+		else
+		{
+			ObjectVisitor visitor(m_IfcObject, m_VisitingDepth + 1);
+			shape->acceptVisitor(&visitor);
+
+			if (m_IfcObject->IsMappedItem)
+			{
+				if (m_IfcShapeRepresentation.ProfilDef != nullptr)
+					m_IfcShapeRepresentation.ProfilDef->ParentObject = m_IfcObject;
+
+				m_IfcShapeRepresentation.SubShapeRepresentations.push_back(visitor.getShapeRepresentation());
+				m_ShapeRepresentations = visitor.getShapeRepresentations();
+			}
+			else
+			{
+				auto shapes = visitor.getShapeRepresentations();
+				if (shapes.size() > 0)
+					m_ShapeRepresentations.insert(m_ShapeRepresentations.end(), shapes.begin(), shapes.end());
+				else
+					m_ShapeRepresentations.push_back(visitor.getShapeRepresentation());
+			}
+		}
 	}
 
-	return false;
+	return true;
+}
+
+bool ObjectVisitor::visitIfcBooleanResult(ifc2x3::IfcBooleanResult* value)
+{
+	bool r1 = false, r2 = false;
+
+	if (value->testFirstOperand())
+	{
+		ObjectVisitor visitor(m_IfcObject, m_VisitingDepth + 1);
+		auto op1 = value->getFirstOperand();
+
+		switch (op1->currentType())
+		{
+		case ifc2x3::IfcBooleanOperand::IFCBOOLEANRESULT:
+			r1 = op1->getIfcBooleanResult()->acceptVisitor(this);
+			break;
+		case ifc2x3::IfcBooleanOperand::IFCCSGPRIMITIVE3D:
+			r1 = op1->getIfcCsgPrimitive3D()->acceptVisitor(this);
+			break;
+		case ifc2x3::IfcBooleanOperand::IFCHALFSPACESOLID:
+		{
+			r1 = op1->getIfcHalfSpaceSolid()->acceptVisitor(&visitor);
+			auto shape = visitor.getShapeRepresentation();
+			shape.BooleanResult = true;
+			if (shape.Key != 0)
+				m_ShapeRepresentations.push_back(shape);
+
+			break;
+		}
+		case ifc2x3::IfcBooleanOperand::IFCSOLIDMODEL:
+		{
+			r1 = op1->getIfcSolidModel()->acceptVisitor(&visitor);
+			auto shape = visitor.getShapeRepresentation();
+			shape.BooleanResult = true;
+			if (shape.Key != 0)
+				m_ShapeRepresentations.push_back(shape);
+
+			break;
+		}
+		}
+	}
+
+	if (value->testSecondOperand())
+	{
+		ObjectVisitor visitor(m_IfcObject, m_VisitingDepth + 1);
+		auto op2 = value->getSecondOperand();
+
+		switch (op2->currentType())
+		{
+		case ifc2x3::IfcBooleanOperand::IFCBOOLEANRESULT:
+			r2 = op2->getIfcBooleanResult()->acceptVisitor(this);
+			break;
+		case ifc2x3::IfcBooleanOperand::IFCCSGPRIMITIVE3D:
+			r2 = op2->getIfcCsgPrimitive3D()->acceptVisitor(this);
+			break;
+		case ifc2x3::IfcBooleanOperand::IFCHALFSPACESOLID:
+		{
+			r2 = op2->getIfcHalfSpaceSolid()->acceptVisitor(&visitor);
+			auto shape = visitor.getShapeRepresentation();
+			shape.BooleanResult = true;
+			if (shape.Key != 0)
+				m_ShapeRepresentations.push_back(shape);
+
+			break;
+		}
+		case ifc2x3::IfcBooleanOperand::IFCSOLIDMODEL:
+		{
+			r2 = op2->getIfcSolidModel()->acceptVisitor(&visitor);
+			auto shape = visitor.getShapeRepresentation();
+			shape.BooleanResult = true;
+			if (shape.Key != 0)
+				m_ShapeRepresentations.push_back(shape);
+
+			break;
+		}
+		}
+	}
+
+	return r1 && r2;
 }
 
 bool ObjectVisitor::visitIfcBooleanClippingResult(ifc2x3::IfcBooleanClippingResult* value)
@@ -82,76 +221,75 @@ bool ObjectVisitor::visitIfcBooleanClippingResult(ifc2x3::IfcBooleanClippingResu
 
 	if (value->testFirstOperand())
 	{
-		ObjectVisitor visitor(m_IfcObject);
+		ObjectVisitor visitor(m_IfcObject, m_VisitingDepth + 1);
 
 		auto op1 = value->getFirstOperand();
 
 		switch (op1->currentType())
 		{
-			case ifc2x3::IfcBooleanOperand::IFCBOOLEANRESULT:
-				r1 = op1->getIfcBooleanResult()->acceptVisitor(this);
-				break;
-			case ifc2x3::IfcBooleanOperand::IFCCSGPRIMITIVE3D:
-				r1 = op1->getIfcCsgPrimitive3D()->acceptVisitor(&visitor);
-				break;
-			case ifc2x3::IfcBooleanOperand::IFCHALFSPACESOLID:
-			{
-				r1 = op1->getIfcHalfSpaceSolid()->acceptVisitor(&visitor);
+		case ifc2x3::IfcBooleanOperand::IFCBOOLEANRESULT:
+			r1 = op1->getIfcBooleanResult()->acceptVisitor(this);
+			break;
+		case ifc2x3::IfcBooleanOperand::IFCCSGPRIMITIVE3D:
+			r1 = op1->getIfcCsgPrimitive3D()->acceptVisitor(&visitor);
+			break;
+		case ifc2x3::IfcBooleanOperand::IFCHALFSPACESOLID:
+		{
+			r1 = op1->getIfcHalfSpaceSolid()->acceptVisitor(&visitor);
+			auto shape = visitor.getShapeRepresentation();
+			shape.BooleanResult = true;
+			if (shape.Key != 0)
+				m_ShapeRepresentations.push_back(shape);
 
-				auto shape = visitor.getShapeRepresentation();
-				if (shape.Key != 0)
-					m_ShapeRepresentations.push_back(shape);
+			break;
+		}
+		case ifc2x3::IfcBooleanOperand::IFCSOLIDMODEL:
+		{
+			r1 = op1->getIfcSolidModel()->acceptVisitor(&visitor);
+			auto shape = visitor.getShapeRepresentation();
+			shape.BooleanResult = true;
+			if (shape.Key != 0)
+				m_ShapeRepresentations.push_back(shape);
 
-				break;
-			}
-			case ifc2x3::IfcBooleanOperand::IFCSOLIDMODEL:
-			{
-				r1 = op1->getIfcSolidModel()->acceptVisitor(&visitor);
-
-				auto shape = visitor.getShapeRepresentation();
-				if (shape.Key != 0)
-					m_ShapeRepresentations.push_back(shape);
-
-				break;
-			}
+			break;
+		}
 		}
 	}
 
 	if (value->testSecondOperand())
 	{
-		ObjectVisitor visitor(m_IfcObject);
+		ObjectVisitor visitor(m_IfcObject, m_VisitingDepth + 1);
 
 		auto op2 = value->getSecondOperand();
 
 		switch (op2->currentType())
 		{
-			case ifc2x3::IfcBooleanOperand::IFCBOOLEANRESULT:
-				r2 = op2->getIfcBooleanResult()->acceptVisitor(this);
-				break;
-			case ifc2x3::IfcBooleanOperand::IFCCSGPRIMITIVE3D:
-				r2 = op2->getIfcCsgPrimitive3D()->acceptVisitor(&visitor);
-				break;
-			case ifc2x3::IfcBooleanOperand::IFCHALFSPACESOLID:
-			{
-				r2 = op2->getIfcHalfSpaceSolid()->acceptVisitor(&visitor);
+		case ifc2x3::IfcBooleanOperand::IFCBOOLEANRESULT:
+			r2 = op2->getIfcBooleanResult()->acceptVisitor(this);
+			break;
+		case ifc2x3::IfcBooleanOperand::IFCCSGPRIMITIVE3D:
+			r2 = op2->getIfcCsgPrimitive3D()->acceptVisitor(&visitor);
+			break;
+		case ifc2x3::IfcBooleanOperand::IFCHALFSPACESOLID:
+		{
+			r2 = op2->getIfcHalfSpaceSolid()->acceptVisitor(&visitor);
+			auto shape = visitor.getShapeRepresentation();
+			shape.BooleanResult = true;
+			if (shape.Key != 0)
+				m_ShapeRepresentations.push_back(shape);
 
-				auto shape = visitor.getShapeRepresentation();
-				if (shape.Key != 0)
-					m_ShapeRepresentations.push_back(shape);
+			break;
+		}
+		case ifc2x3::IfcBooleanOperand::IFCSOLIDMODEL:
+		{
+			r2 = op2->getIfcSolidModel()->acceptVisitor(&visitor);
+			auto shape = visitor.getShapeRepresentation();
+			shape.BooleanResult = true;
+			if (shape.Key != 0)
+				m_ShapeRepresentations.push_back(shape);
 
-				break;
-			}
-			case ifc2x3::IfcBooleanOperand::IFCSOLIDMODEL:
-			{
-
-				r2 = op2->getIfcSolidModel()->acceptVisitor(&visitor);
-
-				auto shape = visitor.getShapeRepresentation();
-				if (shape.Key != 0)
-					m_ShapeRepresentations.push_back(shape);
-
-				break;
-			}
+			break;
+		}
 		}
 	}
 
@@ -160,37 +298,173 @@ bool ObjectVisitor::visitIfcBooleanClippingResult(ifc2x3::IfcBooleanClippingResu
 
 bool ObjectVisitor::visitIfcRepresentationMap(ifc2x3::IfcRepresentationMap* value)
 {
+	if (value->testMappedRepresentation())
+	{
+		if (value->getMappedRepresentation()->acceptVisitor(this))
+		{
+			if (value->testMappingOrigin()
+				&& value->getMappingOrigin()->currentType() ==
+				ifc2x3::IfcAxis2Placement::IFCAXIS2PLACEMENT3D)
+			{
+				m_IfcShapeRepresentation.Transformation = ComputePlacementVisitor::getTransformation(
+					value->getMappingOrigin()->getIfcAxis2Placement3D());
+			}
+
+			return true;
+		}
+	}
+
 	return false;
 }
 
 bool ObjectVisitor::visitIfcFaceBasedSurfaceModel(ifc2x3::IfcFaceBasedSurfaceModel* value)
 {
-	return false;
+	m_IfcShapeRepresentation.EntityType = value->type();
+	m_IfcShapeRepresentation.Key = value->getKey();
+
+	if (value->testFbsmFaces())
+	{
+		for (auto face : value->getFbsmFaces())
+		{
+			if (!(face->acceptVisitor(this)))
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcConnectedFaceSet(ifc2x3::IfcConnectedFaceSet* value)
 {
-	return false;
+	if (value->testCfsFaces())
+	{
+		for (auto face : value->getCfsFaces())
+		{
+			if (!(face->acceptVisitor(this)))
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcShellBasedSurfaceModel(ifc2x3::IfcShellBasedSurfaceModel* value)
 {
-	return false;
+	m_IfcShapeRepresentation.EntityType = value->type();
+	m_IfcShapeRepresentation.Key = value->getKey();
+
+	if (value->testSbsmBoundary())
+	{
+		for (auto face : value->getSbsmBoundary())
+		{
+			if (!(face->acceptVisitor(this)))
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+bool ObjectVisitor::visitIfcShell(ifc2x3::IfcShell* value)
+{
+	switch (value->currentType())
+	{
+	case value->IFCCLOSEDSHELL:
+		value->getIfcClosedShell()->acceptVisitor(this);
+		break;
+	case value->IFCOPENSHELL:
+		value->getIfcOpenShell()->acceptVisitor(this);
+		break;
+	}
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcOpenShell(ifc2x3::IfcOpenShell* value)
 {
-	return false;
+	if (value->testCfsFaces())
+	{
+		for (auto face : value->getCfsFaces())
+		{
+			if (!(face->acceptVisitor(this)))
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcMappedItem(ifc2x3::IfcMappedItem* value)
 {
+	auto temp = value->getKey();
+
+	m_IfcObject->IsMappedItem = true;
+
+	if (value->testMappingSource())
+	{
+		if (value->getMappingSource()->acceptVisitor(this))
+		{
+			if (value->testMappingTarget())
+			{
+				value->getMappingTarget()->acceptVisitor(this);
+			}
+
+			return true;
+		}
+	}
+
 	return false;
 }
 
 bool ObjectVisitor::visitIfcCartesianTransformationOperator3D(ifc2x3::IfcCartesianTransformationOperator3D* value)
 {
-	return false;
+	Vec3 Axis1(1.0f, 0.0f, 0.0f);
+	if (value->testAxis1())
+	{
+		SwitchIfcDirectionToVecteur3D(value->getAxis1(), Axis1);
+		Axis1.Normalize();
+	}
+
+	Vec3 Axis2(0.0f, 1.0f, 0.0f);
+	if (value->testAxis2())
+	{
+		SwitchIfcDirectionToVecteur3D(value->getAxis2(), Axis2);
+		Axis2.Normalize();
+	}
+
+	Vec3 Axis3(0.0f, 0.0f, 1.0f);
+	if (value->testAxis3())
+	{
+		SwitchIfcDirectionToVecteur3D(value->getAxis3(), Axis3);
+		Axis3.Normalize();
+	}
+
+	Vec3 localOrigine(0.0f, 0.0f, 0.0f);
+	if (value->testLocalOrigin())
+	{
+		SwitchIfcCartesianPointToVecteur3D(value->getLocalOrigin(), localOrigine);
+	}
+
+	Matrix4 operator3D(
+		Axis3.x(), Axis1.x(), Axis2.x(), localOrigine.x(),
+		Axis3.y(), Axis1.y(), Axis2.y(), localOrigine.y(),
+		Axis3.z(), Axis1.z(), Axis2.z(), localOrigine.z(),
+		0.0f, 0.0f, 0.0f, 1.0f
+	);
+
+	m_IfcShapeRepresentation.Scale = value->getScale();
+	m_IfcShapeRepresentation.TransformationOperator3D = operator3D;
+	m_IfcShapeRepresentation.DeterminantMatrixOperator3D = (Axis1.x() * Axis2.y() * Axis3.z()) - (Axis2.x() * Axis1.y() * Axis3.z()) + (Axis3.x() * Axis1.y() * Axis2.z()) - localOrigine.x();
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcHalfSpaceSolid(ifc2x3::IfcHalfSpaceSolid* value)
@@ -413,18 +687,28 @@ bool ObjectVisitor::visitIfcExtrudedAreaSolid(ifc2x3::IfcExtrudedAreaSolid* valu
 		{
 			m_IfcShapeRepresentation.Transformation = ComputePlacementVisitor::getTransformation(value->getPosition());
 
-			transformPoints(m_IfcShapeRepresentation.Transformation);
+			if (m_IfcShapeRepresentation.ProfilDef != nullptr)
+				m_IfcShapeRepresentation.ProfilDef->Transform = m_IfcShapeRepresentation.Transformation;
 
 			m_IfcShapeRepresentation.ProfilDefName = value->getSweptArea()->getType().getName();
 
 			if (value->testExtrudedDirection())
 			{
 				m_IfcObject->ExtrusionVector = ComputePlacementVisitor::getDirection(value->getExtrudedDirection());
+
+				if (m_IfcShapeRepresentation.ProfilDef != nullptr)
+					m_IfcShapeRepresentation.ProfilDef->VecteurExtrusion = m_IfcObject->ExtrusionVector;
 			}
 			if (value->testDepth())
 			{
 				m_IfcObject->ExtrusionHeight = value->getDepth();
+
+				if (m_IfcShapeRepresentation.ProfilDef != nullptr)
+					m_IfcShapeRepresentation.ProfilDef->HauteurExtrusion = m_IfcObject->ExtrusionHeight;
 			}
+
+			if (m_IfcShapeRepresentation.ProfilDef != nullptr)
+				m_IfcShapeRepresentation.ProfilDef->ParentObject = m_IfcObject;
 
 			return true;
 		}
@@ -440,86 +724,389 @@ bool ObjectVisitor::visitIfcBoundingBox(ifc2x3::IfcBoundingBox* value)
 
 bool ObjectVisitor::visitIfcStyledItem(ifc2x3::IfcStyledItem* value)
 {
-	return false;
+	if (value->testItem())
+	{
+		m_Style.keyItem = value->getItem()->getKey();
+	}
+	if (value->testStyles())
+	{
+		for (auto styles : value->getStyles())
+		{
+			styles->acceptVisitor(this);
+		}
+	}
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcPresentationStyleAssignment(ifc2x3::IfcPresentationStyleAssignment* value)
 {
-	return false;
+	if (value->testStyles())
+	{
+		for (auto styles : value->getStyles())
+		{
+			switch (styles->currentType())
+			{
+			case ifc2x3::IfcPresentationStyleSelect::IFCCURVESTYLE:
+				styles->getIfcCurveStyle()->acceptVisitor(this);
+				break;
+
+			case ifc2x3::IfcPresentationStyleSelect::IFCFILLAREASTYLE:
+				styles->getIfcFillAreaStyle()->acceptVisitor(this);
+				break;
+
+			case ifc2x3::IfcPresentationStyleSelect::IFCTEXTSTYLE:
+				styles->getIfcTextStyle()->acceptVisitor(this);
+				break;
+
+			case ifc2x3::IfcPresentationStyleSelect::IFCSURFACESTYLE:
+				styles->getIfcSurfaceStyle()->acceptVisitor(this);
+				break;
+			}
+
+		}
+	}
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcSurfaceStyle(ifc2x3::IfcSurfaceStyle* value)
 {
-	return false;
+	if (value->testSide())
+	{
+		value->getSide();
+	}
+	if (value->testStyles())
+	{
+		for (auto styles : value->getStyles())
+		{
+			switch (styles->currentType())
+			{
+			case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLELIGHTING:
+				styles->getIfcSurfaceStyleLighting()->acceptVisitor(this);
+				break;
+
+			case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLESHADING:
+				styles->getIfcSurfaceStyleShading()->acceptVisitor(this);
+				break;
+
+			case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLEWITHTEXTURES:
+				styles->getIfcSurfaceStyleWithTextures()->acceptVisitor(this);
+				break;
+
+			case ifc2x3::IfcSurfaceStyleElementSelect::IFCEXTERNALLYDEFINEDSURFACESTYLE:
+				styles->getIfcExternallyDefinedSurfaceStyle()->acceptVisitor(this);
+				break;
+
+			case ifc2x3::IfcSurfaceStyleElementSelect::IFCSURFACESTYLEREFRACTION:
+				styles->getIfcSurfaceStyleRefraction()->acceptVisitor(this);
+				break;
+			}
+		}
+	}
+	return true;
 }
 
 bool ObjectVisitor::visitIfcSurfaceStyleRendering(ifc2x3::IfcSurfaceStyleRendering* value)
 {
-	return false;
+	if (value->testSurfaceColour())
+	{
+		value->getSurfaceColour()->acceptVisitor(this);
+	}
+
+	if (value->testTransparency())
+	{
+		m_Color.Alpha = value->getTransparency();
+	}
+
+	m_Style.Styles.push_back(m_Color);
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcColourRgb(ifc2x3::IfcColourRgb* value)
 {
-	return false;
+	if (value->testRed())
+	{
+		m_Color.Red = value->getRed();
+	}
+	if (value->testGreen())
+	{
+		m_Color.Green = value->getGreen();
+	}
+	if (value->testBlue())
+	{
+		m_Color.Blue = value->getBlue();
+	}
+	return true;
 }
 
 bool ObjectVisitor::visitIfcIShapeProfileDef(ifc2x3::IfcIShapeProfileDef* value)
 {
-	return false;
+	I_profilDef* profilDef = new I_profilDef();
+	profilDef->Entity = m_IfcObject->Entity;
+	profilDef->Key = m_IfcShapeRepresentation.Key;
+
+	if (value->testPosition())
+	{
+		profilDef->Transformation2D = ComputePlacementVisitor::getTransformation2D(value->getPosition());
+	}
+
+	profilDef->OverallWidth = (double)value->getOverallWidth();
+	profilDef->OverallDepth = (double)value->getOverallDepth();
+	profilDef->WebThickness = (double)value->getWebThickness();
+	profilDef->FlangeThickness = (double)value->getFlangeThickness();
+	profilDef->FilletRadius = (double)value->getFilletRadius();
+	profilDef->nbArg = 5;
+
+	m_IfcShapeRepresentation.ProfilDef = profilDef;
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcLShapeProfileDef(ifc2x3::IfcLShapeProfileDef* value)
 {
-	return false;
+	L_profilDef* profilDef = new L_profilDef();
+	profilDef->Entity = m_IfcObject->Entity;
+	profilDef->Key = m_IfcShapeRepresentation.Key;
+
+	if (value->testPosition())
+	{
+		profilDef->Transformation2D = ComputePlacementVisitor::getTransformation2D(value->getPosition());
+	}
+
+	profilDef->Depth = (double)value->getDepth();
+	profilDef->Width = (double)value->getWidth();
+	profilDef->Thickness = (double)value->getThickness();
+	profilDef->FilletRadius = (double)value->getFilletRadius();
+	profilDef->EdgeRadius = (double)value->getEdgeRadius();
+	profilDef->nbArg = 5;
+
+	if (value->testLegSlope())
+	{
+		profilDef->LegSlope = (double)value->getLegSlope();
+		profilDef->nbArg = 6;
+	}
+
+	m_IfcShapeRepresentation.ProfilDef = profilDef;
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcTShapeProfileDef(ifc2x3::IfcTShapeProfileDef* value)
 {
-	return false;
+	T_profilDef* profilDef = new T_profilDef();
+	profilDef->Entity = m_IfcObject->Entity;
+	profilDef->Key = m_IfcShapeRepresentation.Key;
+
+	if (value->testPosition())
+	{
+		profilDef->Transformation2D = ComputePlacementVisitor::getTransformation2D(value->getPosition());
+	}
+
+	profilDef->Depth = (double)value->getDepth();
+	profilDef->FlangeWidth = (double)value->getFlangeWidth();
+	profilDef->WebThickness = (double)value->getWebThickness();
+	profilDef->FlangeThickness = (double)value->getFlangeThickness();
+	profilDef->FilletRadius = (double)value->getFilletRadius();
+	profilDef->FlangeEdgeRadius = (double)value->getFlangeEdgeRadius();
+	profilDef->WebEdgeRadius = (double)value->getWebEdgeRadius();
+	profilDef->nbArg = 7;
+
+	if (value->testWebSlope() && value->testFlangeSlope())
+	{
+		profilDef->WebSlope = (double)value->getWebSlope();
+		profilDef->FlangeSlope = (double)value->getFlangeSlope();
+		profilDef->nbArg = 9;
+	}
+
+	m_IfcShapeRepresentation.ProfilDef = profilDef;
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcUShapeProfileDef(ifc2x3::IfcUShapeProfileDef* value)
 {
-	return false;
+	U_profilDef* profilDef = new U_profilDef();
+	profilDef->Entity = m_IfcObject->Entity;
+	profilDef->Key = m_IfcShapeRepresentation.Key;
+
+	if (value->testPosition())
+	{
+		profilDef->Transformation2D = ComputePlacementVisitor::getTransformation2D(value->getPosition());
+	}
+
+	profilDef->Depth = (double)value->getDepth();
+	profilDef->FlangeWidth = (double)value->getFlangeWidth();
+	profilDef->WebThickness = (double)value->getWebThickness();
+	profilDef->FlangeThickness = (double)value->getFlangeThickness();
+	profilDef->FilletRadius = (double)value->getFilletRadius();
+	profilDef->nbArg = 5;
+
+	if (value->testEdgeRadius() && value->testFlangeSlope())
+	{
+		profilDef->EdgeRadius = (double)value->getEdgeRadius();
+		profilDef->FlangeSlope = (double)value->getFlangeSlope();
+		profilDef->nbArg = 7;
+	}
+
+	m_IfcShapeRepresentation.ProfilDef = profilDef;
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcCShapeProfileDef(ifc2x3::IfcCShapeProfileDef* value)
 {
-	return false;
+	C_profilDef* profilDef = new C_profilDef();
+	profilDef->Entity = m_IfcObject->Entity;
+	profilDef->Key = m_IfcShapeRepresentation.Key;
+
+	if (value->testPosition())
+	{
+		profilDef->Transformation2D = ComputePlacementVisitor::getTransformation2D(value->getPosition());
+	}
+
+	profilDef->Depth = (double)value->getDepth();
+	profilDef->Width = (double)value->getWidth();
+	profilDef->WallThickness = (double)value->getWallThickness();
+	profilDef->Girth = (double)value->getGirth();
+	profilDef->InternalFilletRadius = (double)value->getInternalFilletRadius();
+
+	m_IfcShapeRepresentation.ProfilDef = profilDef;
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcZShapeProfileDef(ifc2x3::IfcZShapeProfileDef* value)
 {
-	return false;
+	Z_profilDef* profilDef = new Z_profilDef();
+	profilDef->Entity = m_IfcObject->Entity;
+	profilDef->Key = m_IfcShapeRepresentation.Key;
+
+	if (value->testPosition())
+	{
+		profilDef->Transformation2D = ComputePlacementVisitor::getTransformation2D(value->getPosition());
+	}
+
+	profilDef->Depth = (double)value->getDepth();
+	profilDef->FlangeWidth = (double)value->getFlangeWidth();
+	profilDef->WebThickness = (double)value->getWebThickness();
+	profilDef->FlangeThickness = (double)value->getFlangeThickness();
+	profilDef->FilletRadius = (double)value->getFilletRadius();
+	profilDef->EdgeRadius = (double)value->getEdgeRadius();
+
+	m_IfcShapeRepresentation.ProfilDef = profilDef;
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcAsymmetricIShapeProfileDef(ifc2x3::IfcAsymmetricIShapeProfileDef* value)
 {
-	return false;
+	AsymmetricI_profilDef* profilDef = new AsymmetricI_profilDef();
+	profilDef->Entity = m_IfcObject->Entity;
+	profilDef->Key = m_IfcShapeRepresentation.Key;
+
+	if (value->testPosition())
+	{
+		profilDef->Transformation2D = ComputePlacementVisitor::getTransformation2D(value->getPosition());
+	}
+
+	profilDef->OverallWidth = (double)value->getOverallWidth();
+	profilDef->OverallDepth = (double)value->getOverallDepth();
+	profilDef->WebThickness = (double)value->getWebThickness();
+	profilDef->FlangeThickness = (double)value->getFlangeThickness();
+	profilDef->FlangeFilletRadius = (double)value->getTopFlangeFilletRadius();
+	profilDef->TopFlangeWidth = (double)value->getTopFlangeWidth();
+	profilDef->TopFlangeThickness = (double)value->getTopFlangeThickness();
+	profilDef->TopFlangeFilletRadius = (double)value->getTopFlangeFilletRadius();
+
+	m_IfcShapeRepresentation.ProfilDef = profilDef;
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcCircleHollowProfileDef(ifc2x3::IfcCircleHollowProfileDef* value)
 {
-	return false;
+	CircleHollow_profilDef* profilDef = new CircleHollow_profilDef();
+	profilDef->Entity = m_IfcObject->Entity;
+	profilDef->Key = m_IfcShapeRepresentation.Key;
+
+	if (value->testPosition())
+	{
+		profilDef->Transformation2D = ComputePlacementVisitor::getTransformation2D(value->getPosition());
+	}
+
+	profilDef->Radius = (double)value->getRadius();
+	profilDef->WallThickness = (double)value->getWallThickness();
+
+	m_IfcShapeRepresentation.ProfilDef = profilDef;
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcRectangleHollowProfileDef(ifc2x3::IfcRectangleHollowProfileDef* value)
 {
-	return false;
+	RectangleHollow_profilDef* profilDef = new RectangleHollow_profilDef();
+	profilDef->Entity = m_IfcObject->Entity;
+	profilDef->Key = m_IfcShapeRepresentation.Key;
+
+	if (value->testPosition())
+	{
+		profilDef->Transformation2D = ComputePlacementVisitor::getTransformation2D(value->getPosition());
+	}
+
+	profilDef->XDim = (double)value->getXDim();
+	profilDef->YDim = (double)value->getYDim();
+	profilDef->WallThickness = (float)value->getWallThickness();
+	profilDef->InnerFilletRadius = (float)value->getInnerFilletRadius();
+	profilDef->OuteerFilletRadius = (float)value->getOuterFilletRadius();
+
+	m_IfcShapeRepresentation.ProfilDef = profilDef;
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcRectangleProfileDef(ifc2x3::IfcRectangleProfileDef* value)
 {
-	return false;
+	Rectangle_profilDef* profilDef = new Rectangle_profilDef();
+	profilDef->Entity = m_IfcObject->Entity;
+	profilDef->Key = m_IfcShapeRepresentation.Key;
+
+	if (value->testPosition())
+	{
+		profilDef->Transformation2D = ComputePlacementVisitor::getTransformation2D(value->getPosition());
+	}
+
+	profilDef->XDim = (double)value->getXDim();
+	profilDef->YDim = (double)value->getYDim();
+
+	m_IfcShapeRepresentation.ProfilDef = profilDef;
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcCircleProfileDef(ifc2x3::IfcCircleProfileDef* value)
 {
-	return false;
+	Circle_profilDef* profilDef = new Circle_profilDef();
+	profilDef->Entity = m_IfcObject->Entity;
+	profilDef->Key = m_IfcShapeRepresentation.Key;
+
+	if (value->testPosition())
+	{
+		profilDef->Transformation2D = ComputePlacementVisitor::getTransformation2D(value->getPosition());
+	}
+
+	profilDef->Radius = (float)value->getRadius();
+
+	m_IfcShapeRepresentation.ProfilDef = profilDef;
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcArbitraryClosedProfileDef(ifc2x3::IfcArbitraryClosedProfileDef* value)
 {
+	m_IfcShapeRepresentation.OuterCurveName = value->getOuterCurve()->getType().getName();
+
 	if (value->testOuterCurve())
 	{
 		return value->getOuterCurve()->acceptVisitor(this);
@@ -590,32 +1177,97 @@ bool ObjectVisitor::visitIfcPolyline(ifc2x3::IfcPolyline* value)
 
 bool ObjectVisitor::visitIfcFacetedBrep(ifc2x3::IfcFacetedBrep* value)
 {
+	m_IfcShapeRepresentation.EntityType = value->type();
+	m_IfcShapeRepresentation.Key = value->getKey();
+
+	if (value->testOuter())
+	{
+		return value->getOuter()->acceptVisitor(this);
+	}
+
 	return false;
 }
 
 bool ObjectVisitor::visitIfcClosedShell(ifc2x3::IfcClosedShell* value)
 {
-	return false;
+	if (value->testCfsFaces())
+	{
+		for (auto face : value->getCfsFaces())
+		{
+			if (!face->acceptVisitor(this))
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcFace(ifc2x3::IfcFace* value)
 {
-	return false;
+	if (value->testBounds())
+	{
+		m_VisitingFaces = true;
+
+		for (auto bound : value->getBounds())
+		{
+			if (!bound->acceptVisitor(this))
+			{
+				m_VisitingFaces = false;
+
+				return false;
+			}
+		}
+	}
+	m_VisitingFaces = false;
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcFaceOuterBound(ifc2x3::IfcFaceOuterBound* value)
 {
-	return false;
+	m_Face.Type = value->type();
+	m_Face.Points.clear();
+
+	if (value->testBound())
+	{
+		m_Face.Orientation = value->getOrientation();
+		value->getBound()->acceptVisitor(this);
+	}
+
+	m_IfcShapeRepresentation.IfcFaces.push_back(m_Face);
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcFaceBound(ifc2x3::IfcFaceBound* value)
 {
-	return false;
+	m_Face.Type = value->type();
+	m_Face.Points.clear();
+
+	if (value->testBound())
+	{
+		m_Face.Orientation = value->getOrientation();
+		value->getBound()->acceptVisitor(this);
+	}
+
+
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value)
 {
-	return false;
+	for (auto point : value->getPolygon())
+	{
+		if (!m_VisitingFaces)
+			m_IfcShapeRepresentation.Points.push_back(ComputePlacementVisitor::getPoint(point.get()));
+		else
+			m_Face.Points.push_back(ComputePlacementVisitor::getPoint(point.get()));
+	}
+
+	return m_IfcShapeRepresentation.Points.empty() == false;
 }
 
 IFCObject* ObjectVisitor::getIfcObject()
@@ -655,7 +1307,12 @@ void ObjectVisitor::SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, V
 	outVecteur.z() = listPoint.at(2);
 }
 
-IFCShapeRepresentation ObjectVisitor::getShapeRepresentation()
+IFCShapeRepresentation& ObjectVisitor::getShapeRepresentation()
 {
 	return m_IfcShapeRepresentation;
+}
+
+std::vector<IFCShapeRepresentation>& ObjectVisitor::getShapeRepresentations()
+{
+	return m_ShapeRepresentations;
 }

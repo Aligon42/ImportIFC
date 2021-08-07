@@ -1,6 +1,10 @@
 #include "tchar.h"
 #include <aced.h>
 #include <rxregsvc.h> 
+#include <fstream>
+#include <chrono>
+#include <ctime>
+#include <sstream>
 
 #include <ifc2x3/SPFReader.h>
 #include <ifc2x3/SPFWriter.h>
@@ -33,6 +37,9 @@
 void initApp();
 void unloadApp();
 
+static std::string s_LogPath;
+static std::map<std::string, std::vector<std::string>> s_Logs;
+
 const wchar_t* GetWC(const char* c, ...)
 {
 	const size_t cSize = strlen(c) + 1;
@@ -42,6 +49,23 @@ const wchar_t* GetWC(const char* c, ...)
 	return wc;
 }
 
+void WriteLogs()
+{
+	std::ofstream fw(s_LogPath, std::ofstream::app);
+	if (fw.is_open())
+	{
+		for (auto& vec : s_Logs)
+		{
+			for (auto& str : vec.second)
+				fw << str;
+
+			vec.second.clear();
+		}
+
+		fw.close();
+	}
+}
+
 void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vector<IFCObject*>& objects)
 {
 	ComputePlacementVisitor placementVisitor;
@@ -49,10 +73,14 @@ void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vect
 
 	while (it != elements->end())
 	{
+		auto start = std::chrono::high_resolution_clock::now();
+
 		auto& buildingElement = *(it->second);
 
 		int key = it->first;
 		std::string entity = buildingElement.getType().getName();
+
+		it++;
 
 		ObjectVisitor visitor;
 		buildingElement.acceptVisitor(&visitor);
@@ -64,7 +92,10 @@ void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vect
 
 		objects.push_back(obj);
 
-		it++;
+		auto end = std::chrono::high_resolution_clock::now() - start;
+		std::stringstream ss;
+		ss <<"Key: "<< key << " - " << entity << " - " << std::chrono::duration_cast<std::chrono::microseconds>(end).count() / 1000.0 << " ms. \n";
+		s_Logs[entity].push_back(ss.str());
 	}
 }
 
@@ -163,68 +194,76 @@ void loadIfc()
 	expressDataSet->instantiateAll();
 	ComputePlacementVisitor placementVisitor;
 	std::vector<std::thread> threads;
-	std::map<int, Style> listStyles;
-	std::map<int, MappedItem> dicoMappedItem;
 
-	//threads.push_back(std::thread([&]()
-	//{
-	//	// IfcRelVoidsElement
-	//	for (auto& voids : expressDataSet->getAllIfcRelVoidsElement())
-	//	{
-	//		CreateConstructionPointVisitor visitor;
-	//		int key = (int)voids.getKey();
+	std::wstring fpath(fname);
+	std::string path(fpath.begin(), fpath.end());
+	TCHAR NPath[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, NPath);
+	std::wstring curPath(NPath);
 
-	//		voids.acceptVisitor(&visitor);
+	s_LogPath = std::string(curPath.begin(), curPath.end());
 
-	//		ObjectVoid objectVoid;
-	//		objectVoid.keyForVoid = visitor.getkeyForVoid();
-	//		objectVoid.NameProfilDef = visitor.getNameProfildef();
-	//		if (objectVoid.NameProfilDef == "IfcArbitraryClosedProfileDef")
-	//		{
-	//			objectVoid.points1 = visitor.getPoints();
-	//			objectVoid.nbArg = visitor.getNbArgPolyline();
-	//		}
-	//		else if (objectVoid.NameProfilDef == "IfcCircleProfileDef")
-	//		{
-	//			objectVoid.radius = (static_cast<Circle_profilDef*>(visitor.getProfilDef().get()))->Radius;
-	//		}
-	//		else if (objectVoid.NameProfilDef == "IfcRectangleProfileDef")
-	//		{
-	//			objectVoid.XDim = (static_cast<Rectangle_profilDef*>(visitor.getProfilDef().get()))->XDim;
-	//			objectVoid.YDim = (static_cast<Rectangle_profilDef*>(visitor.getProfilDef().get()))->YDim;
-	//		}
-	//		objectVoid.VecteurExtrusion = visitor.getVectorDirection();
-	//		objectVoid.hauteurExtrusion = visitor.getHauteurExtrusion();
-	//		objectVoid.listPlan = visitor.getPlanPolygonal();
-	//		objectVoid.listLocationPolygonal = visitor.getLocationPolygonal();
-	//		objectVoid.AgreementHalf = visitor.getAgreementHalfBool();
-	//		objectVoid.AgreementPolygonal = visitor.getAgreementPolygonalBool();
-	//		objectVoid.listEntityHalf = visitor.getListEntityHalf();
-	//		objectVoid.listEntityPolygonal = visitor.getListEntityPolygonal();
+	int startIndex = path.find_last_of("\\") + 1;
+	s_LogPath += "\\" + path.substr(startIndex, path.length() - 4 - startIndex) + ".txt";
 
-	//		voids.acceptVisitor(&placementVisitor);
-	//		objectVoid.transform1 = placementVisitor.getTransformation();
-	//		Matrix4 transformation = visitor.getTransformation();
+	const auto& apfaoifznbdpkfm = expressDataSet->getAllIfcElement().m_refList;
 
-	//		objectVoid.transform1 *= transformation;
+	int total = 0;
+	for (auto& test : apfaoifznbdpkfm)
+	{
+		if (test->size() == 0) continue;
+		std::string type = (*test->begin()).second->type();
+		if (type == "IfcOpeningElement") continue;
+		total += test->size();
+	}
 
-	//		Construction::s_ObjectVoids.insert(std::make_pair(objectVoid.keyForVoid, objectVoid));
-	//	}
-	//}));
+	std::ofstream fw(s_LogPath, std::ofstream::out);
+	if (fw.is_open())
+	{
+		fw << "Nombre éléments : " << total << "\n";
+		fw.close();
+	}
 
-	//threads.push_back(std::thread([&]()
-	//{
-	//	// IfcStyledItem
-	//	for (auto& styles : expressDataSet->getAllIfcStyledItem())
-	//	{
-	//		CreateConstructionPointVisitor visitor1;
-	//		int key = styles.getKey();
+	threads.push_back(std::thread([&]()
+	{
+		// IfcRelVoidsElement
+		for (auto& voids : expressDataSet->getAllIfcRelVoidsElement())
+		{
+			ObjectVisitor visitor;
+			voids.acceptVisitor(&visitor);
+			auto obj = visitor.getIfcObject();
 
-	//		styles.acceptVisitor(&visitor1);
-	//		Style style = visitor1.getStyle();
-	//		listStyles.emplace(std::make_pair(style.keyItem, style));
-	//	}
-	//}));
+			voids.acceptVisitor(&placementVisitor);
+			obj->LocalTransform = placementVisitor.getTransformation();
+
+			obj->LocalTransform *= (*obj->ShapeRepresentations.begin()).Transformation;
+
+			if (Construction::s_ObjectVoids.find(obj->VoidKey) != Construction::s_ObjectVoids.end())
+			{
+				Construction::s_ObjectVoids[obj->VoidKey].push_back(obj);
+			}
+			else
+			{
+				std::vector<IFCObject*> vec;
+				vec.push_back(obj);
+				Construction::s_ObjectVoids.insert(std::make_pair(obj->VoidKey, vec));
+			}
+		}
+	}));
+
+	threads.push_back(std::thread([&]()
+	{
+		// IfcStyledItem
+		for (auto& styles : expressDataSet->getAllIfcStyledItem())
+		{
+			ObjectVisitor visitor;
+			int key = styles.getKey();
+
+			styles.acceptVisitor(&visitor);
+			Style style = visitor.getStyle();
+			Construction::s_Styles.emplace(std::make_pair(style.keyItem, style));
+		}
+	}));
 
 	std::map<std::string, std::vector<IFCObject*>> objects;
 
@@ -241,24 +280,11 @@ void loadIfc()
 		}
 	}*/
 
-	for (auto element : expressDataSet->getAllIfcWall().m_refList)
-	{
-		if (element->size() > 0)
-		{
-			std::vector<IFCObject*> vector;
-			std::string type = (*element->begin()).second->type();
-
-			objects.emplace(std::make_pair(type, vector));
-
-			threads.push_back(std::thread(ExploreElement, element, std::ref(objects[type])));
-		}
-	}
-
 	/*for (auto mappedItems : expressDataSet->getAllIfcMappedItem().m_refList)
 	{
 		if (mappedItems->size() > 0)
 		{
-			std::vector<IFCObject> vector;
+			std::vector<IFCObject*> vector;
 			std::string type = (*mappedItems->begin()).second->type();
 
 			objects.emplace(std::make_pair(type, vector));
@@ -266,6 +292,21 @@ void loadIfc()
 			threads.push_back(std::thread(ExploreElement, mappedItems, std::ref(objects[type])));
 		}
 	}*/
+
+	for (auto element : expressDataSet->getAllIfcElement().m_refList)
+	{
+		if (element->size() > 0)
+		{
+			std::string type = (*element->begin()).second->type();
+
+			if (type == "IfcOpeningElement") continue;
+
+			objects.emplace(std::make_pair(type, std::vector<IFCObject*>()));
+			s_Logs.emplace(std::make_pair(type, std::vector<std::string>()));
+
+			threads.push_back(std::thread(ExploreElement, element, std::ref(objects[type])));
+		}
+	}
 
 	for (auto& thread : threads)
 	{
@@ -276,15 +317,21 @@ void loadIfc()
 	{
 		for (auto& obj : type.second)
 		{
-			for (auto& shape : obj->ShapeRepresentations)
+			auto& shape = *obj->ShapeRepresentations.begin();
+
+			if (obj->ShapeRepresentations.begin() == obj->ShapeRepresentations.end()) continue;
+
+			if (obj->Entity != "IfcColumn" && obj->Entity != "IfcBeam")
 			{
-				if (obj->Entity != "IfcColumn" && obj->Entity != "IfcBeam")
+				if (obj->IsMappedItem)
 				{
-					if (shape.EntityType == "IfcExtrudedAreaSolid" && !obj->IsMappedItem)
+					continue;
+
+					if (shape.EntityType == "IfcExtrudedAreaSolid")
 					{
 						if (shape.ProfilDefName != "IfcArbitraryClosedProfileDef")
 						{
-							//shape.ProfilDef->createSolid3dProfil({});
+							shape.ProfilDef->createSolid3dProfil();
 						}
 						else
 						{
@@ -292,94 +339,65 @@ void loadIfc()
 							construction.Extrusion();
 						}
 					}
-					else if (shape.EntityType == "IfcBooleanClippingResult" || shape.EntityType == "IfcBooleanResult")
+					else if (shape.EntityType == "IfcBooleanClippingResult")
 					{
-						if (shape.ProfilDefName != "IfcArbitraryClosedProfileDef")
-						{
-							//shape.ProfilDef->createSolid3dProfil({});
-						}
-						else
-						{
-							Construction construction(obj);
-							construction.Extrusion();
-						}
+						Construction construction(obj);
+						construction.Extrusion();
 					}
-					else if (shape.EntityType == "IfcFacetedBrep" || shape.EntityType == "IfcFaceBasedSurfaceModel" || shape.EntityType == "IfcShellBasedSurfaceModel" && !obj->IsMappedItem)
+					else if (shape.EntityType == "IfcFacetedBrep" || shape.EntityType == "IfcFaceBasedSurfaceModel" || shape.EntityType == "IfcShellBasedSurfaceModel")
 					{
 						Construction construction(obj);
 						construction.CreationFaceSolid();
 					}
-					else if (shape.EntityType == "IfcBoundingBox" && !obj->IsMappedItem)
+					else if (shape.EntityType == "IfcBoundingBox")
 					{
-						// TODO createBoundingBox(box, entity, keyProfilDef, listStyle);
-					}
-					else if (shape.EntityType == "IfcMappedItem" && obj->IsMappedItem)
-					{
-						for (int j = 0; j < obj->KeyMappedItems.size(); j++)
-						{
-							MappedItem& map = dicoMappedItem[obj->KeyMappedItems[j]];
-
-							if (map.nameItemsMap[0] == "IfcExtrudedAreaSolid")
-							{
-								map.transform1Map *= obj->LocalTransform;
-								map.transform1Map *= shape.Transformation;
-
-								if (shape.ProfilDefName != "IfcArbitraryClosedProfileDef")
-								{
-									//shape.ProfilDef->createSolid3dProfil({});
-								}
-								else
-								{
-									Construction construction(obj);
-									construction.Extrusion();
-								}
-							}
-							else if (map.nameItemsMap[0] == "IfcBooleanClippingResult")
-							{
-								Construction construction(obj);
-								construction.Extrusion();
-							}
-							else if (map.nameItemsMap[0] == "IfcFacetedBrep" || map.nameItemsMap[0] == "IfcFaceBasedSurfaceModel" || map.nameItemsMap[0] == "IfcShellBasedSurfaceModel")
-							{
-								//shape.ProfilDef->createSolid3dProfil({});
-							}
-							else if (map.nameItemsMap[0] == "IfcBoundingBox")
-							{
-								// TODO createBoundingBox(map.boxMap, entity, map.keyItemsMap[j], listStyle);
-							}
-						}
+						// TODO createBoundingBox(map.boxMap, entity, map.keyItemsMap[j], listStyle);
 					}
 				}
-				else if (obj->Entity == "IfcColumn" || obj->Entity == "IfcBeam")
+				else if ((shape.EntityType == "IfcExtrudedAreaSolid" || shape.BooleanResult) && !obj->IsMappedItem)
 				{
-					if (shape.EntityType == "IfcMappedItem" && obj->IsMappedItem)
+					if (shape.ProfilDefName != "IfcArbitraryClosedProfileDef")
 					{
-						for (int j = 0; j < obj->KeyMappedItems.size(); j++)
-						{
-							MappedItem& map = dicoMappedItem[obj->KeyMappedItems[j]];
-							//shape.ProfilDef->createSolid3dProfil({});
-						}
+						shape.ProfilDef->createSolid3dProfil();
 					}
 					else
 					{
-						//shape.ProfilDef->createSolid3dProfil({});
+						if (!shape.BooleanResult)
+							obj->LocalTransform *= shape.Transformation;
+
+						Construction construction(obj);
+						construction.Extrusion();
 					}
+				}
+				else if (shape.EntityType == "IfcFacetedBrep" || shape.EntityType == "IfcFaceBasedSurfaceModel" || shape.EntityType == "IfcShellBasedSurfaceModel" && !obj->IsMappedItem)
+				{
+					Construction construction(obj);
+					construction.CreationFaceSolid();
+				}
+				else if (shape.EntityType == "IfcBoundingBox" && !obj->IsMappedItem)
+				{
+					// TODO createBoundingBox(box, entity, keyProfilDef, listStyle);
+				}
+			}
+			else if (obj->Entity == "IfcColumn" || obj->Entity == "IfcBeam")
+			{
+				if (obj->IsMappedItem)
+				{
+					// TODO MappedItem
+					/*for (int j = 0; j < obj->KeyMappedItems.size(); j++)
+					{
+						shape.ProfilDef->createSolid3dProfil({});
+					}*/
+				}
+				else
+				{
+					shape.ProfilDef->createSolid3dProfil();
 				}
 			}
 		}
 	}
 
-	//if (shouldWrite)
-	//{
-	//    // ** Write the file
-	//    ifc2x3::SPFWriter writer(expressDataSet);
-	//    std::ofstream filestream;
-	//    filestream.open(writeFile);
-
-	//    bool status = writer.write(filestream);
-	//    filestream.close();
-	//}
-	//listVoid.clear();
+	WriteLogs();
 
 	for (auto& type : objects)
 	{
@@ -389,7 +407,18 @@ void loadIfc()
 		type.second.clear();
 	}
 
-	listStyles.clear();
+	for (auto& el : Construction::s_ObjectVoids)
+	{
+		for (auto obj : el.second)
+			delete obj;
+
+		el.second.clear();
+	}
+
+	Construction::s_ObjectVoids.clear();
+	Construction::s_Styles.clear();
+	s_Logs.clear();
+
 	delete expressDataSet;
 }
 

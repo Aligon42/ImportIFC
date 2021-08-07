@@ -2,91 +2,91 @@
 
 #include "Construction.h"
 
-void I_profilDef::createSolid3dProfil(Style styleDessin)
+void I_profilDef::createSolid3dProfil()
 {
-	Construction construction;
+	Construction construction(this->ParentObject);
 
 	if (nbArg == 5)
-		construction.CreateSolid3dProfilIPE(*this, styleDessin);
+		construction.CreateSolid3dProfilIPE(*this);
 	else
-		construction.CreateSolid3dProfilIPE(*this, styleDessin);
+		construction.CreateSolid3dProfilIPE(*this);
 }
 
-void L_profilDef::createSolid3dProfil(Style styleDessin)
+void L_profilDef::createSolid3dProfil()
 {
-	Construction construction;
+	Construction construction(this->ParentObject);
 
 	if (nbArg == 5)
-		construction.CreateSolid3dProfilL8(*this, styleDessin);
+		construction.CreateSolid3dProfilL8(*this);
 	else
-		construction.CreateSolid3dProfilL9(*this, styleDessin);
+		construction.CreateSolid3dProfilL9(*this);
 }
 
-void T_profilDef::createSolid3dProfil(Style styleDessin)
+void T_profilDef::createSolid3dProfil()
 {
-	Construction construction;
+	Construction construction(this->ParentObject);
 
 	if (nbArg == 7)
-		construction.CreateSolid3dProfilT10(*this, styleDessin);
+		construction.CreateSolid3dProfilT10(*this);
 	else
-		construction.CreateSolid3dProfilT12(*this, styleDessin);
+		construction.CreateSolid3dProfilT12(*this);
 }
 
-void U_profilDef::createSolid3dProfil(Style styleDessin)
+void U_profilDef::createSolid3dProfil()
 {
-	Construction construction;
+	Construction construction(this->ParentObject);
 
 	if (nbArg == 5)
-		construction.CreateSolid3dProfilUPE(*this, styleDessin);
+		construction.CreateSolid3dProfilUPE(*this);
 	else
-		construction.CreateSolid3dProfilUPN(*this, styleDessin);
+		construction.CreateSolid3dProfilUPN(*this);
 }
 
-void C_profilDef::createSolid3dProfil(Style styleDessin)
+void C_profilDef::createSolid3dProfil()
 {
-	Construction construction;
+	Construction construction(this->ParentObject);
 
-	construction.CreateSolid3dProfilC(*this, styleDessin);
+	construction.CreateSolid3dProfilC(*this);
 }
 
-void Z_profilDef::createSolid3dProfil(Style styleDessin)
+void Z_profilDef::createSolid3dProfil()
 {
-	Construction construction;
+	Construction construction(this->ParentObject);
 
-	construction.CreateSolid3dProfilZ(*this, styleDessin);
+	construction.CreateSolid3dProfilZ(*this);
 }
 
-void AsymmetricI_profilDef::createSolid3dProfil(Style styleDessin)
+void AsymmetricI_profilDef::createSolid3dProfil()
 {
-	Construction construction;
+	Construction construction(this->ParentObject);
 
-	construction.CreateSolid3dProfilAsyI(*this, styleDessin);
+	construction.CreateSolid3dProfilAsyI(*this);
 }
 
-void CircleHollow_profilDef::createSolid3dProfil(Style styleDessin)
+void CircleHollow_profilDef::createSolid3dProfil()
 {
-	Construction construction;
+	Construction construction(this->ParentObject);
 
-	construction.CreateSolid3dProfilCircHollow(*this, styleDessin);
+	construction.CreateSolid3dProfilCircHollow(*this);
 }
 
-void RectangleHollow_profilDef::createSolid3dProfil(Style styleDessin)
+void RectangleHollow_profilDef::createSolid3dProfil()
 {
-	Construction construction;
+	Construction construction(this->ParentObject);
 
-	construction.CreateSolid3dProfilRectHollow(*this, styleDessin);
+	construction.CreateSolid3dProfilRectHollow(*this);
 }
 
-void Rectangle_profilDef::createSolid3dProfil(Style styleDessin)
+void Rectangle_profilDef::createSolid3dProfil()
 {
-	Construction construction;
+	Construction construction(this->ParentObject);
 
-	construction.CreateSolid3dProfilRectangle(*this, styleDessin);
+	construction.CreateSolid3dProfilRectangle(*this);
 }
 
-void Circle_profilDef::createSolid3dProfil(Style styleDessin)
+void Circle_profilDef::createSolid3dProfil()
 {
-	Construction construction;
+	Construction construction(this->ParentObject);
 
-	construction.CreateSolid3dProfilCircle(*this, styleDessin);
+	construction.CreateSolid3dProfilCircle(*this);
 }

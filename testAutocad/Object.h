@@ -14,6 +14,9 @@
 typedef mathfu::Vector<double, 3> Vec3;
 typedef mathfu::Matrix<double, 4> Matrix4;
 
+struct ProfilDef;
+struct IFCShapeRepresentation;
+
 struct TrimmedCurve
 {
     Vec3 centreCircle;
@@ -32,13 +35,18 @@ struct CompositeCurveSegment
     std::string ParentCurve;
 };
 
+struct RGBA
+{
+    double Red = 1;
+    double Green = 1;
+    double Blue = 1;
+    double Alpha = 0;
+};
+
 struct Style
 {
     int keyItem;
-    double red = 1;
-    double green = 1;
-    double blue = 1;
-    double transparence = 0;
+    std::vector<RGBA> Styles;
 };
 
 struct Box
@@ -49,8 +57,56 @@ struct Box
     int ZDimBox;
 };
 
+struct Face
+{
+    Step::Boolean Orientation;
+    std::string Type;
+    std::vector<Vec3> Points;
+};
+
+struct IFCShapeRepresentation
+{
+    int Key;
+    bool BooleanResult = false;
+    std::string EntityType;
+    std::string RepresentationIdentifier;
+    std::string RepresentationType;
+    std::string ProfilDefName;
+    std::string OuterCurveName;
+    std::string EntityHalf;
+    double Scale = 0.0;
+    double DeterminantMatrixOperator3D = 0.0;
+    std::list<Vec3> Points;
+    Matrix4 Transformation;
+    Matrix4 Transformation2D;
+    Matrix4 TransformationOperator3D;
+    Matrix4 Plan;
+    Matrix4 LocationPolygonal;
+    Step::Boolean AgreementHalf;
+    Step::Boolean AgreementPolygonal;
+    Step::Logical AgreementCompositeCurve;
+    Matrix4 TransformBoolean;
+    std::vector<Face> IfcFaces;
+    std::vector<CompositeCurveSegment> CompositeCurve;
+    ProfilDef* ProfilDef;
+    std::vector<IFCShapeRepresentation> SubShapeRepresentations;
+};
+
+struct IFCObject
+{
+    int Key;
+    int VoidKey;
+    bool IsMappedItem;
+    std::string Entity;
+    Matrix4 LocalTransform;
+    Vec3 ExtrusionVector;
+    double ExtrusionHeight = 0.0;
+    std::vector<IFCShapeRepresentation> ShapeRepresentations;
+};
+
 struct ProfilDef
 {
+    int Key;
     std::string Name;
     std::string Entity;
     Vec3 VecteurExtrusion;
@@ -59,8 +115,8 @@ struct ProfilDef
     bool IsMappedItem;
     Matrix4 Transformation2D;
     Matrix4 TransformationOperator3D;
-
-    virtual void createSolid3dProfil(Style styleDessin) = 0;
+    IFCObject* ParentObject;
+    virtual void createSolid3dProfil() = 0;
 };
 
 struct I_profilDef : public ProfilDef
@@ -74,7 +130,7 @@ struct I_profilDef : public ProfilDef
     double FlangeSlope;
     int nbArg;
 
-    void createSolid3dProfil(Style styleDessin) override;
+    void createSolid3dProfil() override;
 };
 
 struct L_profilDef : public ProfilDef
@@ -87,7 +143,7 @@ struct L_profilDef : public ProfilDef
     double LegSlope;
     int nbArg;
 
-    void createSolid3dProfil(Style styleDessin) override;
+    void createSolid3dProfil() override;
 };
 
 struct T_profilDef : public ProfilDef
@@ -103,7 +159,7 @@ struct T_profilDef : public ProfilDef
     double FlangeSlope;
     int nbArg;
 
-    void createSolid3dProfil(Style styleDessin) override;
+    void createSolid3dProfil() override;
 };
 
 struct U_profilDef : public ProfilDef
@@ -117,7 +173,7 @@ struct U_profilDef : public ProfilDef
     double FlangeSlope;
     int nbArg;
 
-    void createSolid3dProfil(Style styleDessin) override;
+    void createSolid3dProfil() override;
 };
 
 struct C_profilDef : public ProfilDef
@@ -128,7 +184,7 @@ struct C_profilDef : public ProfilDef
     double Girth;
     double InternalFilletRadius;
 
-    void createSolid3dProfil(Style styleDessin) override;
+    void createSolid3dProfil() override;
 };
 
 struct Z_profilDef : public ProfilDef
@@ -140,7 +196,7 @@ struct Z_profilDef : public ProfilDef
     double FilletRadius;
     double EdgeRadius;
 
-    void createSolid3dProfil(Style styleDessin) override;
+    void createSolid3dProfil() override;
 };
 
 struct AsymmetricI_profilDef : public ProfilDef
@@ -154,7 +210,7 @@ struct AsymmetricI_profilDef : public ProfilDef
     double TopFlangeThickness;
     double TopFlangeFilletRadius;
 
-    void createSolid3dProfil(Style styleDessin) override;
+    void createSolid3dProfil() override;
 };
 
 struct CircleHollow_profilDef : public ProfilDef
@@ -162,7 +218,7 @@ struct CircleHollow_profilDef : public ProfilDef
     double Radius;
     double WallThickness;
 
-    void createSolid3dProfil(Style styleDessin) override;
+    void createSolid3dProfil() override;
 };
 
 struct RectangleHollow_profilDef : public ProfilDef
@@ -173,7 +229,7 @@ struct RectangleHollow_profilDef : public ProfilDef
     double InnerFilletRadius;
     double OuteerFilletRadius;
 
-    void createSolid3dProfil(Style styleDessin) override;
+    void createSolid3dProfil() override;
 };
 
 struct Rectangle_profilDef : public ProfilDef
@@ -181,99 +237,12 @@ struct Rectangle_profilDef : public ProfilDef
     double XDim;
     double YDim;
 
-    void createSolid3dProfil(Style styleDessin) override;
+    void createSolid3dProfil() override;
 };
 
 struct Circle_profilDef : public ProfilDef
 {
     double Radius;
 
-    void createSolid3dProfil(Style styleDessin) override;
-};
-
-struct MappedItem
-{
-    std::vector<std::string> nameItemsMap;
-    std::string NameProfilDefMap;
-    std::vector<int> keyItemsMap;
-    std::list<Vec3> points1Map;
-    std::string outerCurveNameMap;
-    std::vector<int> ListNbArgMap;
-    std::vector<int> listNbArgFaceMap;
-    Vec3 VecteurExtrusionMap;
-    float hauteurExtrusionMap;
-    std::list<Matrix4> listPlanMap;
-    std::list<Matrix4> listLocationPolygonalMap;
-    std::vector<Step::Boolean> AgreementHalfMap;
-    std::vector<Step::Boolean> AgreementPolygonalMap;
-    std::vector<std::string> listEntityHalfMap;
-    std::vector<std::string> listEntityPolygonalMap;
-    CompositeCurveSegment _compositeCurveMap;
-    int nbPolylineCompositeMap;
-    Box boxMap;
-    Matrix4 transform1Map;
-    Matrix4 transformationMap;
-    Matrix4 transformation2DMap;
-    Matrix4 transformFaceMap;
-    bool isMappedItemMap;
-    Matrix4 transformationOperator3DMap;
-    double scale;
-};
-
-struct IFCShapeRepresentation
-{
-    int Key;
-    std::string EntityType;
-    std::string RepresentationIdentifier;
-    std::string RepresentationType;
-    std::string ProfilDefName;
-    std::string OuterCurveName;
-    std::string EntityHalf;
-    double Scale = 0.0;
-    std::list<Vec3> Points;
-    Matrix4 Transformation;
-    Matrix4 Transformation2D;
-    Matrix4 TransformationOperator3D;
-    Matrix4 Plan;
-    Step::Boolean AgreementHalf;
-    Step::Boolean AgreementPolygonal;
-    Step::Logical AgreementCompositeCurve;
-    Matrix4 TransformBoolean;
-    std::vector<IFCShapeRepresentation> IfcFaces;
-    std::vector<CompositeCurveSegment> CompositeCurve;
-    ProfilDef* ProfilDef;
-};
-
-struct IFCObject
-{
-    int Key;
-    bool IsMappedItem;
-    std::string Entity;
-    Matrix4 LocalTransform;
-    Vec3 ExtrusionVector;
-    double ExtrusionHeight = 0.0;
-    std::vector<int> KeyMappedItems;
-    std::vector<IFCShapeRepresentation> ShapeRepresentations;
-};
-
-struct ObjectVoid
-{
-    int KeyForVoid;
-    std::string NameProfilDef;
-    Vec3 VecteurExtrusion;
-    double HauteurExtrusion;
-    std::list<Vec3> Points;
-    std::vector<int> Args;
-    double XDim;
-    double YDim;
-    double Radius;
-    std::list<Matrix4> Plans;
-    std::list<Matrix4> LocationsPolygonal;
-    std::vector<Step::Boolean> AgreementHalf;
-    std::vector<Step::Boolean> AgreementPolygonal;
-    std::vector<std::string> EntitiesHalf;
-    std::vector<std::string> EntitiesPolygonal;
-    Matrix4 Transform;
-    Matrix4 Transform2D;
-    std::vector<IFCShapeRepresentation> ShapeRepresentations;
+    void createSolid3dProfil() override;
 };
