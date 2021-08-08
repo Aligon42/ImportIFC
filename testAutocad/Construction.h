@@ -22,15 +22,30 @@
 #include "CreateConstructionPointVisitor.h"
 #include "dbSubD.h"
 
+#include <chrono>
+
 #include "Object.h"
 
 #define PI 3.141592653589793
+
+class Timer
+{
+public:
+	Timer(int key, const std::string& entity, const std::string& name);
+	~Timer();
+
+private:
+	std::chrono::steady_clock::time_point m_StartTime;
+	std::string m_Name, m_Entity;
+	int m_Key;
+};
 
 class Construction
 {
 public:
 	Construction();
 	Construction(IFCObject* ifcObject);
+	~Construction();
 
 	void Extrusion();
 	void CreationFaceSolid();
@@ -53,6 +68,8 @@ public:
 	void CreateSolid3dProfilRectangle(Rectangle_profilDef& profilDef);
 
 public:
+	static std::string s_LogPath;
+	static std::map<std::string, std::vector<std::string>> s_Logs;
 	static std::map<int, std::vector<IFCObject*>> s_ObjectVoids;
 	static std::map<int, Style> s_Styles;
 
@@ -64,10 +81,11 @@ private:
 
 	void DrawExtrusion(const ACHAR* layerName);
 	void DrawFaces(const ACHAR* layerName);
+	void DrawFacesMappedItem(IFCShapeRepresentation& shape);
 	void DrawVoids(AcDb3dSolid* solid);
 
-	void HandleDeplacements(AcDb3dSolid* solid, IFCShapeRepresentation shape, bool move2D = false);
-	void HandleDeplacements(AcDbSubDMesh* pSubDMesh, IFCShapeRepresentation shape, bool move2D = false);
+	void HandleDeplacements(AcDb3dSolid* solid, IFCShapeRepresentation& shape, bool move2D = false);
+	void HandleDeplacements(AcDbSubDMesh* pSubDMesh, IFCShapeRepresentation& shape, bool move2D = false);
 	void HandleDeplacements(AcDb3dSolid* solid, bool move2D = false, ProfilDef* profilDef = nullptr);
 	void HandleDeplacements(AcDbSubDMesh* pSubDMesh, bool move2D = false, ProfilDef* profilDef = nullptr);
 	void DeplacementObjet3DMappedItem(AcDb3dSolid* solid, const Matrix4& transform);
@@ -84,9 +102,9 @@ private:
 	AcDbRegion* CreateCompositeCurve(const std::vector<CompositeCurveSegment>& compositeCurve, const Matrix4& transform);
 	AcDb2dPolyline* CreatePolyline(AcGePoint3dArray& ptArr, AcDbVoidPtrArray& lines, bool shouldTransform = false, AcGeMatrix3d* matrix3d = nullptr, AcGeVector3d* acVec3d = nullptr);
 	AcDbCircle* CreateCircle(AcGePoint3d& center, double radius, AcDbVoidPtrArray& lines, bool shouldTransform = false, AcGeMatrix3d* matrix3d = nullptr, AcGeVector3d* acVec3d = nullptr);
-	AcDbRegion* CreateRegion(AcDb2dPolyline* pNewPline, AcDbVoidPtrArray lines, AcDbVoidPtrArray& regions);
-	AcDbRegion* CreateRegion(AcDbCircle* pCircle, AcDbVoidPtrArray lines, AcDbVoidPtrArray& regions);
-	AcDbRegion* CreateRegion(AcDbVoidPtrArray lines, AcDbVoidPtrArray& regions);
+	AcDbRegion* CreateRegion(AcDb2dPolyline* pNewPline, AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions);
+	AcDbRegion* CreateRegion(AcDbCircle* pCircle, AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions);
+	AcDbRegion* CreateRegion(AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions);
 
 	void SetColor(AcDb3dSolid* solid, int colorIndex);
 	void SetColor(AcDbSubDMesh* pSubDMesh, int colorIndex);
@@ -97,6 +115,8 @@ private:
 	inline bool StepBoolToBoolean(Step::Boolean other) { return other - 1; }
 
 private:
+	std::chrono::steady_clock::time_point m_StartTime;
+
 	AcDbDatabase* m_Database;
 	AcDbLayerTable* m_LayerTable;
 	IFCObject* m_IfcObject;

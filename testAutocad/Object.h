@@ -61,6 +61,7 @@ struct Face
 {
     Step::Boolean Orientation;
     std::string Type;
+    std::string SupType;
     std::vector<Vec3> Points;
 };
 

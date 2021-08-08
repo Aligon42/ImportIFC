@@ -28,7 +28,12 @@ bool ObjectVisitor::visitIfcProduct(ifc2x3::IfcProduct* value)
 
 bool ObjectVisitor::visitIfcSite(ifc2x3::IfcSite* value)
 {
-	return false;
+	if (value->testRepresentation())
+	{
+		value->getRepresentation()->acceptVisitor(this);
+	}
+
+	return true;
 }
 
 bool ObjectVisitor::visitIfcRelVoidsElement(ifc2x3::IfcRelVoidsElement* value)
@@ -107,7 +112,7 @@ bool ObjectVisitor::visitIfcShapeRepresentation(ifc2x3::IfcShapeRepresentation* 
 			if (shapes.size() > 0)
 				m_ShapeRepresentations.insert(m_ShapeRepresentations.end(), shapes.begin(), shapes.end());
 			else
-				m_ShapeRepresentations.push_back(visitor.getShapeRepresentation());
+				m_IfcShapeRepresentation = visitor.getShapeRepresentation();
 		}
 		else
 		{
@@ -119,8 +124,11 @@ bool ObjectVisitor::visitIfcShapeRepresentation(ifc2x3::IfcShapeRepresentation* 
 				if (m_IfcShapeRepresentation.ProfilDef != nullptr)
 					m_IfcShapeRepresentation.ProfilDef->ParentObject = m_IfcObject;
 
-				m_IfcShapeRepresentation.SubShapeRepresentations.push_back(visitor.getShapeRepresentation());
-				m_ShapeRepresentations = visitor.getShapeRepresentations();
+				auto shapes = visitor.getShapeRepresentations();
+				if (shapes.size() > 0)
+					m_IfcShapeRepresentation.SubShapeRepresentations.insert(m_IfcShapeRepresentation.SubShapeRepresentations.end(), shapes.begin(), shapes.end());
+				else
+					m_IfcShapeRepresentation.SubShapeRepresentations.push_back(visitor.getShapeRepresentation());
 			}
 			else
 			{
@@ -147,32 +155,32 @@ bool ObjectVisitor::visitIfcBooleanResult(ifc2x3::IfcBooleanResult* value)
 
 		switch (op1->currentType())
 		{
-		case ifc2x3::IfcBooleanOperand::IFCBOOLEANRESULT:
-			r1 = op1->getIfcBooleanResult()->acceptVisitor(this);
-			break;
-		case ifc2x3::IfcBooleanOperand::IFCCSGPRIMITIVE3D:
-			r1 = op1->getIfcCsgPrimitive3D()->acceptVisitor(this);
-			break;
-		case ifc2x3::IfcBooleanOperand::IFCHALFSPACESOLID:
-		{
-			r1 = op1->getIfcHalfSpaceSolid()->acceptVisitor(&visitor);
-			auto shape = visitor.getShapeRepresentation();
-			shape.BooleanResult = true;
-			if (shape.Key != 0)
-				m_ShapeRepresentations.push_back(shape);
+			case ifc2x3::IfcBooleanOperand::IFCBOOLEANRESULT:
+				r1 = op1->getIfcBooleanResult()->acceptVisitor(this);
+				break;
+			case ifc2x3::IfcBooleanOperand::IFCCSGPRIMITIVE3D:
+				r1 = op1->getIfcCsgPrimitive3D()->acceptVisitor(this);
+				break;
+			case ifc2x3::IfcBooleanOperand::IFCHALFSPACESOLID:
+			{
+				r1 = op1->getIfcHalfSpaceSolid()->acceptVisitor(&visitor);
+				auto shape = visitor.getShapeRepresentation();
+				shape.BooleanResult = true;
+				if (shape.Key != 0)
+					m_ShapeRepresentations.push_back(shape);
 
-			break;
-		}
-		case ifc2x3::IfcBooleanOperand::IFCSOLIDMODEL:
-		{
-			r1 = op1->getIfcSolidModel()->acceptVisitor(&visitor);
-			auto shape = visitor.getShapeRepresentation();
-			shape.BooleanResult = true;
-			if (shape.Key != 0)
-				m_ShapeRepresentations.push_back(shape);
+				break;
+			}
+			case ifc2x3::IfcBooleanOperand::IFCSOLIDMODEL:
+			{
+				r1 = op1->getIfcSolidModel()->acceptVisitor(&visitor);
+				auto shape = visitor.getShapeRepresentation();
+				shape.BooleanResult = true;
+				if (shape.Key != 0)
+					m_ShapeRepresentations.push_back(shape);
 
-			break;
-		}
+				break;
+			}
 		}
 	}
 
@@ -183,32 +191,32 @@ bool ObjectVisitor::visitIfcBooleanResult(ifc2x3::IfcBooleanResult* value)
 
 		switch (op2->currentType())
 		{
-		case ifc2x3::IfcBooleanOperand::IFCBOOLEANRESULT:
-			r2 = op2->getIfcBooleanResult()->acceptVisitor(this);
-			break;
-		case ifc2x3::IfcBooleanOperand::IFCCSGPRIMITIVE3D:
-			r2 = op2->getIfcCsgPrimitive3D()->acceptVisitor(this);
-			break;
-		case ifc2x3::IfcBooleanOperand::IFCHALFSPACESOLID:
-		{
-			r2 = op2->getIfcHalfSpaceSolid()->acceptVisitor(&visitor);
-			auto shape = visitor.getShapeRepresentation();
-			shape.BooleanResult = true;
-			if (shape.Key != 0)
-				m_ShapeRepresentations.push_back(shape);
+			case ifc2x3::IfcBooleanOperand::IFCBOOLEANRESULT:
+				r2 = op2->getIfcBooleanResult()->acceptVisitor(this);
+				break;
+			case ifc2x3::IfcBooleanOperand::IFCCSGPRIMITIVE3D:
+				r2 = op2->getIfcCsgPrimitive3D()->acceptVisitor(this);
+				break;
+			case ifc2x3::IfcBooleanOperand::IFCHALFSPACESOLID:
+			{
+				r2 = op2->getIfcHalfSpaceSolid()->acceptVisitor(&visitor);
+				auto shape = visitor.getShapeRepresentation();
+				shape.BooleanResult = true;
+				if (shape.Key != 0)
+					m_ShapeRepresentations.push_back(shape);
 
-			break;
-		}
-		case ifc2x3::IfcBooleanOperand::IFCSOLIDMODEL:
-		{
-			r2 = op2->getIfcSolidModel()->acceptVisitor(&visitor);
-			auto shape = visitor.getShapeRepresentation();
-			shape.BooleanResult = true;
-			if (shape.Key != 0)
-				m_ShapeRepresentations.push_back(shape);
+				break;
+			}
+			case ifc2x3::IfcBooleanOperand::IFCSOLIDMODEL:
+			{
+				r2 = op2->getIfcSolidModel()->acceptVisitor(&visitor);
+				auto shape = visitor.getShapeRepresentation();
+				shape.BooleanResult = true;
+				if (shape.Key != 0)
+					m_ShapeRepresentations.push_back(shape);
 
-			break;
-		}
+				break;
+			}
 		}
 	}
 
@@ -227,32 +235,32 @@ bool ObjectVisitor::visitIfcBooleanClippingResult(ifc2x3::IfcBooleanClippingResu
 
 		switch (op1->currentType())
 		{
-		case ifc2x3::IfcBooleanOperand::IFCBOOLEANRESULT:
-			r1 = op1->getIfcBooleanResult()->acceptVisitor(this);
-			break;
-		case ifc2x3::IfcBooleanOperand::IFCCSGPRIMITIVE3D:
-			r1 = op1->getIfcCsgPrimitive3D()->acceptVisitor(&visitor);
-			break;
-		case ifc2x3::IfcBooleanOperand::IFCHALFSPACESOLID:
-		{
-			r1 = op1->getIfcHalfSpaceSolid()->acceptVisitor(&visitor);
-			auto shape = visitor.getShapeRepresentation();
-			shape.BooleanResult = true;
-			if (shape.Key != 0)
-				m_ShapeRepresentations.push_back(shape);
+			case ifc2x3::IfcBooleanOperand::IFCBOOLEANRESULT:
+				r1 = op1->getIfcBooleanResult()->acceptVisitor(this);
+				break;
+			case ifc2x3::IfcBooleanOperand::IFCCSGPRIMITIVE3D:
+				r1 = op1->getIfcCsgPrimitive3D()->acceptVisitor(&visitor);
+				break;
+			case ifc2x3::IfcBooleanOperand::IFCHALFSPACESOLID:
+			{
+				r1 = op1->getIfcHalfSpaceSolid()->acceptVisitor(&visitor);
+				auto shape = visitor.getShapeRepresentation();
+				shape.BooleanResult = true;
+				if (shape.Key != 0)
+					m_ShapeRepresentations.push_back(shape);
 
-			break;
-		}
-		case ifc2x3::IfcBooleanOperand::IFCSOLIDMODEL:
-		{
-			r1 = op1->getIfcSolidModel()->acceptVisitor(&visitor);
-			auto shape = visitor.getShapeRepresentation();
-			shape.BooleanResult = true;
-			if (shape.Key != 0)
-				m_ShapeRepresentations.push_back(shape);
+				break;
+			}
+			case ifc2x3::IfcBooleanOperand::IFCSOLIDMODEL:
+			{
+				r1 = op1->getIfcSolidModel()->acceptVisitor(&visitor);
+				auto shape = visitor.getShapeRepresentation();
+				shape.BooleanResult = true;
+				if (shape.Key != 0)
+					m_ShapeRepresentations.push_back(shape);
 
-			break;
-		}
+				break;
+			}
 		}
 	}
 
@@ -264,32 +272,32 @@ bool ObjectVisitor::visitIfcBooleanClippingResult(ifc2x3::IfcBooleanClippingResu
 
 		switch (op2->currentType())
 		{
-		case ifc2x3::IfcBooleanOperand::IFCBOOLEANRESULT:
-			r2 = op2->getIfcBooleanResult()->acceptVisitor(this);
-			break;
-		case ifc2x3::IfcBooleanOperand::IFCCSGPRIMITIVE3D:
-			r2 = op2->getIfcCsgPrimitive3D()->acceptVisitor(&visitor);
-			break;
-		case ifc2x3::IfcBooleanOperand::IFCHALFSPACESOLID:
-		{
-			r2 = op2->getIfcHalfSpaceSolid()->acceptVisitor(&visitor);
-			auto shape = visitor.getShapeRepresentation();
-			shape.BooleanResult = true;
-			if (shape.Key != 0)
-				m_ShapeRepresentations.push_back(shape);
+			case ifc2x3::IfcBooleanOperand::IFCBOOLEANRESULT:
+				r2 = op2->getIfcBooleanResult()->acceptVisitor(this);
+				break;
+			case ifc2x3::IfcBooleanOperand::IFCCSGPRIMITIVE3D:
+				r2 = op2->getIfcCsgPrimitive3D()->acceptVisitor(&visitor);
+				break;
+			case ifc2x3::IfcBooleanOperand::IFCHALFSPACESOLID:
+			{
+				r2 = op2->getIfcHalfSpaceSolid()->acceptVisitor(&visitor);
+				auto shape = visitor.getShapeRepresentation();
+				shape.BooleanResult = true;
+				if (shape.Key != 0)
+					m_ShapeRepresentations.push_back(shape);
 
-			break;
-		}
-		case ifc2x3::IfcBooleanOperand::IFCSOLIDMODEL:
-		{
-			r2 = op2->getIfcSolidModel()->acceptVisitor(&visitor);
-			auto shape = visitor.getShapeRepresentation();
-			shape.BooleanResult = true;
-			if (shape.Key != 0)
-				m_ShapeRepresentations.push_back(shape);
+				break;
+			}
+			case ifc2x3::IfcBooleanOperand::IFCSOLIDMODEL:
+			{
+				r2 = op2->getIfcSolidModel()->acceptVisitor(&visitor);
+				auto shape = visitor.getShapeRepresentation();
+				shape.BooleanResult = true;
+				if (shape.Key != 0)
+					m_ShapeRepresentations.push_back(shape);
 
-			break;
-		}
+				break;
+			}
 		}
 	}
 
@@ -392,6 +400,8 @@ bool ObjectVisitor::visitIfcOpenShell(ifc2x3::IfcOpenShell* value)
 	{
 		for (auto face : value->getCfsFaces())
 		{
+			m_Face.SupType = value->type();
+
 			if (!(face->acceptVisitor(this)))
 			{
 				return false;
@@ -404,8 +414,6 @@ bool ObjectVisitor::visitIfcOpenShell(ifc2x3::IfcOpenShell* value)
 
 bool ObjectVisitor::visitIfcMappedItem(ifc2x3::IfcMappedItem* value)
 {
-	auto temp = value->getKey();
-
 	m_IfcObject->IsMappedItem = true;
 
 	if (value->testMappingSource())
@@ -416,7 +424,7 @@ bool ObjectVisitor::visitIfcMappedItem(ifc2x3::IfcMappedItem* value)
 			{
 				value->getMappingTarget()->acceptVisitor(this);
 			}
-
+			
 			return true;
 		}
 	}
@@ -1194,6 +1202,8 @@ bool ObjectVisitor::visitIfcClosedShell(ifc2x3::IfcClosedShell* value)
 	{
 		for (auto face : value->getCfsFaces())
 		{
+			m_Face.SupType = value->type();
+
 			if (!face->acceptVisitor(this))
 			{
 				return false;
@@ -1251,8 +1261,6 @@ bool ObjectVisitor::visitIfcFaceBound(ifc2x3::IfcFaceBound* value)
 		m_Face.Orientation = value->getOrientation();
 		value->getBound()->acceptVisitor(this);
 	}
-
-
 
 	return true;
 }

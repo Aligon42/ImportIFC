@@ -1,10 +1,30 @@
 ﻿#include "Construction.h"
 
+#include "TestUI.h"
+
+std::string Construction::s_LogPath;
+std::map<std::string, std::vector<std::string>> Construction::s_Logs;
 std::map<int, std::vector<IFCObject*>> Construction::s_ObjectVoids;
 std::map<int, Style> Construction::s_Styles;
 
+Timer::Timer(int key, const std::string& entity, const std::string& name)
+	: m_Key(key), m_Entity(entity), m_Name(name)
+{
+	m_StartTime = std::chrono::high_resolution_clock::now();
+}
+
+Timer::~Timer()
+{
+	auto end = std::chrono::high_resolution_clock::now() - m_StartTime;
+	std::stringstream ss;
+	ss << "Key: " << m_Key << " - " << m_Entity << " - " << m_Name << " - " << std::chrono::duration_cast<std::chrono::microseconds>(end).count() / 1000.0 << " ms. \n";
+	Construction::s_Logs["Rendu"].push_back(ss.str());
+}
+
+
 Construction::Construction()
 {
+	m_StartTime = std::chrono::high_resolution_clock::now();
 	InitLayerTable();
 	AcGeContext::gTol.setEqualPoint(0.001);
 	AcGeContext::gTol.setEqualVector(0.001);
@@ -13,13 +33,24 @@ Construction::Construction()
 Construction::Construction(IFCObject* ifcObject)
 	: m_IfcObject(ifcObject)
 {
+	m_StartTime = std::chrono::high_resolution_clock::now();
 	InitLayerTable();
 	AcGeContext::gTol.setEqualPoint(0.001);
 	AcGeContext::gTol.setEqualVector(0.001);
 }
 
+Construction::~Construction()
+{
+	auto end = std::chrono::high_resolution_clock::now() - m_StartTime;
+	std::stringstream ss;
+	ss << "Key: " << m_IfcObject->Key << " - " << m_IfcObject->Entity << " - Rendu Autocad - " << std::chrono::duration_cast<std::chrono::microseconds>(end).count() / 1000.0 << " ms. \n";
+	s_Logs["Rendu"].push_back(ss.str());
+}
+
 void Construction::Extrusion()
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	const ACHAR* layerName = GetLayerName(m_IfcObject->Entity);
 	AddTableRecord(layerName);
 	DrawExtrusion(layerName);
@@ -27,6 +58,8 @@ void Construction::Extrusion()
 
 void Construction::CreationFaceSolid()
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	const ACHAR* layerName = GetLayerName(m_IfcObject->Entity);
 	AddTableRecord(layerName);
 	DrawFaces(layerName);
@@ -34,12 +67,16 @@ void Construction::CreationFaceSolid()
 
 Acad::ErrorStatus Construction::InitLayerTable()
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	m_Database = acdbHostApplicationServices()->workingDatabase();
 	return m_Database->getLayerTable(m_LayerTable, AcDb::kForRead);
 }
 
 Acad::ErrorStatus Construction::AddTableRecord(const ACHAR* layerName)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	Acad::ErrorStatus es;
 
 	if (!m_LayerTable->has(layerName))
@@ -65,37 +102,39 @@ Acad::ErrorStatus Construction::AddTableRecord(const ACHAR* layerName)
 
 const ACHAR* Construction::GetLayerName(std::string& entity)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	std::string outLayerName = entity;
 
 	if (entity == "IfcWallStandardCase")
 	{
 		outLayerName = "Mur";
 	}
-	if (entity == "IfcWall")
+	else if (entity == "IfcWall")
 	{
 		outLayerName = "Mur";
 	}
-	if (entity == "IfcSlab")
+	else if (entity == "IfcSlab")
 	{
 		outLayerName = "Dalle";
 	}
-	if (entity == "IfcRoof")
+	else if (entity == "IfcRoof")
 	{
 		outLayerName = "Toit";
 	}
-	if (entity == "IfcCovering")
+	else if (entity == "IfcCovering")
 	{
 		outLayerName = "Revêtement";
 	}
-	if (entity == "IfcPlate")
+	else if (entity == "IfcPlate")
 	{
 		outLayerName = "Plaque";
 	}
-	if (entity == "IfcFooting")
+	else if (entity == "IfcFooting")
 	{
 		outLayerName = "Pied";
 	}
-	if (entity == "IfcMappedItem")
+	else if (entity == "IfcMappedItem")
 	{
 		outLayerName = "Element";
 	}
@@ -105,6 +144,10 @@ const ACHAR* Construction::GetLayerName(std::string& entity)
 
 void Construction::SetColor(AcDb3dSolid* solid, int colorIndex)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
+	if (colorIndex == 0) return;
+
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 
 	RGBA& color = *s_Styles[colorIndex].Styles.begin();
@@ -119,6 +162,8 @@ void Construction::SetColor(AcDb3dSolid* solid, int colorIndex)
 
 void Construction::SetColor(AcDbSubDMesh* pSubDMesh, int colorIndex)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcCmColor couleurRGB = AcCmColor::AcCmColor();
 
 	RGBA& color = *s_Styles[colorIndex].Styles.begin();
@@ -133,6 +178,8 @@ void Construction::SetColor(AcDbSubDMesh* pSubDMesh, int colorIndex)
 
 void Construction::DrawExtrusion(const ACHAR* layerName)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	Acad::ErrorStatus es;
 	AcDbRegion* pRegion = nullptr;
 	ads_name polyName;
@@ -200,6 +247,91 @@ void Construction::DrawExtrusion(const ACHAR* layerName)
 
 void Construction::DrawFaces(const ACHAR* layerName)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
+	int k = 0;
+
+	auto& shapeReps = !m_IfcObject->IsMappedItem ? m_IfcObject->ShapeRepresentations : (*m_IfcObject->ShapeRepresentations.begin()).SubShapeRepresentations;
+
+	if (m_IfcObject->IsMappedItem)
+	{
+		for (auto& subShape : shapeReps)
+		{
+			DrawFacesMappedItem(subShape);
+		}
+	}
+	else
+	{
+		Acad::ErrorStatus es = Acad::ErrorStatus::eOk;
+		AcArray<Adesk::Int32> faceArray;
+		AcDbSubDMesh* pSubDMesh = new AcDbSubDMesh();
+		AcGePoint3dArray ptArr;
+		AcArray<AcCmEntityColor> clrArray;
+		AcCmEntityColor vColor;
+
+		for (auto& shape : shapeReps)
+		{
+			for (auto& face : shape.IfcFaces)
+			{
+				RGBA& colorRGB = *s_Styles[shape.Key].Styles.begin();
+				Adesk::RGBQuad color((((int)(colorRGB.Red * 255) & 0xff) << 16) + (((int)(colorRGB.Green * 255) & 0xff) << 8) + ((int)(colorRGB.Blue * 255) & 0xff));
+
+				faceArray.append(face.Points.size());
+				for (const auto& point : face.Points)
+				{
+					AcGePoint3d point3d = AcGePoint3d::AcGePoint3d(point.x(), point.y(), point.z());
+					ptArr.append(point3d);
+
+					vColor.setRGB(color);
+					clrArray.append(vColor);
+					faceArray.append(k++);
+				}
+			}
+
+			es = pSubDMesh->setSubDMesh(ptArr, faceArray, 0);
+			if (Acad::eOk != es)
+			{
+				pSubDMesh->close();
+				acutPrintf(L"\nFailed to set \n");
+				return;
+			}
+
+			if (shape.Scale > 0.0)
+			{
+				AcGeMatrix3d matrix = AcGeMatrix3d::AcGeMatrix3d();
+				matrix.setToScaling(shape.Scale);
+				pSubDMesh->transformBy(matrix);
+			}
+
+			HandleDeplacements(pSubDMesh, shape, false);
+		}
+
+		pSubDMesh->setLayer(layerName, Adesk::kFalse, false);
+
+		AcDbBlockTable* pBlockTable;
+		AcDbBlockTableRecord* pSpaceRecord;
+
+		es = acdbHostApplicationServices()->workingDatabase()->getSymbolTable(pBlockTable, AcDb::kForRead);
+		es = pBlockTable->getAt(ACDB_MODEL_SPACE, pSpaceRecord, AcDb::kForWrite);
+		es = pBlockTable->close();
+
+		AcDbObjectId meshId = AcDbObjectId::kNull;
+		es = pSpaceRecord->appendAcDbEntity(meshId, pSubDMesh);
+		es = pSubDMesh->setVertexColorArray(clrArray);
+		es = pSubDMesh->close();
+		es = pSpaceRecord->close();
+	}
+}
+
+void Construction::DrawFacesMappedItem(IFCShapeRepresentation& shape)
+{
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
+	const ACHAR* layerName = GetLayerName(m_IfcObject->Entity);
+	AddTableRecord(layerName);
+
+	int k = 0;
+
 	Acad::ErrorStatus es = Acad::ErrorStatus::eOk;
 	AcArray<Adesk::Int32> faceArray;
 	AcDbSubDMesh* pSubDMesh = new AcDbSubDMesh();
@@ -207,47 +339,39 @@ void Construction::DrawFaces(const ACHAR* layerName)
 	AcArray<AcCmEntityColor> clrArray;
 	AcCmEntityColor vColor;
 
-	int k = 0;
-
-	for (auto& shape : m_IfcObject->ShapeRepresentations)
+	for (auto& face : shape.IfcFaces)
 	{
-		for (auto& face : shape.IfcFaces)
+		RGBA& colorRGB = *s_Styles[shape.Key].Styles.begin();
+		Adesk::RGBQuad color((((int)(colorRGB.Red * 255) & 0xff) << 16) + (((int)(colorRGB.Green * 255) & 0xff) << 8) + ((int)(colorRGB.Blue * 255) & 0xff));
+
+		faceArray.append(face.Points.size());
+		for (const auto& point : face.Points)
 		{
-			RGBA& colorRGB = *s_Styles[shape.Key].Styles.begin();
-			Adesk::RGBQuad color((((int)(colorRGB.Red * 255) & 0xff) << 16) + (((int)(colorRGB.Green * 255) & 0xff) << 8) + ((int)(colorRGB.Blue * 255) & 0xff));
+			AcGePoint3d point3d = AcGePoint3d::AcGePoint3d(point.x(), point.y(), point.z());
+			ptArr.append(point3d);
 
-			faceArray.append(face.Points.size());
-			for (const auto& point : face.Points)
-			{
-				AcGePoint3d point3d = AcGePoint3d::AcGePoint3d(point.x(), point.y(), point.z());
-				ptArr.append(point3d);
-
-				vColor.setRGB(color);
-				clrArray.append(vColor);
-				faceArray.append(k++);
-			}
+			vColor.setRGB(color);
+			clrArray.append(vColor);
+			faceArray.append(k++);
 		}
-
-		es = pSubDMesh->setSubDMesh(ptArr, faceArray, 0);
-		if (Acad::eOk != es)
-		{
-			pSubDMesh->close();
-			acutPrintf(L"\nFailed to set \n");
-			return;
-		}
-
-		if (shape.Scale > 0.0)
-		{
-			AcGeMatrix3d matrix = AcGeMatrix3d::AcGeMatrix3d();
-			matrix.setToScaling(shape.Scale);
-			pSubDMesh->transformBy(matrix);
-			//transformationOperator3D *= scale;
-		}
-
-		//SetColor(pSubDMesh, shape.Key);
 	}
 
-	HandleDeplacements(pSubDMesh, false);
+	es = pSubDMesh->setSubDMesh(ptArr, faceArray, 0);
+	if (Acad::eOk != es)
+	{
+		pSubDMesh->close();
+		acutPrintf(L"\nFailed to set \n");
+		return;
+	}
+
+	if (shape.Scale > 0.0)
+	{
+		AcGeMatrix3d matrix = AcGeMatrix3d::AcGeMatrix3d();
+		matrix.setToScaling(shape.Scale);
+		pSubDMesh->transformBy(matrix);
+	}
+
+	HandleDeplacements(pSubDMesh, shape, false);
 
 	pSubDMesh->setLayer(layerName, Adesk::kFalse, false);
 
@@ -258,33 +382,11 @@ void Construction::DrawFaces(const ACHAR* layerName)
 	es = pBlockTable->getAt(ACDB_MODEL_SPACE, pSpaceRecord, AcDb::kForWrite);
 	es = pBlockTable->close();
 
-	// For Vertex color to work, the SubDMesh must be added
-	// to the database
-
 	AcDbObjectId meshId = AcDbObjectId::kNull;
 	es = pSpaceRecord->appendAcDbEntity(meshId, pSubDMesh);
 	es = pSubDMesh->setVertexColorArray(clrArray);
 	es = pSubDMesh->close();
 	es = pSpaceRecord->close();
-	
-	/*pSubDMesh->setLayer(layerName, Adesk::kFalse, false);
-	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
-	if (es == Acad::eOk)
-	{
-		AcDbDatabase* pDb = curDoc()->database();
-		AcDbObjectId modelId = acdbSymUtil()->blockModelSpaceId(pDb);
-		AcDbBlockTableRecord* pBlockTableRecord;
-		acdbOpenAcDbObject((AcDbObject*&)pBlockTableRecord, modelId, AcDb::kForWrite);
-		pBlockTableRecord->appendAcDbEntity(pSubDMesh);
-		pBlockTableRecord->close();
-		pSubDMesh->close();
-	}
-	else
-	{
-		delete pSubDMesh;
-		acutPrintf(_T("Je ne fais rien du tout"));
-		return;
-	}*/
 }
 
 const wchar_t* Construction::ConvertToWideChar(const char* c, ...)
@@ -298,6 +400,8 @@ const wchar_t* Construction::ConvertToWideChar(const char* c, ...)
 
 AcDbRegion* Construction::CreateCompositeCurve(const std::vector<CompositeCurveSegment>& compositeCurve, const Matrix4& transform)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcDbVoidPtrArray lines;
 	Acad::ErrorStatus es;
 	AcGePoint3dArray ptArr;
@@ -370,6 +474,8 @@ AcDbRegion* Construction::CreateCompositeCurve(const std::vector<CompositeCurveS
 
 void Construction::DrawVoids(AcDb3dSolid* solid)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	if (s_ObjectVoids.find(m_IfcObject->Key) != s_ObjectVoids.end())
 	{
 		for (auto objectVoid : s_ObjectVoids[m_IfcObject->Key])
@@ -392,8 +498,10 @@ void Construction::DrawVoids(AcDb3dSolid* solid)
 	}
 }
 
-void Construction::HandleDeplacements(AcDb3dSolid* solid, IFCShapeRepresentation shape, bool move2D)
+void Construction::HandleDeplacements(AcDb3dSolid* solid, IFCShapeRepresentation& shape, bool move2D)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	if (m_IfcObject->IsMappedItem)
 		DeplacementObjet3DMappedItem(solid, shape.TransformationOperator3D);
 
@@ -403,8 +511,10 @@ void Construction::HandleDeplacements(AcDb3dSolid* solid, IFCShapeRepresentation
 		DeplacementObjet(solid, shape.Transformation2D);
 }
 
-void Construction::HandleDeplacements(AcDbSubDMesh* pSubDMesh, IFCShapeRepresentation shape, bool move2D)
+void Construction::HandleDeplacements(AcDbSubDMesh* pSubDMesh, IFCShapeRepresentation& shape, bool move2D)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	if (m_IfcObject->IsMappedItem)
 		DeplacementObjet3DMappedItem(pSubDMesh, shape.TransformationOperator3D);
 
@@ -416,8 +526,10 @@ void Construction::HandleDeplacements(AcDbSubDMesh* pSubDMesh, IFCShapeRepresent
 
 void Construction::HandleDeplacements(AcDb3dSolid* solid, bool move2D, ProfilDef* profilDef)
 {
-	/*if (m_IfcObject->IsMappedItem)
-		DeplacementObjet3DMappedItem(solid, m_ProfilDef->TransformationOperator3D);*/
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
+	if (m_IfcObject->IsMappedItem)
+		DeplacementObjet3DMappedItem(solid, profilDef->TransformationOperator3D);
 
 	DeplacementObjet(solid, m_IfcObject->LocalTransform);
 
@@ -427,8 +539,10 @@ void Construction::HandleDeplacements(AcDb3dSolid* solid, bool move2D, ProfilDef
 
 void Construction::HandleDeplacements(AcDbSubDMesh* pSubDMesh, bool move2D, ProfilDef* profilDef)
 {
-	/*if (m_IfcObject->IsMappedItem)
-		DeplacementObjet3DMappedItem(pSubDMesh, m_ProfilDef->TransformationOperator3D);*/
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
+	if (m_IfcObject->IsMappedItem)
+		DeplacementObjet3DMappedItem(pSubDMesh, profilDef->TransformationOperator3D);
 
 	DeplacementObjet(pSubDMesh, m_IfcObject->LocalTransform);
 
@@ -438,6 +552,8 @@ void Construction::HandleDeplacements(AcDbSubDMesh* pSubDMesh, bool move2D, Prof
 
 void Construction::DrawElement(const ACHAR* layerName, AcDb3dSolid* pSolid, Acad::ErrorStatus es)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	pSolid->setLayer(layerName, Adesk::kFalse, false);
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 	if (es == Acad::eOk)
@@ -460,6 +576,8 @@ void Construction::DrawElement(const ACHAR* layerName, AcDb3dSolid* pSolid, Acad
 
 void Construction::DrawElement(const ACHAR* layerName, AcDbSubDMesh* pSubDMesh, Acad::ErrorStatus es)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	pSubDMesh->setLayer(layerName, Adesk::kFalse, false);
 	AcDbObjectId savedExtrusionId = AcDbObjectId::kNull;
 	if (es == Acad::eOk)
@@ -482,6 +600,8 @@ void Construction::DrawElement(const ACHAR* layerName, AcDbSubDMesh* pSubDMesh, 
 
 void Construction::CreationVoid(AcDb3dSolid* extrusion, IFCObject* objectVoid)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	Acad::ErrorStatus es;
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
@@ -561,6 +681,8 @@ void Construction::CreationVoid(AcDb3dSolid* extrusion, IFCObject* objectVoid)
 
 void Construction::CreationVoidCircle(AcDb3dSolid* extrusion, IFCObject* objectVoid)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	Acad::ErrorStatus es;
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
@@ -638,6 +760,8 @@ void Construction::CreationVoidCircle(AcDb3dSolid* extrusion, IFCObject* objectV
 
 void Construction::CreationVoidRectangle(AcDb3dSolid* extrusion, IFCObject* objectVoid)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	Acad::ErrorStatus es;
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
@@ -723,6 +847,8 @@ void Construction::CreationVoidRectangle(AcDb3dSolid* extrusion, IFCObject* obje
 
 void Construction::CreationSection(AcDb3dSolid* extrusion, IFCShapeRepresentation& shapeRepresentation)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcGeVector3d v1 = AcGeVector3d::AcGeVector3d(0, 0, 0);             // Vector 1 (x,y,z) & Vector 2 (x,y,z)
 	AcGeVector3d v2 = AcGeVector3d::AcGeVector3d(0, 0, 0);
 	AcGeVector3d normal = AcGeVector3d::AcGeVector3d(0, 0, 0);
@@ -1001,6 +1127,8 @@ void Construction::CreationSection(AcDb3dSolid* extrusion, IFCShapeRepresentatio
 
 void Construction::CreationProfilDef(AcDbRegion* pRegion, AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions, const AcGeVector3d& vecExtru, ProfilDef* profilDef)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	Acad::ErrorStatus es;
 
 	const ACHAR* layerName = GetLayerName(m_IfcObject->Entity);
@@ -1040,6 +1168,8 @@ void Construction::CreationProfilDef(AcDbRegion* pRegion, AcDbVoidPtrArray& line
 
 void Construction::CreateSolid3dProfilIPE(I_profilDef& profilDef)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	double width = profilDef.OverallWidth;
 	double depth = profilDef.OverallDepth;
 	double webThickness = profilDef.WebThickness;
@@ -1078,6 +1208,8 @@ void Construction::CreateSolid3dProfilIPE(I_profilDef& profilDef)
 
 void Construction::CreateSolid3dProfilIPN(I_profilDef& profilDef)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	double width = profilDef.OverallWidth;
 	double depth = profilDef.OverallDepth;
 	double webThickness = profilDef.WebThickness;
@@ -1119,6 +1251,8 @@ void Construction::CreateSolid3dProfilIPN(I_profilDef& profilDef)
 
 void Construction::CreateSolid3dProfilL8(L_profilDef& profilDef)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
@@ -1152,6 +1286,8 @@ void Construction::CreateSolid3dProfilL8(L_profilDef& profilDef)
 
 void Construction::CreateSolid3dProfilL9(L_profilDef& profilDef)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
@@ -1188,6 +1324,8 @@ void Construction::CreateSolid3dProfilL9(L_profilDef& profilDef)
 
 void Construction::CreateSolid3dProfilT10(T_profilDef& profilDef)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
@@ -1225,6 +1363,8 @@ void Construction::CreateSolid3dProfilT10(T_profilDef& profilDef)
 
 void Construction::CreateSolid3dProfilT12(T_profilDef& profilDef)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
@@ -1267,6 +1407,8 @@ void Construction::CreateSolid3dProfilT12(T_profilDef& profilDef)
 
 void Construction::CreateSolid3dProfilUPE(U_profilDef& profilDef)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
@@ -1304,6 +1446,8 @@ void Construction::CreateSolid3dProfilUPE(U_profilDef& profilDef)
 
 void Construction::CreateSolid3dProfilUPN(U_profilDef& profilDef)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
@@ -1341,6 +1485,8 @@ void Construction::CreateSolid3dProfilUPN(U_profilDef& profilDef)
 
 void Construction::CreateSolid3dProfilC(C_profilDef& profilDef)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
@@ -1381,6 +1527,8 @@ void Construction::CreateSolid3dProfilC(C_profilDef& profilDef)
 
 void Construction::CreateSolid3dProfilZ(Z_profilDef& profilDef)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
@@ -1418,6 +1566,8 @@ void Construction::CreateSolid3dProfilZ(Z_profilDef& profilDef)
 
 void Construction::CreateSolid3dProfilAsyI(AsymmetricI_profilDef& profilDef)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
@@ -1459,6 +1609,8 @@ void Construction::CreateSolid3dProfilAsyI(AsymmetricI_profilDef& profilDef)
 
 void Construction::CreateSolid3dProfilCircHollow(CircleHollow_profilDef& profilDef)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcDbVoidPtrArray lines[2];
 	AcDbVoidPtrArray regions[2];
 	AcDbCircle* pCircle[2];
@@ -1500,6 +1652,8 @@ void Construction::CreateSolid3dProfilCircHollow(CircleHollow_profilDef& profilD
 
 void Construction::CreateSolid3dProfilRectHollow(RectangleHollow_profilDef& profilDef)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcGePoint3dArray ptArr[2];
 	AcDbVoidPtrArray lines[2];
 	AcDbVoidPtrArray regions[2];
@@ -1554,6 +1708,8 @@ void Construction::CreateSolid3dProfilRectHollow(RectangleHollow_profilDef& prof
 
 void Construction::CreateSolid3dProfilCircle(Circle_profilDef& profilDef)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
 
@@ -1576,6 +1732,8 @@ void Construction::CreateSolid3dProfilCircle(Circle_profilDef& profilDef)
 
 void Construction::CreateSolid3dProfilRectangle(Rectangle_profilDef& profilDef)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcGePoint3dArray ptArr;
 	AcDbVoidPtrArray lines;
 	AcDbVoidPtrArray regions;
@@ -1603,8 +1761,10 @@ void Construction::CreateSolid3dProfilRectangle(Rectangle_profilDef& profilDef)
 	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-AcDbRegion* Construction::CreateRegion(AcDb2dPolyline* pNewPline, AcDbVoidPtrArray lines, AcDbVoidPtrArray& regions)
+AcDbRegion* Construction::CreateRegion(AcDb2dPolyline* pNewPline, AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	Acad::ErrorStatus es;
 
 	es = AcDbRegion::createFromCurves(lines, regions);
@@ -1618,8 +1778,10 @@ AcDbRegion* Construction::CreateRegion(AcDb2dPolyline* pNewPline, AcDbVoidPtrArr
 	return AcDbRegion::cast((AcRxObject*)regions[0]);
 }
 
-AcDbRegion* Construction::CreateRegion(AcDbCircle* pCircle, AcDbVoidPtrArray lines, AcDbVoidPtrArray& regions)
+AcDbRegion* Construction::CreateRegion(AcDbCircle* pCircle, AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	Acad::ErrorStatus es;
 
 	es = AcDbRegion::createFromCurves(lines, regions);
@@ -1633,8 +1795,10 @@ AcDbRegion* Construction::CreateRegion(AcDbCircle* pCircle, AcDbVoidPtrArray lin
 	return AcDbRegion::cast((AcRxObject*)regions[0]);
 }
 
-AcDbRegion* Construction::CreateRegion(AcDbVoidPtrArray lines, AcDbVoidPtrArray& regions)
+AcDbRegion* Construction::CreateRegion(AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	Acad::ErrorStatus es;
 
 	es = AcDbRegion::createFromCurves(lines, regions);
@@ -1649,6 +1813,8 @@ AcDbRegion* Construction::CreateRegion(AcDbVoidPtrArray lines, AcDbVoidPtrArray&
 
 AcGeVector3d Construction::GetExtrusionVector(const Vec3& vector, double height)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcGeVector3d vecExtru = AcGeVector3d::AcGeVector3d(vector.x() * height, vector.y() * height, vector.z() * height);
 
 	return vecExtru;
@@ -1656,6 +1822,8 @@ AcGeVector3d Construction::GetExtrusionVector(const Vec3& vector, double height)
 
 AcDb2dPolyline* Construction::CreatePolyline(AcGePoint3dArray& ptArr, AcDbVoidPtrArray& lines, bool shouldTransform, AcGeMatrix3d* matrix3d, AcGeVector3d* acVec3d)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcDb2dPolyline* pNewPline = new AcDb2dPolyline(AcDb::k2dSimplePoly, ptArr, 0.0, Adesk::kTrue);
 	pNewPline->setColorIndex(3);
 
@@ -1680,6 +1848,8 @@ AcDb2dPolyline* Construction::CreatePolyline(AcGePoint3dArray& ptArr, AcDbVoidPt
 
 AcDbCircle* Construction::CreateCircle(AcGePoint3d& center, double radius, AcDbVoidPtrArray& lines, bool shouldTransform, AcGeMatrix3d* matrix3d, AcGeVector3d* acVec3d)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	AcDbCircle* circle = new AcDbCircle();
 	circle->setCenter(center);
 	circle->setRadius(radius);
@@ -1706,6 +1876,8 @@ AcDbCircle* Construction::CreateCircle(AcGePoint3d& center, double radius, AcDbV
 
 void Construction::DeplacementObjet3DMappedItem(AcDb3dSolid* solid, const Matrix4& transform)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	// 3 source points
 	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
 	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
@@ -1750,6 +1922,8 @@ void Construction::DeplacementObjet3DMappedItem(AcDb3dSolid* solid, const Matrix
 
 void Construction::DeplacementObjet3DMappedItem(AcDbSubDMesh* pSubDMesh, const Matrix4& transform)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	// 3 source points
 	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
 	AcGePoint3d srcpt2 = AcGePoint3d::AcGePoint3d(0, 0, 1);
@@ -1794,6 +1968,8 @@ void Construction::DeplacementObjet3DMappedItem(AcDbSubDMesh* pSubDMesh, const M
 
 void Construction::DeplacementObjet(AcDb3dSolid* solid, const Matrix4& transform)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	Acad::ErrorStatus es;
 	// 3 source points
 	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);
@@ -1835,6 +2011,8 @@ void Construction::DeplacementObjet(AcDb3dSolid* solid, const Matrix4& transform
 
 void Construction::DeplacementObjet(AcDbSubDMesh* pSubDMesh, const Matrix4& transform)
 {
+	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
+
 	Acad::ErrorStatus es;
 	// 3 source points
 	AcGePoint3d srcpt1 = AcGePoint3d::AcGePoint3d(0, 0, 0);

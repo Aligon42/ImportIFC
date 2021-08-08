@@ -34,11 +34,7 @@
 #include <iostream>
 #include <thread>
 
-void initApp();
-void unloadApp();
-
-static std::string s_LogPath;
-static std::map<std::string, std::vector<std::string>> s_Logs;
+#include "TestUI.h"
 
 const wchar_t* GetWC(const char* c, ...)
 {
@@ -51,10 +47,10 @@ const wchar_t* GetWC(const char* c, ...)
 
 void WriteLogs()
 {
-	std::ofstream fw(s_LogPath, std::ofstream::app);
+	std::ofstream fw(Construction::s_LogPath, std::ofstream::app);
 	if (fw.is_open())
 	{
-		for (auto& vec : s_Logs)
+		for (auto& vec : Construction::s_Logs)
 		{
 			for (auto& str : vec.second)
 				fw << str;
@@ -82,6 +78,9 @@ void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vect
 
 		it++;
 
+		//if (key != 5557) continue;
+		//if (key != 16251) continue;
+
 		ObjectVisitor visitor;
 		buildingElement.acceptVisitor(&visitor);
 
@@ -95,7 +94,7 @@ void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vect
 		auto end = std::chrono::high_resolution_clock::now() - start;
 		std::stringstream ss;
 		ss <<"Key: "<< key << " - " << entity << " - " << std::chrono::duration_cast<std::chrono::microseconds>(end).count() / 1000.0 << " ms. \n";
-		s_Logs[entity].push_back(ss.str());
+		Construction::s_Logs[entity].push_back(ss.str());
 	}
 }
 
@@ -201,10 +200,10 @@ void loadIfc()
 	GetCurrentDirectory(MAX_PATH, NPath);
 	std::wstring curPath(NPath);
 
-	s_LogPath = std::string(curPath.begin(), curPath.end());
+	Construction::s_LogPath = std::string(curPath.begin(), curPath.end());
 
 	int startIndex = path.find_last_of("\\") + 1;
-	s_LogPath += "\\" + path.substr(startIndex, path.length() - 4 - startIndex) + ".txt";
+	Construction::s_LogPath += "\\" + path.substr(startIndex, path.length() - 4 - startIndex) + ".txt";
 
 	const auto& apfaoifznbdpkfm = expressDataSet->getAllIfcElement().m_refList;
 
@@ -217,7 +216,7 @@ void loadIfc()
 		total += test->size();
 	}
 
-	std::ofstream fw(s_LogPath, std::ofstream::out);
+	std::ofstream fw(Construction::s_LogPath, std::ofstream::out);
 	if (fw.is_open())
 	{
 		fw << "Nombre éléments : " << total << "\n";
@@ -267,18 +266,21 @@ void loadIfc()
 
 	std::map<std::string, std::vector<IFCObject*>> objects;
 
-	/*for (auto ifcSite : expressDataSet->getAllIfcSite().m_refList)
+	for (auto ifcSite : expressDataSet->getAllIfcSite().m_refList)
 	{
 		if (ifcSite->size() > 0)
 		{
-			std::vector<IFCObject> vector;
 			std::string type = (*ifcSite->begin()).second->type();
 
-			objects.emplace(std::make_pair(type, vector));
+			if (type == "IfcOpeningElement") continue;
 
+			objects.emplace(std::make_pair(type, std::vector<IFCObject*>()));
+			Construction::s_Logs.emplace(std::make_pair(type, std::vector<std::string>()));
+
+			objects.emplace(std::make_pair(type, std::vector<IFCObject*>()));
 			threads.push_back(std::thread(ExploreElement, ifcSite, std::ref(objects[type])));
 		}
-	}*/
+	}
 
 	/*for (auto mappedItems : expressDataSet->getAllIfcMappedItem().m_refList)
 	{
@@ -302,7 +304,7 @@ void loadIfc()
 			if (type == "IfcOpeningElement") continue;
 
 			objects.emplace(std::make_pair(type, std::vector<IFCObject*>()));
-			s_Logs.emplace(std::make_pair(type, std::vector<std::string>()));
+			Construction::s_Logs.emplace(std::make_pair(type, std::vector<std::string>()));
 
 			threads.push_back(std::thread(ExploreElement, element, std::ref(objects[type])));
 		}
@@ -312,6 +314,9 @@ void loadIfc()
 	{
 		thread.join();
 	}
+
+	Construction::s_Logs.emplace(std::make_pair("Rendu", std::vector<std::string>()));
+	Construction::s_Logs.emplace(std::make_pair("Instantiation", std::vector<std::string>()));
 
 	for (auto& type : objects)
 	{
@@ -325,13 +330,16 @@ void loadIfc()
 			{
 				if (obj->IsMappedItem)
 				{
-					continue;
+					auto& subShape = *shape.SubShapeRepresentations.begin();
 
-					if (shape.EntityType == "IfcExtrudedAreaSolid")
+					if (shape.SubShapeRepresentations.begin() == shape.SubShapeRepresentations.end()) continue;
+
+					if (subShape.EntityType == "IfcExtrudedAreaSolid")
 					{
-						if (shape.ProfilDefName != "IfcArbitraryClosedProfileDef")
+						if (subShape.ProfilDefName != "IfcArbitraryClosedProfileDef")
 						{
-							shape.ProfilDef->createSolid3dProfil();
+							if (subShape.ProfilDef != nullptr)
+								subShape.ProfilDef->createSolid3dProfil();
 						}
 						else
 						{
@@ -339,17 +347,17 @@ void loadIfc()
 							construction.Extrusion();
 						}
 					}
-					else if (shape.EntityType == "IfcBooleanClippingResult")
+					else if (subShape.EntityType == "IfcBooleanClippingResult")
 					{
 						Construction construction(obj);
 						construction.Extrusion();
 					}
-					else if (shape.EntityType == "IfcFacetedBrep" || shape.EntityType == "IfcFaceBasedSurfaceModel" || shape.EntityType == "IfcShellBasedSurfaceModel")
+					else if (subShape.EntityType == "IfcFacetedBrep" || subShape.EntityType == "IfcFaceBasedSurfaceModel" || subShape.EntityType == "IfcShellBasedSurfaceModel")
 					{
 						Construction construction(obj);
 						construction.CreationFaceSolid();
 					}
-					else if (shape.EntityType == "IfcBoundingBox")
+					else if (subShape.EntityType == "IfcBoundingBox")
 					{
 						// TODO createBoundingBox(map.boxMap, entity, map.keyItemsMap[j], listStyle);
 					}
@@ -358,7 +366,8 @@ void loadIfc()
 				{
 					if (shape.ProfilDefName != "IfcArbitraryClosedProfileDef")
 					{
-						shape.ProfilDef->createSolid3dProfil();
+						if (shape.ProfilDef != nullptr)
+							shape.ProfilDef->createSolid3dProfil();
 					}
 					else
 					{
@@ -391,7 +400,8 @@ void loadIfc()
 				}
 				else
 				{
-					shape.ProfilDef->createSolid3dProfil();
+					if (shape.ProfilDef != nullptr)
+						shape.ProfilDef->createSolid3dProfil();
 				}
 			}
 		}
@@ -417,7 +427,7 @@ void loadIfc()
 
 	Construction::s_ObjectVoids.clear();
 	Construction::s_Styles.clear();
-	s_Logs.clear();
+	Construction::s_Logs.clear();
 
 	delete expressDataSet;
 }
