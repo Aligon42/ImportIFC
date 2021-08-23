@@ -239,7 +239,7 @@ void test()
     {
         
         int key = (int)site.getKey();
-        if (key != 1) continue;
+        //if (key != 1) continue;
         std::string entity = site.getType().getName();
         CreateConstructionPointVisitor visitor1;
         site.acceptVisitor(&visitor1);
@@ -307,8 +307,6 @@ void test()
             std::vector<std::string> NameProfilDefBool = visitor1.getNameProfildefBool();
             if (nameItems[i] == "IfcExtrudedAreaSolid")
             {
-                
-
                 if (NameProfilDef != "IfcArbitraryClosedProfileDef")
                 {
                     dessinProfilDef(NameProfilDef, entity, VecteurExtrusion, hauteurExtrusion, transform1, transformation, transformation2D, visitor1, points1, transformFace, nameItems, keyProfilDef, keyItems, outerCurveName, ListNbArg, listPlan, listLocationPolygonal, AgreementHalf, AgreementPolygonal, listEntityHalf, listEntityPolygonal, listVoid, _compositeCurveSegment, nbPolylineComposite, nbCompositeCurve, i, listStyle, isMappedItemMethode, transformationOperator3D, scale, VecteurExtrusionBool, hauteurExtrusionBool, transformationBoolExtrud, NameProfilDefBool, RectangleProfilDefBool);
@@ -386,10 +384,10 @@ void test()
 
     }
 
-    const auto& apfaoifznbdpkfm = expressDataSet->getAllIfcElement().m_refList;
+    /*const auto& pjdfpkdfjpodSITE = expressDataSet->getAllIfcElement().m_refList;
 
     int total = 0;
-    for (auto& test : apfaoifznbdpkfm)
+    for (auto& test : pjdfpkdfjpodSITE)
     {
         if (test->size() == 0)continue;
         std::string type = (*test->begin()).second->type();
@@ -397,13 +395,13 @@ void test()
         total += test->size();
     }
     
-    std::ofstream fw("C:\\Users\\AntoineCACHEUX\\source\\repos\\ImportIFC_IFCCADPRO\\Test.txt", std::ofstream::out);
-    if (fw.is_open())
+    std::ofstream fwSite("C:\\Users\\AntoineCACHEUX\\source\\repos\\ImportIFC_IFCCADPRO\\Test.txt", std::ofstream::out);
+    if (fwSite.is_open())
     {
-        fw << "Nombre éléments : " << total<< "\n";
+        fwSite << "Nombre éléments : " << total<< "\n";
 
-        fw.close();
-    }
+        fwSite.close();
+    }*/
 
     int count = 0;
     for (auto& buildingElement : expressDataSet->getAllIfcElement())
@@ -421,7 +419,7 @@ void test()
         //if (key != 653) continue;
         //if (key != 43363) continue;
 
-        std::thread t([&]()
+        /*std::thread t([&]()
         {
             std::ofstream fw("C:\\Users\\AntoineCACHEUX\\source\\repos\\ImportIFC_IFCCADPRO\\Test.txt", std::ofstream::app);
             if (fw.is_open())
@@ -431,7 +429,7 @@ void test()
 
                 fw.close();
             }
-        });
+        });*/
 
         CreateConstructionPointVisitor visitor1;
 
@@ -629,7 +627,7 @@ void test()
             if (isMappedItemMethode) break;
         }
 
-        t.join();
+        //t.join();
     }
 
     acutPrintf(_T("\nFailure : %d\nSuccess : %d\n"), failure_results, success_results);
@@ -759,8 +757,8 @@ void initApp()
 {
     // register a command with the AutoCAD command mechanism
     acedRegCmds->addCommand(_T("IMPORT_COMMANDS"),
-        _T("Import"),
-        _T("Import"),
+        _T("ImportIFC"),
+        _T("ImportIFC"),
         ACRX_CMD_TRANSPARENT,
         test);
 }

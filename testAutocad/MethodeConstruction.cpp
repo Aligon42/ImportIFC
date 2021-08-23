@@ -6348,7 +6348,6 @@ void createFaceSolid(std::string& entity, int keyItems, std::list<Vec3>& points1
 	int sizeNbArg = ListNbArg.size();
 	int k = 0;
 
-
 	for (const auto& point : points1)
 	{
 		AcGePoint3d point3d = AcGePoint3d::AcGePoint3d(point.x(), point.y(), point.z());
