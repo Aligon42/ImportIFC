@@ -5,7 +5,8 @@
 #include <chrono>
 #include <ctime>
 #include <sstream>
-
+#include <iostream>
+#include <thread>
 #include <ifc2x3/SPFReader.h>
 #include <ifc2x3/SPFWriter.h>
 #include <ifc2x3/ExpressDataSet.h>
@@ -14,25 +15,17 @@
 #include <ifc2x3/IfcAxis2Placement.h>
 #include <ifc2x3/IfcAxis2Placement2D.h>
 #include <ifc2x3/IfcAxis2Placement3D.h>
-
+#include <adscodes.h>
 #include <Step/CallBack.h>
-
 #include <vectorial/config.h>
 #include <vectorial/vectorial.h>
 #include <vectorial/simd4f.h>
 #include <mathfu/vector_3.h>
 #include <mathfu/matrix_4x4.h>
 
-#include "CreateConstructionPointVisitor.h"
 #include "ComputePlacementVisitor.h"
 #include "ObjectVisitor.h"
-#include "MethodeConstruction.h"
 #include "Construction.h"
-
-#include <adscodes.h>
-
-#include <iostream>
-#include <thread>
 
 #include "TestUI.h"
 
@@ -62,7 +55,7 @@ void WriteLogs()
 	}
 }
 
-void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vector<IFCObject*>& objects)
+void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vector<std::shared_ptr<IFCObject>>& objects)
 {
 	ComputePlacementVisitor placementVisitor;
 	auto it = elements->begin();
@@ -78,8 +71,7 @@ void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vect
 
 		it++;
 
-		//if (key != 5557) continue;
-		//if (key != 16251) continue;
+		//if (key != 110771) continue;
 
 		ObjectVisitor visitor;
 		buildingElement.acceptVisitor(&visitor);
@@ -93,7 +85,7 @@ void ExploreElement(std::map<Step::Id, Step::BaseObjectPtr>* elements, std::vect
 
 		auto end = std::chrono::high_resolution_clock::now() - start;
 		std::stringstream ss;
-		ss <<"Key: "<< key << " - " << entity << " - " << std::chrono::duration_cast<std::chrono::microseconds>(end).count() / 1000.0 << " ms. \n";
+		ss << "Key: " << key << " - " << entity << " - " << std::chrono::duration_cast<std::chrono::microseconds>(end).count() / 1000.0 << " ms. \n";
 		Construction::s_Logs[entity].push_back(ss.str());
 	}
 }
@@ -193,6 +185,7 @@ void loadIfc()
 	expressDataSet->instantiateAll();
 	ComputePlacementVisitor placementVisitor;
 	std::vector<std::thread> threads;
+	std::map<std::string, std::vector<std::shared_ptr<IFCObject>>> objects;
 
 	std::wstring fpath(fname);
 	std::string path(fpath.begin(), fpath.end());
@@ -204,6 +197,9 @@ void loadIfc()
 
 	int startIndex = path.find_last_of("\\") + 1;
 	Construction::s_LogPath += "\\" + path.substr(startIndex, path.length() - 4 - startIndex) + ".txt";
+
+	Construction::s_Logs.emplace(std::make_pair("Rendu", std::vector<std::string>()));
+	Construction::s_Logs.emplace(std::make_pair("Instantiation", std::vector<std::string>()));
 
 	const auto& apfaoifznbdpkfm = expressDataSet->getAllIfcElement().m_refList;
 
@@ -243,7 +239,7 @@ void loadIfc()
 			}
 			else
 			{
-				std::vector<IFCObject*> vec;
+				std::vector<std::shared_ptr<IFCObject>> vec;
 				vec.push_back(obj);
 				Construction::s_ObjectVoids.insert(std::make_pair(obj->VoidKey, vec));
 			}
@@ -264,8 +260,6 @@ void loadIfc()
 		}
 	}));
 
-	std::map<std::string, std::vector<IFCObject*>> objects;
-
 	for (auto ifcSite : expressDataSet->getAllIfcSite().m_refList)
 	{
 		if (ifcSite->size() > 0)
@@ -274,26 +268,12 @@ void loadIfc()
 
 			if (type == "IfcOpeningElement") continue;
 
-			objects.emplace(std::make_pair(type, std::vector<IFCObject*>()));
 			Construction::s_Logs.emplace(std::make_pair(type, std::vector<std::string>()));
+			objects.emplace(std::make_pair(type, std::vector<std::shared_ptr<IFCObject>>()));
 
-			objects.emplace(std::make_pair(type, std::vector<IFCObject*>()));
 			threads.push_back(std::thread(ExploreElement, ifcSite, std::ref(objects[type])));
 		}
 	}
-
-	/*for (auto mappedItems : expressDataSet->getAllIfcMappedItem().m_refList)
-	{
-		if (mappedItems->size() > 0)
-		{
-			std::vector<IFCObject*> vector;
-			std::string type = (*mappedItems->begin()).second->type();
-
-			objects.emplace(std::make_pair(type, vector));
-
-			threads.push_back(std::thread(ExploreElement, mappedItems, std::ref(objects[type])));
-		}
-	}*/
 
 	for (auto element : expressDataSet->getAllIfcElement().m_refList)
 	{
@@ -303,8 +283,8 @@ void loadIfc()
 
 			if (type == "IfcOpeningElement") continue;
 
-			objects.emplace(std::make_pair(type, std::vector<IFCObject*>()));
 			Construction::s_Logs.emplace(std::make_pair(type, std::vector<std::string>()));
+			objects.emplace(std::make_pair(type, std::vector<std::shared_ptr<IFCObject>>()));
 
 			threads.push_back(std::thread(ExploreElement, element, std::ref(objects[type])));
 		}
@@ -314,9 +294,6 @@ void loadIfc()
 	{
 		thread.join();
 	}
-
-	Construction::s_Logs.emplace(std::make_pair("Rendu", std::vector<std::string>()));
-	Construction::s_Logs.emplace(std::make_pair("Instantiation", std::vector<std::string>()));
 
 	for (auto& type : objects)
 	{
@@ -411,19 +388,11 @@ void loadIfc()
 
 	for (auto& type : objects)
 	{
-		for (auto* obj : type.second)
-			delete obj;
-
 		type.second.clear();
 	}
 
 	for (auto& el : Construction::s_ObjectVoids)
-	{
-		for (auto obj : el.second)
-			delete obj;
-
 		el.second.clear();
-	}
 
 	Construction::s_ObjectVoids.clear();
 	Construction::s_Styles.clear();

@@ -59,10 +59,12 @@ struct Box
 
 struct Face
 {
+    int Key;
+    int FaceKey;
+    std::vector<Vec3> Points;
     Step::Boolean Orientation;
     std::string Type;
     std::string SupType;
-    std::vector<Vec3> Points;
 };
 
 struct IFCShapeRepresentation
@@ -75,6 +77,8 @@ struct IFCShapeRepresentation
     std::string ProfilDefName;
     std::string OuterCurveName;
     std::string EntityHalf;
+    Vec3 ExtrusionVector;
+    double ExtrusionHeight = 0.0;
     double Scale = 0.0;
     double DeterminantMatrixOperator3D = 0.0;
     std::list<Vec3> Points;
@@ -89,7 +93,7 @@ struct IFCShapeRepresentation
     Matrix4 TransformBoolean;
     std::vector<Face> IfcFaces;
     std::vector<CompositeCurveSegment> CompositeCurve;
-    ProfilDef* ProfilDef;
+    std::shared_ptr<ProfilDef> ProfilDef;
     std::vector<IFCShapeRepresentation> SubShapeRepresentations;
 };
 
@@ -100,8 +104,6 @@ struct IFCObject
     bool IsMappedItem;
     std::string Entity;
     Matrix4 LocalTransform;
-    Vec3 ExtrusionVector;
-    double ExtrusionHeight = 0.0;
     std::vector<IFCShapeRepresentation> ShapeRepresentations;
 };
 
@@ -116,7 +118,7 @@ struct ProfilDef
     bool IsMappedItem;
     Matrix4 Transformation2D;
     Matrix4 TransformationOperator3D;
-    IFCObject* ParentObject;
+    std::shared_ptr<IFCObject> ParentObject;
     virtual void createSolid3dProfil() = 0;
 };
 

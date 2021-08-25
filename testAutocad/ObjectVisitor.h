@@ -32,9 +32,9 @@ class ObjectVisitor : public ifc2x3::InheritVisitor
 {
 public:
     //! Constructor
-    ObjectVisitor(int visitingDepth = 0);
-    ObjectVisitor(IFCObject* obj, int visitingDepth = 0);
-    ObjectVisitor(IFCObject* obj, IFCShapeRepresentation& shape, int visitingDepth = 0);
+    ObjectVisitor(int representationCount = 0, int visitingDepth = 0);
+    ObjectVisitor(std::shared_ptr<IFCObject> obj, int representationCount, int visitingDepth = 0);
+    ObjectVisitor(std::shared_ptr<IFCObject> obj, IFCShapeRepresentation& shape, int representationCount, int visitingDepth = 0);
 
     bool visitIfcProduct(ifc2x3::IfcProduct* value) override;
     bool visitIfcSite(ifc2x3::IfcSite* value) override;
@@ -93,7 +93,7 @@ public:
     bool visitIfcFaceBound(ifc2x3::IfcFaceBound* value) override;
     bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value) override;
 
-    IFCObject* getIfcObject();
+    std::shared_ptr<IFCObject> getIfcObject();
     inline Style getStyle() const
     {
         return m_Style;
@@ -108,13 +108,13 @@ private:
     std::vector<IFCShapeRepresentation>& getShapeRepresentations();
 
 private:
-    int m_VisitingDepth;
+    int m_VisitingDepth, m_RepresentationCount;
     bool m_VisitingCompositeCurve = false;
     bool m_VisitingFaces = false;
 
     IFCShapeRepresentation m_IfcShapeRepresentation;
     std::vector<IFCShapeRepresentation> m_ShapeRepresentations;
-    IFCObject* m_IfcObject;
+    std::shared_ptr<IFCObject> m_IfcObject;
     Style m_Style;
     RGBA m_Color;
     Face m_Face;

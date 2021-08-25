@@ -21,12 +21,6 @@
     <ClCompile Include="ComputePlacementVisitor.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="CreateConstructionPointVisitor.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="MethodeConstruction.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -44,12 +38,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ComputePlacementVisitor.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="CreateConstructionPointVisitor.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="MethodeConstruction.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">

@@ -1,17 +1,17 @@
 #include "ObjectVisitor.h"
 #include "ComputePlacementVisitor.h"
 
-ObjectVisitor::ObjectVisitor(int visitingDepth)
-	: m_VisitingDepth(visitingDepth), ifc2x3::InheritVisitor()
+ObjectVisitor::ObjectVisitor(int representationCount, int visitingDepth)
+	: m_RepresentationCount(representationCount), m_VisitingDepth(visitingDepth), ifc2x3::InheritVisitor()
 {
-	m_IfcObject = new IFCObject();
+	m_IfcObject = std::make_shared<IFCObject>();
 }
 
-ObjectVisitor::ObjectVisitor(IFCObject* obj, int visitingDepth)
-	: m_IfcObject(obj), m_VisitingDepth(visitingDepth), ifc2x3::InheritVisitor() { }
+ObjectVisitor::ObjectVisitor(std::shared_ptr<IFCObject> obj, int representationCount, int visitingDepth)
+	: m_IfcObject(obj), m_RepresentationCount(representationCount), m_VisitingDepth(visitingDepth), ifc2x3::InheritVisitor() { }
 
-ObjectVisitor::ObjectVisitor(IFCObject* obj, IFCShapeRepresentation& shape, int visitingDepth)
-	: m_IfcObject(obj), m_IfcShapeRepresentation(shape), m_VisitingDepth(visitingDepth), ifc2x3::InheritVisitor() { }
+ObjectVisitor::ObjectVisitor(std::shared_ptr<IFCObject> obj, IFCShapeRepresentation& shape, int representationCount, int visitingDepth)
+	: m_IfcObject(obj), m_IfcShapeRepresentation(shape), m_RepresentationCount(representationCount), m_VisitingDepth(visitingDepth), ifc2x3::InheritVisitor() { }
 
 bool ObjectVisitor::visitIfcProduct(ifc2x3::IfcProduct* value)
 {
@@ -60,14 +60,17 @@ bool ObjectVisitor::visitIfcProductRepresentation(ifc2x3::IfcProductRepresentati
 
 bool ObjectVisitor::visitIfcProductDefinitionShape(ifc2x3::IfcProductDefinitionShape* value)
 {
-	for (auto& representation : value->getRepresentations())
+	auto& representations = value->getRepresentations();
+	m_RepresentationCount = representations.size();
+
+	for (auto& representation : representations)
 	{
 		auto type = representation->getRepresentationType();
 		auto identifier = representation->getRepresentationIdentifier();
 
 		if (identifier == "Axis" && type == "Curve2D") continue;
 
-		ObjectVisitor visitor(m_IfcObject, m_VisitingDepth + 1);
+		ObjectVisitor visitor(m_IfcObject, m_RepresentationCount, m_VisitingDepth + 1);
 		representation->acceptVisitor(&visitor);
 
 		if (visitor.m_ShapeRepresentations.size() > 0)
@@ -95,50 +98,18 @@ bool ObjectVisitor::visitIfcShapeRepresentation(ifc2x3::IfcShapeRepresentation* 
 	m_IfcShapeRepresentation.RepresentationIdentifier = value->getRepresentationIdentifier().toUTF8();
 	m_IfcShapeRepresentation.RepresentationType = value->getRepresentationType().toUTF8();
 
-	for (auto& shape : value->getItems())
+	auto& shapesRepresentation = value->getItems();
+
+	for (auto& shape : shapesRepresentation)
 	{
-		if (m_VisitingDepth > 1)
-		{
-			ObjectVisitor visitor(m_IfcObject, m_IfcShapeRepresentation, m_VisitingDepth + 1);
-			shape->acceptVisitor(&visitor);
+		ObjectVisitor visitor(m_IfcObject, m_RepresentationCount, m_VisitingDepth + 1);
+		shape->acceptVisitor(&visitor);
 
-			if (m_IfcObject->IsMappedItem)
-			{
-				if (m_IfcShapeRepresentation.ProfilDef != nullptr)
-					m_IfcShapeRepresentation.ProfilDef->ParentObject = m_IfcObject;
-			}
-
-			auto shapes = visitor.getShapeRepresentations();
-			if (shapes.size() > 0)
-				m_ShapeRepresentations.insert(m_ShapeRepresentations.end(), shapes.begin(), shapes.end());
-			else
-				m_IfcShapeRepresentation = visitor.getShapeRepresentation();
-		}
+		auto shapes = visitor.getShapeRepresentations();
+		if (shapes.size() > 0)
+			m_ShapeRepresentations.insert(m_ShapeRepresentations.end(), shapes.begin(), shapes.end());
 		else
-		{
-			ObjectVisitor visitor(m_IfcObject, m_VisitingDepth + 1);
-			shape->acceptVisitor(&visitor);
-
-			if (m_IfcObject->IsMappedItem)
-			{
-				if (m_IfcShapeRepresentation.ProfilDef != nullptr)
-					m_IfcShapeRepresentation.ProfilDef->ParentObject = m_IfcObject;
-
-				auto shapes = visitor.getShapeRepresentations();
-				if (shapes.size() > 0)
-					m_IfcShapeRepresentation.SubShapeRepresentations.insert(m_IfcShapeRepresentation.SubShapeRepresentations.end(), shapes.begin(), shapes.end());
-				else
-					m_IfcShapeRepresentation.SubShapeRepresentations.push_back(visitor.getShapeRepresentation());
-			}
-			else
-			{
-				auto shapes = visitor.getShapeRepresentations();
-				if (shapes.size() > 0)
-					m_ShapeRepresentations.insert(m_ShapeRepresentations.end(), shapes.begin(), shapes.end());
-				else
-					m_ShapeRepresentations.push_back(visitor.getShapeRepresentation());
-			}
-		}
+			m_ShapeRepresentations.push_back(visitor.getShapeRepresentation());
 	}
 
 	return true;
@@ -396,6 +367,8 @@ bool ObjectVisitor::visitIfcShell(ifc2x3::IfcShell* value)
 
 bool ObjectVisitor::visitIfcOpenShell(ifc2x3::IfcOpenShell* value)
 {
+	m_Face.Key = value->getKey();
+
 	if (value->testCfsFaces())
 	{
 		for (auto face : value->getCfsFaces())
@@ -416,13 +389,32 @@ bool ObjectVisitor::visitIfcMappedItem(ifc2x3::IfcMappedItem* value)
 {
 	m_IfcObject->IsMappedItem = true;
 
+	m_IfcShapeRepresentation.EntityType = value->type();
+	m_IfcShapeRepresentation.Key = value->getKey();
+
 	if (value->testMappingSource())
 	{
-		if (value->getMappingSource()->acceptVisitor(this))
+		ObjectVisitor visitor(m_RepresentationCount, m_VisitingDepth + 1);
+
+		if (value->getMappingSource()->acceptVisitor(&visitor))
 		{
 			if (value->testMappingTarget())
 			{
 				value->getMappingTarget()->acceptVisitor(this);
+			}
+
+			if (visitor.m_ShapeRepresentations.size() > 0)
+			{
+				m_IfcShapeRepresentation.SubShapeRepresentations.assign(visitor.m_ShapeRepresentations.begin(), visitor.m_ShapeRepresentations.end());
+			}
+			else
+			{
+				auto shape = visitor.getShapeRepresentation();
+
+				if (shape.Key != 0 || m_IfcObject->IsMappedItem)
+				{
+					m_IfcShapeRepresentation.SubShapeRepresentations.push_back(shape);
+				}
 			}
 			
 			return true;
@@ -702,17 +694,17 @@ bool ObjectVisitor::visitIfcExtrudedAreaSolid(ifc2x3::IfcExtrudedAreaSolid* valu
 
 			if (value->testExtrudedDirection())
 			{
-				m_IfcObject->ExtrusionVector = ComputePlacementVisitor::getDirection(value->getExtrudedDirection());
+				m_IfcShapeRepresentation.ExtrusionVector = ComputePlacementVisitor::getDirection(value->getExtrudedDirection());
 
 				if (m_IfcShapeRepresentation.ProfilDef != nullptr)
-					m_IfcShapeRepresentation.ProfilDef->VecteurExtrusion = m_IfcObject->ExtrusionVector;
+					m_IfcShapeRepresentation.ProfilDef->VecteurExtrusion = m_IfcShapeRepresentation.ExtrusionVector;
 			}
 			if (value->testDepth())
 			{
-				m_IfcObject->ExtrusionHeight = value->getDepth();
+				m_IfcShapeRepresentation.ExtrusionHeight = value->getDepth();
 
 				if (m_IfcShapeRepresentation.ProfilDef != nullptr)
-					m_IfcShapeRepresentation.ProfilDef->HauteurExtrusion = m_IfcObject->ExtrusionHeight;
+					m_IfcShapeRepresentation.ProfilDef->HauteurExtrusion = m_IfcShapeRepresentation.ExtrusionHeight;
 			}
 
 			if (m_IfcShapeRepresentation.ProfilDef != nullptr)
@@ -851,7 +843,7 @@ bool ObjectVisitor::visitIfcColourRgb(ifc2x3::IfcColourRgb* value)
 
 bool ObjectVisitor::visitIfcIShapeProfileDef(ifc2x3::IfcIShapeProfileDef* value)
 {
-	I_profilDef* profilDef = new I_profilDef();
+	std::shared_ptr<I_profilDef> profilDef = std::make_shared<I_profilDef>();
 	profilDef->Entity = m_IfcObject->Entity;
 	profilDef->Key = m_IfcShapeRepresentation.Key;
 
@@ -874,7 +866,7 @@ bool ObjectVisitor::visitIfcIShapeProfileDef(ifc2x3::IfcIShapeProfileDef* value)
 
 bool ObjectVisitor::visitIfcLShapeProfileDef(ifc2x3::IfcLShapeProfileDef* value)
 {
-	L_profilDef* profilDef = new L_profilDef();
+	std::shared_ptr<L_profilDef> profilDef = std::make_shared<L_profilDef>();
 	profilDef->Entity = m_IfcObject->Entity;
 	profilDef->Key = m_IfcShapeRepresentation.Key;
 
@@ -903,7 +895,7 @@ bool ObjectVisitor::visitIfcLShapeProfileDef(ifc2x3::IfcLShapeProfileDef* value)
 
 bool ObjectVisitor::visitIfcTShapeProfileDef(ifc2x3::IfcTShapeProfileDef* value)
 {
-	T_profilDef* profilDef = new T_profilDef();
+	std::shared_ptr<T_profilDef> profilDef = std::make_shared<T_profilDef>();
 	profilDef->Entity = m_IfcObject->Entity;
 	profilDef->Key = m_IfcShapeRepresentation.Key;
 
@@ -935,7 +927,7 @@ bool ObjectVisitor::visitIfcTShapeProfileDef(ifc2x3::IfcTShapeProfileDef* value)
 
 bool ObjectVisitor::visitIfcUShapeProfileDef(ifc2x3::IfcUShapeProfileDef* value)
 {
-	U_profilDef* profilDef = new U_profilDef();
+	std::shared_ptr<U_profilDef> profilDef = std::make_shared<U_profilDef>();
 	profilDef->Entity = m_IfcObject->Entity;
 	profilDef->Key = m_IfcShapeRepresentation.Key;
 
@@ -965,7 +957,7 @@ bool ObjectVisitor::visitIfcUShapeProfileDef(ifc2x3::IfcUShapeProfileDef* value)
 
 bool ObjectVisitor::visitIfcCShapeProfileDef(ifc2x3::IfcCShapeProfileDef* value)
 {
-	C_profilDef* profilDef = new C_profilDef();
+	std::shared_ptr<C_profilDef> profilDef = std::make_shared<C_profilDef>();
 	profilDef->Entity = m_IfcObject->Entity;
 	profilDef->Key = m_IfcShapeRepresentation.Key;
 
@@ -987,7 +979,7 @@ bool ObjectVisitor::visitIfcCShapeProfileDef(ifc2x3::IfcCShapeProfileDef* value)
 
 bool ObjectVisitor::visitIfcZShapeProfileDef(ifc2x3::IfcZShapeProfileDef* value)
 {
-	Z_profilDef* profilDef = new Z_profilDef();
+	std::shared_ptr<Z_profilDef> profilDef = std::make_shared<Z_profilDef>();
 	profilDef->Entity = m_IfcObject->Entity;
 	profilDef->Key = m_IfcShapeRepresentation.Key;
 
@@ -1010,7 +1002,7 @@ bool ObjectVisitor::visitIfcZShapeProfileDef(ifc2x3::IfcZShapeProfileDef* value)
 
 bool ObjectVisitor::visitIfcAsymmetricIShapeProfileDef(ifc2x3::IfcAsymmetricIShapeProfileDef* value)
 {
-	AsymmetricI_profilDef* profilDef = new AsymmetricI_profilDef();
+	std::shared_ptr<AsymmetricI_profilDef> profilDef = std::make_shared<AsymmetricI_profilDef>();
 	profilDef->Entity = m_IfcObject->Entity;
 	profilDef->Key = m_IfcShapeRepresentation.Key;
 
@@ -1035,7 +1027,7 @@ bool ObjectVisitor::visitIfcAsymmetricIShapeProfileDef(ifc2x3::IfcAsymmetricISha
 
 bool ObjectVisitor::visitIfcCircleHollowProfileDef(ifc2x3::IfcCircleHollowProfileDef* value)
 {
-	CircleHollow_profilDef* profilDef = new CircleHollow_profilDef();
+	std::shared_ptr<CircleHollow_profilDef> profilDef = std::make_shared<CircleHollow_profilDef>();
 	profilDef->Entity = m_IfcObject->Entity;
 	profilDef->Key = m_IfcShapeRepresentation.Key;
 
@@ -1054,7 +1046,7 @@ bool ObjectVisitor::visitIfcCircleHollowProfileDef(ifc2x3::IfcCircleHollowProfil
 
 bool ObjectVisitor::visitIfcRectangleHollowProfileDef(ifc2x3::IfcRectangleHollowProfileDef* value)
 {
-	RectangleHollow_profilDef* profilDef = new RectangleHollow_profilDef();
+	std::shared_ptr<RectangleHollow_profilDef> profilDef = std::make_shared<RectangleHollow_profilDef>();
 	profilDef->Entity = m_IfcObject->Entity;
 	profilDef->Key = m_IfcShapeRepresentation.Key;
 
@@ -1076,7 +1068,7 @@ bool ObjectVisitor::visitIfcRectangleHollowProfileDef(ifc2x3::IfcRectangleHollow
 
 bool ObjectVisitor::visitIfcRectangleProfileDef(ifc2x3::IfcRectangleProfileDef* value)
 {
-	Rectangle_profilDef* profilDef = new Rectangle_profilDef();
+	std::shared_ptr<Rectangle_profilDef> profilDef = std::make_shared<Rectangle_profilDef>();
 	profilDef->Entity = m_IfcObject->Entity;
 	profilDef->Key = m_IfcShapeRepresentation.Key;
 
@@ -1095,7 +1087,7 @@ bool ObjectVisitor::visitIfcRectangleProfileDef(ifc2x3::IfcRectangleProfileDef* 
 
 bool ObjectVisitor::visitIfcCircleProfileDef(ifc2x3::IfcCircleProfileDef* value)
 {
-	Circle_profilDef* profilDef = new Circle_profilDef();
+	std::shared_ptr<Circle_profilDef> profilDef = std::make_shared<Circle_profilDef>();
 	profilDef->Entity = m_IfcObject->Entity;
 	profilDef->Key = m_IfcShapeRepresentation.Key;
 
@@ -1198,6 +1190,8 @@ bool ObjectVisitor::visitIfcFacetedBrep(ifc2x3::IfcFacetedBrep* value)
 
 bool ObjectVisitor::visitIfcClosedShell(ifc2x3::IfcClosedShell* value)
 {
+	m_Face.Key = value->getKey();
+
 	if (value->testCfsFaces())
 	{
 		for (auto face : value->getCfsFaces())
@@ -1216,6 +1210,8 @@ bool ObjectVisitor::visitIfcClosedShell(ifc2x3::IfcClosedShell* value)
 
 bool ObjectVisitor::visitIfcFace(ifc2x3::IfcFace* value)
 {
+	m_Face.FaceKey = value->getKey();
+
 	if (value->testBounds())
 	{
 		m_VisitingFaces = true;
@@ -1262,6 +1258,8 @@ bool ObjectVisitor::visitIfcFaceBound(ifc2x3::IfcFaceBound* value)
 		value->getBound()->acceptVisitor(this);
 	}
 
+	m_IfcShapeRepresentation.IfcFaces.push_back(m_Face);
+
 	return true;
 }
 
@@ -1278,7 +1276,7 @@ bool ObjectVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value)
 	return m_IfcShapeRepresentation.Points.empty() == false;
 }
 
-IFCObject* ObjectVisitor::getIfcObject()
+std::shared_ptr<IFCObject> ObjectVisitor::getIfcObject()
 {
 	m_IfcObject->LocalTransform = m_IfcShapeRepresentation.Transformation;
 

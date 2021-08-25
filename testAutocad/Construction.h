@@ -19,7 +19,6 @@
 #include <vectorial/simd4f.h>
 #include <mathfu/vector_3.h>
 #include <mathfu/matrix_4x4.h>
-#include "CreateConstructionPointVisitor.h"
 #include "dbSubD.h"
 
 #include <chrono>
@@ -44,7 +43,7 @@ class Construction
 {
 public:
 	Construction();
-	Construction(IFCObject* ifcObject);
+	Construction(std::shared_ptr<IFCObject> ifcObject);
 	~Construction();
 
 	void Extrusion();
@@ -70,18 +69,18 @@ public:
 public:
 	static std::string s_LogPath;
 	static std::map<std::string, std::vector<std::string>> s_Logs;
-	static std::map<int, std::vector<IFCObject*>> s_ObjectVoids;
+	static std::map<int, std::vector<std::shared_ptr<IFCObject>>> s_ObjectVoids;
 	static std::map<int, Style> s_Styles;
 
 private:
 	Acad::ErrorStatus InitLayerTable();
 	Acad::ErrorStatus AddTableRecord(const ACHAR* layerName);
-	void DrawElement(const ACHAR* layerName, AcDb3dSolid* pSolid, Acad::ErrorStatus es);
-	void DrawElement(const ACHAR* layerName, AcDbSubDMesh* pSubDMesh, Acad::ErrorStatus es);
+	void DrawElement(const ACHAR* layerName, AcDb3dSolid* pSolid, Acad::ErrorStatus& es);
+	void DrawElement(const ACHAR* layerName, AcDbSubDMesh* pSubDMesh, AcArray<AcCmEntityColor>& clrArray, Acad::ErrorStatus& es);
 
 	void DrawExtrusion(const ACHAR* layerName);
 	void DrawFaces(const ACHAR* layerName);
-	void DrawFacesMappedItem(IFCShapeRepresentation& shape);
+	void DrawFacesMappedItem(IFCShapeRepresentation& shape, IFCShapeRepresentation& mappedShape);
 	void DrawVoids(AcDb3dSolid* solid);
 
 	void HandleDeplacements(AcDb3dSolid* solid, IFCShapeRepresentation& shape, bool move2D = false);
@@ -93,9 +92,9 @@ private:
 	void DeplacementObjet(AcDb3dSolid* solid, const Matrix4& transform);
 	void DeplacementObjet(AcDbSubDMesh* pSubDMesh, const Matrix4& transform);
 
-	void CreationVoid(AcDb3dSolid* extrusion, IFCObject* objectVoid);
-	void CreationVoidCircle(AcDb3dSolid* extrusion, IFCObject* objectVoid);
-	void CreationVoidRectangle(AcDb3dSolid* extrusion, IFCObject* objectVoid);
+	void CreationVoid(AcDb3dSolid* extrusion, std::shared_ptr<IFCObject> objectVoid);
+	void CreationVoidCircle(AcDb3dSolid* extrusion, std::shared_ptr<IFCObject> objectVoid);
+	void CreationVoidRectangle(AcDb3dSolid* extrusion, std::shared_ptr<IFCObject> objectVoid);
 	void CreationSection(AcDb3dSolid* extrusion, IFCShapeRepresentation& shapeRepresentation);
 	void CreationProfilDef(AcDbRegion* pRegion, AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions, const AcGeVector3d& vecExtru, ProfilDef* profilDef = nullptr);
 
@@ -119,5 +118,5 @@ private:
 
 	AcDbDatabase* m_Database;
 	AcDbLayerTable* m_LayerTable;
-	IFCObject* m_IfcObject;
+	std::shared_ptr<IFCObject> m_IfcObject;
 };
