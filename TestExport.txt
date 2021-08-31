@@ -1,0 +1,17 @@
+ISO-10303-21;
+HEADER;
+FILE_DESCRIPTION(('Test pour l''exportIFC PROCAL'), '');
+FILE_NAME('TEST','Tue Aug 31 12:02:56 2021\X\0A',('Antoine Cacheux'),('PROCAL'), '1.0.0', 'unknown', 'Authorisation unknown');
+FILE_SCHEMA(('IFC2X3'));
+ENDSEC;
+DATA;
+#1=IFCPROJECT($,#2,$,'Projet de test',$,$,$,(),#7);
+#2=IFCOWNERHISTORY(#3,#6,$,$,$,$,$,1630404176);
+#3=IFCPERSONANDORGANIZATION(#4,#5,$);
+#4=IFCPERSON('AC','CACHEUX','Antoine',$,$,$,$,$);
+#5=IFCORGANIZATION('PROCAL_id','PROCAL',$,$,$);
+#6=IFCAPPLICATION(#5,'1.0.0','ENVELOP3D','ENVELOP3D_id');
+#7=IFCUNITASSIGNMENT((#8));
+#8=IFCSIUNIT(*,.LENGTHUNIT.,$,.METRE.);
+ENDSEC;
+END-ISO-10303-21;

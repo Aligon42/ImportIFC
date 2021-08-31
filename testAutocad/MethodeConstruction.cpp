@@ -410,7 +410,7 @@ void extrusion(int key, std::string& entity, std::vector<std::string>& nameItems
 
 
 	DeplacementObjet2D(pSolid, transformation2D);
-	DeplacementObjet3D(pSolid, transformation);
+	//DeplacementObjet3D(pSolid, transformation);
 
 	// Temp pour des tests
 	//ListNbArg

@@ -32,6 +32,7 @@
 #include <adscodes.h>
 
 #include <iostream>
+#include "Export.h"
 
 #define DISTANCE_TOLERANCE 0.001
 
@@ -417,7 +418,7 @@ void test()
         //if (key != 59641) continue;
         //if (key != 503) continue;
         //if (key != 653) continue;
-        //if (key != 43363) continue;
+        //if (key != 102583) continue;
 
         /*std::thread t([&]()
         {
@@ -632,20 +633,37 @@ void test()
 
     acutPrintf(_T("\nFailure : %d\nSuccess : %d\n"), failure_results, success_results);
 
+    //shouldWrite = true;
+    //ifc2x3::ExpressDataSet* expressDataSet2 = new ifc2x3::ExpressDataSet();
+    ////auto header = expressDataSet->getHeader();
+    //Step::SPFHeader header;
+    //header.getFileDescription().description.push_back("Test pour l'exportIFC PROCAL");
+    //header.getFileName().author.push_back("Antoine Cacheux");
+    //header.getFileName().organization.push_back("PROCAL");
+    //time_t t = time(0);
+    //char* dt = ctime(&t);
+    //header.getFileName().timeStamp = dt;
+    //header.getFileSchema().schemaIdentifiers.push_back("IFC2X3");
+
+    //expressDataSet2->setHeader(header);
+
     //if (shouldWrite)
     //{
-    //    // ** Write the file
-    //    ifc2x3::SPFWriter writer(expressDataSet);
-    //    std::ofstream filestream;
-    //    filestream.open(writeFile);
+    //    // ** Write the file        
+    //    ifc2x3::SPFWriter writer(expressDataSet2);
+    //    std::ofstream filestream("C:\\Users\\AntoineCACHEUX\\source\\repos\\ImportIFC_IFCCADPRO\\TestExport.txt", std::ofstream::out);
 
     //    bool status = writer.write(filestream);
     //    filestream.close();
     //}
+    //delete expressDataSet2;
+
+    ExportIFC();
 
     listVoid.clear();
     listStyle.clear();
     delete expressDataSet;
+    
 }
 
 void dessinProfilDef(std::string& NameProfilDef, std::string& entity, Vec3& VecteurExtrusion, float hauteurExtrusion, Matrix4& transform1, Matrix4& transformation, Matrix4& transformation2D, CreateConstructionPointVisitor& visitor1, std::list<Vec3>& points1, Matrix4& transformFace, std::vector<std::string>& nameItems, int keyItem, std::vector<int>& keyItems, std::string& outerCurveName, std::vector<int>& ListNbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal, std::vector<Step::Boolean>& AgreementHalf, std::vector<Step::Boolean>& AgreementPolygonal, std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal, std::vector<ObjectVoid>& listVoid, CompositeCurveSegment& _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, int i, std::map<int, Style>& vectorStyle, bool isMappedItem, Matrix4& transformationOperator3D, double scale, std::vector<Vec3>& VecteurExtrusionBool, std::vector<float>& hauteurExtrusionBool, std::vector<Matrix4>& transformationBoolExtrud, std::vector<std::string>& NameProfilDefBool, std::vector<Rectangle_profilDef>& RectangleProfilDefBool)
@@ -764,9 +782,24 @@ void initApp()
         test);
 }
 
+void initAppEx()
+{
+    // register a command with the AutoCAD command mechanism
+    acedRegCmds->addCommand(_T("EXPORT_COMMANDS"),
+        _T("ExportIFC"),
+        _T("ExportIFC"),
+        ACRX_CMD_TRANSPARENT,
+        ExportIFC);
+}
+
 void unloadApp()
 {
     acedRegCmds->removeGroup(_T("IMPORT_COMMANDS"));
+}
+
+void unloadAppEx()
+{
+    acedRegCmds->removeGroup(_T("EXPORT_COMMANDS"));
 }
 
 extern "C" AcRx::AppRetCode
@@ -779,9 +812,11 @@ acrxEntryPoint(AcRx::AppMsgCode msg, void* pkt)
         acrxDynamicLinker->unlockApplication(pkt);
         acrxRegisterAppMDIAware(pkt);
         initApp();
+        initAppEx();
         break;
     case AcRx::kUnloadAppMsg:
         unloadApp();
+        unloadAppEx();
         break;
     default:
         break;
