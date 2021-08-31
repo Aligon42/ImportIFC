@@ -156,9 +156,11 @@
   <ItemGroup>
     <ClCompile Include="ComputePlacementVisitor.cpp" />
     <ClCompile Include="CreateConstructionPointVisitor.cpp" />
+    <ClCompile Include="CreateGeometric.cpp" />
     <ClCompile Include="Export.cpp" />
     <ClCompile Include="MethodeConstruction.cpp" />
     <ClCompile Include="ImportIFC.cpp" />
+    <ClCompile Include="UUIDGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ArxProject.def" />
@@ -166,10 +168,12 @@
   <ItemGroup>
     <ClInclude Include="ComputePlacementVisitor.h" />
     <ClInclude Include="CreateConstructionPointVisitor.h" />
+    <ClInclude Include="CreateGeometricRepresentationVisitor.h" />
     <ClInclude Include="Export.h" />
     <ClInclude Include="MethodeConstruction.h" />
     <ClInclude Include="ProfilDef.h" />
     <ClInclude Include="tests.h" />
+    <ClInclude Include="UUIDGenerator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
