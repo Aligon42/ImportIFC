@@ -268,6 +268,8 @@ bool CreateGeometricRepresentationVisitor::visitIfcFacetedBrep(ifc2x3::IfcFacete
 {
     bool result = true;
     Step::RefPtr<ifc2x3::IfcFacetedBrep> rpValue = value;
+
+
 }
 
 bool CreateGeometricRepresentationVisitor::visitIfcSweptAreaSolid(ifc2x3::IfcSweptAreaSolid* value)
