@@ -658,8 +658,6 @@ void test()
     //}
     //delete expressDataSet2;
 
-    ExportIFC();
-
     listVoid.clear();
     listStyle.clear();
     delete expressDataSet;

@@ -73,6 +73,18 @@ bool CreateGeometricRepresentationVisitor::visitIfcWallStandardCase(ifc2x3::IfcW
     return result;
 }
 
+bool CreateGeometricRepresentationVisitor::visitIfcCovering(ifc2x3::IfcCovering* value)
+{
+    bool result = true;
+    Step::RefPtr< ifc2x3::IfcCovering > rpValue = value;
+
+    mGeomType = BODY_SWEPTSOLID;
+    result &= visitIfcProduct(value);
+    mGeomType = UNDEF_GEOM;
+
+    return result;
+}
+
 bool CreateGeometricRepresentationVisitor::visitIfcSlab(ifc2x3::IfcSlab* value)
 {
     bool result = true;
@@ -250,6 +262,12 @@ bool CreateGeometricRepresentationVisitor::visitIfcRepresentation(ifc2x3::IfcRep
     rpValue->getItems().insert(representationItem.get());
 
     return result;
+}
+
+bool CreateGeometricRepresentationVisitor::visitIfcFacetedBrep(ifc2x3::IfcFacetedBrep* value)
+{
+    bool result = true;
+    Step::RefPtr<ifc2x3::IfcFacetedBrep> rpValue = value;
 }
 
 bool CreateGeometricRepresentationVisitor::visitIfcSweptAreaSolid(ifc2x3::IfcSweptAreaSolid* value)

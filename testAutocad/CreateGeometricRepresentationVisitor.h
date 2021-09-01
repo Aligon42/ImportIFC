@@ -16,6 +16,7 @@ public:
 
 	virtual bool visitIfcBuildingElementPart(ifc2x3::IfcBuildingElementPart* value);
 	virtual bool visitIfcWallStandardCase(ifc2x3::IfcWallStandardCase* value);
+	bool visitIfcCovering(ifc2x3::IfcCovering* value);
 	virtual bool visitIfcSpatialStructureElement(ifc2x3::IfcSpatialStructureElement* value);
 	virtual bool visitIfcSlab(ifc2x3::IfcSlab* value);
 	virtual bool visitIfcBeam(ifc2x3::IfcBeam* value);
@@ -25,6 +26,7 @@ public:
 	virtual bool visitIfcProduct(ifc2x3::IfcProduct* value);
 	virtual bool visitIfcProductRepresentation(ifc2x3::IfcProductRepresentation* value);
 	virtual bool visitIfcRepresentation(ifc2x3::IfcRepresentation* value);
+	bool visitIfcFacetedBrep(ifc2x3::IfcFacetedBrep* value);
 	virtual bool visitIfcSweptAreaSolid(ifc2x3::IfcSweptAreaSolid* value);
 	virtual bool visitIfcExtrudedAreaSolid(ifc2x3::IfcExtrudedAreaSolid* value);
 	virtual bool visitIfcPlacement(ifc2x3::IfcPlacement* value);
@@ -50,6 +52,7 @@ protected:
 	std::vector<double> mPosition;
 	std::vector<double> mLocalPlacement;
 	std::vector<double> mExtrusionDirection;
+	std::vector<double> mPolyloop;
 	double mExtrusionDepth;
 	bool mUpdateGeometry;
 	Step::RefPtr< ifc2x3::IfcPolyline > mPolyline;
