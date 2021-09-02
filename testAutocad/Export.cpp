@@ -338,7 +338,7 @@ void ExportIFC()
     linkByAggregate(building.get(), groundFloor.get());
 
     // Build an Ifc WallStandardCase TEST
-    Step::RefPtr<ifc2x3::IfcWallStandardCase> wallTest = expressDataSet->createIfcWallStandardCase();
+    /*Step::RefPtr<ifc2x3::IfcWallStandardCase> wallTest = expressDataSet->createIfcWallStandardCase();
     points.clear();
     position.clear();
     placement.clear();
@@ -352,7 +352,7 @@ void ExportIFC()
     position.push_back(50.0);
     position.push_back(50.0);
     cwrv.setPosition(position);
-    cwrv.setExtrusionDepth(5.0);
+    cwrv.setExtrusionDepth(5.0);*/
     /*if (!wallTest->acceptVisitor(&cwrv)) {
         std::cerr << "ERROR while creating wall representation" << std::endl;
     }*/
@@ -367,27 +367,27 @@ void ExportIFC()
     points.push_back(5.0); points.push_back(0.0); points.push_back(0.0);
     points.push_back(5.0); points.push_back(0.0); points.push_back(2.0);
     points.push_back(0.0); points.push_back(0.0); points.push_back(2.0);
-    cwrv.setPolyloop(points);
+    //cwrv.setPolyloop(points);
     points.push_back(5.0); points.push_back(0.0); points.push_back(0.0);
     points.push_back(5.0); points.push_back(5.0); points.push_back(0.0);
     points.push_back(5.0); points.push_back(5.0); points.push_back(2.0);
     points.push_back(5.0); points.push_back(0.0); points.push_back(2.0);
-    cwrv.setPolyloop(points);
+    //cwrv.setPolyloop(points);
     points.push_back(5.0); points.push_back(5.0); points.push_back(0.0);
     points.push_back(0.0); points.push_back(5.0); points.push_back(0.0);
     points.push_back(0.0); points.push_back(5.0); points.push_back(2.0);
     points.push_back(5.0); points.push_back(5.0); points.push_back(2.0);
-    cwrv.setPolyloop(points);
+    //cwrv.setPolyloop(points);
     points.push_back(0.0); points.push_back(5.0); points.push_back(0.0);
     points.push_back(0.0); points.push_back(0.0); points.push_back(0.0);
     points.push_back(0.0); points.push_back(0.0); points.push_back(2.0);
     points.push_back(0.0); points.push_back(5.0); points.push_back(2.0);
-    cwrv.setPolyloop(points);
+    //cwrv.setPolyloop(points);
     points.push_back(0.0); points.push_back(0.0); points.push_back(0.0);
     points.push_back(5.0); points.push_back(0.0); points.push_back(0.0);
     points.push_back(5.0); points.push_back(5.0); points.push_back(0.0);
     points.push_back(0.0); points.push_back(5.0); points.push_back(0.0);
-    cwrv.setPolyloop(points);
+    //cwrv.setPolyloop(points);
     points.push_back(0.0); points.push_back(0.0); points.push_back(2.0);
     points.push_back(5.0); points.push_back(0.0); points.push_back(2.0);
     points.push_back(5.0); points.push_back(5.0); points.push_back(2.0);

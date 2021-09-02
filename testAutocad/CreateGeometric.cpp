@@ -273,7 +273,13 @@ bool CreateGeometricRepresentationVisitor::visitIfcFacetedBrep(ifc2x3::IfcFacete
     Step::RefPtr<ifc2x3::IfcClosedShell> closedShell;
 
     rpValue->setOuter(closedShell);
-    closedShell = (ifc2x3::IfcClosedShell*)mDataSet->createIfcClosedShell().get();
+    
+    if (!closedShell.valid()) {
+        closedShell = mDataSet->createIfcClosedShell();
+        rpValue->setOuter(closedShell.get());
+    }
+
+    //closedShell = (ifc2x3::IfcClosedShell*)mDataSet->createIfcClosedShell().get();
 
     result &= closedShell->acceptVisitor(this);
 
@@ -290,13 +296,22 @@ bool CreateGeometricRepresentationVisitor::visitIfcClosedShell(ifc2x3::IfcClosed
     ifc2x3::Set_IfcFace_1_n face_1_n;
     ifc2x3::Set_IfcFace_1_n::iterator it;
 
-    for (it = rpValue->getCfsFaces().begin();it != rpValue->getCfsFaces().end(); it++)
+    for (int i = 0; i < 6; i++)
     {
-        face = (*it).get();
+        //face_1_n = (*it).get();
+        face.release();
+        if (!face.valid()) {
+            face = (ifc2x3::IfcClosedShell*)mDataSet->createIfcFace().get();
+            rpValue->setCfsFaces(face.get());
+
+            result &= face->acceptVisitor(this);
+        }
     }
 
-    rpValue->setCfsFaces(face_1_n);
-    face = (ifc2x3::IfcClosedShell*)mDataSet->createIfcFace().get();
+    /*for (it = rpValue->getCfsFaces().begin();it != rpValue->getCfsFaces().end(); it++)
+    {
+        face_1_n = (*it).get();
+    }*/
 
     result &= face->acceptVisitor(this);
 
@@ -495,14 +510,21 @@ bool CreateGeometricRepresentationVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop*
     bool result = true;
     Step::RefPtr<ifc2x3::IfcPolyLoop> rpValue = value;
 
-    for (unsigned int i = 0; i < mPolyloop.size() / 2; i++)
+    int internalCount = 0;
+    for (unsigned int i = mOffset * 4; i < mPolyloop.size() / 3; i++)
     {
+        if (internalCount == 4) break;
+
         Step::RefPtr< ifc2x3::IfcCartesianPoint > p = mDataSet->createIfcCartesianPoint();
-        p->getCoordinates().push_back(mPolyloop[2 * i]);
-        p->getCoordinates().push_back(mPolyloop[2 * i + 1]);
-        p->getCoordinates().push_back(mPolyloop[2 * i + 2]);
+        p->getCoordinates().push_back(mPolyloop[3 * i]);
+        p->getCoordinates().push_back(mPolyloop[3 * i + 1]);
+        p->getCoordinates().push_back(mPolyloop[3 * i + 2]);
         rpValue->getPolygon().push_back(p.get());
+
+        internalCount++;
     }
+
+    mOffset++;
 
     if (mPolyloopMustBeClosed &&
         (*rpValue->getPolygon().begin())->getCoordinates() != (*rpValue->getPolygon().rbegin())->getCoordinates()) {
