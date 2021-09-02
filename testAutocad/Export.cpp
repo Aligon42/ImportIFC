@@ -44,6 +44,7 @@
 #include <iostream>
 #include "CreateGeometricRepresentationVisitor.h"
 #include "UUIDGenerator.h"
+#include "Export.h"
 
 #define DISTANCE_TOLERANCE 0.001
 
@@ -352,9 +353,9 @@ void ExportIFC()
     position.push_back(50.0);
     cwrv.setPosition(position);
     cwrv.setExtrusionDepth(5.0);
-    if (!wallTest->acceptVisitor(&cwrv)) {
+    /*if (!wallTest->acceptVisitor(&cwrv)) {
         std::cerr << "ERROR while creating wall representation" << std::endl;
-    }
+    }*/
 
     // Build an IfcCovering test
     Step::RefPtr<ifc2x3::IfcCovering> coveringTest = expressDataSet->createIfcCovering();

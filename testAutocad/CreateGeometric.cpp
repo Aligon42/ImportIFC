@@ -15,6 +15,7 @@
 // Lesser General Public License for more details.
 
 #include "CreateGeometricRepresentationVisitor.h"
+#include "Export.h"
 
 #include <ifc2x3/IfcProduct.h>
 #include <ifc2x3/DefinedTypes.h>
@@ -249,14 +250,14 @@ bool CreateGeometricRepresentationVisitor::visitIfcRepresentation(ifc2x3::IfcRep
     case BODY_SWEPTSOLID:
         rpValue->setRepresentationIdentifier("Body");
         rpValue->setRepresentationType("SweptSolid");
-        representationItem = (ifc2x3::IfcRepresentationItem*)mDataSet->createIfcExtrudedAreaSolid().get();
+        representationItem = (ifc2x3::IfcRepresentationItem*)mDataSet->createIfcFacetedBrep().get();        
         break;
     default:
         return false;
         break;
     }
 
-    result &= representationItem->acceptVisitor(this); //plant ici
+    result &= representationItem->acceptVisitor(this);
     mPolyloopMustBeClosed = false;
 
     rpValue->getItems().insert(representationItem.get());
@@ -272,6 +273,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcFacetedBrep(ifc2x3::IfcFacete
     Step::RefPtr<ifc2x3::IfcClosedShell> closedShell;
 
     rpValue->setOuter(closedShell);
+    closedShell = (ifc2x3::IfcClosedShell*)mDataSet->createIfcClosedShell().get();
 
     result &= closedShell->acceptVisitor(this);
 
@@ -290,10 +292,11 @@ bool CreateGeometricRepresentationVisitor::visitIfcClosedShell(ifc2x3::IfcClosed
 
     for (it = rpValue->getCfsFaces().begin();it != rpValue->getCfsFaces().end(); it++)
     {
-        face_1_n = (*it).get();
+        face = (*it).get();
     }
 
     rpValue->setCfsFaces(face_1_n);
+    face = (ifc2x3::IfcClosedShell*)mDataSet->createIfcFace().get();
 
     result &= face->acceptVisitor(this);
 
@@ -305,7 +308,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcFace(ifc2x3::IfcFace* value)
     bool result = true;
     Step::RefPtr<ifc2x3::IfcFace> rpValue = value;
 
-    Step::RefPtr<ifc2x3::IfcFaceBound> faceBound;
+    Step::RefPtr<ifc2x3::IfcFaceOuterBound> faceOuterBound;
     ifc2x3::Set_IfcFaceBound_1_n faceBound_1_n;
     ifc2x3::Set_IfcFaceBound_1_n::iterator it;
 
@@ -315,8 +318,9 @@ bool CreateGeometricRepresentationVisitor::visitIfcFace(ifc2x3::IfcFace* value)
     }
 
     rpValue->setBounds(faceBound_1_n);
+    faceOuterBound = (ifc2x3::IfcClosedShell*)mDataSet->createIfcFaceOuterBound().get();
 
-    result &= faceBound->acceptVisitor(this);
+    result &= faceOuterBound->acceptVisitor(this);
 
     return result;
 
@@ -457,6 +461,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcFaceOuterBound(ifc2x3::IfcFac
     Step::RefPtr<ifc2x3::IfcPolyLoop> polyloop;
 
     rpValue->setBound(polyloop);
+    polyloop = (ifc2x3::IfcClosedShell*)mDataSet->createIfcPolyLoop().get();
 
     result &= polyloop->acceptVisitor(this);
 

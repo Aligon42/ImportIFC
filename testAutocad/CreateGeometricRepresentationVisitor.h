@@ -61,6 +61,7 @@ protected:
 	double mExtrusionDepth;
 	bool mUpdateGeometry;
 	Step::RefPtr< ifc2x3::IfcPolyline > mPolyline;
+
 };
 
 #endif // ** CREATEGEOMETRICREPRESENTATIONVISITOR_H_ ** //
