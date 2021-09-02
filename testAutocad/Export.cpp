@@ -404,7 +404,14 @@ void ExportIFC()
 
     // ** Write the file        
     ifc2x3::SPFWriter writer(expressDataSet.get());
-    std::ofstream filestream("C:\\Users\\AntoineCACHEUX\\source\\repos\\ImportIFC_IFCCADPRO\\TestExport.ifc", std::ofstream::out);
+
+    TCHAR NPath[MAX_PATH];
+    GetCurrentDirectory(MAX_PATH, NPath);
+    std::wstring curPath(NPath);
+
+    std::string path(curPath.begin(), curPath.end());
+
+    std::ofstream filestream(path + "\\TestExport.ifc", std::ofstream::out);
 
     bool status = writer.write(filestream);
     filestream.close();

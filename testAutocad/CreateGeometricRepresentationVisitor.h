@@ -62,6 +62,13 @@ protected:
 	bool mUpdateGeometry;
 	Step::RefPtr< ifc2x3::IfcPolyline > mPolyline;
 	int mOffset = 0;
+
+	//  		4  3
+	//		 |  |  |
+	int test[8][8][8];
+
+	// triple tableau
+	// tableau: 4, 4, 4, 8, 9, 
 };
 
 #endif // ** CREATEGEOMETRICREPRESENTATIONVISITOR_H_ ** //

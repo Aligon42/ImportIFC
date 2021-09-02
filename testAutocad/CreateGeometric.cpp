@@ -272,14 +272,8 @@ bool CreateGeometricRepresentationVisitor::visitIfcFacetedBrep(ifc2x3::IfcFacete
 
     Step::RefPtr<ifc2x3::IfcClosedShell> closedShell;
 
-    rpValue->setOuter(closedShell);
-    
-    if (!closedShell.valid()) {
-        closedShell = mDataSet->createIfcClosedShell();
-        rpValue->setOuter(closedShell.get());
-    }
-
-    //closedShell = (ifc2x3::IfcClosedShell*)mDataSet->createIfcClosedShell().get();
+    closedShell = mDataSet->createIfcClosedShell();
+    rpValue->setOuter(closedShell.get());
 
     result &= closedShell->acceptVisitor(this);
 
@@ -294,26 +288,15 @@ bool CreateGeometricRepresentationVisitor::visitIfcClosedShell(ifc2x3::IfcClosed
 
     Step::RefPtr<ifc2x3::IfcFace> face;
     ifc2x3::Set_IfcFace_1_n face_1_n;
-    ifc2x3::Set_IfcFace_1_n::iterator it;
 
     for (int i = 0; i < 6; i++)
     {
-        //face_1_n = (*it).get();
-        face.release();
-        if (!face.valid()) {
-            face = (ifc2x3::IfcClosedShell*)mDataSet->createIfcFace().get();
-            rpValue->setCfsFaces(face.get());
-
-            result &= face->acceptVisitor(this);
-        }
+        face = mDataSet->createIfcFace().get();
+        result &= face->acceptVisitor(this);
+        face_1_n.emplace(face);
     }
 
-    /*for (it = rpValue->getCfsFaces().begin();it != rpValue->getCfsFaces().end(); it++)
-    {
-        face_1_n = (*it).get();
-    }*/
-
-    result &= face->acceptVisitor(this);
+    rpValue->setCfsFaces(face_1_n);
 
     return result;
 }
@@ -325,20 +308,17 @@ bool CreateGeometricRepresentationVisitor::visitIfcFace(ifc2x3::IfcFace* value)
 
     Step::RefPtr<ifc2x3::IfcFaceOuterBound> faceOuterBound;
     ifc2x3::Set_IfcFaceBound_1_n faceBound_1_n;
-    ifc2x3::Set_IfcFaceBound_1_n::iterator it;
-
-    for (it = rpValue->getBounds().begin(); it != rpValue->getBounds().end(); it++)
+    
+    for (size_t i = 0; i < 1; i++)
     {
-        faceBound_1_n = (*it).get();
+        faceOuterBound = mDataSet->createIfcFaceOuterBound();
+        result &= faceOuterBound->acceptVisitor(this);
+        faceBound_1_n.emplace(faceOuterBound);
     }
 
     rpValue->setBounds(faceBound_1_n);
-    faceOuterBound = (ifc2x3::IfcClosedShell*)mDataSet->createIfcFaceOuterBound().get();
-
-    result &= faceOuterBound->acceptVisitor(this);
 
     return result;
-
 }
 
 bool CreateGeometricRepresentationVisitor::visitIfcSweptAreaSolid(ifc2x3::IfcSweptAreaSolid* value)
@@ -475,8 +455,8 @@ bool CreateGeometricRepresentationVisitor::visitIfcFaceOuterBound(ifc2x3::IfcFac
 
     Step::RefPtr<ifc2x3::IfcPolyLoop> polyloop;
 
+    polyloop = mDataSet->createIfcPolyLoop().get();
     rpValue->setBound(polyloop);
-    polyloop = (ifc2x3::IfcClosedShell*)mDataSet->createIfcPolyLoop().get();
 
     result &= polyloop->acceptVisitor(this);
 
@@ -515,7 +495,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop*
     {
         if (internalCount == 4) break;
 
-        Step::RefPtr< ifc2x3::IfcCartesianPoint > p = mDataSet->createIfcCartesianPoint();
+        Step::RefPtr<ifc2x3::IfcCartesianPoint> p = mDataSet->createIfcCartesianPoint();
         p->getCoordinates().push_back(mPolyloop[3 * i]);
         p->getCoordinates().push_back(mPolyloop[3 * i + 1]);
         p->getCoordinates().push_back(mPolyloop[3 * i + 2]);
