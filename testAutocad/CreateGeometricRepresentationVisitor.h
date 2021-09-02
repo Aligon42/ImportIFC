@@ -26,16 +26,21 @@ public:
 	virtual bool visitIfcProduct(ifc2x3::IfcProduct* value);
 	virtual bool visitIfcProductRepresentation(ifc2x3::IfcProductRepresentation* value);
 	virtual bool visitIfcRepresentation(ifc2x3::IfcRepresentation* value);
-	bool visitIfcFacetedBrep(ifc2x3::IfcFacetedBrep* value);
+	virtual bool visitIfcFacetedBrep(ifc2x3::IfcFacetedBrep* value);
+	virtual bool visitIfcClosedShell(ifc2x3::IfcClosedShell* value);
+	virtual bool visitIfcFace(ifc2x3::IfcFace* value);
 	virtual bool visitIfcSweptAreaSolid(ifc2x3::IfcSweptAreaSolid* value);
 	virtual bool visitIfcExtrudedAreaSolid(ifc2x3::IfcExtrudedAreaSolid* value);
 	virtual bool visitIfcPlacement(ifc2x3::IfcPlacement* value);
 	virtual bool visitIfcLocalPlacement(ifc2x3::IfcLocalPlacement* value);
 	virtual bool visitIfcArbitraryClosedProfileDef(ifc2x3::IfcArbitraryClosedProfileDef* value);
+	virtual bool visitIfcFaceOuterBound(ifc2x3::IfcFaceOuterBound* value);
 	virtual bool visitIfcPolyline(ifc2x3::IfcPolyline* value);
+	virtual bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value);
 
 	void set2DPolyline(std::vector<double>& poly) { m2DPolyline = poly; mUpdateGeometry = true; }
 	void set3DPolyline(std::vector<double>& poly) { m3DPolyline = poly; mUpdateGeometry = true; }
+	void setPolyloop(std::vector<double>& poly) { mPolyloop = poly; mUpdateGeometry = true; }
 	void setPosition(std::vector<double>& vec) { mPosition = vec; }
 	void setLocalPlacement(std::vector<double>& vec) { mLocalPlacement = vec; }
 	void setExtrusionDirection(std::vector<double>& vec) { mExtrusionDirection = vec; }
@@ -59,3 +64,4 @@ protected:
 };
 
 #endif // ** CREATEGEOMETRICREPRESENTATIONVISITOR_H_ ** //
+

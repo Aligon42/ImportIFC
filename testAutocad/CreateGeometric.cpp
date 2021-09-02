@@ -256,7 +256,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcRepresentation(ifc2x3::IfcRep
         break;
     }
 
-    result &= representationItem->acceptVisitor(this);
+    result &= representationItem->acceptVisitor(this); //plant ici
     mPolyloopMustBeClosed = false;
 
     rpValue->getItems().insert(representationItem.get());
@@ -269,6 +269,56 @@ bool CreateGeometricRepresentationVisitor::visitIfcFacetedBrep(ifc2x3::IfcFacete
     bool result = true;
     Step::RefPtr<ifc2x3::IfcFacetedBrep> rpValue = value;
 
+    Step::RefPtr<ifc2x3::IfcClosedShell> closedShell;
+
+    rpValue->setOuter(closedShell);
+
+    result &= closedShell->acceptVisitor(this);
+
+    return result;
+
+}
+
+bool CreateGeometricRepresentationVisitor::visitIfcClosedShell(ifc2x3::IfcClosedShell* value)
+{
+    bool result = true;
+    Step::RefPtr<ifc2x3::IfcClosedShell> rpValue = value;
+
+    Step::RefPtr<ifc2x3::IfcFace> face;
+    ifc2x3::Set_IfcFace_1_n face_1_n;
+    ifc2x3::Set_IfcFace_1_n::iterator it;
+
+    for (it = rpValue->getCfsFaces().begin();it != rpValue->getCfsFaces().end(); it++)
+    {
+        face_1_n = (*it).get();
+    }
+
+    rpValue->setCfsFaces(face_1_n);
+
+    result &= face->acceptVisitor(this);
+
+    return result;
+}
+
+bool CreateGeometricRepresentationVisitor::visitIfcFace(ifc2x3::IfcFace* value)
+{
+    bool result = true;
+    Step::RefPtr<ifc2x3::IfcFace> rpValue = value;
+
+    Step::RefPtr<ifc2x3::IfcFaceBound> faceBound;
+    ifc2x3::Set_IfcFaceBound_1_n faceBound_1_n;
+    ifc2x3::Set_IfcFaceBound_1_n::iterator it;
+
+    for (it = rpValue->getBounds().begin(); it != rpValue->getBounds().end(); it++)
+    {
+        faceBound_1_n = (*it).get();
+    }
+
+    rpValue->setBounds(faceBound_1_n);
+
+    result &= faceBound->acceptVisitor(this);
+
+    return result;
 
 }
 
@@ -399,6 +449,21 @@ bool CreateGeometricRepresentationVisitor::visitIfcArbitraryClosedProfileDef(ifc
     return result;
 }
 
+bool CreateGeometricRepresentationVisitor::visitIfcFaceOuterBound(ifc2x3::IfcFaceOuterBound* value)
+{
+    bool result = true;
+    Step::RefPtr<ifc2x3::IfcFaceOuterBound> rpValue = value;
+
+    Step::RefPtr<ifc2x3::IfcPolyLoop> polyloop;
+
+    rpValue->setBound(polyloop);
+
+    result &= polyloop->acceptVisitor(this);
+
+    return result;
+
+}
+
 bool CreateGeometricRepresentationVisitor::visitIfcPolyline(ifc2x3::IfcPolyline* value)
 {
     bool result = true;
@@ -415,6 +480,28 @@ bool CreateGeometricRepresentationVisitor::visitIfcPolyline(ifc2x3::IfcPolyline*
     if (mPolyloopMustBeClosed &&
         (*rpValue->getPoints().begin())->getCoordinates() != (*rpValue->getPoints().rbegin())->getCoordinates()) {
         rpValue->getPoints().push_back(*rpValue->getPoints().begin());
+    }
+
+    return result;
+}
+
+bool CreateGeometricRepresentationVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value)
+{
+    bool result = true;
+    Step::RefPtr<ifc2x3::IfcPolyLoop> rpValue = value;
+
+    for (unsigned int i = 0; i < mPolyloop.size() / 2; i++)
+    {
+        Step::RefPtr< ifc2x3::IfcCartesianPoint > p = mDataSet->createIfcCartesianPoint();
+        p->getCoordinates().push_back(mPolyloop[2 * i]);
+        p->getCoordinates().push_back(mPolyloop[2 * i + 1]);
+        p->getCoordinates().push_back(mPolyloop[2 * i + 2]);
+        rpValue->getPolygon().push_back(p.get());
+    }
+
+    if (mPolyloopMustBeClosed &&
+        (*rpValue->getPolygon().begin())->getCoordinates() != (*rpValue->getPolygon().rbegin())->getCoordinates()) {
+        rpValue->getPolygon().push_back(*rpValue->getPolygon().begin());
     }
 
     return result;

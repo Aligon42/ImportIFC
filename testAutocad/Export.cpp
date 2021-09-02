@@ -356,6 +356,49 @@ void ExportIFC()
         std::cerr << "ERROR while creating wall representation" << std::endl;
     }
 
+    // Build an IfcCovering test
+    Step::RefPtr<ifc2x3::IfcCovering> coveringTest = expressDataSet->createIfcCovering();
+    points.clear();
+    position.clear();
+    placement.clear();
+    cwrv.init();
+    points.push_back(0.0); points.push_back(0.0); points.push_back(0.0);
+    points.push_back(5.0); points.push_back(0.0); points.push_back(0.0);
+    points.push_back(5.0); points.push_back(0.0); points.push_back(2.0);
+    points.push_back(0.0); points.push_back(0.0); points.push_back(2.0);
+    cwrv.setPolyloop(points);
+    points.push_back(5.0); points.push_back(0.0); points.push_back(0.0);
+    points.push_back(5.0); points.push_back(5.0); points.push_back(0.0);
+    points.push_back(5.0); points.push_back(5.0); points.push_back(2.0);
+    points.push_back(5.0); points.push_back(0.0); points.push_back(2.0);
+    cwrv.setPolyloop(points);
+    points.push_back(5.0); points.push_back(5.0); points.push_back(0.0);
+    points.push_back(0.0); points.push_back(5.0); points.push_back(0.0);
+    points.push_back(0.0); points.push_back(5.0); points.push_back(2.0);
+    points.push_back(5.0); points.push_back(5.0); points.push_back(2.0);
+    cwrv.setPolyloop(points);
+    points.push_back(0.0); points.push_back(5.0); points.push_back(0.0);
+    points.push_back(0.0); points.push_back(0.0); points.push_back(0.0);
+    points.push_back(0.0); points.push_back(0.0); points.push_back(2.0);
+    points.push_back(0.0); points.push_back(5.0); points.push_back(2.0);
+    cwrv.setPolyloop(points);
+    points.push_back(0.0); points.push_back(0.0); points.push_back(0.0);
+    points.push_back(5.0); points.push_back(0.0); points.push_back(0.0);
+    points.push_back(5.0); points.push_back(5.0); points.push_back(0.0);
+    points.push_back(0.0); points.push_back(5.0); points.push_back(0.0);
+    cwrv.setPolyloop(points);
+    points.push_back(0.0); points.push_back(0.0); points.push_back(2.0);
+    points.push_back(5.0); points.push_back(0.0); points.push_back(2.0);
+    points.push_back(5.0); points.push_back(5.0); points.push_back(2.0);
+    points.push_back(0.0); points.push_back(5.0); points.push_back(2.0);
+    cwrv.setPolyloop(points);
+    position.push_back(0.0);
+    position.push_back(0.0);
+    position.push_back(0.0);
+    cwrv.setPosition(position);
+    if (!coveringTest->acceptVisitor(&cwrv)) {
+        std::cerr << "ERROR while creating covering representation" << std::endl;
+    }
 
 
     // ** Write the file        
