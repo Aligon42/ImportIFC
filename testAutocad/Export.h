@@ -2,3 +2,4 @@
 
 void ExportIFC();
 
+static bool isCoveringExp;

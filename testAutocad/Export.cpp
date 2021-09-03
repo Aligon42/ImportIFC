@@ -359,39 +359,46 @@ void ExportIFC()
 
     // Build an IfcCovering test
     Step::RefPtr<ifc2x3::IfcCovering> coveringTest = expressDataSet->createIfcCovering();
+    // Init root properties
+    initRootProperties(coveringTest.get(), "Covering 1");
+    coveringTest->setOwnerHistory(ownerHistory);
+    coveringTest->setPredefinedType(ifc2x3::IfcCoveringTypeEnum_CLADDING);
+    // Create representation
     points.clear();
     position.clear();
     placement.clear();
     cwrv.init();
+    // Polyloop #1
     points.push_back(0.0); points.push_back(0.0); points.push_back(0.0);
     points.push_back(5.0); points.push_back(0.0); points.push_back(0.0);
     points.push_back(5.0); points.push_back(0.0); points.push_back(2.0);
     points.push_back(0.0); points.push_back(0.0); points.push_back(2.0);
-    //cwrv.setPolyloop(points);
+    // Polyloop #2
     points.push_back(5.0); points.push_back(0.0); points.push_back(0.0);
     points.push_back(5.0); points.push_back(5.0); points.push_back(0.0);
     points.push_back(5.0); points.push_back(5.0); points.push_back(2.0);
     points.push_back(5.0); points.push_back(0.0); points.push_back(2.0);
-    //cwrv.setPolyloop(points);
+    // Polyloop #3
     points.push_back(5.0); points.push_back(5.0); points.push_back(0.0);
     points.push_back(0.0); points.push_back(5.0); points.push_back(0.0);
     points.push_back(0.0); points.push_back(5.0); points.push_back(2.0);
     points.push_back(5.0); points.push_back(5.0); points.push_back(2.0);
-    //cwrv.setPolyloop(points);
+    // Polyloop #4
     points.push_back(0.0); points.push_back(5.0); points.push_back(0.0);
     points.push_back(0.0); points.push_back(0.0); points.push_back(0.0);
     points.push_back(0.0); points.push_back(0.0); points.push_back(2.0);
     points.push_back(0.0); points.push_back(5.0); points.push_back(2.0);
-    //cwrv.setPolyloop(points);
+    // Polyloop #5
     points.push_back(0.0); points.push_back(0.0); points.push_back(0.0);
     points.push_back(5.0); points.push_back(0.0); points.push_back(0.0);
     points.push_back(5.0); points.push_back(5.0); points.push_back(0.0);
     points.push_back(0.0); points.push_back(5.0); points.push_back(0.0);
-    //cwrv.setPolyloop(points);
+    // Polyloop #6
     points.push_back(0.0); points.push_back(0.0); points.push_back(2.0);
     points.push_back(5.0); points.push_back(0.0); points.push_back(2.0);
     points.push_back(5.0); points.push_back(5.0); points.push_back(2.0);
     points.push_back(0.0); points.push_back(5.0); points.push_back(2.0);
+    // Enregistrement de tout les points dans le tableau de polyloop
     cwrv.setPolyloop(points);
     position.push_back(0.0);
     position.push_back(0.0);
@@ -400,6 +407,39 @@ void ExportIFC()
     if (!coveringTest->acceptVisitor(&cwrv)) {
         std::cerr << "ERROR while creating covering representation" << std::endl;
     }
+
+    linkByContainedInSpatial(groundFloor.get(), coveringTest.get());
+
+
+    Step::RefPtr<ifc2x3::IfcCoveringType> coveringtypeTest = expressDataSet->createIfcCoveringType();
+    coveringtypeTest->setPredefinedType(ifc2x3::IfcCoveringTypeEnum_CLADDING);
+
+    //// Define an Opening
+    //Step::RefPtr<ifc2x3::IfcOpeningElement> opening1 = expressDataSet->createIfcOpeningElement();
+    //// Init root properties
+    //initRootProperties(opening1.get(), "Opening 1");
+    //// Create representation
+    //points.clear();
+    //position.clear();
+    //placement.clear();
+    //cwrv.init();
+    //points.push_back(1.0); points.push_back(1.0);
+    //points.push_back(2.0); points.push_back(1.0);
+    //points.push_back(2.0); points.push_back(2.0);
+    //points.push_back(1.0); points.push_back(2.0);
+    //cwrv.set2DPolyline(points);
+    //cwrv.setExtrusionDepth(4.0);
+    //placement.push_back(0.0);
+    //placement.push_back(0.0);
+    //placement.push_back(-1.0);
+    //cwrv.setLocalPlacement(placement);
+    //if (!opening1->acceptVisitor(&cwrv)) {
+    //    std::cerr << "ERROR while creating opening representation" << std::endl;
+    //}
+
+    //// Assign it to a wall
+    //linkByVoidsElement(coveringTest.get(), opening1.get());
+
 
 
     // ** Write the file        
@@ -416,7 +456,7 @@ void ExportIFC()
     bool status = writer.write(filestream);
     filestream.close();
 
-    acutPrintf(_T("EXPORT DONE"));
+    acedAlert(_T("EXPORT DONE"));
 
 }
 

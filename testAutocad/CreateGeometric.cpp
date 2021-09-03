@@ -77,6 +77,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcWallStandardCase(ifc2x3::IfcW
 bool CreateGeometricRepresentationVisitor::visitIfcCovering(ifc2x3::IfcCovering* value)
 {
     bool result = true;
+    isCoveringExp = true;
     Step::RefPtr< ifc2x3::IfcCovering > rpValue = value;
 
     mGeomType = BODY_SWEPTSOLID;
@@ -250,7 +251,16 @@ bool CreateGeometricRepresentationVisitor::visitIfcRepresentation(ifc2x3::IfcRep
     case BODY_SWEPTSOLID:
         rpValue->setRepresentationIdentifier("Body");
         rpValue->setRepresentationType("SweptSolid");
-        representationItem = (ifc2x3::IfcRepresentationItem*)mDataSet->createIfcFacetedBrep().get();        
+        if (isCoveringExp == true)
+        {
+            representationItem = (ifc2x3::IfcRepresentationItem*)mDataSet->createIfcFacetedBrep().get();
+            isCoveringExp = false;
+        }
+        else
+        {
+            representationItem = (ifc2x3::IfcRepresentationItem*)mDataSet->createIfcExtrudedAreaSolid().get();
+        }
+                
         break;
     default:
         return false;
@@ -454,9 +464,11 @@ bool CreateGeometricRepresentationVisitor::visitIfcFaceOuterBound(ifc2x3::IfcFac
     Step::RefPtr<ifc2x3::IfcFaceOuterBound> rpValue = value;
 
     Step::RefPtr<ifc2x3::IfcPolyLoop> polyloop;
+    Step::Boolean boolean = Step::Boolean::BTrue;
 
     polyloop = mDataSet->createIfcPolyLoop().get();
     rpValue->setBound(polyloop);
+    rpValue->setOrientation(boolean);
 
     result &= polyloop->acceptVisitor(this);
 
@@ -510,6 +522,29 @@ bool CreateGeometricRepresentationVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop*
         (*rpValue->getPolygon().begin())->getCoordinates() != (*rpValue->getPolygon().rbegin())->getCoordinates()) {
         rpValue->getPolygon().push_back(*rpValue->getPolygon().begin());
     }
+
+    return result;
+}
+
+bool CreateGeometricRepresentationVisitor::visitIfcCoveringType(ifc2x3::IfcCoveringType* value)
+{
+    bool result = true;
+    Step::RefPtr< ifc2x3::IfcCoveringType > rpValue = value;
+    Step::RefPtr < ifc2x3::IfcPropertySet> propertySet;
+    propertySet = mDataSet->createIfcPropertySet();
+
+    result &= propertySet->acceptVisitor(this);
+
+    return result;
+}
+
+bool CreateGeometricRepresentationVisitor::visitIfcPropertySet(ifc2x3::IfcPropertySet* value)
+{
+    bool result = true;
+    Step::RefPtr< ifc2x3::IfcPropertySet > rpValue = value;
+
+    rpValue->setDescription("bla bla bla");
+
 
     return result;
 }

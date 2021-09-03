@@ -16,7 +16,7 @@ public:
 
 	virtual bool visitIfcBuildingElementPart(ifc2x3::IfcBuildingElementPart* value);
 	virtual bool visitIfcWallStandardCase(ifc2x3::IfcWallStandardCase* value);
-	bool visitIfcCovering(ifc2x3::IfcCovering* value);
+	virtual bool visitIfcCovering(ifc2x3::IfcCovering* value);
 	virtual bool visitIfcSpatialStructureElement(ifc2x3::IfcSpatialStructureElement* value);
 	virtual bool visitIfcSlab(ifc2x3::IfcSlab* value);
 	virtual bool visitIfcBeam(ifc2x3::IfcBeam* value);
@@ -37,6 +37,9 @@ public:
 	virtual bool visitIfcFaceOuterBound(ifc2x3::IfcFaceOuterBound* value);
 	virtual bool visitIfcPolyline(ifc2x3::IfcPolyline* value);
 	virtual bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value);
+	
+	virtual bool visitIfcCoveringType(ifc2x3::IfcCoveringType* value);
+	virtual bool visitIfcPropertySet(ifc2x3::IfcPropertySet* value);
 
 	void set2DPolyline(std::vector<double>& poly) { m2DPolyline = poly; mUpdateGeometry = true; }
 	void set3DPolyline(std::vector<double>& poly) { m3DPolyline = poly; mUpdateGeometry = true; }
@@ -62,6 +65,7 @@ protected:
 	bool mUpdateGeometry;
 	Step::RefPtr< ifc2x3::IfcPolyline > mPolyline;
 	int mOffset = 0;
+
 
 	//  		4  3
 	//		 |  |  |
