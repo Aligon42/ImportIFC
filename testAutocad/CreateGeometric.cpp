@@ -299,7 +299,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcClosedShell(ifc2x3::IfcClosed
     Step::RefPtr<ifc2x3::IfcFace> face;
     ifc2x3::Set_IfcFace_1_n face_1_n;
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < sizeFaceArray; i++)
     {
         face = mDataSet->createIfcFace().get();
         result &= face->acceptVisitor(this);
@@ -503,9 +503,9 @@ bool CreateGeometricRepresentationVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop*
     Step::RefPtr<ifc2x3::IfcPolyLoop> rpValue = value;
 
     int internalCount = 0;
-    for (unsigned int i = mOffset * 4; i < mPolyloop.size() / 3; i++)
+    for (unsigned int i = mOffset * sizeListePoints; i < mPolyloop.size() / 3; i++)
     {
-        if (internalCount == 4) break;
+        if (internalCount == sizeListePoints) break;
 
         Step::RefPtr<ifc2x3::IfcCartesianPoint> p = mDataSet->createIfcCartesianPoint();
         p->getCoordinates().push_back(mPolyloop[3 * i]);

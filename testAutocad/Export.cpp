@@ -344,78 +344,60 @@ void ExportIFC()
     // Link (Building <--> Storey)
     linkByAggregate(building.get(), groundFloor.get());
 
-    // Build an Ifc WallStandardCase TEST
-    /*Step::RefPtr<ifc2x3::IfcWallStandardCase> wallTest = expressDataSet->createIfcWallStandardCase();
-    points.clear();
-    position.clear();
-    placement.clear();
-    cwrv.init();
-    points.push_back(0.0); points.push_back(0.0);
-    points.push_back(5.0); points.push_back(0.0);
-    points.push_back(5.0); points.push_back(9.0);
-    points.push_back(0.0); points.push_back(9.0);
-    cwrv.set2DPolyline(points);
-    position.push_back(50.0);
-    position.push_back(50.0);
-    position.push_back(50.0);
-    cwrv.setPosition(position);
-    cwrv.setExtrusionDepth(5.0);*/
-    /*if (!wallTest->acceptVisitor(&cwrv)) {
-        std::cerr << "ERROR while creating wall representation" << std::endl;
-    }*/
+    //// Build an IfcCovering test
+    //Step::RefPtr<ifc2x3::IfcCovering> coveringTest = expressDataSet->createIfcCovering();
+    //// Init root properties
+    //initRootProperties(coveringTest.get(), "Covering 1");
+    //coveringTest->setOwnerHistory(ownerHistory);
+    //coveringTest->setPredefinedType(ifc2x3::IfcCoveringTypeEnum_CLADDING);
+    //// Create representation
+    //points.clear();
+    //position.clear();
+    //placement.clear();
+    //cwrv.init();
+    //// Polyloop #1
+    //points.push_back(0.0); points.push_back(0.0); points.push_back(0.0);
+    //points.push_back(5.0); points.push_back(0.0); points.push_back(0.0);
+    //points.push_back(5.0); points.push_back(0.0); points.push_back(2.0);
+    //points.push_back(0.0); points.push_back(0.0); points.push_back(2.0);
+    //// Polyloop #2
+    //points.push_back(5.0); points.push_back(0.0); points.push_back(0.0);
+    //points.push_back(5.0); points.push_back(5.0); points.push_back(0.0);
+    //points.push_back(5.0); points.push_back(5.0); points.push_back(2.0);
+    //points.push_back(5.0); points.push_back(0.0); points.push_back(2.0);
+    //// Polyloop #3
+    //points.push_back(5.0); points.push_back(5.0); points.push_back(0.0);
+    //points.push_back(0.0); points.push_back(5.0); points.push_back(0.0);
+    //points.push_back(0.0); points.push_back(5.0); points.push_back(2.0);
+    //points.push_back(5.0); points.push_back(5.0); points.push_back(2.0);
+    //// Polyloop #4
+    //points.push_back(0.0); points.push_back(5.0); points.push_back(0.0);
+    //points.push_back(0.0); points.push_back(0.0); points.push_back(0.0);
+    //points.push_back(0.0); points.push_back(0.0); points.push_back(2.0);
+    //points.push_back(0.0); points.push_back(5.0); points.push_back(2.0);
+    //// Polyloop #5
+    //points.push_back(0.0); points.push_back(0.0); points.push_back(0.0);
+    //points.push_back(5.0); points.push_back(0.0); points.push_back(0.0);
+    //points.push_back(5.0); points.push_back(5.0); points.push_back(0.0);
+    //points.push_back(0.0); points.push_back(5.0); points.push_back(0.0);
+    //// Polyloop #6
+    //points.push_back(0.0);
+    //  points.push_back(0.0); 
+    // points.push_back(2.0);
+    //points.push_back(5.0); points.push_back(0.0); points.push_back(2.0);
+    //points.push_back(5.0); points.push_back(5.0); points.push_back(2.0);
+    //points.push_back(0.0); points.push_back(5.0); points.push_back(2.0);
+    //// Enregistrement de tout les points dans le tableau de polyloop
+    //cwrv.setPolyloop(points);
+    //position.push_back(0.0);
+    //position.push_back(0.0);
+    //position.push_back(0.0);
+    //cwrv.setPosition(position);
+    //if (!coveringTest->acceptVisitor(&cwrv)) {
+    //    std::cerr << "ERROR while creating covering representation" << std::endl;
+    //}
 
-    // Build an IfcCovering test
-    Step::RefPtr<ifc2x3::IfcCovering> coveringTest = expressDataSet->createIfcCovering();
-    // Init root properties
-    initRootProperties(coveringTest.get(), "Covering 1");
-    coveringTest->setOwnerHistory(ownerHistory);
-    coveringTest->setPredefinedType(ifc2x3::IfcCoveringTypeEnum_CLADDING);
-    // Create representation
-    points.clear();
-    position.clear();
-    placement.clear();
-    cwrv.init();
-    // Polyloop #1
-    points.push_back(0.0); points.push_back(0.0); points.push_back(0.0);
-    points.push_back(5.0); points.push_back(0.0); points.push_back(0.0);
-    points.push_back(5.0); points.push_back(0.0); points.push_back(2.0);
-    points.push_back(0.0); points.push_back(0.0); points.push_back(2.0);
-    // Polyloop #2
-    points.push_back(5.0); points.push_back(0.0); points.push_back(0.0);
-    points.push_back(5.0); points.push_back(5.0); points.push_back(0.0);
-    points.push_back(5.0); points.push_back(5.0); points.push_back(2.0);
-    points.push_back(5.0); points.push_back(0.0); points.push_back(2.0);
-    // Polyloop #3
-    points.push_back(5.0); points.push_back(5.0); points.push_back(0.0);
-    points.push_back(0.0); points.push_back(5.0); points.push_back(0.0);
-    points.push_back(0.0); points.push_back(5.0); points.push_back(2.0);
-    points.push_back(5.0); points.push_back(5.0); points.push_back(2.0);
-    // Polyloop #4
-    points.push_back(0.0); points.push_back(5.0); points.push_back(0.0);
-    points.push_back(0.0); points.push_back(0.0); points.push_back(0.0);
-    points.push_back(0.0); points.push_back(0.0); points.push_back(2.0);
-    points.push_back(0.0); points.push_back(5.0); points.push_back(2.0);
-    // Polyloop #5
-    points.push_back(0.0); points.push_back(0.0); points.push_back(0.0);
-    points.push_back(5.0); points.push_back(0.0); points.push_back(0.0);
-    points.push_back(5.0); points.push_back(5.0); points.push_back(0.0);
-    points.push_back(0.0); points.push_back(5.0); points.push_back(0.0);
-    // Polyloop #6
-    points.push_back(0.0); points.push_back(0.0); points.push_back(2.0);
-    points.push_back(5.0); points.push_back(0.0); points.push_back(2.0);
-    points.push_back(5.0); points.push_back(5.0); points.push_back(2.0);
-    points.push_back(0.0); points.push_back(5.0); points.push_back(2.0);
-    // Enregistrement de tout les points dans le tableau de polyloop
-    cwrv.setPolyloop(points);
-    position.push_back(0.0);
-    position.push_back(0.0);
-    position.push_back(0.0);
-    cwrv.setPosition(position);
-    if (!coveringTest->acceptVisitor(&cwrv)) {
-        std::cerr << "ERROR while creating covering representation" << std::endl;
-    }
-
-    linkByContainedInSpatial(groundFloor.get(), coveringTest.get());
+    //linkByContainedInSpatial(groundFloor.get(), coveringTest.get());
 
 
     Step::RefPtr<ifc2x3::IfcCoveringType> coveringtypeTest = expressDataSet->createIfcCoveringType();
@@ -448,16 +430,13 @@ void ExportIFC()
 
         for (int i = 0; i < solidArray.length(); i++)
         {
-            /*ads_name solid;
-            acedSSName(listeBlock, j, solid);
-            AcDbObjectId solidId;
-            acdbGetObjectId(solidId, solid);
 
-            AcDbEntity* pEntSolid;
-            acdbOpenAcDbEntity(pEntSolid, solidId, AcDb::kForRead);*/
             AcGePoint3dArray listePoints;
             AcDbIntArray snapModes;
             AcDbIntArray geomlds;
+
+            // Build an IfcCovering
+            Step::RefPtr<ifc2x3::IfcCovering> covering = expressDataSet->createIfcCovering();
 
             points.clear();
             cwrv.init();
@@ -466,27 +445,30 @@ void ExportIFC()
             faceArray.removeAll();
             pCloneSolid->explode(faceArray);
 
+            sizeFaceArray = faceArray.length();
+
             for (int k = 0; k < faceArray.length(); k++)
             {
                 AcDbFace* pCloneFace = (AcDbFace*)faceArray.at(k);
                 pCloneFace->getGripPoints(listePoints, snapModes, geomlds);
 
-                int sizeListePoints = listePoints.length();
+                sizeListePoints = listePoints.length();
 
 
                 for (int l = 0; l < sizeListePoints; l++)
                 {
                     AcGePoint3d point = listePoints.at(l);
 
-                    // Build an IfcCovering test
-                    Step::RefPtr<ifc2x3::IfcCovering> coveringTest = expressDataSet->createIfcCovering();
+                    
                     // Init root properties
-                    initRootProperties(coveringTest.get(), "Covering");
-                    coveringTest->setOwnerHistory(ownerHistory);
-                    coveringTest->setPredefinedType(ifc2x3::IfcCoveringTypeEnum_CLADDING);
+                    initRootProperties(covering.get(), "Covering");
+                    covering->setOwnerHistory(ownerHistory);
+                    covering->setPredefinedType(ifc2x3::IfcCoveringTypeEnum_CLADDING);
                     // Create representation
                     // Polyloop #1
-                    points.push_back((double)point.x()); points.push_back((double)point.y()); points.push_back((double)point.z());
+                    points.push_back(point[0]);
+                    points.push_back(point[1]);
+                    points.push_back(point[2]);
 
 
 
@@ -503,11 +485,11 @@ void ExportIFC()
             position.push_back(0.0);
             position.push_back(0.0);
             cwrv.setPosition(position);
-            if (!coveringTest->acceptVisitor(&cwrv)) {
+            if (!covering->acceptVisitor(&cwrv)) {
                 std::cerr << "ERROR while creating covering representation" << std::endl;
             }
 
-            linkByContainedInSpatial(groundFloor.get(), coveringTest.get());
+            linkByContainedInSpatial(groundFloor.get(), covering.get());
 
 
             pCloneSolid->erase();
