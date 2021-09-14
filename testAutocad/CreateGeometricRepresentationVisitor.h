@@ -50,6 +50,8 @@ public:
 	void setExtrusionDepth(double depth) { mExtrusionDepth = depth; }
 	void init();
 
+	inline void setElement(const std::vector<int>& elements) { mElements = elements; }
+
 protected:
 	GeometryType mGeomType;
 	LocationType mLocationType;
@@ -66,6 +68,8 @@ protected:
 	Step::RefPtr< ifc2x3::IfcPolyline > mPolyline;
 	int mOffset = 0;
 
+	std::vector<int> mElements;
+	int mFaceIndex = 0;
 
 	//  		4  3
 	//		 |  |  |

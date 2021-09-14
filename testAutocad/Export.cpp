@@ -445,20 +445,20 @@ void ExportIFC()
             faceArray.removeAll();
             pCloneSolid->explode(faceArray);
 
-            sizeFaceArray = faceArray.length();
+            std::vector<int> nbPoints;
+            nbPoints.resize(faceArray.length());
 
             for (int k = 0; k < faceArray.length(); k++)
             {
                 AcDbFace* pCloneFace = (AcDbFace*)faceArray.at(k);
                 pCloneFace->getGripPoints(listePoints, snapModes, geomlds);
 
-                sizeListePoints = listePoints.length();
+                int pointsCount = listePoints.length();
+                nbPoints[k] = pointsCount;
 
-
-                for (int l = 0; l < sizeListePoints; l++)
+                for (int l = 0; l < pointsCount; l++)
                 {
                     AcGePoint3d point = listePoints.at(l);
-
                     
                     // Init root properties
                     initRootProperties(covering.get(), "Covering");
@@ -469,9 +469,6 @@ void ExportIFC()
                     points.push_back(point[0]);
                     points.push_back(point[1]);
                     points.push_back(point[2]);
-
-
-
                 }
 
                 pCloneFace->erase();
@@ -485,6 +482,7 @@ void ExportIFC()
             position.push_back(0.0);
             position.push_back(0.0);
             cwrv.setPosition(position);
+            cwrv.setElement(nbPoints);
             if (!covering->acceptVisitor(&cwrv)) {
                 std::cerr << "ERROR while creating covering representation" << std::endl;
             }
