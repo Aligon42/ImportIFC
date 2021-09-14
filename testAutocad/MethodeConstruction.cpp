@@ -410,7 +410,7 @@ void extrusion(int key, std::string& entity, std::vector<std::string>& nameItems
 
 
 	DeplacementObjet2D(pSolid, transformation2D);
-	//DeplacementObjet3D(pSolid, transformation);
+	DeplacementObjet3D(pSolid, transformation);
 
 	// Temp pour des tests
 	//ListNbArg
@@ -6322,6 +6322,7 @@ void createFaceSolid(std::string& entity, int keyItems, std::list<Vec3>& points1
 		layerName = _T("Element");
 	}
 
+	
 
 	if (!pLayerTable->has(layerName))
 	{
@@ -6352,6 +6353,20 @@ void createFaceSolid(std::string& entity, int keyItems, std::list<Vec3>& points1
 	{
 		AcGePoint3d point3d = AcGePoint3d::AcGePoint3d(point.x(), point.y(), point.z());
 		ptArr.append(point3d);
+
+		/*RGBA& colorRGB = vectorStyle[shape.Key].Styles.begin();
+		Adesk::RGBQuad color((((int)(colorRGB.Red * 255) & 0xff) << 16) + (((int)(colorRGB.Green * 255) & 0xff) << 8) + ((int)(colorRGB.Blue * 255) & 0xff));
+
+		faceArray.append(face.Points.size());
+		for (const auto& point : face.Points)
+		{
+			AcGePoint3d point3d = AcGePoint3d::AcGePoint3d(point.x(), point.y(), point.z());
+			ptArr.append(point3d);
+
+			vColor.setRGB(color);
+			clrArray.append(vColor);
+			faceArray.append(k++);
+		}*/
 	}
 
 	for (int i = 0; i < sizeNbArg; i++)
@@ -6403,6 +6418,8 @@ void createFaceSolid(std::string& entity, int keyItems, std::list<Vec3>& points1
 		AcCmTransparency transparence = AcCmTransparency::AcCmTransparency(alpha);
 		pSubDMesh->setTransparency(transparence);
 	}
+
+
 
 	pSubDMesh->setLayer(layerName, Adesk::kFalse, false);
 

@@ -414,11 +414,7 @@ void test()
         if (entity == "IfcOpeningElement") continue;
         count++;
         //if (key != 108852 /*&& key != 110815 && key != 108907 && key != 110867*/) continue;
-        //if (key != 8221) continue;
-        //if (key != 59641) continue;
-        //if (key != 503) continue;
-        //if (key != 653) continue;
-        //if (key != 102583) continue;
+        //if (key != 53689) continue;
 
         /*std::thread t([&]()
         {

@@ -219,6 +219,13 @@ ifc2x3::IfcRelFillsElement* linkByFillsElement(
 
 void ExportIFC()
 {
+
+    ads_name listeBlock;
+    Adesk::Int32 nbBlock;
+    AcDbVoidPtrArray solidArray;
+    AcDbVoidPtrArray faceArray;
+
+    
     // ** First build an ExpressDataSet
     Step::RefPtr <ifc2x3::ExpressDataSet> expressDataSet = new ifc2x3::ExpressDataSet();
 
@@ -414,31 +421,104 @@ void ExportIFC()
     Step::RefPtr<ifc2x3::IfcCoveringType> coveringtypeTest = expressDataSet->createIfcCoveringType();
     coveringtypeTest->setPredefinedType(ifc2x3::IfcCoveringTypeEnum_CLADDING);
 
-    //// Define an Opening
-    //Step::RefPtr<ifc2x3::IfcOpeningElement> opening1 = expressDataSet->createIfcOpeningElement();
-    //// Init root properties
-    //initRootProperties(opening1.get(), "Opening 1");
-    //// Create representation
-    //points.clear();
-    //position.clear();
-    //placement.clear();
-    //cwrv.init();
-    //points.push_back(1.0); points.push_back(1.0);
-    //points.push_back(2.0); points.push_back(1.0);
-    //points.push_back(2.0); points.push_back(2.0);
-    //points.push_back(1.0); points.push_back(2.0);
-    //cwrv.set2DPolyline(points);
-    //cwrv.setExtrusionDepth(4.0);
-    //placement.push_back(0.0);
-    //placement.push_back(0.0);
-    //placement.push_back(-1.0);
-    //cwrv.setLocalPlacement(placement);
-    //if (!opening1->acceptVisitor(&cwrv)) {
-    //    std::cerr << "ERROR while creating opening representation" << std::endl;
-    //}
+    // Prepare selection set
+    int err = acedSSGet(NULL, NULL, NULL, NULL, listeBlock);
+    if (err != RTNORM)
+    {
+        nbBlock = 0;
+    }
+    else {
+        acedSSLength(listeBlock, &nbBlock);
+    }
 
-    //// Assign it to a wall
-    //linkByVoidsElement(coveringTest.get(), opening1.get());
+    for (int j = 0; j < nbBlock; j++)
+    {
+        // add to selection set
+        ads_name block;
+        acedSSName(listeBlock, j, block);
+        AcDbObjectId blockId;
+        acdbGetObjectId(blockId, block);
+
+        AcDbEntity* pEntBlock;
+        acdbOpenAcDbEntity(pEntBlock, blockId, AcDb::kForRead);
+
+        AcDbBlockReference* pCloneBlock = (AcDbBlockReference*)pEntBlock->clone();
+        solidArray.removeAll();
+        pCloneBlock->explode(solidArray);
+
+        for (int i = 0; i < solidArray.length(); i++)
+        {
+            /*ads_name solid;
+            acedSSName(listeBlock, j, solid);
+            AcDbObjectId solidId;
+            acdbGetObjectId(solidId, solid);
+
+            AcDbEntity* pEntSolid;
+            acdbOpenAcDbEntity(pEntSolid, solidId, AcDb::kForRead);*/
+            AcGePoint3dArray listePoints;
+            AcDbIntArray snapModes;
+            AcDbIntArray geomlds;
+
+            points.clear();
+            cwrv.init();
+
+            AcDb3dSolid* pCloneSolid = (AcDb3dSolid*)solidArray.at(i);
+            faceArray.removeAll();
+            pCloneSolid->explode(faceArray);
+
+            for (int k = 0; k < faceArray.length(); k++)
+            {
+                AcDbFace* pCloneFace = (AcDbFace*)faceArray.at(k);
+                pCloneFace->getGripPoints(listePoints, snapModes, geomlds);
+
+                int sizeListePoints = listePoints.length();
+
+
+                for (int l = 0; l < sizeListePoints; l++)
+                {
+                    AcGePoint3d point = listePoints.at(l);
+
+                    // Build an IfcCovering test
+                    Step::RefPtr<ifc2x3::IfcCovering> coveringTest = expressDataSet->createIfcCovering();
+                    // Init root properties
+                    initRootProperties(coveringTest.get(), "Covering");
+                    coveringTest->setOwnerHistory(ownerHistory);
+                    coveringTest->setPredefinedType(ifc2x3::IfcCoveringTypeEnum_CLADDING);
+                    // Create representation
+                    // Polyloop #1
+                    points.push_back((double)point.x()); points.push_back((double)point.y()); points.push_back((double)point.z());
+
+
+
+                }
+
+                pCloneFace->erase();
+                pCloneFace->close();
+            }
+
+            position.clear();
+            placement.clear();
+            cwrv.setPolyloop(points);
+            position.push_back(0.0);
+            position.push_back(0.0);
+            position.push_back(0.0);
+            cwrv.setPosition(position);
+            if (!coveringTest->acceptVisitor(&cwrv)) {
+                std::cerr << "ERROR while creating covering representation" << std::endl;
+            }
+
+            linkByContainedInSpatial(groundFloor.get(), coveringTest.get());
+
+
+            pCloneSolid->erase();
+            pCloneSolid->close();
+        }
+
+
+        pCloneBlock->erase();
+        pCloneBlock->close();
+    }
+
 
 
 
