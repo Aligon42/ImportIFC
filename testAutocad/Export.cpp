@@ -431,7 +431,7 @@ void ExportIFC()
         for (int i = 0; i < solidArray.length(); i++)
         {
 
-            AcGePoint3dArray listePoints;
+            
             AcDbIntArray snapModes;
             AcDbIntArray geomlds;
 
@@ -448,15 +448,21 @@ void ExportIFC()
             std::vector<int> nbPoints;
             nbPoints.resize(faceArray.length());
 
+            int count = 0;
+
             for (int k = 0; k < faceArray.length(); k++)
             {
+                AcGePoint3dArray listePoints;
+
                 AcDbFace* pCloneFace = (AcDbFace*)faceArray.at(k);
                 pCloneFace->getGripPoints(listePoints, snapModes, geomlds);
+                //pCloneFace->getStretchPoints(listePoints);
 
                 int pointsCount = listePoints.length();
-                nbPoints[k] = pointsCount;
+                nbPoints[k] = pointsCount;// - count;
+                //count = pointsCount;
 
-                for (int l = 0; l < pointsCount; l++)
+                for (int l = 0; l < nbPoints[k]; l++)
                 {
                     AcGePoint3d point = listePoints.at(l);
                     
