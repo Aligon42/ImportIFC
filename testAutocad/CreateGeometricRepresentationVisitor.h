@@ -17,6 +17,7 @@ public:
 	virtual bool visitIfcBuildingElementPart(ifc2x3::IfcBuildingElementPart* value);
 	virtual bool visitIfcWallStandardCase(ifc2x3::IfcWallStandardCase* value);
 	virtual bool visitIfcCovering(ifc2x3::IfcCovering* value);
+	virtual bool visitIfcPlate(ifc2x3::IfcPlate* value);
 	virtual bool visitIfcSpatialStructureElement(ifc2x3::IfcSpatialStructureElement* value);
 	virtual bool visitIfcSlab(ifc2x3::IfcSlab* value);
 	virtual bool visitIfcBeam(ifc2x3::IfcBeam* value);

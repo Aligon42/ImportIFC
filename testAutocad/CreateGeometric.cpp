@@ -87,6 +87,19 @@ bool CreateGeometricRepresentationVisitor::visitIfcCovering(ifc2x3::IfcCovering*
     return result;
 }
 
+bool CreateGeometricRepresentationVisitor::visitIfcPlate(ifc2x3::IfcPlate* value)
+{
+    bool result = true;
+    isCoveringExp = true;
+    Step::RefPtr< ifc2x3::IfcPlate > rpValue = value;
+
+    mGeomType = BODY_SWEPTSOLID;
+    result &= visitIfcProduct(value);
+    mGeomType = UNDEF_GEOM;
+
+    return result;
+}
+
 bool CreateGeometricRepresentationVisitor::visitIfcSlab(ifc2x3::IfcSlab* value)
 {
     bool result = true;
