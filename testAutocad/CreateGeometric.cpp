@@ -90,7 +90,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcCovering(ifc2x3::IfcCovering*
 bool CreateGeometricRepresentationVisitor::visitIfcPlate(ifc2x3::IfcPlate* value)
 {
     bool result = true;
-    isCoveringExp = true;
+    isPlateExp = true;
     Step::RefPtr< ifc2x3::IfcPlate > rpValue = value;
 
     mGeomType = BODY_SWEPTSOLID;
@@ -268,6 +268,11 @@ bool CreateGeometricRepresentationVisitor::visitIfcRepresentation(ifc2x3::IfcRep
         {
             representationItem = (ifc2x3::IfcRepresentationItem*)mDataSet->createIfcFacetedBrep().get();
             isCoveringExp = false;
+        }
+        else if (isPlateExp == true)
+        {
+            representationItem = (ifc2x3::IfcRepresentationItem*)mDataSet->createIfcFacetedBrep().get();
+            isPlateExp = false;
         }
         else
         {
