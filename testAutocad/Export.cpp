@@ -223,7 +223,6 @@ void ExportIFC()
     ads_name listeBlock;
     Adesk::Int32 nbBlock;
     AcDbVoidPtrArray solidArray;
-    AcDbVoidPtrArray faceArray;
 
     
     // ** First build an ExpressDataSet
@@ -375,18 +374,16 @@ void ExportIFC()
 
         for (int i = 0; i < solidArray.length(); i++)
         {
+            AcDbVoidPtrArray faceArray;
 
             AcDbIntArray snapModes;
             AcDbIntArray geomlds;
 
-            
-
             AcDb3dSolid* pCloneSolid = (AcDb3dSolid*)solidArray.at(i);
             faceArray.removeAll();
-            pCloneSolid->explode(faceArray); // soucis de récupération des faces 
+            pCloneSolid->explode(faceArray); 
             AcString calque;
             pCloneSolid->layer(calque);
-
 
             std::vector<int> nbPoints;
             nbPoints.resize(faceArray.length());
@@ -394,29 +391,33 @@ void ExportIFC()
             int count = 0;
 
             AcString::Encoding encoding = AcString::Encoding::Utf8;
-            auto iso = calque.match("ISO", encoding);
-            auto pla = calque.match("PLA", encoding);
-            auto sup = calque.match("SUP", encoding);
+            int iso = calque.match("ISO", encoding);
+            int pla = calque.match("PLA", encoding);
+            int sup = calque.match("SUP", encoding);
 
-            Step::RefPtr<ifc2x3::IfcCovering> object;
+            Step::RefPtr<ifc2x3::IfcCovering> objectCovering;
+            Step::RefPtr<ifc2x3::IfcPlate> objectPlate;
+            bool isPlate = false;
 
             if (iso > 0 )
             {
-                object = expressDataSet->createIfcCovering();
+                objectCovering = expressDataSet->createIfcCovering();
             }
             else if (pla > 0)
             {
-                object = expressDataSet->createIfcPlate();
+                objectPlate = expressDataSet->createIfcPlate();
+                isPlate = true;
             }
             else if (sup > 0)
             {
-                object = expressDataSet->createIfcPlate();
+                objectPlate = expressDataSet->createIfcPlate();
+                isPlate = true;
             }
             else 
             {
-                object = expressDataSet->createIfcCovering();
+                objectCovering = expressDataSet->createIfcCovering();
             }
-            object = expressDataSet->createIfcCovering();
+            //object = expressDataSet->createIfcCovering();
 
             points.clear();
             cwrv.init();
@@ -429,18 +430,50 @@ void ExportIFC()
                 pCloneFace->getGripPoints(listePoints, snapModes, geomlds);
                 //pCloneFace->getStretchPoints(listePoints);
 
+                
+
                 int pointsCount = listePoints.length();
                 nbPoints[k] = pointsCount;// - count;
                 //count = pointsCount;
+
+                
 
                 for (int l = 0; l < nbPoints[k]; l++)
                 {
                     AcGePoint3d point = listePoints.at(l);
                     
                     // Init root properties
-                    initRootProperties(object.get(), "Covering");
-                    object->setOwnerHistory(ownerHistory);
-                    object->setPredefinedType(ifc2x3::IfcCoveringTypeEnum_CLADDING);
+                    if (iso > 0)
+                    {
+                        initRootProperties(objectCovering.get(), "Covering_Isolation");
+                        objectCovering->setOwnerHistory(ownerHistory);
+                    }
+                    else if (pla > 0)
+                    {
+                        initRootProperties(objectPlate.get(), "Plate_Plateau");
+                        objectPlate->setOwnerHistory(ownerHistory);
+                    }
+                    else if (sup > 0)
+                    {
+                        initRootProperties(objectPlate.get(), "Plate_Support");
+                        objectPlate->setOwnerHistory(ownerHistory);
+                    }
+                    else
+                    {
+                        initRootProperties(objectCovering.get(), "Covering");
+                        objectCovering->setOwnerHistory(ownerHistory);
+                    }                    
+                    
+                    
+
+                    if (iso > 0)
+                    {
+                        objectCovering->setPredefinedType(ifc2x3::IfcCoveringTypeEnum_INSULATION);
+                    }
+                    else if(isPlate == false)
+                    {
+                        objectCovering->setPredefinedType(ifc2x3::IfcCoveringTypeEnum_CLADDING);
+                    }
 
                     // Create representation
                     // Polyloop #1
@@ -455,19 +488,41 @@ void ExportIFC()
 
             position.clear();
             placement.clear();
+            cwrv.setElement(nbPoints);
             cwrv.setPolyloop(points);
             position.push_back(0.0);
             position.push_back(0.0);
             position.push_back(0.0);
-            cwrv.setPosition(position);
-            cwrv.setElement(nbPoints);
-            if (!object->acceptVisitor(&cwrv)) {
-                std::cerr << "ERROR while creating covering representation" << std::endl;
+            cwrv.setPosition(position);            
+            if (iso > 0)
+            {
+                if (!objectCovering->acceptVisitor(&cwrv)) {
+                    std::cerr << "ERROR while creating covering representation" << std::endl;
+                }
+                linkByContainedInSpatial(groundFloor.get(), objectCovering.get());
             }
-
-            linkByContainedInSpatial(groundFloor.get(), object.get());
-
-
+            else if (pla > 0)
+            {
+                if (!objectPlate->acceptVisitor(&cwrv)) {
+                    std::cerr << "ERROR while creating covering representation" << std::endl;
+                }
+                linkByContainedInSpatial(groundFloor.get(), objectPlate.get());
+            }
+            else if (sup > 0)
+            {
+                if (!objectPlate->acceptVisitor(&cwrv)) {
+                    std::cerr << "ERROR while creating covering representation" << std::endl;
+                }
+                linkByContainedInSpatial(groundFloor.get(), objectPlate.get());
+            }
+            else
+            {
+                if (!objectCovering->acceptVisitor(&cwrv)) {
+                    std::cerr << "ERROR while creating covering representation" << std::endl;
+                }
+                linkByContainedInSpatial(groundFloor.get(), objectCovering.get());
+            }
+            
             pCloneSolid->erase();
             pCloneSolid->close();
         }
