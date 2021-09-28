@@ -548,6 +548,125 @@ bool CreateGeometricRepresentationVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop*
     return result;
 }
 
+bool CreateGeometricRepresentationVisitor::visitIfcEdgeLoop(ifc2x3::IfcEdgeLoop* value)
+{
+    bool result = true;
+    Step::RefPtr<ifc2x3::IfcEdgeLoop> rpValue = value;
+
+    Step::RefPtr<ifc2x3::IfcOrientedEdge> orientedEdge;
+    std::vector<Step::RefPtr<ifc2x3::IfcOrientedEdge>>::const_iterator orientedEdgeIT;
+    ifc2x3::List_IfcOrientedEdge_1_n orientedEdge_1_n;
+
+    for (size_t i = 0; i < 1; i++)
+    {
+        orientedEdge = mDataSet->createIfcOrientedEdge();
+        result &= orientedEdge->acceptVisitor(this);
+        orientedEdge_1_n.emplace(orientedEdgeIT);
+    }
+
+    rpValue->setEdgeList(orientedEdge_1_n);
+
+    return result;
+}
+
+bool CreateGeometricRepresentationVisitor::visitIfcOrientedEdge(ifc2x3::IfcOrientedEdge* value)
+{
+    bool result = true;
+    Step::RefPtr<ifc2x3::IfcOrientedEdge> rpValue = value;
+
+    Step::RefPtr<ifc2x3::IfcEdgeCurve> edgeCurve;
+
+    edgeCurve = mDataSet->createIfcEdgeCurve();
+    result &= edgeCurve->acceptVisitor(this);
+
+    rpValue->setEdgeElement(edgeCurve);
+
+    return result;
+}
+
+bool CreateGeometricRepresentationVisitor::visitIfcEdgeCurve(ifc2x3::IfcEdgeCurve* value)
+{
+    bool result = true;
+    Step::RefPtr<ifc2x3::IfcEdgeCurve> rpValue = value;
+
+    Step::RefPtr<ifc2x3::IfcVertexPoint> vertexStart;
+    Step::RefPtr<ifc2x3::IfcVertexPoint> vertexEnd;
+    Step::RefPtr<ifc2x3::IfcCircle> EdgeGeometry;
+    Step::Boolean sameSense = Step::Boolean::BFalse; //ajouter valeur
+
+    vertexStart = mDataSet->createIfcVertexPoint();
+    vertexEnd = mDataSet->createIfcVertexPoint();
+    EdgeGeometry = mDataSet->createIfcCircle();
+
+    vertexS = true;
+    result &= vertexStart->acceptVisitor(this);
+    vertexE = true;
+    result &= vertexEnd->acceptVisitor(this);
+    result &= EdgeGeometry->acceptVisitor(this);
+
+    rpValue->setEdgeStart(vertexStart);
+    rpValue->setEdgeEnd(vertexEnd);
+    rpValue->setEdgeGeometry(EdgeGeometry);
+    rpValue->setSameSense(sameSense);
+
+    vertexS = false;
+    vertexE = false;
+
+    return result;
+}
+
+bool CreateGeometricRepresentationVisitor::visitIfcVertexPoint(ifc2x3::IfcVertexPoint* value)
+{
+    bool result = true;
+    Step::RefPtr<ifc2x3::IfcVertexPoint> rpValue = value;
+
+    Step::RefPtr<ifc2x3::IfcCartesianPoint> p = mDataSet->createIfcCartesianPoint();
+    p->getCoordinates().push_back(0.0);//ajouter valeur
+    p->getCoordinates().push_back(0.0);//ajouter valeur
+    p->getCoordinates().push_back(0.0);//ajouter valeur
+    rpValue->setVertexGeometry(p.get());
+
+    rpValue->setVertexGeometry(p);
+
+    return result;
+}
+
+bool CreateGeometricRepresentationVisitor::visitIfcCircle(ifc2x3::IfcCircle* value)
+{
+    bool result = true;
+    Step::RefPtr<ifc2x3::IfcCircle> rpValue = value;
+
+    Step::RefPtr<ifc2x3::IfcAxis2Placement2D> axis = mDataSet->createIfcAxis2Placement2D();
+
+    axis->acceptVisitor(this);
+
+    rpValue->setPosition(axis);
+
+    return result;
+}
+
+bool CreateGeometricRepresentationVisitor::visitIfcAxis2Placement2D(ifc2x3::IfcAxis2Placement2D* value)
+{
+    bool result = true;
+    Step::RefPtr<ifc2x3::IfcAxis2Placement2D> rpValue = value;
+
+    Step::RefPtr<ifc2x3::IfcCartesianPoint> p = mDataSet->createIfcCartesianPoint();
+    Step::RefPtr<ifc2x3::IfcDirection> d = mDataSet->createIfcDirection();
+
+    p->getCoordinates().push_back(0.0);//ajouter valeur
+    p->getCoordinates().push_back(0.0);//ajouter valeur
+    p->getCoordinates().push_back(0.0);//ajouter valeur
+    rpValue->setLocation(p.get());
+
+    d->getDirectionRatios().push_back(0.0);//ajouter valeur
+    d->getDirectionRatios().push_back(0.0);//ajouter valeur
+    d->getDirectionRatios().push_back(0.0);//ajouter valeur
+    rpValue->setRefDirection(d.get());
+
+    return result;
+}
+
+
 bool CreateGeometricRepresentationVisitor::visitIfcCoveringType(ifc2x3::IfcCoveringType* value)
 {
     bool result = true;
@@ -565,7 +684,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcPropertySet(ifc2x3::IfcProper
     bool result = true;
     Step::RefPtr< ifc2x3::IfcPropertySet > rpValue = value;
 
-    rpValue->setDescription("bla bla bla");
+    rpValue->setDescription("");
 
 
     return result;

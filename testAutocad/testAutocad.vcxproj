@@ -134,6 +134,8 @@
       <ModuleDefinitionFile>ArxProject.def</ModuleDefinitionFile>
       <AdditionalDependencies>vendor\ifc-sdk\ifc2x3.lib;vendor\ifc-sdk\Step.lib;ac1st24.lib;acad.lib;acapp.lib;acapp_crx.lib;AcCamera.lib;accore.lib;acdb24.lib;acdbmgd.lib;AcDbPointCloudObj.lib;AcDrawBridge.lib;AcFdEval.lib;AcFdUi.lib;acge24.lib;AcGeolocationObj.lib;acgeoment.lib;acgiapi.lib;acismobj24.lib;AcJsCoreStub_crx.lib;acModelDocObj.lib;AcMPolygonObj.lib;AcPal.lib;AcPublish_crx.lib;AcSceneOE.lib;AcTc.lib;AcTcUi.lib;acui24.lib;AdApplicationFrame.lib;adui24.lib;aNav.lib;axdb.lib;rxapi.lib;userdata.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)ENVELOP3DIFC.arx</OutputFile>
+      <IgnoreAllDefaultLibraries>
+      </IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -157,9 +159,13 @@
     <ClCompile Include="ComputePlacementVisitor.cpp" />
     <ClCompile Include="CreateConstructionPointVisitor.cpp" />
     <ClCompile Include="CreateGeometric.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="Export.cpp" />
+    <ClCompile Include="InsertionBlock.cpp" />
     <ClCompile Include="MethodeConstruction.cpp" />
     <ClCompile Include="ImportIFC.cpp" />
+    <ClCompile Include="pch.cpp" />
     <ClCompile Include="UUIDGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,8 +175,12 @@
     <ClInclude Include="ComputePlacementVisitor.h" />
     <ClInclude Include="CreateConstructionPointVisitor.h" />
     <ClInclude Include="CreateGeometricRepresentationVisitor.h" />
+    <ClInclude Include="EntryPoint.h" />
     <ClInclude Include="Export.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="InsertionBlock.h" />
     <ClInclude Include="MethodeConstruction.h" />
+    <ClInclude Include="pch.h" />
     <ClInclude Include="ProfilDef.h" />
     <ClInclude Include="tests.h" />
     <ClInclude Include="UUIDGenerator.h" />

@@ -385,6 +385,8 @@ void ExportIFC()
             AcString calque;
             pCloneSolid->layer(calque);
 
+            
+
             std::vector<int> nbPoints;
             nbPoints.resize(faceArray.length());
 
@@ -397,6 +399,9 @@ void ExportIFC()
 
             Step::RefPtr<ifc2x3::IfcCovering> objectCovering;
             Step::RefPtr<ifc2x3::IfcPlate> objectPlate;
+
+            //Step::RefPtr<ifc2x3::IfcVertexPoint> vertex;
+
             bool isPlate = false;
 
             if (iso > 0 )
@@ -430,12 +435,32 @@ void ExportIFC()
                 pCloneFace->getGripPoints(listePoints, snapModes, geomlds);
                 //pCloneFace->getStretchPoints(listePoints);
 
-                
+                //Adesk::UInt16 uInt16 = listePoints.length();
+                //Adesk::Boolean boolEdge;
+                Acad::ErrorStatus es;
+                AcDbVoidPtrArray polylineArray;
+
+                pCloneFace->explode(polylineArray);
 
                 int pointsCount = listePoints.length();
                 nbPoints[k] = pointsCount;// - count;
                 //count = pointsCount;
 
+                for (int t = 0; t < polylineArray.length(); t++)//décomposer les faces pour avoir des polyline afin de verifier si c'est des arc ou des droites 
+                {
+                    AcDb3dPolyline* pClonePolyline = (AcDb3dPolyline*)polylineArray.at(t);
+
+                    double offsetCurve = 10;
+                    AcDbVoidPtrArray offsetCurveArray;
+
+                    pClonePolyline->getOffsetCurves(offsetCurve, offsetCurveArray);
+
+                    AcGeCurve3d* curve3d;
+                    AcGeTol tol;
+                    pClonePolyline->getAcGeCurve(curve3d, tol);
+
+                }
+               
                 
 
                 for (int l = 0; l < nbPoints[k]; l++)

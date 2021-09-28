@@ -38,7 +38,13 @@ public:
 	virtual bool visitIfcFaceOuterBound(ifc2x3::IfcFaceOuterBound* value);
 	virtual bool visitIfcPolyline(ifc2x3::IfcPolyline* value);
 	virtual bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value);
-	
+	virtual bool visitIfcEdgeLoop(ifc2x3::IfcEdgeLoop* value);
+	virtual bool visitIfcOrientedEdge(ifc2x3::IfcOrientedEdge* value);
+	virtual bool visitIfcEdgeCurve(ifc2x3::IfcEdgeCurve* value);
+	virtual bool visitIfcVertexPoint(ifc2x3::IfcVertexPoint* value);
+	virtual bool visitIfcCircle(ifc2x3::IfcCircle* value);
+	virtual bool visitIfcAxis2Placement2D(ifc2x3::IfcAxis2Placement2D* value);
+
 	virtual bool visitIfcCoveringType(ifc2x3::IfcCoveringType* value);
 	virtual bool visitIfcPropertySet(ifc2x3::IfcPropertySet* value);
 
@@ -71,6 +77,12 @@ protected:
 
 	std::vector<int> mElements;
 	int mFaceIndex = 0;
+
+	bool vertexS = false;
+	bool vertexE = false;
+
+
+
 
 	//  		4  3
 	//		 |  |  |
