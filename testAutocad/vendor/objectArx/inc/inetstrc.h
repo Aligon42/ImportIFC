@@ -65,7 +65,7 @@ namespace AcadInet
 		statusInternetSessionOpenFailed,
 
 		statusInvalidAccessType,				// something other than GENERIC_READ/WRITE
-		statusFileOpenFailed,					// specifically, the OpenFile() method returned NULL
+		statusFileOpenFailed,					// specifically, the OpenAndSelectFile() method returned NULL
 		statusHttpOpenRequestFailed,			// OpenRequest() returned 0
 		statusUserCancelledTransfer,
 

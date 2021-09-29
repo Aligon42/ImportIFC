@@ -522,7 +522,7 @@ struct Acad
                              eInetInternetSessionOpenFailed,
                              
                              eInetInvalidAccessType,    // something other than a download/upload request
-                             eInetFileOpenFailed,       // specifically, the OpenFile() method returned NULL
+                             eInetFileOpenFailed,       // specifically, the OpenAndSelectFile() method returned NULL
                              eInetHttpOpenRequestFailed,// OpenRequest() returned 0
                              eInetUserCancelledTransfer,
                              

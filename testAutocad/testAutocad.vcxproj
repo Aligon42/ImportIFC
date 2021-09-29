@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>bin\$(Configuration)\</OutDir>
-    <IntDir>bin-int\$(Configuration)\</IntDir>
+    <OutDir>..\bin\$(Configuration)\</OutDir>
+    <IntDir>..\bin-int\$(Configuration)\</IntDir>
     <TargetExt>.arx</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -124,7 +124,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>vendor\objectArx\inc;vendor\objectArx\inc-x64;vendor\ifc-sdk\include;vendor\ifc-sdk\src\Step;vendor\ifc-sdk\src\ifc2x3;vendor\MathFu\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>vendor\objectArx\inc;vendor\objectArx\inc-x64;vendor\ifc-sdk\include;vendor\ifc-sdk\src\Step;vendor\ifc-sdk\src\ifc2x3;vendor\MathFu\include;src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -158,21 +158,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ComputePlacementVisitor.cpp" />
-    <ClCompile Include="Construction.cpp" />
-    <ClCompile Include="Object.cpp" />
-    <ClCompile Include="ObjectVisitor.cpp" />
-    <ClCompile Include="TestUI.cpp" />
+    <ClCompile Include="src\Visitors\ComputePlacementVisitor.cpp" />
+    <ClCompile Include="src\Utils\Object.cpp" />
+    <ClCompile Include="src\Visitors\IfcReader.cpp" />
+    <ClCompile Include="src\Visitors\ObjectVisitor.cpp" />
+    <ClCompile Include="src\Autocad\Autocad.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Import\ImportIfc.cpp" />
+    <ClCompile Include="src\Utils\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ArxProject.def" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ComputePlacementVisitor.h" />
-    <ClInclude Include="Construction.h" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="ObjectVisitor.h" />
-    <ClInclude Include="TestUI.h" />
+    <ClInclude Include="src\Visitors\ComputePlacementVisitor.h" />
+    <ClInclude Include="src\Utils\Object.h" />
+    <ClInclude Include="src\Visitors\IfcReader.h" />
+    <ClInclude Include="src\Visitors\ObjectVisitor.h" />
+    <ClInclude Include="src\Autocad\Autocad.h" />
+    <ClInclude Include="src\Import\ImportIfc.h" />
+    <ClInclude Include="src\Utils\Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,16 +1,5 @@
 #pragma once
 
-#include "tchar.h"
-#include "aced.h"
-#include "rxregsvc.h"
-#include "dbapserv.h"
-#include "dbents.h"
-#include "dbsol3d.h"
-#include "dbregion.h"
-#include "dbsymutl.h"
-#include "dbplanesurf.h"
-#include "AcApDMgr.h"
-#include <Windows.h>
 #include <string.h>
 #include <iostream>
 #include <math.h>
@@ -23,7 +12,7 @@
 #include <mathfu/vector_3.h>
 #include <mathfu/matrix_4x4.h>
 
-#include "Object.h"
+#include "Utils/Object.h"
 
 typedef mathfu::Vector<double, 3> Vec3;
 typedef mathfu::Matrix<double, 4> Matrix4;

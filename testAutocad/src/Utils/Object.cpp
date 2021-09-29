@@ -1,10 +1,10 @@
 #include "Object.h"
 
-#include "Construction.h"
+#include "Autocad/Autocad.h"
 
 void I_profilDef::createSolid3dProfil()
 {
-	Construction construction(this->ParentObject);
+	Autocad construction(this->ParentObject);
 
 	if (nbArg == 5)
 		construction.CreateSolid3dProfilIPE(*this);
@@ -14,7 +14,7 @@ void I_profilDef::createSolid3dProfil()
 
 void L_profilDef::createSolid3dProfil()
 {
-	Construction construction(this->ParentObject);
+	Autocad construction(this->ParentObject);
 
 	if (nbArg == 5)
 		construction.CreateSolid3dProfilL8(*this);
@@ -24,7 +24,7 @@ void L_profilDef::createSolid3dProfil()
 
 void T_profilDef::createSolid3dProfil()
 {
-	Construction construction(this->ParentObject);
+	Autocad construction(this->ParentObject);
 
 	if (nbArg == 7)
 		construction.CreateSolid3dProfilT10(*this);
@@ -34,7 +34,7 @@ void T_profilDef::createSolid3dProfil()
 
 void U_profilDef::createSolid3dProfil()
 {
-	Construction construction(this->ParentObject);
+	Autocad construction(this->ParentObject);
 
 	if (nbArg == 5)
 		construction.CreateSolid3dProfilUPE(*this);
@@ -44,49 +44,49 @@ void U_profilDef::createSolid3dProfil()
 
 void C_profilDef::createSolid3dProfil()
 {
-	Construction construction(this->ParentObject);
+	Autocad construction(this->ParentObject);
 
 	construction.CreateSolid3dProfilC(*this);
 }
 
 void Z_profilDef::createSolid3dProfil()
 {
-	Construction construction(this->ParentObject);
+	Autocad construction(this->ParentObject);
 
 	construction.CreateSolid3dProfilZ(*this);
 }
 
 void AsymmetricI_profilDef::createSolid3dProfil()
 {
-	Construction construction(this->ParentObject);
+	Autocad construction(this->ParentObject);
 
 	construction.CreateSolid3dProfilAsyI(*this);
 }
 
 void CircleHollow_profilDef::createSolid3dProfil()
 {
-	Construction construction(this->ParentObject);
+	Autocad construction(this->ParentObject);
 
 	construction.CreateSolid3dProfilCircHollow(*this);
 }
 
 void RectangleHollow_profilDef::createSolid3dProfil()
 {
-	Construction construction(this->ParentObject);
+	Autocad construction(this->ParentObject);
 
 	construction.CreateSolid3dProfilRectHollow(*this);
 }
 
 void Rectangle_profilDef::createSolid3dProfil()
 {
-	Construction construction(this->ParentObject);
+	Autocad construction(this->ParentObject);
 
 	construction.CreateSolid3dProfilRectangle(*this);
 }
 
 void Circle_profilDef::createSolid3dProfil()
 {
-	Construction construction(this->ParentObject);
+	Autocad construction(this->ParentObject);
 
 	construction.CreateSolid3dProfilCircle(*this);
 }

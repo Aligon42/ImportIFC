@@ -1,11 +1,17 @@
-﻿#include "Construction.h"
+﻿#include "Autocad.h"
 
-#include "TestUI.h"
+#include <adscodes.h>
+#include <dbapserv.h>
+#include <dbsol3d.h>
+#include <dbsymutl.h>
+#include <AcApDMgr.h>
+#include <rxregsvc.h>
+#include <dbregion.h>
 
-std::string Construction::s_LogPath;
-std::map<std::string, std::vector<std::string>> Construction::s_Logs;
-std::map<int, std::vector<std::shared_ptr<IFCObject>>> Construction::s_ObjectVoids;
-std::map<int, Style> Construction::s_Styles;
+std::string Autocad::s_LogPath;
+std::map<std::string, std::vector<std::string>> Autocad::s_Logs;
+std::map<int, std::vector<std::shared_ptr<IFCObject>>> Autocad::s_ObjectVoids;
+std::map<int, Style> Autocad::s_Styles;
 
 Timer::Timer(int key, const std::string& entity, const std::string& name)
 	: m_Key(key), m_Entity(entity), m_Name(name)
@@ -18,11 +24,10 @@ Timer::~Timer()
 	auto end = std::chrono::high_resolution_clock::now() - m_StartTime;
 	std::stringstream ss;
 	ss << "Key: " << m_Key << " - " << m_Entity << " - " << m_Name << " - " << std::chrono::duration_cast<std::chrono::microseconds>(end).count() / 1000.0 << " ms. \n";
-	Construction::s_Logs["Rendu"].push_back(ss.str());
+	Autocad::s_Logs["Rendu"].push_back(ss.str());
 }
 
-
-Construction::Construction()
+Autocad::Autocad()
 {
 	m_StartTime = std::chrono::high_resolution_clock::now();
 	InitLayerTable();
@@ -30,7 +35,7 @@ Construction::Construction()
 	AcGeContext::gTol.setEqualVector(0.001);
 }
 
-Construction::Construction(std::shared_ptr<IFCObject> ifcObject)
+Autocad::Autocad(std::shared_ptr<IFCObject> ifcObject)
 	: m_IfcObject(ifcObject)
 {
 	m_StartTime = std::chrono::high_resolution_clock::now();
@@ -39,7 +44,7 @@ Construction::Construction(std::shared_ptr<IFCObject> ifcObject)
 	AcGeContext::gTol.setEqualVector(0.001);
 }
 
-Construction::~Construction()
+Autocad::~Autocad()
 {
 	auto end = std::chrono::high_resolution_clock::now() - m_StartTime;
 	std::stringstream ss;
@@ -47,7 +52,29 @@ Construction::~Construction()
 	s_Logs["Rendu"].push_back(ss.str());
 }
 
-void Construction::Extrusion()
+std::string Autocad::OpenAndSelectFile()
+{
+	AcDbObjectId transId;
+	TCHAR* fname;
+
+	struct resbuf* rb;
+	// Get a ifc file from the user.
+	//
+	rb = acutNewRb(RTSTR);
+	int stat = acedGetFileD(_T("Pick a IFC file"), NULL, _T("ifc"), 0, rb);
+	if ((stat != RTNORM) || (rb == NULL))
+	{
+		acutPrintf(_T("\nYou must pick a ifc file."));
+		return "";
+	}
+	fname = (TCHAR*)acad_malloc((_tcslen(rb->resval.rstring) + 1) * sizeof(TCHAR));
+	_tcscpy(fname, rb->resval.rstring);
+	acutRelRb(rb);
+
+	return WideCharToString(fname);
+}
+
+void Autocad::Extrusion()
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -56,7 +83,7 @@ void Construction::Extrusion()
 	DrawExtrusion(layerName);
 }
 
-void Construction::CreationFaceSolid()
+void Autocad::CreationFaceSolid()
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -65,7 +92,7 @@ void Construction::CreationFaceSolid()
 	DrawFaces(layerName);
 }
 
-Acad::ErrorStatus Construction::InitLayerTable()
+Acad::ErrorStatus Autocad::InitLayerTable()
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -73,7 +100,7 @@ Acad::ErrorStatus Construction::InitLayerTable()
 	return m_Database->getLayerTable(m_LayerTable, AcDb::kForRead);
 }
 
-Acad::ErrorStatus Construction::AddTableRecord(const ACHAR* layerName)
+Acad::ErrorStatus Autocad::AddTableRecord(const ACHAR* layerName)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -100,7 +127,7 @@ Acad::ErrorStatus Construction::AddTableRecord(const ACHAR* layerName)
 	return es;
 }
 
-const ACHAR* Construction::GetLayerName(std::string& entity)
+const ACHAR* Autocad::GetLayerName(std::string& entity)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -170,7 +197,7 @@ const ACHAR* Construction::GetLayerName(std::string& entity)
 	return ConvertToWideChar(outLayerName.c_str());
 }
 
-void Construction::SetColor(AcDb3dSolid* solid, int colorIndex)
+void Autocad::SetColor(AcDb3dSolid* solid, int colorIndex)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -188,7 +215,7 @@ void Construction::SetColor(AcDb3dSolid* solid, int colorIndex)
 	solid->setTransparency(transparence);
 }
 
-void Construction::SetColor(AcDbSubDMesh* pSubDMesh, int colorIndex)
+void Autocad::SetColor(AcDbSubDMesh* pSubDMesh, int colorIndex)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -204,7 +231,7 @@ void Construction::SetColor(AcDbSubDMesh* pSubDMesh, int colorIndex)
 	pSubDMesh->setTransparency(transparence);
 }
 
-void Construction::DrawExtrusion(const ACHAR* layerName)
+void Autocad::DrawExtrusion(const ACHAR* layerName)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -273,20 +300,21 @@ void Construction::DrawExtrusion(const ACHAR* layerName)
 	DrawElement(layerName, pSolid, es);
 }
 
-void Construction::DrawFaces(const ACHAR* layerName)
+void Autocad::DrawFaces(const ACHAR* layerName)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
 	int k = 0;
-
-	auto& shapeReps = !m_IfcObject->IsMappedItem ? m_IfcObject->ShapeRepresentations : (*m_IfcObject->ShapeRepresentations.begin()).SubShapeRepresentations;
+	auto& shapeReps = m_IfcObject->ShapeRepresentations;
 
 	if (m_IfcObject->IsMappedItem)
 	{
-		auto& mappedShape = (*m_IfcObject->ShapeRepresentations.begin());
-		for (auto& subShape : shapeReps)
+		for (auto& parentShape : shapeReps)
 		{
-			DrawFacesMappedItem(subShape, mappedShape);
+			for (auto& subShape : parentShape.SubShapeRepresentations)
+			{
+				DrawFacesMappedItem(subShape, parentShape);
+			}
 		}
 	}
 	else
@@ -339,7 +367,7 @@ void Construction::DrawFaces(const ACHAR* layerName)
 	}
 }
 
-void Construction::DrawFacesMappedItem(IFCShapeRepresentation& shape, IFCShapeRepresentation& mappedShape)
+void Autocad::DrawFacesMappedItem(IFCShapeRepresentation& shape, IFCShapeRepresentation& mappedShape)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -399,7 +427,7 @@ void Construction::DrawFacesMappedItem(IFCShapeRepresentation& shape, IFCShapeRe
 	DrawElement(layerName, pSubDMesh, clrArray, es);
 }
 
-const wchar_t* Construction::ConvertToWideChar(const char* c, ...)
+const wchar_t* Autocad::ConvertToWideChar(const char* c, ...)
 {
 	const size_t cSize = strlen(c) + 1;
 	wchar_t* wc = new wchar_t[cSize];
@@ -408,7 +436,7 @@ const wchar_t* Construction::ConvertToWideChar(const char* c, ...)
 	return wc;
 }
 
-AcDbRegion* Construction::CreateCompositeCurve(const std::vector<CompositeCurveSegment>& compositeCurve, const Matrix4& transform)
+AcDbRegion* Autocad::CreateCompositeCurve(const std::vector<CompositeCurveSegment>& compositeCurve, const Matrix4& transform)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -482,7 +510,7 @@ AcDbRegion* Construction::CreateCompositeCurve(const std::vector<CompositeCurveS
 	return pRegion;
 }
 
-void Construction::DrawVoids(AcDb3dSolid* solid)
+void Autocad::DrawVoids(AcDb3dSolid* solid)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -508,7 +536,7 @@ void Construction::DrawVoids(AcDb3dSolid* solid)
 	}
 }
 
-void Construction::HandleDeplacements(AcDb3dSolid* solid, IFCShapeRepresentation& shape, bool move2D)
+void Autocad::HandleDeplacements(AcDb3dSolid* solid, IFCShapeRepresentation& shape, bool move2D)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -521,7 +549,7 @@ void Construction::HandleDeplacements(AcDb3dSolid* solid, IFCShapeRepresentation
 		DeplacementObjet(solid, shape.Transformation2D);
 }
 
-void Construction::HandleDeplacements(AcDbSubDMesh* pSubDMesh, IFCShapeRepresentation& shape, bool move2D)
+void Autocad::HandleDeplacements(AcDbSubDMesh* pSubDMesh, IFCShapeRepresentation& shape, bool move2D)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -534,7 +562,7 @@ void Construction::HandleDeplacements(AcDbSubDMesh* pSubDMesh, IFCShapeRepresent
 		DeplacementObjet(pSubDMesh, shape.Transformation2D);
 }
 
-void Construction::HandleDeplacements(AcDb3dSolid* solid, bool move2D, ProfilDef* profilDef)
+void Autocad::HandleDeplacements(AcDb3dSolid* solid, bool move2D, ProfilDef* profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -547,7 +575,7 @@ void Construction::HandleDeplacements(AcDb3dSolid* solid, bool move2D, ProfilDef
 		DeplacementObjet(solid, profilDef->Transformation2D);
 }
 
-void Construction::HandleDeplacements(AcDbSubDMesh* pSubDMesh, bool move2D, ProfilDef* profilDef)
+void Autocad::HandleDeplacements(AcDbSubDMesh* pSubDMesh, bool move2D, ProfilDef* profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -560,7 +588,7 @@ void Construction::HandleDeplacements(AcDbSubDMesh* pSubDMesh, bool move2D, Prof
 		DeplacementObjet(pSubDMesh, profilDef->Transformation2D);
 }
 
-void Construction::DrawElement(const ACHAR* layerName, AcDb3dSolid* pSolid, Acad::ErrorStatus& es)
+void Autocad::DrawElement(const ACHAR* layerName, AcDb3dSolid* pSolid, Acad::ErrorStatus& es)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -584,7 +612,7 @@ void Construction::DrawElement(const ACHAR* layerName, AcDb3dSolid* pSolid, Acad
 	}
 }
 
-void Construction::DrawElement(const ACHAR* layerName, AcDbSubDMesh* pSubDMesh, AcArray<AcCmEntityColor>& clrArray, Acad::ErrorStatus& es)
+void Autocad::DrawElement(const ACHAR* layerName, AcDbSubDMesh* pSubDMesh, AcArray<AcCmEntityColor>& clrArray, Acad::ErrorStatus& es)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -610,10 +638,10 @@ void Construction::DrawElement(const ACHAR* layerName, AcDbSubDMesh* pSubDMesh, 
 		delete pSubDMesh;
 		acutPrintf(_T("Je ne fais rien du tout"));
 		return;
-	}	
+	}
 }
 
-void Construction::CreationVoid(AcDb3dSolid* extrusion, std::shared_ptr<IFCObject> objectVoid)
+void Autocad::CreationVoid(AcDb3dSolid* extrusion, std::shared_ptr<IFCObject> objectVoid)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -694,7 +722,7 @@ void Construction::CreationVoid(AcDb3dSolid* extrusion, std::shared_ptr<IFCObjec
 	extrusion_void2->close();
 }
 
-void Construction::CreationVoidCircle(AcDb3dSolid* extrusion, std::shared_ptr<IFCObject> objectVoid)
+void Autocad::CreationVoidCircle(AcDb3dSolid* extrusion, std::shared_ptr<IFCObject> objectVoid)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -773,7 +801,7 @@ void Construction::CreationVoidCircle(AcDb3dSolid* extrusion, std::shared_ptr<IF
 	extrusion_void2->close();
 }
 
-void Construction::CreationVoidRectangle(AcDb3dSolid* extrusion, std::shared_ptr<IFCObject> objectVoid)
+void Autocad::CreationVoidRectangle(AcDb3dSolid* extrusion, std::shared_ptr<IFCObject> objectVoid)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -860,7 +888,7 @@ void Construction::CreationVoidRectangle(AcDb3dSolid* extrusion, std::shared_ptr
 	extrusion_void2->close();
 }
 
-void Construction::CreationSection(AcDb3dSolid* extrusion, IFCShapeRepresentation& shapeRepresentation)
+void Autocad::CreationSection(AcDb3dSolid* extrusion, IFCShapeRepresentation& shapeRepresentation)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1140,7 +1168,7 @@ void Construction::CreationSection(AcDb3dSolid* extrusion, IFCShapeRepresentatio
 	}
 }
 
-void Construction::CreationProfilDef(AcDbRegion* pRegion, AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions, const AcGeVector3d& vecExtru, ProfilDef* profilDef)
+void Autocad::CreationProfilDef(AcDbRegion* pRegion, AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions, const AcGeVector3d& vecExtru, ProfilDef* profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1196,7 +1224,7 @@ void Construction::CreationProfilDef(AcDbRegion* pRegion, AcDbVoidPtrArray& line
 	DrawElement(layerName, pSolid, es);
 }
 
-void Construction::CreateSolid3dProfilIPE(I_profilDef& profilDef)
+void Autocad::CreateSolid3dProfilIPE(I_profilDef& profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1236,7 +1264,7 @@ void Construction::CreateSolid3dProfilIPE(I_profilDef& profilDef)
 	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilIPN(I_profilDef& profilDef)
+void Autocad::CreateSolid3dProfilIPN(I_profilDef& profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1279,7 +1307,7 @@ void Construction::CreateSolid3dProfilIPN(I_profilDef& profilDef)
 	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilL8(L_profilDef& profilDef)
+void Autocad::CreateSolid3dProfilL8(L_profilDef& profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1314,7 +1342,7 @@ void Construction::CreateSolid3dProfilL8(L_profilDef& profilDef)
 	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilL9(L_profilDef& profilDef)
+void Autocad::CreateSolid3dProfilL9(L_profilDef& profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1352,7 +1380,7 @@ void Construction::CreateSolid3dProfilL9(L_profilDef& profilDef)
 	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilT10(T_profilDef& profilDef)
+void Autocad::CreateSolid3dProfilT10(T_profilDef& profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1391,7 +1419,7 @@ void Construction::CreateSolid3dProfilT10(T_profilDef& profilDef)
 	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilT12(T_profilDef& profilDef)
+void Autocad::CreateSolid3dProfilT12(T_profilDef& profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1435,7 +1463,7 @@ void Construction::CreateSolid3dProfilT12(T_profilDef& profilDef)
 	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilUPE(U_profilDef& profilDef)
+void Autocad::CreateSolid3dProfilUPE(U_profilDef& profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1474,7 +1502,7 @@ void Construction::CreateSolid3dProfilUPE(U_profilDef& profilDef)
 	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilUPN(U_profilDef& profilDef)
+void Autocad::CreateSolid3dProfilUPN(U_profilDef& profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1513,7 +1541,7 @@ void Construction::CreateSolid3dProfilUPN(U_profilDef& profilDef)
 	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilC(C_profilDef& profilDef)
+void Autocad::CreateSolid3dProfilC(C_profilDef& profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1555,7 +1583,7 @@ void Construction::CreateSolid3dProfilC(C_profilDef& profilDef)
 	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilZ(Z_profilDef& profilDef)
+void Autocad::CreateSolid3dProfilZ(Z_profilDef& profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1594,7 +1622,7 @@ void Construction::CreateSolid3dProfilZ(Z_profilDef& profilDef)
 	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilAsyI(AsymmetricI_profilDef& profilDef)
+void Autocad::CreateSolid3dProfilAsyI(AsymmetricI_profilDef& profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1637,7 +1665,7 @@ void Construction::CreateSolid3dProfilAsyI(AsymmetricI_profilDef& profilDef)
 	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilCircHollow(CircleHollow_profilDef& profilDef)
+void Autocad::CreateSolid3dProfilCircHollow(CircleHollow_profilDef& profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1680,7 +1708,7 @@ void Construction::CreateSolid3dProfilCircHollow(CircleHollow_profilDef& profilD
 	}
 }
 
-void Construction::CreateSolid3dProfilRectHollow(RectangleHollow_profilDef& profilDef)
+void Autocad::CreateSolid3dProfilRectHollow(RectangleHollow_profilDef& profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1736,7 +1764,7 @@ void Construction::CreateSolid3dProfilRectHollow(RectangleHollow_profilDef& prof
 	}
 }
 
-void Construction::CreateSolid3dProfilCircle(Circle_profilDef& profilDef)
+void Autocad::CreateSolid3dProfilCircle(Circle_profilDef& profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1760,7 +1788,7 @@ void Construction::CreateSolid3dProfilCircle(Circle_profilDef& profilDef)
 	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-void Construction::CreateSolid3dProfilRectangle(Rectangle_profilDef& profilDef)
+void Autocad::CreateSolid3dProfilRectangle(Rectangle_profilDef& profilDef)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1791,7 +1819,7 @@ void Construction::CreateSolid3dProfilRectangle(Rectangle_profilDef& profilDef)
 	CreationProfilDef(pRegion, lines, regions, vecExtru, &profilDef);
 }
 
-AcDbRegion* Construction::CreateRegion(AcDb2dPolyline* pNewPline, AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions)
+AcDbRegion* Autocad::CreateRegion(AcDb2dPolyline* pNewPline, AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1808,7 +1836,7 @@ AcDbRegion* Construction::CreateRegion(AcDb2dPolyline* pNewPline, AcDbVoidPtrArr
 	return AcDbRegion::cast((AcRxObject*)regions[0]);
 }
 
-AcDbRegion* Construction::CreateRegion(AcDbCircle* pCircle, AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions)
+AcDbRegion* Autocad::CreateRegion(AcDbCircle* pCircle, AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1825,7 +1853,7 @@ AcDbRegion* Construction::CreateRegion(AcDbCircle* pCircle, AcDbVoidPtrArray& li
 	return AcDbRegion::cast((AcRxObject*)regions[0]);
 }
 
-AcDbRegion* Construction::CreateRegion(AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions)
+AcDbRegion* Autocad::CreateRegion(AcDbVoidPtrArray& lines, AcDbVoidPtrArray& regions)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1841,7 +1869,7 @@ AcDbRegion* Construction::CreateRegion(AcDbVoidPtrArray& lines, AcDbVoidPtrArray
 	return AcDbRegion::cast((AcRxObject*)regions[0]);
 }
 
-AcGeVector3d Construction::GetExtrusionVector(const Vec3& vector, double height)
+AcGeVector3d Autocad::GetExtrusionVector(const Vec3& vector, double height)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1858,7 +1886,7 @@ AcGeVector3d Construction::GetExtrusionVector(const Vec3& vector, double height)
 	}
 }
 
-AcDb2dPolyline* Construction::CreatePolyline(AcGePoint3dArray& ptArr, AcDbVoidPtrArray& lines, bool shouldTransform, AcGeMatrix3d* matrix3d, AcGeVector3d* acVec3d)
+AcDb2dPolyline* Autocad::CreatePolyline(AcGePoint3dArray& ptArr, AcDbVoidPtrArray& lines, bool shouldTransform, AcGeMatrix3d* matrix3d, AcGeVector3d* acVec3d)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1884,7 +1912,7 @@ AcDb2dPolyline* Construction::CreatePolyline(AcGePoint3dArray& ptArr, AcDbVoidPt
 	return pNewPline;
 }
 
-AcDbCircle* Construction::CreateCircle(AcGePoint3d& center, double radius, AcDbVoidPtrArray& lines, bool shouldTransform, AcGeMatrix3d* matrix3d, AcGeVector3d* acVec3d)
+AcDbCircle* Autocad::CreateCircle(AcGePoint3d& center, double radius, AcDbVoidPtrArray& lines, bool shouldTransform, AcGeMatrix3d* matrix3d, AcGeVector3d* acVec3d)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1912,7 +1940,7 @@ AcDbCircle* Construction::CreateCircle(AcGePoint3d& center, double radius, AcDbV
 	return circle;
 }
 
-void Construction::DeplacementObjet3DMappedItem(AcDb3dSolid* solid, const Matrix4& transform)
+void Autocad::DeplacementObjet3DMappedItem(AcDb3dSolid* solid, const Matrix4& transform)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -1958,7 +1986,7 @@ void Construction::DeplacementObjet3DMappedItem(AcDb3dSolid* solid, const Matrix
 	solid->transformBy(mat);
 }
 
-void Construction::DeplacementObjet3DMappedItem(AcDbSubDMesh* pSubDMesh, const Matrix4& transform)
+void Autocad::DeplacementObjet3DMappedItem(AcDbSubDMesh* pSubDMesh, const Matrix4& transform)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -2004,7 +2032,7 @@ void Construction::DeplacementObjet3DMappedItem(AcDbSubDMesh* pSubDMesh, const M
 	pSubDMesh->transformBy(mat);
 }
 
-void Construction::DeplacementObjet(AcDb3dSolid* solid, const Matrix4& transform)
+void Autocad::DeplacementObjet(AcDb3dSolid* solid, const Matrix4& transform)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 
@@ -2047,7 +2075,7 @@ void Construction::DeplacementObjet(AcDb3dSolid* solid, const Matrix4& transform
 	es = solid->transformBy(mat);
 }
 
-void Construction::DeplacementObjet(AcDbSubDMesh* pSubDMesh, const Matrix4& transform)
+void Autocad::DeplacementObjet(AcDbSubDMesh* pSubDMesh, const Matrix4& transform)
 {
 	Timer timer(m_IfcObject->Key, m_IfcObject->Entity, __FUNCTION__);
 

@@ -1,31 +1,20 @@
 #pragma once
 
-#include "tchar.h"
-#include "aced.h"
-#include "rxregsvc.h"
-#include "dbapserv.h"
-#include "dbents.h"
-#include "dbsol3d.h"
-#include "dbregion.h"
-#include "dbsymutl.h"
-#include "dbplanesurf.h"
-#include "AcApDMgr.h"
-#include <Windows.h>
-#include <string.h>
-#include <iostream>
-#include <math.h>
-#include <vectorial/config.h>
-#include <vectorial/vectorial.h>
-#include <vectorial/simd4f.h>
-#include <mathfu/vector_3.h>
-#include <mathfu/matrix_4x4.h>
-#include "dbSubD.h"
+#include "Utils/Object.h"
+#include "Utils/Utils.h"
 
+#include <string>
+#include <map>
 #include <chrono>
 
-#include "Object.h"
+#include <dbSubD.h>
+#include <dbents.h>
+#include <aced.h>
+#include <tchar.h>
 
 #define PI 3.141592653589793
+
+#define LogAutocad(msg, ...) acutPrintf(_T(##msg), __VA_ARGS__)
 
 class Timer
 {
@@ -39,12 +28,12 @@ private:
 	int m_Key;
 };
 
-class Construction
+class Autocad
 {
 public:
-	Construction();
-	Construction(std::shared_ptr<IFCObject> ifcObject);
-	~Construction();
+	Autocad();
+	Autocad(std::shared_ptr<IFCObject> ifcObject);
+	~Autocad();
 
 	void Extrusion();
 	void CreationFaceSolid();
@@ -67,10 +56,7 @@ public:
 	void CreateSolid3dProfilRectangle(Rectangle_profilDef& profilDef);
 
 public:
-	static std::string s_LogPath;
-	static std::map<std::string, std::vector<std::string>> s_Logs;
-	static std::map<int, std::vector<std::shared_ptr<IFCObject>>> s_ObjectVoids;
-	static std::map<int, Style> s_Styles;
+	static std::string OpenAndSelectFile();
 
 private:
 	Acad::ErrorStatus InitLayerTable();
@@ -112,6 +98,12 @@ private:
 	const wchar_t* ConvertToWideChar(const char* c, ...);
 	AcGeVector3d GetExtrusionVector(const Vec3& vector, double height);
 	inline bool StepBoolToBoolean(Step::Boolean other) { return other - 1; }
+
+public:
+	static std::string s_LogPath;
+	static std::map<std::string, std::vector<std::string>> s_Logs;
+	static std::map<int, std::vector<std::shared_ptr<IFCObject>>> s_ObjectVoids;
+	static std::map<int, Style> s_Styles;
 
 private:
 	std::chrono::steady_clock::time_point m_StartTime;
