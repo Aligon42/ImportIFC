@@ -8,7 +8,7 @@
 #include <ifc2x3/SPFReader.h>
 #include <ifc2x3/ExpressDataSet.h>
 
-//#define USETHREADS
+#define USETHREADS
 #ifdef USETHREADS
 #include <thread>
 #endif

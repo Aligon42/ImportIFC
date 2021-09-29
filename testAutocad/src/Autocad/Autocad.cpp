@@ -416,10 +416,10 @@ void Autocad::DrawFacesMappedItem(IFCShapeRepresentation& shape, IFCShapeReprese
 		return;
 	}
 
-	if (shape.Scale > 0.0)
+	if (mappedShape.Scale > 0.0)
 	{
 		AcGeMatrix3d matrix = AcGeMatrix3d::AcGeMatrix3d();
-		matrix.setToScaling(shape.Scale);
+		matrix.setToScaling(mappedShape.Scale);
 		pSubDMesh->transformBy(matrix);
 	}
 

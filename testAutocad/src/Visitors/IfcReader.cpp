@@ -249,8 +249,6 @@ void IfcReader::DrawElements()
 	{
 		for (auto& obj : type.second)
 		{
-			//if (obj->Key != 5557) continue;
-
 			auto& shape = *obj->ShapeRepresentations.begin();
 
 			if (obj->ShapeRepresentations.begin() == obj->ShapeRepresentations.end()) continue;

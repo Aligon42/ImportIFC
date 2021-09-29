@@ -12,7 +12,7 @@ void importIfc()
 
 void exportIfc()
 {
-
+	// TODO: Export
 }
 
 void initApp()
@@ -41,20 +41,17 @@ acrxEntryPoint(AcRx::AppMsgCode msg, void* pkt)
 {
 	switch (msg)
 	{
-
-	case AcRx::kInitAppMsg:
-		acrxDynamicLinker->unlockApplication(pkt);
-		acrxRegisterAppMDIAware(pkt);
-		initApp();
-		break;
-	case AcRx::kUnloadAppMsg:
-		unloadApp();
-		break;
-	default:
-		break;
-
+		case AcRx::kInitAppMsg:
+			acrxDynamicLinker->unlockApplication(pkt);
+			acrxRegisterAppMDIAware(pkt);
+			initApp();
+			break;
+		case AcRx::kUnloadAppMsg:
+			unloadApp();
+			break;
+		default:
+			break;
 	}
 
 	return AcRx::kRetOK;
-
 }

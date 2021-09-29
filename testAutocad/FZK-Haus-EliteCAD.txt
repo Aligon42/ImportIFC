@@ -1,264 +1,264 @@
 Nombre éléments : 116
-Key: 16251 - IfcBeam - 0.059 ms. 
-Key: 5440 - IfcBuildingElementProxy - 3.105 ms. 
-Key: 5557 - IfcBuildingElementProxy - 7.817 ms. 
-Key: 5653 - IfcBuildingElementProxy - 10.784 ms. 
-Key: 5749 - IfcBuildingElementProxy - 10.97 ms. 
-Key: 5845 - IfcBuildingElementProxy - 10.815 ms. 
-Key: 5941 - IfcBuildingElementProxy - 10.78 ms. 
-Key: 99433 - IfcBuildingElementProxy - 34.975 ms. 
-Key: 99547 - IfcBuildingElementProxy - 2.267 ms. 
-Key: 99601 - IfcBuildingElementProxy - 1.543 ms. 
-Key: 99739 - IfcBuildingElementProxy - 20.473 ms. 
-Key: 99877 - IfcBuildingElementProxy - 32.085 ms. 
-Key: 100645 - IfcBuildingElementProxy - 1.533 ms. 
-Key: 100744 - IfcBuildingElementProxy - 0.199 ms. 
-Key: 100834 - IfcBuildingElementProxy - 7.681 ms. 
-Key: 100924 - IfcBuildingElementProxy - 7.68 ms. 
-Key: 100972 - IfcBuildingElementProxy - 6.241 ms. 
-Key: 101062 - IfcBuildingElementProxy - 7.741 ms. 
-Key: 101152 - IfcBuildingElementProxy - 7.859 ms. 
-Key: 101242 - IfcBuildingElementProxy - 7.779 ms. 
-Key: 101332 - IfcBuildingElementProxy - 7.866 ms. 
-Key: 101507 - IfcBuildingElementProxy - 0.308 ms. 
+Key: 16251 - IfcBeam - 0.07 ms. 
+Key: 5440 - IfcBuildingElementProxy - 5.965 ms. 
+Key: 5557 - IfcBuildingElementProxy - 9.137 ms. 
+Key: 5653 - IfcBuildingElementProxy - 12 ms. 
+Key: 5749 - IfcBuildingElementProxy - 11.802 ms. 
+Key: 5845 - IfcBuildingElementProxy - 11.205 ms. 
+Key: 5941 - IfcBuildingElementProxy - 11.001 ms. 
+Key: 99433 - IfcBuildingElementProxy - 32.503 ms. 
+Key: 99547 - IfcBuildingElementProxy - 2.283 ms. 
+Key: 99601 - IfcBuildingElementProxy - 1.568 ms. 
+Key: 99739 - IfcBuildingElementProxy - 24.046 ms. 
+Key: 99877 - IfcBuildingElementProxy - 26.9 ms. 
+Key: 100645 - IfcBuildingElementProxy - 1.413 ms. 
+Key: 100744 - IfcBuildingElementProxy - 0.207 ms. 
+Key: 100834 - IfcBuildingElementProxy - 7.506 ms. 
+Key: 100924 - IfcBuildingElementProxy - 7.289 ms. 
+Key: 100972 - IfcBuildingElementProxy - 6.14 ms. 
+Key: 101062 - IfcBuildingElementProxy - 7.458 ms. 
+Key: 101152 - IfcBuildingElementProxy - 7.298 ms. 
+Key: 101242 - IfcBuildingElementProxy - 7.462 ms. 
+Key: 101332 - IfcBuildingElementProxy - 7.369 ms. 
+Key: 101507 - IfcBuildingElementProxy - 0.295 ms. 
 Key: 101846 - IfcBuildingElementProxy - 0.539 ms. 
-Key: 101912 - IfcBuildingElementProxy - 11.895 ms. 
-Key: 102026 - IfcBuildingElementProxy - 20.137 ms. 
-Key: 102164 - IfcBuildingElementProxy - 27.528 ms. 
-Key: 103999 - IfcBuildingElementProxy - 3.341 ms. 
-Key: 104095 - IfcBuildingElementProxy - 14.58 ms. 
-Key: 104203 - IfcBuildingElementProxy - 6.566 ms. 
-Key: 104275 - IfcBuildingElementProxy - 2.221 ms. 
-Key: 104311 - IfcBuildingElementProxy - 2.903 ms. 
-Key: 104347 - IfcBuildingElementProxy - 2.843 ms. 
-Key: 104461 - IfcBuildingElementProxy - 6.67 ms. 
-Key: 104557 - IfcBuildingElementProxy - 2.2 ms. 
-Key: 104602 - IfcBuildingElementProxy - 7.806 ms. 
-Key: 104644 - IfcBuildingElementProxy - 1.646 ms. 
-Key: 104731 - IfcBuildingElementProxy - 2.32 ms. 
-Key: 104821 - IfcBuildingElementProxy - 2.214 ms. 
-Key: 105013 - IfcBuildingElementProxy - 18.054 ms. 
-Key: 105127 - IfcBuildingElementProxy - 2.361 ms. 
-Key: 105241 - IfcBuildingElementProxy - 2.32 ms. 
-Key: 105328 - IfcBuildingElementProxy - 2.307 ms. 
-Key: 105421 - IfcBuildingElementProxy - 9.209 ms. 
-Key: 105538 - IfcBuildingElementProxy - 3.196 ms. 
-Key: 105592 - IfcBuildingElementProxy - 1.581 ms. 
-Key: 105634 - IfcBuildingElementProxy - 1.105 ms. 
-Key: 105673 - IfcBuildingElementProxy - 1.039 ms. 
-Key: 107693 - IfcBuildingElementProxy - 4.151 ms. 
-Key: 108160 - IfcBuildingElementProxy - 1.182 ms. 
-Key: 108304 - IfcBuildingElementProxy - 5.136 ms. 
-Key: 119473 - IfcBuildingElementProxy - 2.076 ms. 
-Key: 119516 - IfcBuildingElementProxy - 6.016 ms. 
-Key: 119525 - IfcBuildingElementProxy - 0.175 ms. 
-Key: 119535 - IfcBuildingElementProxy - 0.156 ms. 
-Key: 119599 - IfcBuildingElementProxy - 2.413 ms. 
-Key: 119609 - IfcBuildingElementProxy - 0.11 ms. 
-Key: 119619 - IfcBuildingElementProxy - 0.101 ms. 
-Key: 119662 - IfcBuildingElementProxy - 4.759 ms. 
-Key: 119697 - IfcBuildingElementProxy - 0.073 ms. 
-Key: 119732 - IfcBuildingElementProxy - 0.067 ms. 
-Key: 119741 - IfcBuildingElementProxy - 0.102 ms. 
-Key: 119751 - IfcBuildingElementProxy - 0.108 ms. 
+Key: 101912 - IfcBuildingElementProxy - 11.572 ms. 
+Key: 102026 - IfcBuildingElementProxy - 19.826 ms. 
+Key: 102164 - IfcBuildingElementProxy - 27.247 ms. 
+Key: 103999 - IfcBuildingElementProxy - 3.714 ms. 
+Key: 104095 - IfcBuildingElementProxy - 14.067 ms. 
+Key: 104203 - IfcBuildingElementProxy - 6.551 ms. 
+Key: 104275 - IfcBuildingElementProxy - 2.266 ms. 
+Key: 104311 - IfcBuildingElementProxy - 3.002 ms. 
+Key: 104347 - IfcBuildingElementProxy - 2.981 ms. 
+Key: 104461 - IfcBuildingElementProxy - 6.534 ms. 
+Key: 104557 - IfcBuildingElementProxy - 2.159 ms. 
+Key: 104602 - IfcBuildingElementProxy - 7.845 ms. 
+Key: 104644 - IfcBuildingElementProxy - 1.617 ms. 
+Key: 104731 - IfcBuildingElementProxy - 2.325 ms. 
+Key: 104821 - IfcBuildingElementProxy - 2.161 ms. 
+Key: 105013 - IfcBuildingElementProxy - 18.929 ms. 
+Key: 105127 - IfcBuildingElementProxy - 2.331 ms. 
+Key: 105241 - IfcBuildingElementProxy - 2.277 ms. 
+Key: 105328 - IfcBuildingElementProxy - 2.287 ms. 
+Key: 105421 - IfcBuildingElementProxy - 9.579 ms. 
+Key: 105538 - IfcBuildingElementProxy - 3.219 ms. 
+Key: 105592 - IfcBuildingElementProxy - 1.57 ms. 
+Key: 105634 - IfcBuildingElementProxy - 1.068 ms. 
+Key: 105673 - IfcBuildingElementProxy - 1.112 ms. 
+Key: 107693 - IfcBuildingElementProxy - 4.283 ms. 
+Key: 108160 - IfcBuildingElementProxy - 1.158 ms. 
+Key: 108304 - IfcBuildingElementProxy - 4.774 ms. 
+Key: 119473 - IfcBuildingElementProxy - 2.079 ms. 
+Key: 119516 - IfcBuildingElementProxy - 4.773 ms. 
+Key: 119525 - IfcBuildingElementProxy - 0.108 ms. 
+Key: 119535 - IfcBuildingElementProxy - 0.104 ms. 
+Key: 119599 - IfcBuildingElementProxy - 2.177 ms. 
+Key: 119609 - IfcBuildingElementProxy - 0.107 ms. 
+Key: 119619 - IfcBuildingElementProxy - 0.105 ms. 
+Key: 119662 - IfcBuildingElementProxy - 4.286 ms. 
+Key: 119697 - IfcBuildingElementProxy - 0.074 ms. 
+Key: 119732 - IfcBuildingElementProxy - 0.07 ms. 
+Key: 119741 - IfcBuildingElementProxy - 0.104 ms. 
+Key: 119751 - IfcBuildingElementProxy - 0.102 ms. 
 Key: 119761 - IfcBuildingElementProxy - 0.105 ms. 
 Key: 119771 - IfcBuildingElementProxy - 0.103 ms. 
-Key: 119781 - IfcBuildingElementProxy - 0.109 ms. 
-Key: 119817 - IfcBuildingElementProxy - 0.071 ms. 
-Key: 126762 - IfcBuildingElementProxy - 10.24 ms. 
-Key: 126894 - IfcBuildingElementProxy - 11.925 ms. 
-Key: 12260 - IfcCovering - 0.06 ms. 
-Key: 12394 - IfcCovering - 0.039 ms. 
-Key: 12516 - IfcCovering - 0.034 ms. 
-Key: 12719 - IfcCovering - 0.045 ms. 
-Key: 12862 - IfcCovering - 0.034 ms. 
-Key: 13049 - IfcCovering - 0.036 ms. 
-Key: 108619 - IfcCovering - 0.073 ms. 
-Key: 13617 - IfcDoor - 0.122 ms. 
-Key: 15826 - IfcDoor - 0.248 ms. 
-Key: 15944 - IfcDoor - 0.242 ms. 
-Key: 16134 - IfcDoor - 0.242 ms. 
-Key: 24905 - IfcRailing - 27.114 ms. 
-Key: 113966 - IfcRailing - 2.901 ms. 
-Key: 114552 - IfcRailing - 1.382 ms. 
-Key: 108783 - IfcRoof - 0.011 ms. 
-Key: 12118 - IfcSite - 11.629 ms. 
-Key: 15682 - IfcSlab - 0.039 ms. 
-Key: 108754 - IfcSlab - 0.036 ms. 
-Key: 108778 - IfcSlab - 0.034 ms. 
-Key: 112788 - IfcSlab - 0.059 ms. 
-Key: 18016 - IfcStair - 3.54 ms. 
-Key: 12532 - IfcVirtualElement - 0.032 ms. 
-Key: 12735 - IfcVirtualElement - 0.027 ms. 
-Key: 108649 - IfcVirtualElement - 0.048 ms. 
-Key: 13076 - IfcWallStandardCase - 0.039 ms. 
-Key: 13640 - IfcWallStandardCase - 0.035 ms. 
-Key: 14364 - IfcWallStandardCase - 0.034 ms. 
-Key: 14854 - IfcWallStandardCase - 0.034 ms. 
-Key: 15706 - IfcWallStandardCase - 0.033 ms. 
-Key: 15980 - IfcWallStandardCase - 0.036 ms. 
-Key: 16014 - IfcWallStandardCase - 0.033 ms. 
-Key: 16176 - IfcWallStandardCase - 0.095 ms. 
-Key: 16221 - IfcWallStandardCase - 0.078 ms. 
-Key: 108852 - IfcWallStandardCase - 0.142 ms. 
-Key: 108907 - IfcWallStandardCase - 0.189 ms. 
-Key: 110815 - IfcWallStandardCase - 0.134 ms. 
-Key: 110867 - IfcWallStandardCase - 0.182 ms. 
-Key: 13310 - IfcWindow - 0.466 ms. 
-Key: 13545 - IfcWindow - 0.455 ms. 
-Key: 13871 - IfcWindow - 0.448 ms. 
-Key: 14105 - IfcWindow - 0.451 ms. 
-Key: 14339 - IfcWindow - 0.449 ms. 
-Key: 14595 - IfcWindow - 0.47 ms. 
-Key: 14829 - IfcWindow - 0.45 ms. 
-Key: 15086 - IfcWindow - 0.461 ms. 
-Key: 15320 - IfcWindow - 0.48 ms. 
-Key: 15637 - IfcWindow - 0.614 ms. 
-Key: 110771 - IfcWindow - 3.994 ms. 
-Key: 112728 - IfcWindow - 3.969 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::InitLayerTable - 0.004 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.003 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.135 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.01 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.018 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.02 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.009 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.077 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.829 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 1.169 ms. 
+Key: 119781 - IfcBuildingElementProxy - 0.114 ms. 
+Key: 119817 - IfcBuildingElementProxy - 0.072 ms. 
+Key: 126762 - IfcBuildingElementProxy - 10.329 ms. 
+Key: 126894 - IfcBuildingElementProxy - 12.625 ms. 
+Key: 12260 - IfcCovering - 0.077 ms. 
+Key: 12394 - IfcCovering - 0.04 ms. 
+Key: 12516 - IfcCovering - 0.04 ms. 
+Key: 12719 - IfcCovering - 0.048 ms. 
+Key: 12862 - IfcCovering - 0.039 ms. 
+Key: 13049 - IfcCovering - 0.039 ms. 
+Key: 108619 - IfcCovering - 0.069 ms. 
+Key: 13617 - IfcDoor - 0.511 ms. 
+Key: 15826 - IfcDoor - 0.274 ms. 
+Key: 15944 - IfcDoor - 0.262 ms. 
+Key: 16134 - IfcDoor - 0.931 ms. 
+Key: 24905 - IfcRailing - 23.88 ms. 
+Key: 113966 - IfcRailing - 3.012 ms. 
+Key: 114552 - IfcRailing - 1.465 ms. 
+Key: 108783 - IfcRoof - 0.027 ms. 
+Key: 12118 - IfcSite - 16.149 ms. 
+Key: 15682 - IfcSlab - 0.055 ms. 
+Key: 108754 - IfcSlab - 0.04 ms. 
+Key: 108778 - IfcSlab - 0.039 ms. 
+Key: 112788 - IfcSlab - 0.07 ms. 
+Key: 18016 - IfcStair - 6.445 ms. 
+Key: 12532 - IfcVirtualElement - 0.075 ms. 
+Key: 12735 - IfcVirtualElement - 0.048 ms. 
+Key: 108649 - IfcVirtualElement - 0.32 ms. 
+Key: 13076 - IfcWallStandardCase - 0.072 ms. 
+Key: 13640 - IfcWallStandardCase - 0.037 ms. 
+Key: 14364 - IfcWallStandardCase - 0.342 ms. 
+Key: 14854 - IfcWallStandardCase - 0.061 ms. 
+Key: 15706 - IfcWallStandardCase - 0.056 ms. 
+Key: 15980 - IfcWallStandardCase - 0.057 ms. 
+Key: 16014 - IfcWallStandardCase - 0.314 ms. 
+Key: 16176 - IfcWallStandardCase - 0.124 ms. 
+Key: 16221 - IfcWallStandardCase - 0.342 ms. 
+Key: 108852 - IfcWallStandardCase - 0.413 ms. 
+Key: 108907 - IfcWallStandardCase - 0.219 ms. 
+Key: 110815 - IfcWallStandardCase - 0.14 ms. 
+Key: 110867 - IfcWallStandardCase - 0.199 ms. 
+Key: 13310 - IfcWindow - 1.24 ms. 
+Key: 13545 - IfcWindow - 0.937 ms. 
+Key: 13871 - IfcWindow - 0.48 ms. 
+Key: 14105 - IfcWindow - 0.822 ms. 
+Key: 14339 - IfcWindow - 0.725 ms. 
+Key: 14595 - IfcWindow - 0.729 ms. 
+Key: 14829 - IfcWindow - 1.031 ms. 
+Key: 15086 - IfcWindow - 0.483 ms. 
+Key: 15320 - IfcWindow - 0.522 ms. 
+Key: 15637 - IfcWindow - 0.616 ms. 
+Key: 110771 - IfcWindow - 4.069 ms. 
+Key: 112728 - IfcWindow - 4.694 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::InitLayerTable - 0.03 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.007 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.177 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.002 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.002 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.014 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.003 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.016 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.009 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.042 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.066 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.19 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.062 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.795 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 1.054 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.002 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.002 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.012 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.011 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.048 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.039 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.176 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.003 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.016 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.014 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.05 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.076 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.284 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.009 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.008 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.008 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.031 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.035 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.148 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.035 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.038 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.156 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.009 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.008 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.031 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.035 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.132 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.009 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.008 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.032 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.035 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.142 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.009 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.008 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.008 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.031 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.037 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.132 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.156 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.008 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.008 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.03 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.036 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.146 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.008 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.014 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.04 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.04 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.164 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.009 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.009 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.032 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.04 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.153 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.008 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.008 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.033 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.035 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.134 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.031 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.036 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.146 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.017 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.014 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.046 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.061 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.22 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.008 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.008 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.031 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.04 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.157 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.087 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.081 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.19 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 1.187 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 1.854 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.078 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.077 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.172 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 1.157 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 1.813 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.002 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.017 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.015 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.048 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.064 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.226 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.015 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.02 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.052 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.067 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.247 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.016 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.015 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.046 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.059 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.217 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.015 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.02 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.053 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.063 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.237 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.016 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.023 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.016 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.048 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.06 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.223 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.017 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.016 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.048 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.061 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.231 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.003 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.018 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.016 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.05 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.062 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.079 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.284 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.002 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.022 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.017 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.058 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.079 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.015 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.015 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.046 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.064 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.261 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.015 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.015 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.045 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.061 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.225 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.015 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.015 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.046 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.066 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.25 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.018 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.015 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.078 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.164 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.436 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.003 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.016 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.015 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.047 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.068 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.262 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.016 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.015 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.047 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.065 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.264 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.002 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.017 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.016 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.048 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.064 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.235 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.016 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.016 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.049 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.074 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.235 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.017 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.015 ms. 
 Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.048 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.068 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.229 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::GetLayerName - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::AddTableRecord - 0.001 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet3DMappedItem - 0.016 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DeplacementObjet - 0.014 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::HandleDeplacements - 0.045 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.055 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.236 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFaces - 1859.8 ms. 
-Key: 5557 - IfcBuildingElementProxy - Autocad::CreationFaceSolid - 1859.97 ms. 
-Key: 5557 - IfcBuildingElementProxy - Rendu Autocad - 1860.02 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawElement - 0.058 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFacesMappedItem - 0.252 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::DrawFaces - 7.109 ms. 
+Key: 5557 - IfcBuildingElementProxy - Autocad::CreationFaceSolid - 7.351 ms. 
+Key: 5557 - IfcBuildingElementProxy - Rendu Autocad - 7.466 ms. 
