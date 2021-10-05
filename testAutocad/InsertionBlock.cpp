@@ -338,8 +338,9 @@ AcDbObjectIdArray postToDatabase(AcDbVoidPtrArray eSet, AcDb3dSolid* pSolid, int
 		}
 
 
-		pNewEnt->getMassProp(volume, centroid, momInertia, prodInertia, prinMoments, prinAxes, radiiGyration, extents);
 
+		pNewEnt->setLayer(_T("0"));
+		pNewEnt->getMassProp(volume, centroid, momInertia, prodInertia, prinMoments, prinAxes, radiiGyration, extents);
 		pNewEnt->setColor(colorBlock);
 
 
@@ -367,6 +368,7 @@ AcDbObjectIdArray postToDatabase(AcDbVoidPtrArray eSet, AcDb3dSolid* pSolid, int
 			AcDb3dSolid* pSol = newSolids.at(k);
 			pSol->getMassProp(volume, centroid, momInertia, prodInertia, prinMoments, prinAxes, radiiGyration, extents);
 			pSol->setColor(colorBlock);
+			pSol->setLayer(_T("0"));
 			pBtblr->appendAcDbEntity(ObjId, pSol);
 			pSol->close();
 			if (volume > 0)
@@ -571,6 +573,8 @@ int ajusterBlocAvecContour(void)
 
 		acedGetCurrentUCS(matrix3dG);
 		origin = pEnt->position();
+		//angle = pEnt->get
+		double angleRotation = pEnt->rotation();
 		ads_point pOrigin;
 		ads_point pResult;
 		ads_point p1;
@@ -762,42 +766,86 @@ int ajusterBlocAvecContour(void)
 					std::string _SpiSur2 = std::to_string(pi / 2.0);
 					std::string _Spi = std::to_string(pi);
 
-					if (xmils < xmil)
-						// il est à gauche
+					if (angleRotation == 0.)
 					{
-						handleG = ObjId.handle();
-						if (longueurG < (p2res[0] - p1res[0]))
+						if (xmils < xmil)
+							// il est à gauche
 						{
-							longueurG = round(p2res[0] - p1res[0]);
+							handleG = ObjId.handle();
+							if (longueurG < (p2res[0] - p1res[0]))
+							{
+								longueurG = round(p2res[0] - p1res[0]);
+							}
+							if (largeurG < (p2res[1] - p1res[1]))
+							{
+								largeurG = round(p2res[1] - p1res[1]);
+							}
+							if (p1[0] < xminG)
+							{
+								xminG = p1[0];
+							}
+							name2->close();
+							acedSSAdd(name, jeuSelG, jeuSelG);
 						}
-						if (largeurG < (p2res[1] - p1res[1]))
-						{
-							largeurG = round(p2res[1] - p1res[1]);
+						// à droite
+						else {
+							handleD = ObjId.handle();
+							if (longueurD < (maxPoint[0] - minPoint[0]))
+							{
+								longueurD = round(p2res[0] - p1res[0]);
+							}
+							if (largeurD < (maxPoint[1] - minPoint[1]))
+							{
+								largeurD = round(p2res[1] - p1res[1]);
+							}
+							if (p1[0] < xminD)
+							{
+								xminD = p1[0];
+							}
+							name2->close();
+							acedSSAdd(name, jeuSelD, jeuSelD);
 						}
-						if (p1[0] < xminG)
-						{
-							xminG = p1[0];
-						}
-						name2->close();
-						acedSSAdd(name, jeuSelG, jeuSelG);
 					}
-					// à droite
-					else {
-						handleD = ObjId.handle();
-						if (longueurD < (maxPoint[0] - minPoint[0]))
+					else
+					{
+						if (ymils < ymil)
+							// il est à gauche
 						{
-							longueurD = round(p2res[0] - p1res[0]);
+							handleG = ObjId.handle();
+							if (longueurG < (p2res[0] - p1res[0]))
+							{
+								longueurG = round(p2res[0] - p1res[0]);
+							}
+							if (largeurG < (p2res[1] - p1res[1]))
+							{
+								largeurG = round(p2res[1] - p1res[1]);
+							}
+							if (p1[0] < xminG)
+							{
+								xminG = p1[0];
+							}
+							name2->close();
+							acedSSAdd(name, jeuSelG, jeuSelG);
 						}
-						if (largeurD < (maxPoint[1] - minPoint[1]))
-						{
-							largeurD = round(p2res[1] - p1res[1]);
+						// à droite
+						else {
+							handleD = ObjId.handle();
+							if (longueurD < (maxPoint[0] - minPoint[0]))
+							{
+								longueurD = round(p2res[0] - p1res[0]);
+							}
+							if (largeurD < (maxPoint[1] - minPoint[1]))
+							{
+								largeurD = round(p2res[1] - p1res[1]);
+							}
+							if (p1[0] < xminD)
+							{
+								xminD = p1[0];
+							}
+							name2->close();
+							acedSSAdd(name, jeuSelD, jeuSelD);
 						}
-						if (p1[0] < xminD)
-						{
-							xminD = p1[0];
-						}
-						name2->close();
-						acedSSAdd(name, jeuSelD, jeuSelD);
+
 					}
 				}
 			}

@@ -433,79 +433,155 @@ void ExportIFC()
 
                 AcDbFace* pCloneFace = (AcDbFace*)faceArray.at(k);
                 pCloneFace->getGripPoints(listePoints, snapModes, geomlds);
-                //pCloneFace->getStretchPoints(listePoints);
 
-                //Adesk::UInt16 uInt16 = listePoints.length();
-                //Adesk::Boolean boolEdge;
                 Acad::ErrorStatus es;
                 AcDbVoidPtrArray polylineArray;
 
                 pCloneFace->explode(polylineArray);
 
                 int pointsCount = listePoints.length();
-                nbPoints[k] = pointsCount;// - count;
-                //count = pointsCount;
+                nbPoints[k] = pointsCount;
 
-                for (int t = 0; t < polylineArray.length(); t++)//décomposer les faces pour avoir des polyline afin de verifier si c'est des arc ou des droites 
+                double angle;                
+                AcGePoint3dArray listePointsPolyline;
+
+                // CERCLE
+                Circle circle;
+
+                // TRIMMEDCURVE
+                TrimmedCurveEx trimmedCurve;
+
+                //COMPOSITECURVESEGMENT
+                CompositeCurveSegmentEx compositeCurveSegment;
+
+                std::vector<CompositeCurveSegmentEx> listCompositeCurveSegmentTrim;
+                std::vector<std::string> listTypeCompositeCurveSegment;
+
+                for (int t = 0; t < polylineArray.length(); t++)//décomposer les faces pour avoir des polylines afin de verifier si c'est des arcs ou des droites 
                 {
-                    AcDb3dPolyline* pClonePolyline = (AcDb3dPolyline*)polylineArray.at(t);
+                    AcDbArc* pCloneArc = (AcDbArc*)polylineArray.at(t);
+                    AcDbPolyline* pClonePolyline = (AcDbPolyline*)polylineArray.at(t);
 
-                    double offsetCurve = 10;
-                    AcDbVoidPtrArray offsetCurveArray;
+                    angle = pCloneArc->totalAngle();
 
-                    pClonePolyline->getOffsetCurves(offsetCurve, offsetCurveArray);
-
-                    AcGeCurve3d* curve3d;
-                    AcGeTol tol;
-                    pClonePolyline->getAcGeCurve(curve3d, tol);
-
-                }
-               
-                
-
-                for (int l = 0; l < nbPoints[k]; l++)
-                {
-                    AcGePoint3d point = listePoints.at(l);
-                    
-                    // Init root properties
-                    if (iso > 0)
+                    if (angle == 0)
                     {
-                        initRootProperties(objectCovering.get(), "Covering_Isolation");
-                        objectCovering->setOwnerHistory(ownerHistory);
-                    }
-                    else if (pla > 0)
-                    {
-                        initRootProperties(objectPlate.get(), "Plate_Plateau");
-                        objectPlate->setOwnerHistory(ownerHistory);
-                    }
-                    else if (sup > 0)
-                    {
-                        initRootProperties(objectPlate.get(), "Plate_Support");
-                        objectPlate->setOwnerHistory(ownerHistory);
+                        isPolyline = true;
+                        
+                        pClonePolyline->getStretchPoints(listePointsPolyline);
+
+                        for (int i = 0; i < listePointsPolyline.length(); i++)
+                        {
+                            AcGePoint3d point = (AcGePoint3d)listePointsPolyline.at(i);
+                            points.push_back((roundoff(point[0], 3)) * 0.001);
+                            points.push_back((roundoff(point[1], 3)) * 0.001);
+                            points.push_back((roundoff(point[2], 3)) * 0.001);
+                        }
+
+                        cwrv.set3DPolyline(points);
+                        listTypeCompositeCurveSegment.push_back("polyline");
+                        
                     }
                     else
                     {
-                        initRootProperties(objectCovering.get(), "Covering");
-                        objectCovering->setOwnerHistory(ownerHistory);
-                    }                    
-                    
-                    
+                        isPolyline = false;
 
-                    if (iso > 0)
-                    {
-                        objectCovering->setPredefinedType(ifc2x3::IfcCoveringTypeEnum_INSULATION);
-                    }
-                    else if(isPlate == false)
-                    {
-                        objectCovering->setPredefinedType(ifc2x3::IfcCoveringTypeEnum_CLADDING);
+                        //set circle 
+                        circle.centre = pCloneArc->center();
+                        circle.rayon = pCloneArc->radius();
+
+                        //set trimmedCurve (#112767)
+                        trimmedCurve.trim1 = pCloneArc->startAngle();
+                        trimmedCurve.trim2 = pCloneArc->endAngle();
+                        trimmedCurve.preference = ifc2x3::IfcTrimmingPreference::IfcTrimmingPreference_PARAMETER; //à récup
+                        trimmedCurve.senseAgreement = Step::Boolean::BFalse; //à récup
+
+                        //set compositeCurveSegment
+                        compositeCurveSegment.transition = ifc2x3::IfcTransitionCode::IfcTransitionCode_CONTINUOUS; //à récup
+                        compositeCurveSegment.sameSense = Step::Boolean::BTrue; //à récup
+                        cwrv.setCompositeCurveSegment(compositeCurveSegment, trimmedCurve, circle);
+
+                        listTypeCompositeCurveSegment.push_back("trimmedCurve");
+                        listCompositeCurveSegmentTrim.push_back(compositeCurveSegment);
+
+                        iteratorPolyline++;
                     }
 
-                    // Create representation
-                    // Polyloop #1
-                    points.push_back((roundoff(point[0], 3)) * 0.001);
-                    points.push_back((roundoff(point[1], 3)) * 0.001);
-                    points.push_back((roundoff(point[2], 3)) * 0.001);
+
                 }
+
+                if (iteratorPolyline > 0)
+                {
+                    int index = 0;
+                    int nbPointsPolyline = 0;
+                    std::vector<int> listNbPointsPolyline;
+
+                    for (int i = 0; i <= listTypeCompositeCurveSegment.size() - index; i++)
+                    {
+                        while (listTypeCompositeCurveSegment.at(index) == "polyline")
+                        {
+                            nbPointsPolyline++;
+                            index++;
+                        }
+
+                        listNbPointsPolyline.push_back(nbPointsPolyline);
+
+                        if (listTypeCompositeCurveSegment.at(index) == "trimmedCurve")
+                        {
+                            nbPointsPolyline = 0;
+                        }
+                    }
+
+                    cwrv.setListCompositeCurveSegmentTrim(listCompositeCurveSegmentTrim);
+                    cwrv.setListNbPointsPolylineCompositeCurveSegment(listNbPointsPolyline);
+                    cwrv.setListTypeCompositeCurveSegment(listTypeCompositeCurveSegment);
+                }
+                else 
+                {
+                    for (int l = 0; l < nbPoints[k]; l++)
+                    {
+                        AcGePoint3d point = listePoints.at(l);
+
+                        // Init root properties
+                        if (iso > 0)
+                        {
+                            initRootProperties(objectCovering.get(), "Covering_Isolation");
+                            objectCovering->setOwnerHistory(ownerHistory);
+                        }
+                        else if (pla > 0)
+                        {
+                            initRootProperties(objectPlate.get(), "Plate_Plateau");
+                            objectPlate->setOwnerHistory(ownerHistory);
+                        }
+                        else if (sup > 0)
+                        {
+                            initRootProperties(objectPlate.get(), "Plate_Support");
+                            objectPlate->setOwnerHistory(ownerHistory);
+                        }
+                        else
+                        {
+                            initRootProperties(objectCovering.get(), "Covering");
+                            objectCovering->setOwnerHistory(ownerHistory);
+                        }
+
+                        if (iso > 0)
+                        {
+                            objectCovering->setPredefinedType(ifc2x3::IfcCoveringTypeEnum_INSULATION);
+                        }
+                        else if (isPlate == false)
+                        {
+                            objectCovering->setPredefinedType(ifc2x3::IfcCoveringTypeEnum_CLADDING);
+                        }
+
+                        // Create representation
+                        // Polyloop #1
+                        points.push_back((roundoff(point[0], 3)) * 0.001);
+                        points.push_back((roundoff(point[1], 3)) * 0.001);
+                        points.push_back((roundoff(point[2], 3)) * 0.001);
+                    }
+                }
+
+                
 
                 pCloneFace->erase();
                 pCloneFace->close();

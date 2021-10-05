@@ -6,9 +6,46 @@
 
 #include <vector>
 
+#include "tchar.h"
+#include "aced.h"
+#include "rxregsvc.h"
+#include "dbapserv.h"
+#include "dbents.h"
+#include "dbsol3d.h"
+#include "dbregion.h"
+#include "dbsymutl.h"
+#include "dbplanesurf.h"
+#include "AcApDMgr.h"
+
+struct CompositeCurveSegmentEx
+{
+	ifc2x3::IfcTransitionCode transition;
+	Step::Boolean sameSense;
+	TrimmedCurveEx mTrimmedCurve;
+};
+
+struct TrimmedCurveEx
+{
+	ifc2x3::Set_IfcTrimmingSelect_1_2 trim1;
+	ifc2x3::Set_IfcTrimmingSelect_1_2 trim2;
+	Step::Boolean senseAgreement;
+	ifc2x3::IfcTrimmingPreference preference;
+	Circle mCircle;
+};
+
+struct Circle
+{
+	AcGePoint3d centre;
+	ifc2x3::IfcPositiveLengthMeasure rayon;
+};
+
+
+
 class CreateGeometricRepresentationVisitor : public ifc2x3::InheritVisitor
 {
 public:
+
+	
 	typedef enum { UNDEF_GEOM = 0, FOOTPRINT_CURVE2D, AXIS_CURVE2D, BODY_SWEPTSOLID } GeometryType;
 	typedef enum { UNDEF_LOC = 0, POSITION, LOCAL_PLACEMENT } LocationType;
 	//! Constructor
@@ -35,8 +72,12 @@ public:
 	virtual bool visitIfcPlacement(ifc2x3::IfcPlacement* value);
 	virtual bool visitIfcLocalPlacement(ifc2x3::IfcLocalPlacement* value);
 	virtual bool visitIfcArbitraryClosedProfileDef(ifc2x3::IfcArbitraryClosedProfileDef* value);
+	virtual bool visitIfcCompositeCurve(ifc2x3::IfcCompositeCurve* value);
+	virtual bool visitIfcCompositeCurveSegment(ifc2x3::IfcCompositeCurveSegment* value);
+	virtual bool visitIfcTrimmedCurve(ifc2x3::IfcTrimmedCurve* value);
 	virtual bool visitIfcFaceOuterBound(ifc2x3::IfcFaceOuterBound* value);
-	virtual bool visitIfcPolyline(ifc2x3::IfcPolyline* value);
+	virtual bool visitIfcPolyline2D(ifc2x3::IfcPolyline* value);
+	virtual bool visitIfcPolyline3D(ifc2x3::IfcPolyline* value);
 	virtual bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value);
 	virtual bool visitIfcEdgeLoop(ifc2x3::IfcEdgeLoop* value);
 	virtual bool visitIfcOrientedEdge(ifc2x3::IfcOrientedEdge* value);
@@ -59,6 +100,17 @@ public:
 
 	inline void setElement(const std::vector<int>& elements) { mElements = elements; }
 
+	inline void setCompositeCurveSegment(CompositeCurveSegmentEx compositeCurveSegment, TrimmedCurveEx trimmedCurve, Circle circle)
+	{
+		mCompositeCurveSegment.sameSense = compositeCurveSegment.sameSense; mCompositeCurveSegment.transition = compositeCurveSegment.transition; mCompositeCurveSegment.mTrimmedCurve = trimmedCurve; mCompositeCurveSegment.mTrimmedCurve.mCircle = circle;
+	}
+
+	inline void setListCompositeCurveSegmentTrim(std::vector<CompositeCurveSegmentEx> listCompositeCurveSegment) { mListCompositeCurveSegmentTrim = listCompositeCurveSegment; }
+
+	inline void setListTypeCompositeCurveSegment(std::vector<std::string> listTypeCompositeCurveSegment) { mListTypeCompositeCurveSegment = listTypeCompositeCurveSegment; }
+
+	inline void setListNbPointsPolylineCompositeCurveSegment(std::vector<int> listNbPointsPolylineCompositeCurveSegment) { mListNbPointsPolylineCompositeCurveSegment = listNbPointsPolylineCompositeCurveSegment; }
+
 protected:
 	GeometryType mGeomType;
 	LocationType mLocationType;
@@ -70,6 +122,7 @@ protected:
 	std::vector<double> mLocalPlacement;
 	std::vector<double> mExtrusionDirection;
 	std::vector<double> mPolyloop;
+	std::vector< ifc2x3::IfcPositiveLengthMeasure> mRayon;
 	double mExtrusionDepth;
 	bool mUpdateGeometry;
 	Step::RefPtr< ifc2x3::IfcPolyline > mPolyline;
@@ -81,6 +134,14 @@ protected:
 	bool vertexS = false;
 	bool vertexE = false;
 
+	std::vector<std::string> mListTypeCompositeCurveSegment;
+	int indexListCompositeCurveSegment = 0;
+	int indexCompositeCurvePoly = 0;
+	std::vector<int> mListNbPointsPolylineCompositeCurveSegment;
+	std::vector<CompositeCurveSegmentEx> mListCompositeCurveSegmentTrim;
+	CompositeCurveSegmentEx mCompositeCurveSegment;
+	TrimmedCurveEx mTrimmedCurve;
+	Circle mCircle;
 
 
 
