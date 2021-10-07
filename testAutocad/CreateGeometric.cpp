@@ -543,10 +543,10 @@ bool CreateGeometricRepresentationVisitor::visitIfcTrimmedCurve(ifc2x3::IfcTrimm
     result &= circle->acceptVisitor(this);
 
     rpValue->setBasisCurve(circle);
-    rpValue->setTrim1(mListCompositeCurveSegmentTrim.at(indexListCompositeCurveSegment).mTrimmedCurve.trim1);
-    rpValue->setTrim1(mListCompositeCurveSegmentTrim.at(indexListCompositeCurveSegment).mTrimmedCurve.trim2);
-    rpValue->setSenseAgreement(mListCompositeCurveSegmentTrim.at(indexListCompositeCurveSegment).mTrimmedCurve.senseAgreement);
-    rpValue->setMasterRepresentation(mListCompositeCurveSegmentTrim.at(indexListCompositeCurveSegment).mTrimmedCurve.preference);
+    rpValue->setTrim1(mListTrimmedCurve.at(indexListCompositeCurveSegment).trim1);
+    rpValue->setTrim1(mListTrimmedCurve.at(indexListCompositeCurveSegment).trim2);
+    rpValue->setSenseAgreement(mListTrimmedCurve.at(indexListCompositeCurveSegment).senseAgreement);
+    rpValue->setMasterRepresentation(mListTrimmedCurve.at(indexListCompositeCurveSegment).preference);
 
     return result;
 
@@ -762,7 +762,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcCircle(ifc2x3::IfcCircle* val
     axis->acceptVisitor(this);
 
     rpValue->setPosition(axis);
-    rpValue->setRadius(rayon);
+    rpValue->setRadius(mListCircle.at(indexListCompositeCurveSegment).rayon);
 
     return result;
 }
@@ -775,9 +775,9 @@ bool CreateGeometricRepresentationVisitor::visitIfcAxis2Placement2D(ifc2x3::IfcA
     Step::RefPtr<ifc2x3::IfcCartesianPoint> p = mDataSet->createIfcCartesianPoint();
     Step::RefPtr<ifc2x3::IfcDirection> d = mDataSet->createIfcDirection();
 
-    p->getCoordinates().push_back(0.0);//ajouter valeur
-    p->getCoordinates().push_back(0.0);//ajouter valeur
-    p->getCoordinates().push_back(0.0);//ajouter valeur
+    p->getCoordinates().push_back(mListCircle[indexListCompositeCurveSegment].centre.x);//ajouter valeur
+    p->getCoordinates().push_back(mListCircle[indexListCompositeCurveSegment].centre.y);//ajouter valeur
+    p->getCoordinates().push_back(mListCircle[indexListCompositeCurveSegment].centre.z);//ajouter valeur
     rpValue->setLocation(p.get());
 
     d->getDirectionRatios().push_back(0.0);//ajouter valeur

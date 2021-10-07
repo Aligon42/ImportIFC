@@ -57,6 +57,7 @@ void initAppEx()
         ExportIFC);
 }
 
+
 void unloadApp()
 {
     acedRegCmds->removeGroup(_T("IMPORT_COMMANDS"));
@@ -66,6 +67,7 @@ void unloadAppEx()
 {
     acedRegCmds->removeGroup(_T("EXPORT_COMMANDS"));
 }
+
 
 extern "C" AcRx::AppRetCode
 acrxEntryPoint(AcRx::AppMsgCode msg, void* pkt)
@@ -84,12 +86,14 @@ acrxEntryPoint(AcRx::AppMsgCode msg, void* pkt)
         acedRegFunc(ajusterBlocAvecContour, 2);
         initApp();
         initAppEx();
+        
         break;
     case AcRx::kUnloadAppMsg:
         acedUndef(_T("_insertionBlockSimple"), 1);
         acedUndef(_T("_ajusterBlocAvecContour"), 2);
         unloadApp();
         unloadAppEx();
+       
         break;
     default:
         break;

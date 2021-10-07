@@ -18,14 +18,98 @@ bool CreateConstructionPointVisitor::visitIfcProduct(
     return true;
 }
 
-//bool CreateConstructionPointVisitor::visitIfcSpatialStructureElement(
-//    ifc2x3::IfcSpatialStructureElement* value)
-//{
-//    if (value->)
-//    {
-//
-//    }
-//}
+bool CreateConstructionPointVisitor::visitIfcSIUnit(
+    ifc2x3::IfcSIUnit* value)
+{
+    EXA = false;
+    PETA = false;
+    TERA = false;
+    GIGA = false;
+    MEGA = false;
+    KILO = false;
+    HECTO = false;
+    DECA = false;
+    DECI = false;
+    CENTI = false;
+    MILLI = false;
+    MICRO = false;
+    NANO = false;
+    PICO = false;
+    FEMTO = false;
+    ATTO = false; 
+
+    if (value->getUnitType() == ifc2x3::IfcUnitEnum::IfcUnitEnum_LENGTHUNIT)
+    {
+        if (value->getPrefix() == ifc2x3::IfcSIPrefix_EXA)
+        {
+            EXA = true;
+        }
+        else if (value->getPrefix() == ifc2x3::IfcSIPrefix_PETA)
+        {
+            PETA = true;
+        }
+        else if (value->getPrefix() == ifc2x3::IfcSIPrefix_TERA)
+        {
+            TERA = true;
+        }
+        else if (value->getPrefix() == ifc2x3::IfcSIPrefix_GIGA)
+        {
+            GIGA = true;
+        }
+        else if (value->getPrefix() == ifc2x3::IfcSIPrefix_MEGA)
+        {
+            MEGA = true;
+        }
+        else if (value->getPrefix() == ifc2x3::IfcSIPrefix_KILO)
+        {
+            KILO = true;
+        }
+        else if (value->getPrefix() == ifc2x3::IfcSIPrefix_HECTO)
+        {
+            HECTO = true;
+        }
+        else if (value->getPrefix() == ifc2x3::IfcSIPrefix_DECA)
+        {
+            DECA = true;
+        }
+        else if (value->getPrefix() == ifc2x3::IfcSIPrefix_DECI)
+        {
+            DECI = true;
+        }
+        else if (value->getPrefix() == ifc2x3::IfcSIPrefix_CENTI)
+        {
+            CENTI = true;
+        }
+        else if (value->getPrefix() == ifc2x3::IfcSIPrefix_MILLI)
+        {
+            MILLI = true;
+        }
+        else if (value->getPrefix() == ifc2x3::IfcSIPrefix_MICRO)
+        {
+            MICRO = true;
+        }
+        else if (value->getPrefix() == ifc2x3::IfcSIPrefix_NANO)
+        {
+            NANO = true;
+        }
+        else if (value->getPrefix() == ifc2x3::IfcSIPrefix_PICO)
+        {
+            PICO = true;
+        }
+        else if (value->getPrefix() == ifc2x3::IfcSIPrefix_FEMTO)
+        {
+            FEMTO = true;
+        }
+        else if (value->getPrefix() == ifc2x3::IfcSIPrefix_ATTO)
+        {
+            ATTO = true;
+        }
+    }
+    
+
+
+    return true;
+}
 
 bool CreateConstructionPointVisitor::visitIfcSite(
     ifc2x3::IfcSite* value)
@@ -1269,6 +1353,86 @@ Vec3 CreateConstructionPointVisitor::SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDi
 
     return outVecteur;
 }
+
+bool CreateConstructionPointVisitor::getEXA() const
+{
+    return EXA;
+}
+
+bool CreateConstructionPointVisitor::getPETA() const
+{
+    return PETA;
+}
+
+bool CreateConstructionPointVisitor::getTERA() const
+{
+    return TERA;
+}
+
+bool CreateConstructionPointVisitor::getGIGA() const
+{
+    return GIGA;
+}
+
+bool CreateConstructionPointVisitor::getMEGA() const
+{
+    return MEGA;
+}
+
+bool CreateConstructionPointVisitor::getKILO() const
+{
+    return KILO;
+}
+
+bool CreateConstructionPointVisitor::getHECTO() const
+{
+    return HECTO;
+}
+bool CreateConstructionPointVisitor::getDECA() const
+{
+    return DECA;
+}
+
+bool CreateConstructionPointVisitor::getDECI() const
+{
+    return DECI;
+}
+
+bool CreateConstructionPointVisitor::getCENTI() const
+{
+    return CENTI;
+}
+
+bool CreateConstructionPointVisitor::getMILLI() const
+{
+    return MILLI;
+}
+
+bool CreateConstructionPointVisitor::getMICRO() const
+{
+    return MICRO;
+}
+
+bool CreateConstructionPointVisitor::getNANO() const
+{
+    return NANO;
+}
+
+bool CreateConstructionPointVisitor::getPICO() const
+{
+    return PICO;
+}
+
+bool CreateConstructionPointVisitor::getFEMTO() const
+{
+    return FEMTO;
+}
+
+bool CreateConstructionPointVisitor::getATTO() const
+{
+    return ATTO;
+}
+
 
 std::list<Vec3> CreateConstructionPointVisitor::getPoints() const
 {

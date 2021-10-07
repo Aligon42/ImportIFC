@@ -2325,6 +2325,7 @@ void createSolid3dProfilIPE(I_profilDef& IprofilDef, std::string& entity, int ke
 	{
 		delete pSolid;
 	}
+
 }
 
 void createSolid3dProfilIPN(I_profilDef& IprofilDef, std::string& entity, int keyItems, std::string& outerCurveName, std::list<Vec3>& points1, std::vector<int>& ListNbArg, Vec3& VecteurExtrusion, float hauteurExtrusion, Matrix4& transform1, Matrix4& transformation, Matrix4& transformation2D, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal, std::vector<Step::Boolean>& AgreementHalf, std::vector<Step::Boolean>& AgreementPolygonal, std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal, std::vector<ObjectVoid>& listVoid, CompositeCurveSegment& _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, std::map<int, Style>& vectorStyle, bool isMappedItem, Matrix4& transformationOperator3D, std::vector<Vec3>& VecteurExtrusionBool, std::vector<float>& hauteurExtrusionBool, std::vector<Matrix4>& transformationBoolExtrud, std::vector<std::string>& NameProfilDefBool, std::vector<Rectangle_profilDef>& RectangleProfilDefBool)

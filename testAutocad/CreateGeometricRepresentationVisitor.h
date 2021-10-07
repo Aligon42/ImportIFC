@@ -21,7 +21,6 @@ struct CompositeCurveSegmentEx
 {
 	ifc2x3::IfcTransitionCode transition;
 	Step::Boolean sameSense;
-	TrimmedCurveEx mTrimmedCurve;
 };
 
 struct TrimmedCurveEx
@@ -30,7 +29,6 @@ struct TrimmedCurveEx
 	ifc2x3::Set_IfcTrimmingSelect_1_2 trim2;
 	Step::Boolean senseAgreement;
 	ifc2x3::IfcTrimmingPreference preference;
-	Circle mCircle;
 };
 
 struct Circle
@@ -102,10 +100,14 @@ public:
 
 	inline void setCompositeCurveSegment(CompositeCurveSegmentEx compositeCurveSegment, TrimmedCurveEx trimmedCurve, Circle circle)
 	{
-		mCompositeCurveSegment.sameSense = compositeCurveSegment.sameSense; mCompositeCurveSegment.transition = compositeCurveSegment.transition; mCompositeCurveSegment.mTrimmedCurve = trimmedCurve; mCompositeCurveSegment.mTrimmedCurve.mCircle = circle;
+		mCompositeCurveSegment.sameSense = compositeCurveSegment.sameSense; mCompositeCurveSegment.transition = compositeCurveSegment.transition; mTrimmedCurve = trimmedCurve; mCircle = circle;
 	}
 
 	inline void setListCompositeCurveSegmentTrim(std::vector<CompositeCurveSegmentEx> listCompositeCurveSegment) { mListCompositeCurveSegmentTrim = listCompositeCurveSegment; }
+
+	inline void setListTrimmedCurve(std::vector<TrimmedCurveEx> listTrimmedCurve) { mListTrimmedCurve = listTrimmedCurve; }
+
+	inline void setListCCircle(std::vector<Circle> listCircle) { mListCircle = listCircle; }
 
 	inline void setListTypeCompositeCurveSegment(std::vector<std::string> listTypeCompositeCurveSegment) { mListTypeCompositeCurveSegment = listTypeCompositeCurveSegment; }
 
@@ -139,6 +141,8 @@ protected:
 	int indexCompositeCurvePoly = 0;
 	std::vector<int> mListNbPointsPolylineCompositeCurveSegment;
 	std::vector<CompositeCurveSegmentEx> mListCompositeCurveSegmentTrim;
+	std::vector<TrimmedCurveEx> mListTrimmedCurve;
+	std::vector<Circle> mListCircle;
 	CompositeCurveSegmentEx mCompositeCurveSegment;
 	TrimmedCurveEx mTrimmedCurve;
 	Circle mCircle;

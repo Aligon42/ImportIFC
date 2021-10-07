@@ -198,6 +198,24 @@ static Style style;
 static Style styleDessin;
 static std::map<int, Style> listStyle;
 
+//unitées
+static bool EXA  ;
+static bool PETA ;
+static bool TERA ;
+static bool GIGA ;
+static bool MEGA ;
+static bool KILO ;
+static bool HECTO;
+static bool DECA ;
+static bool DECI ;
+static bool CENTI;
+static bool MILLI;
+static bool MICRO;
+static bool NANO ;
+static bool PICO ;
+static bool FEMTO;
+static bool ATTO ;
+
 
 class CreateConstructionPointVisitor : public ifc2x3::InheritVisitor
 {
@@ -282,6 +300,7 @@ private:
     std::vector<int> keyMappedItem;
     std::vector<std::string> nameItemsMap;
     std::vector<int> keyShapeMap;
+
     
 
 public:
@@ -289,6 +308,7 @@ public:
     CreateConstructionPointVisitor();
 
     bool visitIfcProduct(ifc2x3::IfcProduct* value) override;
+    bool visitIfcSIUnit(ifc2x3::IfcSIUnit* value) override;
     bool visitIfcSite(ifc2x3::IfcSite* value) override;
     bool visitIfcRelVoidsElement(ifc2x3::IfcRelVoidsElement* value) override;
     bool visitIfcProductRepresentation(ifc2x3::IfcProductRepresentation* value) override;
@@ -406,4 +426,21 @@ public:
     Vec3 SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);
     void transformPoints(const Matrix4& transform);
 
+    
+    bool getEXA() const;
+    bool getPETA() const;
+    bool getTERA() const;
+    bool getGIGA() const;
+    bool getMEGA() const;
+    bool getKILO() const;
+    bool getHECTO() const;
+    bool getDECA() const;
+    bool getDECI() const;
+    bool getCENTI() const;
+    bool getMILLI() const;
+    bool getMICRO() const;
+    bool getNANO() const;
+    bool getPICO() const;
+    bool getFEMTO() const;
+    bool getATTO() const;
 };

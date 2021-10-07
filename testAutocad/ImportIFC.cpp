@@ -237,6 +237,30 @@ void test()
         listStyle.insert(std::pair<int, Style>(style.keyItem, style));
     }
 
+    for (auto& units : expressDataSet->getAllIfcSIUnit())
+    {
+        CreateConstructionPointVisitor visitor1;
+        int key = units.getKey();
+
+        units.acceptVisitor(&visitor1);
+        EXA = visitor1.getEXA();
+        PETA  = visitor1.getPETA();
+        TERA  = visitor1.getTERA();
+        GIGA  = visitor1.getGIGA();
+        MEGA  = visitor1.getMEGA();
+        KILO  = visitor1.getKILO();
+        HECTO = visitor1.getHECTO();
+        DECA  = visitor1.getDECA();
+        DECI  = visitor1.getDECI();
+        CENTI = visitor1.getCENTI();
+        MILLI = visitor1.getMILLI();
+        MICRO = visitor1.getMICRO();
+        NANO  = visitor1.getNANO();
+        PICO  = visitor1.getPICO();
+        FEMTO = visitor1.getFEMTO();
+        ATTO  = visitor1.getATTO();
+    }
+
     for (auto& site : expressDataSet->getAllIfcSite())
     {
         
@@ -414,20 +438,6 @@ void test()
         std::string entity = buildingElement.getType().getName();
         if (entity == "IfcOpeningElement") continue;
         count++;
-        //if (key != 108852 /*&& key != 110815 && key != 108907 && key != 110867*/) continue;
-        //if (key != 53689) continue;
-
-        /*std::thread t([&]()
-        {
-            std::ofstream fw("C:\\Users\\AntoineCACHEUX\\source\\repos\\ImportIFC_IFCCADPRO\\Test.txt", std::ofstream::app);
-            if (fw.is_open())
-            {
-                auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-                fw << "Index :" << count << "- Key: " << key << " - " << entity << " - " << std::ctime(&now);
-
-                fw.close();
-            }
-        });*/
 
         CreateConstructionPointVisitor visitor1;
 
@@ -625,6 +635,95 @@ void test()
             if (isMappedItemMethode) break;
         }
 
+        double scale_set;
+        AcGePoint3d origin;
+        origin[X] = origin[Y] = origin[Z] = 0.0;
+
+        if (EXA == true)
+        {
+            scale_set = 10000000000000000000;
+        }
+        else if (PETA == true)
+        {
+            scale_set = 1000000000000000000;
+        }
+        else if (TERA == true)
+        {
+            scale_set = 1000000000000000;
+        }
+        else if (GIGA == true)
+        {
+            scale_set = 1000000000000;
+        }
+        else if (MEGA == true)
+        {
+            scale_set = 1000000000;
+        }
+        else if (KILO == true)
+        {
+            scale_set = 1000000;
+        }
+        else if (HECTO == true)
+        {
+            scale_set = 100000;
+        }
+        else if (DECA == true)
+        {
+            scale_set = 10000;
+        }
+        else if (DECI == true)
+        {
+            scale_set = 100;
+        }
+        else if (CENTI == true)
+        {
+            scale_set = 10;
+        }
+        else if (MILLI == true)
+        {
+            scale_set = 0;
+        }
+        else if (MICRO == true)
+        {
+            scale_set = 0.001;
+        }
+        else if (NANO == true)
+        {
+            scale_set = 0.000001;
+        }
+        else if (PICO == true)
+        {
+            scale_set = 0.000000001;
+        }
+        else if (FEMTO == true)
+        {
+            scale_set = 0.000000000001;
+        }
+        else if (ATTO == true)
+        {
+            scale_set = 0.000000000000001;
+        }
+        else
+        {
+            scale_set = 1000;
+        }
+
+        ads_name selection;
+        int nbEntity_set;
+
+        std::string A = "A";
+        auto A_set = GetWCM(A.c_str());
+
+        int selectionSet = acedSSGet(A_set, NULL, NULL, NULL, selection);
+        if (selectionSet != RTNORM)
+        {
+            nbEntity_set = 0;
+        }
+        else {
+            acedSSLength(selection, &nbEntity_set);
+        }
+
+        acedCommandS(RTSTR, L"_scale", RTPICKS, selection, RTSTR, L"", RT3DPOINT, origin, RTREAL, scale_set, RTNONE);
         //t.join();
     }
 
@@ -654,6 +753,7 @@ void test()
     //    filestream.close();
     //}
     //delete expressDataSet2;
+
 
     listVoid.clear();
     listStyle.clear();

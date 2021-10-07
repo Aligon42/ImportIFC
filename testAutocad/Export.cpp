@@ -368,6 +368,9 @@ void ExportIFC()
         AcDbEntity* pEntBlock;
         acdbOpenAcDbEntity(pEntBlock, blockId, AcDb::kForRead);
 
+        //TEST SCALE
+        //pEntBlock->setLinetypeScale(1000);
+
         AcDbBlockReference* pCloneBlock = (AcDbBlockReference*)pEntBlock->clone();
         solidArray.removeAll();
         pCloneBlock->explode(solidArray);
@@ -455,6 +458,8 @@ void ExportIFC()
                 CompositeCurveSegmentEx compositeCurveSegment;
 
                 std::vector<CompositeCurveSegmentEx> listCompositeCurveSegmentTrim;
+                std::vector<TrimmedCurveEx> listTrimmedCurve;
+                std::vector<Circle> listCircle;
                 std::vector<std::string> listTypeCompositeCurveSegment;
 
                 for (int t = 0; t < polylineArray.length(); t++)//décomposer les faces pour avoir des polylines afin de verifier si c'est des arcs ou des droites 
@@ -503,6 +508,8 @@ void ExportIFC()
 
                         listTypeCompositeCurveSegment.push_back("trimmedCurve");
                         listCompositeCurveSegmentTrim.push_back(compositeCurveSegment);
+                        listTrimmedCurve.push_back(trimmedCurve);
+                        listCircle.push_back(circle);
 
                         iteratorPolyline++;
                     }
@@ -512,6 +519,8 @@ void ExportIFC()
 
                 if (iteratorPolyline > 0)
                 {
+                   
+
                     int index = 0;
                     int nbPointsPolyline = 0;
                     std::vector<int> listNbPointsPolyline;
@@ -533,11 +542,15 @@ void ExportIFC()
                     }
 
                     cwrv.setListCompositeCurveSegmentTrim(listCompositeCurveSegmentTrim);
+                    cwrv.setListTrimmedCurve(listTrimmedCurve);
+                    cwrv.setListCCircle(listCircle);
                     cwrv.setListNbPointsPolylineCompositeCurveSegment(listNbPointsPolyline);
                     cwrv.setListTypeCompositeCurveSegment(listTypeCompositeCurveSegment);
                 }
                 else 
                 {
+                    points.clear();
+
                     for (int l = 0; l < nbPoints[k]; l++)
                     {
                         AcGePoint3d point = listePoints.at(l);
@@ -635,7 +648,6 @@ void ExportIFC()
 
 
 
-
     // ** Write the file        
     ifc2x3::SPFWriter writer(expressDataSet.get());
 
@@ -653,4 +665,5 @@ void ExportIFC()
     acedAlert(_T("EXPORT DONE"));
 
 }
+
 
