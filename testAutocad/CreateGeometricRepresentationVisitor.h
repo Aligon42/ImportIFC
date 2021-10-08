@@ -37,7 +37,13 @@ struct Circle
 	ifc2x3::IfcPositiveLengthMeasure rayon;
 };
 
-
+struct FaceParCompositeCurve
+{
+	std::vector<CompositeCurveSegmentEx> listCompositeCurveSegmentTrim;
+	std::vector<TrimmedCurveEx> listTrimmedCurve;
+	std::vector<Circle> listCircle;
+	std::vector<std::string> listTypeCompositeCurveSegment;
+};
 
 class CreateGeometricRepresentationVisitor : public ifc2x3::InheritVisitor
 {

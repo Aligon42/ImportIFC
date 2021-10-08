@@ -261,7 +261,7 @@ void test()
         ATTO  = visitor1.getATTO();
     }
 
-    for (auto& site : expressDataSet->getAllIfcSite())
+    /*for (auto& site : expressDataSet->getAllIfcSite())
     {
         
         int key = (int)site.getKey();
@@ -325,7 +325,7 @@ void test()
             {
                 vectorStyle.push_back(listStyle[keyItems[i]]);
             }
-        }*/
+        }
 
         for (int i = 0; i < nameItems.size(); i++)
         {
@@ -361,7 +361,7 @@ void test()
                 createBoundingBox(box, entity, keyProfilDef, listStyle);
             }
         }
-    }
+    }*/
 
     std::map<int, MappedItem> dicoMappedItem;
 
@@ -370,7 +370,7 @@ void test()
         int key = (int)mappedItems.getKey();
         std::string entity = mappedItems.getType().getName();
 
-        //if (key != 1) continue;
+        //if (key != 1429496) continue;
         //if (key != 5454) continue;
 
         CreateConstructionPointVisitor visitor1;
@@ -435,6 +435,8 @@ void test()
         
         int key = (int)buildingElement.getKey();
         
+        //if (key != 49194) continue;
+
         std::string entity = buildingElement.getType().getName();
         if (entity == "IfcOpeningElement") continue;
         count++;
@@ -635,95 +637,7 @@ void test()
             if (isMappedItemMethode) break;
         }
 
-        double scale_set;
-        AcGePoint3d origin;
-        origin[X] = origin[Y] = origin[Z] = 0.0;
-
-        if (EXA == true)
-        {
-            scale_set = 10000000000000000000;
-        }
-        else if (PETA == true)
-        {
-            scale_set = 1000000000000000000;
-        }
-        else if (TERA == true)
-        {
-            scale_set = 1000000000000000;
-        }
-        else if (GIGA == true)
-        {
-            scale_set = 1000000000000;
-        }
-        else if (MEGA == true)
-        {
-            scale_set = 1000000000;
-        }
-        else if (KILO == true)
-        {
-            scale_set = 1000000;
-        }
-        else if (HECTO == true)
-        {
-            scale_set = 100000;
-        }
-        else if (DECA == true)
-        {
-            scale_set = 10000;
-        }
-        else if (DECI == true)
-        {
-            scale_set = 100;
-        }
-        else if (CENTI == true)
-        {
-            scale_set = 10;
-        }
-        else if (MILLI == true)
-        {
-            scale_set = 0;
-        }
-        else if (MICRO == true)
-        {
-            scale_set = 0.001;
-        }
-        else if (NANO == true)
-        {
-            scale_set = 0.000001;
-        }
-        else if (PICO == true)
-        {
-            scale_set = 0.000000001;
-        }
-        else if (FEMTO == true)
-        {
-            scale_set = 0.000000000001;
-        }
-        else if (ATTO == true)
-        {
-            scale_set = 0.000000000000001;
-        }
-        else
-        {
-            scale_set = 1000;
-        }
-
-        ads_name selection;
-        int nbEntity_set;
-
-        std::string A = "A";
-        auto A_set = GetWCM(A.c_str());
-
-        int selectionSet = acedSSGet(A_set, NULL, NULL, NULL, selection);
-        if (selectionSet != RTNORM)
-        {
-            nbEntity_set = 0;
-        }
-        else {
-            acedSSLength(selection, &nbEntity_set);
-        }
-
-        acedCommandS(RTSTR, L"_scale", RTPICKS, selection, RTSTR, L"", RT3DPOINT, origin, RTREAL, scale_set, RTNONE);
+        
         //t.join();
     }
 
@@ -754,6 +668,95 @@ void test()
     //}
     //delete expressDataSet2;
 
+    double scale_set;
+    AcGePoint3d origin;
+    origin[X] = origin[Y] = origin[Z] = 0.0;
+
+    if (EXA == true)
+    {
+        scale_set = 1000000000000000000000.0;
+    }
+    else if (PETA == true)
+    {
+        scale_set = 1000000000000000000;
+    }
+    else if (TERA == true)
+    {
+        scale_set = 1000000000000000;
+    }
+    else if (GIGA == true)
+    {
+        scale_set = 1000000000000;
+    }
+    else if (MEGA == true)
+    {
+        scale_set = 1000000000;
+    }
+    else if (KILO == true)
+    {
+        scale_set = 1000000;
+    }
+    else if (HECTO == true)
+    {
+        scale_set = 100000;
+    }
+    else if (DECA == true)
+    {
+        scale_set = 10000;
+    }
+    else if (DECI == true)
+    {
+        scale_set = 100;
+    }
+    else if (CENTI == true)
+    {
+        scale_set = 10;
+    }
+    else if (MILLI == true)
+    {
+        scale_set = 0;
+    }
+    else if (MICRO == true)
+    {
+        scale_set = 0.001;
+    }
+    else if (NANO == true)
+    {
+        scale_set = 0.000001;
+    }
+    else if (PICO == true)
+    {
+        scale_set = 0.000000001;
+    }
+    else if (FEMTO == true)
+    {
+        scale_set = 0.000000000001;
+    }
+    else if (ATTO == true)
+    {
+        scale_set = 0.000000000000001;
+    }
+    else
+    {
+        scale_set = 1000;
+    }
+
+    ads_name selection;
+    int nbEntity_set;
+
+    std::string A = "A";
+    auto A_set = GetWCM(A.c_str());
+
+    int selectionSet = acedSSGet(A_set, NULL, NULL, NULL, selection);
+    if (selectionSet != RTNORM)
+    {
+        nbEntity_set = 0;
+    }
+    else {
+        acedSSLength(selection, &nbEntity_set);
+    }
+
+    acedCommandS(RTSTR, L"_scale", RTPICKS, selection, RTSTR, L"", RT3DPOINT, origin, RTREAL, scale_set, RTNONE);
 
     listVoid.clear();
     listStyle.clear();

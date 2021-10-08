@@ -430,6 +430,28 @@ void ExportIFC()
             points.clear();
             cwrv.init();
 
+            std::vector<FaceParCompositeCurve> listFaceCompositeCurve;
+
+
+            // CERCLE
+            Circle circle;
+
+            // TRIMMEDCURVE
+            TrimmedCurveEx trimmedCurve;
+
+            //COMPOSITECURVESEGMENT
+            CompositeCurveSegmentEx compositeCurveSegment;
+
+            std::vector<CompositeCurveSegmentEx> listCompositeCurveSegmentTrim;
+            std::vector<TrimmedCurveEx> listTrimmedCurve;
+            std::vector<Circle> listCircle;
+            std::vector<std::string> listTypeCompositeCurveSegment;
+
+            //OBJET POUR UNE FACE EN COMPOSITECURVE
+            FaceParCompositeCurve faceCompositeCurve;
+
+            std::vector<int> listNbPointsPolyline;
+
             for (int k = 0; k < faceArray.length(); k++)
             {
                 AcGePoint3dArray listePoints;
@@ -448,19 +470,6 @@ void ExportIFC()
                 double angle;                
                 AcGePoint3dArray listePointsPolyline;
 
-                // CERCLE
-                Circle circle;
-
-                // TRIMMEDCURVE
-                TrimmedCurveEx trimmedCurve;
-
-                //COMPOSITECURVESEGMENT
-                CompositeCurveSegmentEx compositeCurveSegment;
-
-                std::vector<CompositeCurveSegmentEx> listCompositeCurveSegmentTrim;
-                std::vector<TrimmedCurveEx> listTrimmedCurve;
-                std::vector<Circle> listCircle;
-                std::vector<std::string> listTypeCompositeCurveSegment;
 
                 for (int t = 0; t < polylineArray.length(); t++)//décomposer les faces pour avoir des polylines afin de verifier si c'est des arcs ou des droites 
                 {
@@ -514,26 +523,33 @@ void ExportIFC()
                         iteratorPolyline++;
                     }
 
-
                 }
 
                 if (iteratorPolyline > 0)
                 {
-                   
-
+                    typeLoop.push_back("CompositeCurve");
                     int index = 0;
-                    int nbPointsPolyline = 0;
-                    std::vector<int> listNbPointsPolyline;
+                    int nbPointsPolyline = 0;                    
 
-                    for (int i = 0; i <= listTypeCompositeCurveSegment.size() - index; i++)
+                    for (int i = 0; i < listTypeCompositeCurveSegment.size() - index; i++)
                     {
                         while (listTypeCompositeCurveSegment.at(index) == "polyline")
                         {
                             nbPointsPolyline++;
                             index++;
+
+                            if (index == listTypeCompositeCurveSegment.size())
+                            {
+                                break;
+                            }
                         }
 
                         listNbPointsPolyline.push_back(nbPointsPolyline);
+
+                        if (index == listTypeCompositeCurveSegment.size())
+                        {
+                            break;
+                        }
 
                         if (listTypeCompositeCurveSegment.at(index) == "trimmedCurve")
                         {
@@ -541,16 +557,12 @@ void ExportIFC()
                         }
                     }
 
-                    cwrv.setListCompositeCurveSegmentTrim(listCompositeCurveSegmentTrim);
-                    cwrv.setListTrimmedCurve(listTrimmedCurve);
-                    cwrv.setListCCircle(listCircle);
-                    cwrv.setListNbPointsPolylineCompositeCurveSegment(listNbPointsPolyline);
-                    cwrv.setListTypeCompositeCurveSegment(listTypeCompositeCurveSegment);
+                    
                 }
                 else 
                 {
                     points.clear();
-
+                    typeLoop.push_back("Polyline");
                     for (int l = 0; l < nbPoints[k]; l++)
                     {
                         AcGePoint3d point = listePoints.at(l);
@@ -594,11 +606,15 @@ void ExportIFC()
                     }
                 }
 
-                
-
                 pCloneFace->erase();
                 pCloneFace->close();
             }
+
+            cwrv.setListCompositeCurveSegmentTrim(listCompositeCurveSegmentTrim);
+            cwrv.setListTrimmedCurve(listTrimmedCurve);
+            cwrv.setListCCircle(listCircle);
+            cwrv.setListNbPointsPolylineCompositeCurveSegment(listNbPointsPolyline);
+            cwrv.setListTypeCompositeCurveSegment(listTypeCompositeCurveSegment);
 
             position.clear();
             placement.clear();

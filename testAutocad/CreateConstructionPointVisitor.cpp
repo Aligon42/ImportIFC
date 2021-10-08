@@ -1436,7 +1436,17 @@ bool CreateConstructionPointVisitor::getATTO() const
 
 std::list<Vec3> CreateConstructionPointVisitor::getPoints() const
 {
-    return _points;
+    if (_points.size() < 10e3)
+    {
+        return _points;
+    }
+
+    std::list<Vec3> _pointsVide;
+    Vec3 vecVide;
+    vecVide.x() = vecVide.y() = vecVide.z() = 0.0;
+    _pointsVide.push_back(vecVide);
+    
+    return _pointsVide;
 }
 
 Vec3 CreateConstructionPointVisitor::getVectorDirection() const

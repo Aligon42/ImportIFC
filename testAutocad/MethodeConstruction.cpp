@@ -34,35 +34,35 @@ void extrusion(int key, std::string& entity, std::vector<std::string>& nameItems
 
 	if (entity == "IfcWallStandardCase")
 	{
-		layerName = _T("Mur");
+		layerName = _T("IfcWallStandardCase");
 	}
 	if (entity == "IfcWall")
 	{
-		layerName = _T("Mur");
+		layerName = _T("IfcWall");
 	}
 	if (entity == "IfcSlab")
 	{
-		layerName = _T("Dalle");
+		layerName = _T("IfcSlab");
 	}
 	if (entity == "IfcRoof")
 	{
-		layerName = _T("Toit");
+		layerName = _T("IfcRoof");
 	}
 	if (entity == "IfcCovering")
 	{
-		layerName = _T("Revêtement");
+		layerName = _T("IfcCovering");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 
@@ -100,7 +100,7 @@ void extrusion(int key, std::string& entity, std::vector<std::string>& nameItems
 	}
 	else if (outerCurveName == "IfcPolyline")
 	{
-		if (nbArg.size() > 1)
+		if (nbArg.size() > 1 && nbArg[0] == 1)
 		{
 			nbArg.erase(nbArg.begin());
 			points1.pop_front();
@@ -267,35 +267,35 @@ void extrusion(int key, std::string& entity, std::vector<std::string>& nameItems
 
 	if (entity == "IfcWallStandardCase")
 	{
-		layerName = _T("Mur");
+		layerName = _T("IfcWallStandardCase");
 	}
 	if (entity == "IfcWall")
 	{
-		layerName = _T("Mur");
+		layerName = _T("IfcWall");
 	}
 	if (entity == "IfcSlab")
 	{
-		layerName = _T("Dalle");
+		layerName = _T("IfcSlab");
 	}
 	if (entity == "IfcRoof")
 	{
-		layerName = _T("Toit");
+		layerName = _T("IfcRoof");
 	}
 	if (entity == "IfcCovering")
 	{
-		layerName = _T("Revêtement");
+		layerName = _T("IfcCovering");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -2074,23 +2074,23 @@ void createSolid3dProfilIPE(I_profilDef& IprofilDef, std::string& entity, int ke
 	// Check to see if the layer exists
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -2340,23 +2340,23 @@ void createSolid3dProfilIPN(I_profilDef& IprofilDef, std::string& entity, int ke
 
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -2608,23 +2608,23 @@ void createSolid3dProfilL8(L_profilDef& LprofilDef, std::string& entity, int key
 
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -2868,23 +2868,23 @@ void createSolid3dProfilL9(L_profilDef& LprofilDef, std::string& entity, int key
 
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -3131,23 +3131,23 @@ void createSolid3dProfilT10(T_profilDef& TprofilDef, std::string& entity, int ke
 
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -3395,23 +3395,23 @@ void createSolid3dProfilT12(T_profilDef& TprofilDef, std::string& entity, int ke
 
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -3663,23 +3663,23 @@ void createSolid3dProfilUPE(U_profilDef& UprofilDef, std::string& entity, int ke
 
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -3925,23 +3925,23 @@ void createSolid3dProfilUPN(U_profilDef& UprofilDef, std::string& entity, int ke
 
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -4187,23 +4187,23 @@ void createSolid3dProfilC(C_profilDef& CprofilDef, std::string& entity, int keyI
 
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -4453,23 +4453,23 @@ void createSolid3dProfilZ(Z_profilDef& ZprofilDef, std::string& entity, int keyI
 
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -4716,23 +4716,23 @@ void createSolid3dProfilAsyI(AsymmetricI_profilDef& AsymmetricIprofilDef, std::s
 
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -4988,23 +4988,23 @@ void createSolid3dProfilCircHollow(CircleHollow_profilDef& CircleHollowprofilDef
 
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -5283,23 +5283,23 @@ void createSolid3dProfilRectHollow(RectangleHollow_profilDef& RectangleHollowpro
 
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -5603,23 +5603,23 @@ void createSolid3dProfilCircle(Circle_profilDef& CircleprofilDef, std::string& e
 
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -5856,23 +5856,23 @@ void createSolid3dProfilRectangle(Rectangle_profilDef& RectangleprofilDef, std::
 
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	if (!pLayerTable->has(layerName))
@@ -6111,67 +6111,67 @@ void createBoundingBox(Box& box, std::string& entity, int keyItems, std::map<int
 
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	else if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	else if (entity == "IfcWallStandardCase")
 	{
-		layerName = _T("Mur");
+		layerName = _T("IfcWallStandardCase");
 	}
 	else if (entity == "IfcWall")
 	{
-		layerName = _T("Mur");
+		layerName = _T("IfcWall");
 	}
 	else if (entity == "IfcSlab")
 	{
-		layerName = _T("Dalle");
+		layerName = _T("IfcSlab");
 	}
 	else if (entity == "IfcRoof")
 	{
-		layerName = _T("Toit");
+		layerName = _T("IfcRoof");
 	}
 	else if (entity == "IfcCovering")
 	{
-		layerName = _T("Revêtement");
+		layerName = _T("IfcCovering");
 	}
 	else if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	else if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	else if (entity == "IfcBuildingElementProxy")
 	{
-		layerName = _T("Proxy");
+		layerName = _T("IfcBuildingElementProxy");
 	}
 	else if (entity == "IfcDoor")
 	{
-		layerName = _T("Porte");
+		layerName = _T("IfcDoor");
 	}
 	else if (entity == "IfcSite")
 	{
-		layerName = _T("Site");
+		layerName = _T("IfcSite");
 	}
 	else if (entity == "IfcStair")
 	{
-		layerName = _T("Escalier");
+		layerName = _T("IfcStair");
 	}
 	else if (entity == "IfcRailling")
 	{
-		layerName = _T("Balustrade");
+		layerName = _T("IfcRailling");
 	}
 	else if (entity == "IfcWindow")
 	{
-		layerName = _T("Fenêtre");
+		layerName = _T("IfcWindow");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 
@@ -6260,67 +6260,67 @@ void createFaceSolid(std::string& entity, int keyItems, std::list<Vec3>& points1
 
 	if (entity == "IfcBeam")
 	{
-		layerName = _T("Poutre");
+		layerName = _T("IfcBeam");
 	}
 	else if (entity == "IfcColumn")
 	{
-		layerName = _T("Colonne");
+		layerName = _T("IfcColumn");
 	}
 	else if (entity == "IfcWallStandardCase")
 	{
-		layerName = _T("Mur");
+		layerName = _T("IfcWallStandardCase");
 	}
 	else if (entity == "IfcWall")
 	{
-		layerName = _T("Mur");
+		layerName = _T("IfcWall");
 	}
 	else if (entity == "IfcSlab")
 	{
-		layerName = _T("Dalle");
+		layerName = _T("IfcSlab");
 	}
 	else if (entity == "IfcRoof")
 	{
-		layerName = _T("Toit");
+		layerName = _T("IfcRoof");
 	}
 	else if (entity == "IfcCovering")
 	{
-		layerName = _T("Revêtement");
+		layerName = _T("IfcCovering");
 	}
 	else if (entity == "IfcPlate")
 	{
-		layerName = _T("Plaque");
+		layerName = _T("IfcPlate");
 	}
 	else if (entity == "IfcFooting")
 	{
-		layerName = _T("Pied");
+		layerName = _T("IfcFooting");
 	}
 	else if (entity == "IfcBuildingElementProxy")
 	{
-		layerName = _T("Proxy");
+		layerName = _T("IfcBuildingElementProxy");
 	}
 	else if (entity == "IfcDoor")
 	{
-		layerName = _T("Porte");
+		layerName = _T("IfcDoor");
 	}
 	else if (entity == "IfcSite")
 	{
-		layerName = _T("Site");
+		layerName = _T("IfcSite");
 	}
 	else if (entity == "IfcStair")
 	{
-		layerName = _T("Escalier");
+		layerName = _T("IfcStair");
 	}
 	else if (entity == "IfcRailling")
 	{
-		layerName = _T("Balustrade");
+		layerName = _T("IfcRailling");
 	}
 	else if (entity == "IfcWindow")
 	{
-		layerName = _T("Fenêtre");
+		layerName = _T("IfcWindow");
 	}
 	if (entity == "IfcMappedItem")
 	{
-		layerName = _T("Element");
+		layerName = _T("IfcMappedItem");
 	}
 
 	

@@ -1,4 +1,4 @@
-#include "tchar.h"
+ï»¿#include "tchar.h"
 #include <aced.h>
 #include <rxregsvc.h> 
 #include <stdlib.h>
@@ -519,6 +519,10 @@ int ajusterBlocAvecContour(void)
 	float xmil = (p2resContour[0] + p1resContour[0]) / 2.;
 	float ymil = (p2resContour[1] + p1resContour[1]) / 2.;
 
+
+	//BacutPrintf(_T("\n(%f %f)   (%f %f) / (%f %f) "), p1resContour[0], p1resContour[1], p2resContour[0], p2resContour[1], xmil, ymil);
+
+
 	pointMilieuContour.x = xmil;
 	pointMilieuContour.y = ymil;
 
@@ -710,14 +714,14 @@ int ajusterBlocAvecContour(void)
 					acedTrans(p2, rbOrigin, rbFinal, 0, p2res);
 
 					//if (longueurG < (maxPoint[0] - minPoint[0]))
-					if (longueurG < (p2res[0] - p1res[0]))
+					if (longueurG < abs(p2res[0] - p1res[0]))
 					{
-						longueurG = round(p2res[0] - p1res[0]);
+						longueurG = abs(round(p2res[0] - p1res[0]));
 					}
 					//if (largeurG < (maxPoint[1] - minPoint[1]))
-					if (largeurG < (p2res[1] - p1res[1]))
+					if (largeurG < abs(p2res[1] - p1res[1]))
 					{
-						largeurG = round(p2res[1] - p1res[1]);
+						largeurG = abs(round(p2res[1] - p1res[1]));
 					}
 
 					if (p1res[0] < xminG)
@@ -732,7 +736,7 @@ int ajusterBlocAvecContour(void)
 					acedSSAdd(name, jeuSelG, jeuSelG);
 				}
 			}
-			// Il y a des solide coupés en 2
+			// Il y a des solide coupÃ©s en 2
 			else {
 				for (int t = 0; t < resultarr.length(); t++)
 				{
@@ -752,6 +756,7 @@ int ajusterBlocAvecContour(void)
 					p1[0] = minPoint[0];
 					p1[1] = minPoint[1];
 					p1[2] = minPoint[2];
+
 					p2[0] = maxPoint[0];
 					p2[1] = maxPoint[1];
 					p2[2] = maxPoint[2];
@@ -759,93 +764,56 @@ int ajusterBlocAvecContour(void)
 					acedTrans(p1, rbOrigin, rbFinal, 0, p1res);
 					acedTrans(p2, rbOrigin, rbFinal, 0, p2res);
 
-					xmils = (p2[0] + p1[0]) / 2.;
-					ymils = (p2[1] + p1[1]) / 2.;
+					xmils = (p2res[0] + p1res[0]) / 2.;
+					ymils = (p2res[1] + p1res[1]) / 2.;
 					float pi = 3.14159f;
 					std::string _Srotation = std::to_string(rotation);
 					std::string _SpiSur2 = std::to_string(pi / 2.0);
 					std::string _Spi = std::to_string(pi);
 
-					if (angleRotation == 0.)
+					//acutPrintf(_T("\n avant TRANS %f  - (%f %f)   (%f %f) / (%f %f) "), name[0] , p1[0], p1[1], p2[0], p2[1], xmils, ymils);
+					//acutPrintf(_T("\n APRES TRANS %f  - (%f %f)   (%f %f) / (%f %f) "), name[0] , p1res[0], p1res[1], p2res[0], p2res[1], xmils, ymils);
+
+
+					//acutPrintf(_T(" X %f -  %f\n"), xmils, xmil);
+					if (xmils < xmil)
+						// il est Ã  gauche
 					{
-						if (xmils < xmil)
-							// il est à gauche
+						handleG = ObjId.handle();
+						if (longueurG < abs(p2res[0] - p1res[0]))
 						{
-							handleG = ObjId.handle();
-							if (longueurG < (p2res[0] - p1res[0]))
-							{
-								longueurG = round(p2res[0] - p1res[0]);
-							}
-							if (largeurG < (p2res[1] - p1res[1]))
-							{
-								largeurG = round(p2res[1] - p1res[1]);
-							}
-							if (p1[0] < xminG)
-							{
-								xminG = p1[0];
-							}
-							name2->close();
-							acedSSAdd(name, jeuSelG, jeuSelG);
+							longueurG = abs(round(p2res[0] - p1res[0]));
 						}
-						// à droite
-						else {
-							handleD = ObjId.handle();
-							if (longueurD < (maxPoint[0] - minPoint[0]))
-							{
-								longueurD = round(p2res[0] - p1res[0]);
-							}
-							if (largeurD < (maxPoint[1] - minPoint[1]))
-							{
-								largeurD = round(p2res[1] - p1res[1]);
-							}
-							if (p1[0] < xminD)
-							{
-								xminD = p1[0];
-							}
-							name2->close();
-							acedSSAdd(name, jeuSelD, jeuSelD);
-						}
-					}
-					else
-					{
-						if (ymils < ymil)
-							// il est à gauche
+						if (largeurG < abs(p2res[1] - p1res[1]))
 						{
-							handleG = ObjId.handle();
-							if (longueurG < (p2res[0] - p1res[0]))
-							{
-								longueurG = round(p2res[0] - p1res[0]);
-							}
-							if (largeurG < (p2res[1] - p1res[1]))
-							{
-								largeurG = round(p2res[1] - p1res[1]);
-							}
-							if (p1[0] < xminG)
-							{
-								xminG = p1[0];
-							}
-							name2->close();
-							acedSSAdd(name, jeuSelG, jeuSelG);
+							largeurG = abs(round(p2res[1] - p1res[1]));
 						}
-						// à droite
-						else {
-							handleD = ObjId.handle();
-							if (longueurD < (maxPoint[0] - minPoint[0]))
-							{
-								longueurD = round(p2res[0] - p1res[0]);
-							}
-							if (largeurD < (maxPoint[1] - minPoint[1]))
-							{
-								largeurD = round(p2res[1] - p1res[1]);
-							}
-							if (p1[0] < xminD)
-							{
-								xminD = p1[0];
-							}
-							name2->close();
-							acedSSAdd(name, jeuSelD, jeuSelD);
+						if (p1res[0] < xminG)
+						{
+							xminG = p1res[0];
 						}
 
+						name2->close();
+						acedSSAdd(name, jeuSelG, jeuSelG);
+					}
+					// Ã  droite
+					else {
+						handleD = ObjId.handle();
+						if (longueurD < (maxPoint[0] - minPoint[0]))
+						{
+							longueurD = abs(round(p2res[0] - p1res[0]));
+						}
+						if (largeurD < (maxPoint[1] - minPoint[1]))
+						{
+							largeurD = abs(round(p2res[1] - p1res[1]));
+						}
+						if (p1res[0] < xminD)
+						{
+							xminD = p1res[0];
+						}
+						//name2->setColorIndex(2);
+						name2->close();
+						acedSSAdd(name, jeuSelD, jeuSelD);
 					}
 				}
 			}
@@ -854,7 +822,7 @@ int ajusterBlocAvecContour(void)
 
 
 			int m;
-			// Création du bloc coté Gauche
+			// CrÃ©ation du bloc cotÃ© Gauche
 			ads_sslength(jeuSelG, &nbrObjG);
 			if (nbrObjG > 0)
 			{
@@ -862,6 +830,7 @@ int ajusterBlocAvecContour(void)
 				m = handleG;
 				origin.x = xminG;
 				nomBlock = nomBlockH(nomBlock, m, (int)longueurG, (int)largeurG);
+				//acutPrintf(_T("GGGGG->>>> %f / %f ->>>> %s\n"), longueurG, largeurG, nomBlockH);
 				double degrees = rotation * (180.0 / 3.141592653589793238463);
 				//acutPrintf(_T("Nombre Gauche: %i -  %s\n"), nbrObjG, nomBlockH);
 				acedCommandS(RTSTR, L"_block", RTSTR, nomBlock, RT3DPOINT, origin, RTPICKS, jeuSelG, RTSTR, L"", RTNONE);
@@ -911,7 +880,7 @@ int ajusterBlocAvecContour(void)
 				pMS->close();
 				pBlkTab->close();
 
-				// Ajout du bloc dans la liste des résultats
+				// Ajout du bloc dans la liste des rÃ©sultats
 				acdbGetAdsName(name, idBlock);
 				pSVal = pSVal->rbnext = acutNewRb(RTENAME);
 				pSVal->resval.rlname[0] = name[0];
@@ -919,7 +888,7 @@ int ajusterBlocAvecContour(void)
 				//acedCommandS(RTSTR, L"_ERASE", RTPICKS, jeuSelG, RTSTR, L"", RTNONE);
 			}
 
-			// Création du bloc coté Droit
+			// CrÃ©ation du bloc cotÃ© Droit
 			ads_sslength(jeuSelD, &nbrObjD);
 			if (nbrObjD > 0)
 			{
@@ -931,6 +900,7 @@ int ajusterBlocAvecContour(void)
 
 				//acutPrintf(_T("Nombre Droit: %i -  %s\n"), nbrObjG, nomBlockH);
 				//origin.transformBy(mat2);
+				//acutPrintf(_T("DDDDD->>>> %f / %f ->>>> %s\n"), longueurG, largeurG, nomBlockH);
 				acedCommandS(RTSTR, L"_block", RTSTR, nomBlock, RT3DPOINT, origin, RTPICKS, jeuSelD, RTSTR, L"", RTNONE);
 
 				// Insertion du bloc
@@ -1007,3 +977,4 @@ int ajusterBlocAvecContour(void)
 	//acedAlert(_T("zzz"));
 	return (RSRSLT);
 }
+

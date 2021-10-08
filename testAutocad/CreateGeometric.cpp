@@ -268,15 +268,21 @@ bool CreateGeometricRepresentationVisitor::visitIfcRepresentation(ifc2x3::IfcRep
         {
             representationItem = (ifc2x3::IfcRepresentationItem*)mDataSet->createIfcFacetedBrep().get();
             isCoveringExp = false;
+            indexTypeLoop = 0;
+            typeLoop.clear();
         }
         else if (isPlateExp == true)
         {
             representationItem = (ifc2x3::IfcRepresentationItem*)mDataSet->createIfcFacetedBrep().get();
             isPlateExp = false;
+            indexTypeLoop = 0;
+            typeLoop.clear();
         }
         else
         {
             representationItem = (ifc2x3::IfcRepresentationItem*)mDataSet->createIfcExtrudedAreaSolid().get();
+            indexTypeLoop = 0;
+            typeLoop.clear();
         }
                 
         break;
@@ -562,17 +568,18 @@ bool CreateGeometricRepresentationVisitor::visitIfcFaceOuterBound(ifc2x3::IfcFac
 
     Step::RefPtr<ifc2x3::IfcCompositeCurve> compositeCurve;
 
-    if (iteratorPolyline == 0)
+    if (typeLoop[indexTypeLoop] == "Polyline")
     {
         polyloop = mDataSet->createIfcPolyLoop().get();
         rpValue->setBound(polyloop);
     }
-    else if (iteratorPolyline > 0)
+    else if (typeLoop[indexTypeLoop] == "CompositeCurve")
     {
         compositeCurve = mDataSet->createIfcCompositeCurve().get();
         rpValue->setBound(compositeCurve);
     }
     
+    indexTypeLoop++;
 
     rpValue->setOrientation(boolean);
 
