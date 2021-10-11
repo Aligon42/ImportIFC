@@ -269,20 +269,20 @@ bool CreateGeometricRepresentationVisitor::visitIfcRepresentation(ifc2x3::IfcRep
             representationItem = (ifc2x3::IfcRepresentationItem*)mDataSet->createIfcFacetedBrep().get();
             isCoveringExp = false;
             indexTypeLoop = 0;
-            typeLoop.clear();
+            
         }
         else if (isPlateExp == true)
         {
             representationItem = (ifc2x3::IfcRepresentationItem*)mDataSet->createIfcFacetedBrep().get();
             isPlateExp = false;
             indexTypeLoop = 0;
-            typeLoop.clear();
+           
         }
         else
         {
             representationItem = (ifc2x3::IfcRepresentationItem*)mDataSet->createIfcExtrudedAreaSolid().get();
             indexTypeLoop = 0;
-            typeLoop.clear();
+            
         }
                 
         break;
@@ -292,6 +292,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcRepresentation(ifc2x3::IfcRep
     }
 
     result &= representationItem->acceptVisitor(this);
+    typeLoop.clear();
     mPolyloopMustBeClosed = false;
 
     rpValue->getItems().insert(representationItem.get());

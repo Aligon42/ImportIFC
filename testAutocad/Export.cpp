@@ -458,6 +458,8 @@ void ExportIFC()
                 std::vector<Circle> listCircle;
                 std::vector<std::string> listTypeCompositeCurveSegment;
 
+
+
                 for (int t = 0; t < polylineArray.length(); t++)//décomposer les faces pour avoir des polylines afin de verifier si c'est des arcs ou des droites 
                 {
                     AcDbArc* pCloneArc = (AcDbArc*)polylineArray.at(t);
@@ -503,8 +505,8 @@ void ExportIFC()
                         circle.rayon = pCloneArc->radius();
 
                         //set trimmedCurve (#112767)
-                        trimmedCurve.trim1 = (double)pCloneArc->startAngle();
-                        trimmedCurve.trim2 = (double)pCloneArc->endAngle();
+                        trimmedCurve.trim1 = pCloneArc->startAngle();
+                        trimmedCurve.trim2 = pCloneArc->endAngle();
                         trimmedCurve.preference = ifc2x3::IfcTrimmingPreference::IfcTrimmingPreference_PARAMETER;
                         trimmedCurve.senseAgreement = Step::Boolean::BFalse; //à récup
 
@@ -525,7 +527,7 @@ void ExportIFC()
 
                 if (iteratorPolyline > 0)
                 {
-                    typeLoop.push_back("CompositeCurve");
+                    cwrv.ajoutTypeLoop_type("CompositeCurve");
                     int index = 0;
                     int nbPointsPolyline = 1;
                     bool poly = false;
@@ -568,7 +570,7 @@ void ExportIFC()
                 else 
                 {
                     points.clear();
-                    typeLoop.push_back("Polyline");
+                    cwrv.ajoutTypeLoop_type("Polyline");
                     for (int l = 0; l < nbPoints[k]; l++)
                     {
                         AcGePoint3d point = listePoints.at(l);

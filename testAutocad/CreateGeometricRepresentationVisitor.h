@@ -25,8 +25,8 @@ struct CompositeCurveSegmentEx
 
 struct TrimmedCurveEx
 {
-	ifc2x3::Set_IfcTrimmingSelect_1_2 trim1;
-	ifc2x3::Set_IfcTrimmingSelect_1_2 trim2;
+	double trim1;
+	double trim2;
 	Step::Boolean senseAgreement;
 	ifc2x3::IfcTrimmingPreference preference;
 };
@@ -127,6 +127,8 @@ public:
 		mListFaceCompositeCurve = listFaceCompositeCurve;
 	}
 
+	inline void ajoutTypeLoop_type(const std::string& type) { typeLoop.push_back(type); }
+
 protected:
 	GeometryType mGeomType;
 	LocationType mLocationType;
@@ -163,6 +165,9 @@ protected:
 
 	std::vector<FaceParCompositeCurve> mListFaceCompositeCurve;
 	int indexFace;
+
+	std::vector<std::string> typeLoop;
+	int indexTypeLoop;
 
 
 	//  		4  3
