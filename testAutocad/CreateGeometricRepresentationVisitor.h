@@ -104,20 +104,20 @@ public:
 
 	inline void setElement(const std::vector<int>& elements) { mElements = elements; }
 
-	inline void setCompositeCurveSegment(CompositeCurveSegmentEx compositeCurveSegment, TrimmedCurveEx trimmedCurve, Circle circle)
+	inline void setCompositeCurveSegment(CompositeCurveSegmentEx& compositeCurveSegment, TrimmedCurveEx& trimmedCurve, Circle& circle)
 	{
 		mCompositeCurveSegment.sameSense = compositeCurveSegment.sameSense; mCompositeCurveSegment.transition = compositeCurveSegment.transition; mTrimmedCurve = trimmedCurve; mCircle = circle;
 	}
 
-	inline void setListCompositeCurveSegmentTrim(std::vector<CompositeCurveSegmentEx> listCompositeCurveSegment) { mListCompositeCurveSegmentTrim = listCompositeCurveSegment; }
+	inline void setListCompositeCurveSegmentTrim(std::vector<CompositeCurveSegmentEx>& listCompositeCurveSegment) { mListCompositeCurveSegmentTrim = listCompositeCurveSegment; }
 
-	inline void setListTrimmedCurve(std::vector<TrimmedCurveEx> listTrimmedCurve) { mListTrimmedCurve = listTrimmedCurve; }
+	inline void setListTrimmedCurve(std::vector<TrimmedCurveEx>& listTrimmedCurve) { mListTrimmedCurve = listTrimmedCurve; }
 
-	inline void setListCCircle(std::vector<Circle> listCircle) { mListCircle = listCircle; }
+	inline void setListCCircle(std::vector<Circle>& listCircle) { mListCircle = listCircle; }
 
-	inline void setListTypeCompositeCurveSegment(std::vector<std::string> listTypeCompositeCurveSegment) { mListTypeCompositeCurveSegment = listTypeCompositeCurveSegment; }
+	inline void setListTypeCompositeCurveSegment(std::vector<std::string>& listTypeCompositeCurveSegment) { mListTypeCompositeCurveSegment = listTypeCompositeCurveSegment; }
 
-	inline void setListNbPointsPolylineCompositeCurveSegment(std::vector<int> listNbPointsPolylineCompositeCurveSegment) { mListNbPointsPolylineCompositeCurveSegment = listNbPointsPolylineCompositeCurveSegment; }
+	inline void setListNbPointsPolylineCompositeCurveSegment(std::vector<int>& listNbPointsPolylineCompositeCurveSegment) { mListNbPointsPolylineCompositeCurveSegment = listNbPointsPolylineCompositeCurveSegment; }
 
 protected:
 	GeometryType mGeomType;

@@ -507,11 +507,11 @@ void ExportIFC()
                         //set trimmedCurve (#112767)
                         trimmedCurve.trim1 = pCloneArc->startAngle();
                         trimmedCurve.trim2 = pCloneArc->endAngle();
-                        trimmedCurve.preference = ifc2x3::IfcTrimmingPreference::IfcTrimmingPreference_PARAMETER; //à récup
+                        trimmedCurve.preference = ifc2x3::IfcTrimmingPreference::IfcTrimmingPreference_PARAMETER;
                         trimmedCurve.senseAgreement = Step::Boolean::BFalse; //à récup
 
                         //set compositeCurveSegment
-                        compositeCurveSegment.transition = ifc2x3::IfcTransitionCode::IfcTransitionCode_CONTINUOUS; //à récup
+                        compositeCurveSegment.transition = ifc2x3::IfcTransitionCode::IfcTransitionCode_CONTINUOUS;
                         compositeCurveSegment.sameSense = Step::Boolean::BTrue; //à récup
                         cwrv.setCompositeCurveSegment(compositeCurveSegment, trimmedCurve, circle);
 
@@ -529,7 +529,8 @@ void ExportIFC()
                 {
                     typeLoop.push_back("CompositeCurve");
                     int index = 0;
-                    int nbPointsPolyline = 0;                    
+                    int nbPointsPolyline = 0;
+                    bool poly = false;
 
                     for (int i = 0; i < listTypeCompositeCurveSegment.size() - index; i++)
                     {
@@ -537,23 +538,30 @@ void ExportIFC()
                         {
                             nbPointsPolyline++;
                             index++;
+                            poly = true;
 
                             if (index == listTypeCompositeCurveSegment.size())
                             {
+                                
                                 break;
                             }
-                        }
-
-                        listNbPointsPolyline.push_back(nbPointsPolyline);
+                        }       
 
                         if (index == listTypeCompositeCurveSegment.size())
                         {
                             break;
                         }
 
+                        if (poly == true)
+                        {
+                            listNbPointsPolyline.push_back(nbPointsPolyline);
+                        }
+
                         if (listTypeCompositeCurveSegment.at(index) == "trimmedCurve")
                         {
                             nbPointsPolyline = 0;
+                            index++;
+                            poly = false;
                         }
                     }
 
@@ -600,9 +608,9 @@ void ExportIFC()
 
                         // Create representation
                         // Polyloop #1
-                        points.push_back((roundoff(point[0], 3)) * 0.001);
-                        points.push_back((roundoff(point[1], 3)) * 0.001);
-                        points.push_back((roundoff(point[2], 3)) * 0.001);
+                        points.push_back(point[0] * 0.001);
+                        points.push_back(point[1] * 0.001);
+                        points.push_back(point[2] * 0.001);
                     }
                 }
 

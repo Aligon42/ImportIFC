@@ -1,7 +1,6 @@
 #pragma once
 
 void ExportIFC();
-void Scale();
 
 static bool isCoveringExp;
 static bool isPlateExp;
