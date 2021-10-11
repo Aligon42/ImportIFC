@@ -45,6 +45,9 @@ struct FaceParCompositeCurve
 	std::vector<std::string> listTypeCompositeCurveSegment;
 };
 
+
+
+
 class CreateGeometricRepresentationVisitor : public ifc2x3::InheritVisitor
 {
 public:
@@ -159,7 +162,7 @@ protected:
 	Circle mCircle;
 
 	std::vector<FaceParCompositeCurve> mListFaceCompositeCurve;
-
+	int indexFace;
 
 
 	//  		4  3

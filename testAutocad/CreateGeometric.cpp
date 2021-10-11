@@ -494,6 +494,8 @@ bool CreateGeometricRepresentationVisitor::visitIfcCompositeCurve(ifc2x3::IfcCom
     Step::RefPtr<ifc2x3::IfcCompositeCurveSegment> compositeCurveSegment;
     Step::Logical logical = Step::Logical::LFalse;
 
+    indexFace = 0;
+
     for (size_t i = 0; i < 1; i++)
     {
         compositeCurveSegment = mDataSet->createIfcCompositeCurveSegment();
@@ -520,17 +522,19 @@ bool CreateGeometricRepresentationVisitor::visitIfcCompositeCurveSegment(ifc2x3:
 
     
 
-    for (indexListCompositeCurveSegment; indexListCompositeCurveSegment < mListTypeCompositeCurveSegment.size(); indexListCompositeCurveSegment++)
+    for (indexListCompositeCurveSegment; indexListCompositeCurveSegment < mListFaceCompositeCurve[indexFace].listCompositeCurveSegmentTrim.size(); indexListCompositeCurveSegment++)
     {
-        if (mListTypeCompositeCurveSegment.at(indexListCompositeCurveSegment) == "polyline")
+        if (mListFaceCompositeCurve[indexFace].listTypeCompositeCurveSegment.at(indexListCompositeCurveSegment) == "polyline")
         {
             result &= polyline->acceptVisitor(this);
         }
-        else if (mListTypeCompositeCurveSegment.at(indexListCompositeCurveSegment) == "trimmedCurve")
+        else if (mListFaceCompositeCurve[indexFace].listTypeCompositeCurveSegment.at(indexListCompositeCurveSegment) == "trimmedCurve")
         {
             result &= trimmedCurve->acceptVisitor(this);
         }
     }
+
+    indexFace++;
 
     rpValue->setTransition(transitionCode);
     rpValue->setSameSense(sameSense);
@@ -549,10 +553,10 @@ bool CreateGeometricRepresentationVisitor::visitIfcTrimmedCurve(ifc2x3::IfcTrimm
     result &= circle->acceptVisitor(this);
 
     rpValue->setBasisCurve(circle);
-    rpValue->setTrim1(mListTrimmedCurve.at(indexListCompositeCurveSegment).trim1);
-    rpValue->setTrim1(mListTrimmedCurve.at(indexListCompositeCurveSegment).trim2);
-    rpValue->setSenseAgreement(mListTrimmedCurve.at(indexListCompositeCurveSegment).senseAgreement);
-    rpValue->setMasterRepresentation(mListTrimmedCurve.at(indexListCompositeCurveSegment).preference);
+    rpValue->setTrim1(mListFaceCompositeCurve[indexFace].listTrimmedCurve.at(indexListCompositeCurveSegment).trim1);
+    rpValue->setTrim1(mListFaceCompositeCurve[indexFace].listTrimmedCurve.at(indexListCompositeCurveSegment).trim2);
+    rpValue->setSenseAgreement(mListFaceCompositeCurve[indexFace].listTrimmedCurve.at(indexListCompositeCurveSegment).senseAgreement);
+    rpValue->setMasterRepresentation(mListFaceCompositeCurve[indexFace].listTrimmedCurve.at(indexListCompositeCurveSegment).preference);
 
     return result;
 
@@ -769,7 +773,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcCircle(ifc2x3::IfcCircle* val
     axis->acceptVisitor(this);
 
     rpValue->setPosition(axis);
-    rpValue->setRadius(mListCircle.at(indexListCompositeCurveSegment).rayon);
+    rpValue->setRadius(mListFaceCompositeCurve[indexFace].listCircle.at(indexListCompositeCurveSegment).rayon);
 
     return result;
 }
@@ -782,9 +786,9 @@ bool CreateGeometricRepresentationVisitor::visitIfcAxis2Placement2D(ifc2x3::IfcA
     Step::RefPtr<ifc2x3::IfcCartesianPoint> p = mDataSet->createIfcCartesianPoint();
     Step::RefPtr<ifc2x3::IfcDirection> d = mDataSet->createIfcDirection();
 
-    p->getCoordinates().push_back(mListCircle[indexListCompositeCurveSegment].centre.x);//ajouter valeur
-    p->getCoordinates().push_back(mListCircle[indexListCompositeCurveSegment].centre.y);//ajouter valeur
-    p->getCoordinates().push_back(mListCircle[indexListCompositeCurveSegment].centre.z);//ajouter valeur
+    p->getCoordinates().push_back(mListFaceCompositeCurve[indexFace].listCircle[indexListCompositeCurveSegment].centre.x);//ajouter valeur
+    p->getCoordinates().push_back(mListFaceCompositeCurve[indexFace].listCircle[indexListCompositeCurveSegment].centre.y);//ajouter valeur
+    p->getCoordinates().push_back(mListFaceCompositeCurve[indexFace].listCircle[indexListCompositeCurveSegment].centre.z);//ajouter valeur
     rpValue->setLocation(p.get());
 
     d->getDirectionRatios().push_back(0.0);//ajouter valeur

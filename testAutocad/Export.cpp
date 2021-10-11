@@ -516,8 +516,8 @@ void ExportIFC()
                         circle.rayon = pCloneArc->radius();
 
                         //set trimmedCurve (#112767)
-                        trimmedCurve.trim1 = pCloneArc->startAngle();
-                        trimmedCurve.trim2 = pCloneArc->endAngle();
+                        trimmedCurve.trim1 = (double)pCloneArc->startAngle();
+                        trimmedCurve.trim2 = (double)pCloneArc->endAngle();
                         trimmedCurve.preference = ifc2x3::IfcTrimmingPreference::IfcTrimmingPreference_PARAMETER;
                         trimmedCurve.senseAgreement = Step::Boolean::BFalse; //à récup
 
@@ -637,6 +637,7 @@ void ExportIFC()
             }
 
             cwrv.setFaceParCompositeCurve(listFaceCompositeCurve);
+            cwrv.setListNbPointsPolylineCompositeCurveSegment(listNbPointsPolyline);
 
             position.clear();
             placement.clear();
