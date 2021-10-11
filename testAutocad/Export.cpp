@@ -432,24 +432,6 @@ void ExportIFC()
 
             std::vector<FaceParCompositeCurve> listFaceCompositeCurve;
 
-
-            // CERCLE
-            Circle circle;
-
-            // TRIMMEDCURVE
-            TrimmedCurveEx trimmedCurve;
-
-            //COMPOSITECURVESEGMENT
-            CompositeCurveSegmentEx compositeCurveSegment;
-
-            std::vector<CompositeCurveSegmentEx> listCompositeCurveSegmentTrim;
-            std::vector<TrimmedCurveEx> listTrimmedCurve;
-            std::vector<Circle> listCircle;
-            std::vector<std::string> listTypeCompositeCurveSegment;
-
-            //OBJET POUR UNE FACE EN COMPOSITECURVE
-            FaceParCompositeCurve faceCompositeCurve;
-
             std::vector<int> listNbPointsPolyline;
 
             for (int k = 0; k < faceArray.length(); k++)
@@ -467,14 +449,30 @@ void ExportIFC()
                 int pointsCount = listePoints.length();
                 nbPoints[k] = pointsCount;
 
-                double angle;                
-                AcGePoint3dArray listePointsPolyline;
+                double angle;
 
+                //OBJET POUR UNE FACE EN COMPOSITECURVE
+                FaceParCompositeCurve faceCompositeCurve;
+                std::vector<CompositeCurveSegmentEx> listCompositeCurveSegmentTrim;
+                std::vector<TrimmedCurveEx> listTrimmedCurve;
+                std::vector<Circle> listCircle;
+                std::vector<std::string> listTypeCompositeCurveSegment;
 
                 for (int t = 0; t < polylineArray.length(); t++)//décomposer les faces pour avoir des polylines afin de verifier si c'est des arcs ou des droites 
                 {
                     AcDbArc* pCloneArc = (AcDbArc*)polylineArray.at(t);
                     AcDbPolyline* pClonePolyline = (AcDbPolyline*)polylineArray.at(t);
+
+                    // CERCLE
+                    Circle circle;
+
+                    // TRIMMEDCURVE
+                    TrimmedCurveEx trimmedCurve;
+
+                    //COMPOSITECURVESEGMENT
+                    CompositeCurveSegmentEx compositeCurveSegment;
+
+                    AcGePoint3dArray listePointsPolyline;
 
                     angle = pCloneArc->totalAngle();
 
@@ -529,7 +527,7 @@ void ExportIFC()
                 {
                     typeLoop.push_back("CompositeCurve");
                     int index = 0;
-                    int nbPointsPolyline = 0;
+                    int nbPointsPolyline = 1;
                     bool poly = false;
 
                     for (int i = 0; i < listTypeCompositeCurveSegment.size() - index; i++)
@@ -614,15 +612,18 @@ void ExportIFC()
                     }
                 }
 
+                faceCompositeCurve.listCircle = listCircle;
+                faceCompositeCurve.listCompositeCurveSegmentTrim = listCompositeCurveSegmentTrim;
+                faceCompositeCurve.listTrimmedCurve = listTrimmedCurve;
+                faceCompositeCurve.listTypeCompositeCurveSegment = listTypeCompositeCurveSegment;
+
+                listFaceCompositeCurve.push_back(faceCompositeCurve);
+
                 pCloneFace->erase();
                 pCloneFace->close();
             }
 
-            cwrv.setListCompositeCurveSegmentTrim(listCompositeCurveSegmentTrim);
-            cwrv.setListTrimmedCurve(listTrimmedCurve);
-            cwrv.setListCCircle(listCircle);
-            cwrv.setListNbPointsPolylineCompositeCurveSegment(listNbPointsPolyline);
-            cwrv.setListTypeCompositeCurveSegment(listTypeCompositeCurveSegment);
+            cwrv.setFaceParCompositeCurve(listFaceCompositeCurve);
 
             position.clear();
             placement.clear();

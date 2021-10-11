@@ -119,6 +119,11 @@ public:
 
 	inline void setListNbPointsPolylineCompositeCurveSegment(std::vector<int>& listNbPointsPolylineCompositeCurveSegment) { mListNbPointsPolylineCompositeCurveSegment = listNbPointsPolylineCompositeCurveSegment; }
 
+	inline void setFaceParCompositeCurve(std::vector<FaceParCompositeCurve>& listFaceCompositeCurve)
+	{
+		mListFaceCompositeCurve = listFaceCompositeCurve;
+	}
+
 protected:
 	GeometryType mGeomType;
 	LocationType mLocationType;
@@ -152,6 +157,8 @@ protected:
 	CompositeCurveSegmentEx mCompositeCurveSegment;
 	TrimmedCurveEx mTrimmedCurve;
 	Circle mCircle;
+
+	std::vector<FaceParCompositeCurve> mListFaceCompositeCurve;
 
 
 
