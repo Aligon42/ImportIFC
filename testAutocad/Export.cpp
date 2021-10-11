@@ -471,7 +471,7 @@ void ExportIFC()
                 std::vector<Circle> listCircle;
                 std::vector<std::string> listTypeCompositeCurveSegment;
 
-
+                bool isCompositeCurve = false;
 
                 for (int t = 0; t < polylineArray.length(); t++)//décomposer les faces pour avoir des polylines afin de verifier si c'est des arcs ou des droites 
                 {
@@ -493,7 +493,6 @@ void ExportIFC()
 
                     if (angle == 0)
                     {
-                        isPolyline = true;
                         
                         pClonePolyline->getStretchPoints(listePointsPolyline);
 
@@ -511,15 +510,14 @@ void ExportIFC()
                     }
                     else
                     {
-                        isPolyline = false;
 
                         //set circle 
                         circle.centre = pCloneArc->center();
                         circle.rayon = pCloneArc->radius();
 
                         //set trimmedCurve (#112767)
-                        trimmedCurve.trim1.emplace(Utils::RadianToDegree(pCloneArc->startAngle()));
-                        trimmedCurve.trim2.emplace(Utils::RadianToDegree(pCloneArc->endAngle()));
+                        trimmedCurve.trim1 = (Utils::RadianToDegree(pCloneArc->startAngle()));
+                        trimmedCurve.trim2 = (Utils::RadianToDegree(pCloneArc->endAngle()));
                         trimmedCurve.preference = ifc2x3::IfcTrimmingPreference::IfcTrimmingPreference_PARAMETER;
                         trimmedCurve.senseAgreement = Step::Boolean::BFalse; //à récup
 
@@ -533,12 +531,11 @@ void ExportIFC()
                         listTrimmedCurve.push_back(trimmedCurve);
                         listCircle.push_back(circle);
 
-                        iteratorPolyline++;
+                        isCompositeCurve = true;
                     }
-
                 }
 
-                if (iteratorPolyline > 0)
+                if (isCompositeCurve == true)
                 {
                     cwrv.ajoutTypeLoop_type("CompositeCurve");
                     int index = 0;

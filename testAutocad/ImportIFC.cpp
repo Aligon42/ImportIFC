@@ -261,7 +261,7 @@ void test()
         ATTO  = visitor1.getATTO();
     }
 
-    /*for (auto& site : expressDataSet->getAllIfcSite())
+    for (auto& site : expressDataSet->getAllIfcSite())
     {
         
         int key = (int)site.getKey();
@@ -318,7 +318,7 @@ void test()
         bool isMappedItem = visitor1.getIsMappedItem();
         Matrix4 transformationOperator3D = visitor1.getTransformationOperator3D();
 
-        /*std::vector<Style> vectorStyle;
+        std::vector<Style> vectorStyle;
         if (keyItems.size() > 0)
         {
             for (int i = 0; i < keyItems.size(); i++)
@@ -361,7 +361,7 @@ void test()
                 createBoundingBox(box, entity, keyProfilDef, listStyle);
             }
         }
-    }*/
+    }
 
     std::map<int, MappedItem> dicoMappedItem;
 
@@ -748,13 +748,6 @@ void test()
     auto A_set = GetWCM(A.c_str());
 
     int selectionSet = acedSSGet(A_set, NULL, NULL, NULL, selection);
-    if (selectionSet != RTNORM)
-    {
-        nbEntity_set = 0;
-    }
-    else {
-        acedSSLength(selection, &nbEntity_set);
-    }
 
     acedCommandS(RTSTR, L"_scale", RTPICKS, selection, RTSTR, L"", RT3DPOINT, origin, RTREAL, scale_set, RTNONE);
 
