@@ -516,8 +516,8 @@ void ExportIFC()
                         circle.rayon = pCloneArc->radius();
 
                         //set trimmedCurve (#112767)
-                        trimmedCurve.trim1 = (double)pCloneArc->startAngle();
-                        trimmedCurve.trim2 = (double)pCloneArc->endAngle();
+                        trimmedCurve.trim1.emplace(Utils::RadianToDegree(pCloneArc->startAngle()));
+                        trimmedCurve.trim2.emplace(Utils::RadianToDegree(pCloneArc->endAngle()));
                         trimmedCurve.preference = ifc2x3::IfcTrimmingPreference::IfcTrimmingPreference_PARAMETER;
                         trimmedCurve.senseAgreement = Step::Boolean::BFalse; //à récup
 
