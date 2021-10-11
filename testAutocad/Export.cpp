@@ -48,6 +48,19 @@
 
 #define DISTANCE_TOLERANCE 0.001
 
+namespace Utils
+{
+    double RadianToDegree(const double rad)
+    {
+        return rad * (180.0 / PI);
+    }
+
+    double DegreeToRadian(const double deg)
+    {
+        return deg * (PI / 180.0);
+    }
+}
+
 void initOwnerHistory(ifc2x3::IfcOwnerHistory* theOwnerHistory, std::string userID, std::string userFN, std::string userLN,std::string orgID, std::string orgName,std::string appVersion, std::string appID, std::string appName)
 {
     theOwnerHistory->getOwningUser()->getThePerson()->setId(userID);
@@ -690,5 +703,3 @@ void ExportIFC()
     acedAlert(_T("EXPORT DONE"));
 
 }
-
-
