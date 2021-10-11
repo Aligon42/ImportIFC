@@ -92,10 +92,10 @@ void test()
     // Get a ifc file from the user.
     //
     rb = acutNewRb(RTSTR);
-    int stat = acedGetFileD(_T("Pick a IFC file"), NULL, _T("ifc"), 0, rb);
+    int stat = acedGetFileD(_T("Selectionnez votre fichier IFC"), NULL, _T("ifc"), 0, rb);
     if ((stat != RTNORM) || (rb == NULL))
     {
-        acutPrintf(_T("\nYou must pick a ifc file."));
+        acutPrintf(_T("\nVous devez selectionner un fichier IFC."));
         return;
     }
     fname = (TCHAR*)acad_malloc((_tcslen(rb->resval.rstring) + 1) * sizeof(TCHAR));
@@ -410,25 +410,6 @@ void test()
 
     }
 
-    /*const auto& pjdfpkdfjpodSITE = expressDataSet->getAllIfcElement().m_refList;
-
-    int total = 0;
-    for (auto& test : pjdfpkdfjpodSITE)
-    {
-        if (test->size() == 0)continue;
-        std::string type = (*test->begin()).second->type();
-        if (type == "IfcOpeningElement") continue;
-        total += test->size();
-    }
-    
-    std::ofstream fwSite("C:\\Users\\AntoineCACHEUX\\source\\repos\\ImportIFC_IFCCADPRO\\Test.txt", std::ofstream::out);
-    if (fwSite.is_open())
-    {
-        fwSite << "Nombre éléments : " << total<< "\n";
-
-        fwSite.close();
-    }*/
-
     int count = 0;
     for (auto& buildingElement : expressDataSet->getAllIfcElement())
     {
@@ -714,7 +695,7 @@ void test()
     }
     else if (MILLI == true)
     {
-        scale_set = 0;
+        scale_set = 1;
     }
     else if (MICRO == true)
     {
@@ -744,12 +725,13 @@ void test()
     ads_name selection;
     int nbEntity_set;
 
-    std::string A = "A";
+    std::string A = "_A";
     auto A_set = GetWCM(A.c_str());
 
     int selectionSet = acedSSGet(A_set, NULL, NULL, NULL, selection);
+    acedSSLength(selection, &nbEntity_set);
 
-    acedCommandS(RTSTR, L"_scale", RTPICKS, selection, RTSTR, L"", RT3DPOINT, origin, RTREAL, scale_set, RTNONE);
+    //acedCommandS(RTSTR, L"_scale", RTSTR, L"_ALL", RTSTR, L"", RT3DPOINT, origin, RTREAL, scale_set, RTNONE);
 
     listVoid.clear();
     listStyle.clear();

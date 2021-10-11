@@ -101,11 +101,6 @@ int block(void)
 	rotation = rb->resval.rreal;
 	rb = rb->rbnext;
 
-
-
-
-
-
 	AcGePoint3d origin = AcGePoint3d::AcGePoint3d(0., 0.0, 0.);
 	AcDbDatabase* pDb = acdbHostApplicationServices()->workingDatabase();
 
