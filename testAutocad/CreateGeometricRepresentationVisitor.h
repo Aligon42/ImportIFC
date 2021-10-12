@@ -74,6 +74,7 @@ public:
 	virtual bool visitIfcFacetedBrep(ifc2x3::IfcFacetedBrep* value);
 	virtual bool visitIfcClosedShell(ifc2x3::IfcClosedShell* value);
 	virtual bool visitIfcFace(ifc2x3::IfcFace* value);
+	virtual bool visitIfcFaceOuterBound(ifc2x3::IfcFaceOuterBound* value);
 	virtual bool visitIfcSweptAreaSolid(ifc2x3::IfcSweptAreaSolid* value);
 	virtual bool visitIfcExtrudedAreaSolid(ifc2x3::IfcExtrudedAreaSolid* value);
 	virtual bool visitIfcPlacement(ifc2x3::IfcPlacement* value);
@@ -82,16 +83,15 @@ public:
 	virtual bool visitIfcCompositeCurve(ifc2x3::IfcCompositeCurve* value);
 	virtual bool visitIfcCompositeCurveSegment(ifc2x3::IfcCompositeCurveSegment* value);
 	virtual bool visitIfcTrimmedCurve(ifc2x3::IfcTrimmedCurve* value);
-	virtual bool visitIfcFaceOuterBound(ifc2x3::IfcFaceOuterBound* value);
-	virtual bool visitIfcPolyline2D(ifc2x3::IfcPolyline* value);
-	virtual bool visitIfcPolyline3D(ifc2x3::IfcPolyline* value);
+	virtual bool visitIfcTrimmingSelect(ifc2x3::IfcTrimmingSelect* value);
+	virtual bool visitIfcPolyline(ifc2x3::IfcPolyline* value);
 	virtual bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value);
 	virtual bool visitIfcEdgeLoop(ifc2x3::IfcEdgeLoop* value);
 	virtual bool visitIfcOrientedEdge(ifc2x3::IfcOrientedEdge* value);
 	virtual bool visitIfcEdgeCurve(ifc2x3::IfcEdgeCurve* value);
 	virtual bool visitIfcVertexPoint(ifc2x3::IfcVertexPoint* value);
 	virtual bool visitIfcCircle(ifc2x3::IfcCircle* value);
-	virtual bool visitIfcAxis2Placement2D(ifc2x3::IfcAxis2Placement2D* value);
+	virtual bool visitIfcAxis2Placement3D(ifc2x3::IfcAxis2Placement3D* value);
 
 	virtual bool visitIfcCoveringType(ifc2x3::IfcCoveringType* value);
 	virtual bool visitIfcPropertySet(ifc2x3::IfcPropertySet* value);
@@ -167,6 +167,7 @@ protected:
 	int indexFace;
 	int indexTypeLoop;
 	int indexListTrimmedCurve = 0;
+	int indexListCircle = 0;
 
 	std::vector<std::string> typeLoop;
 
@@ -181,3 +182,16 @@ protected:
 
 #endif // ** CREATEGEOMETRICREPRESENTATIONVISITOR_H_ ** //
 
+
+Step::RefPtr<ifc2x3::IfcFaceOuterBound> faceOuterBound;
+ifc2x3::Set_IfcFaceBound_1_n faceBound_1_n;
+
+for (size_t i = 0; i < 1; i++)
+{
+	faceOuterBound = mDataSet->createIfcFaceOuterBound();
+	result &= faceOuterBound->acceptVisitor(this);
+	faceBound_1_n.emplace(faceOuterBound);
+}
+
+indexListCompositeCurveSegment = 0;
+rpValue->setBounds(faceBound_1_n);

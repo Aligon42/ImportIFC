@@ -177,6 +177,8 @@ bool CreateGeometricRepresentationVisitor::visitIfcProduct(ifc2x3::IfcProduct* v
     bool result = true;
     Step::RefPtr< ifc2x3::IfcProduct > rpValue = value;
 
+    mFaceIndex = 0;
+
     // Set ObjectPlacement: Placement of the product in space, the placement can either
     // be absolute (relative to the world coordinate system), relative (relative to the
     // object placement of another product), or constraint (e.g. relative to grid axes).
@@ -324,7 +326,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcClosedShell(ifc2x3::IfcClosed
     Step::RefPtr<ifc2x3::IfcFace> face;
     ifc2x3::Set_IfcFace_1_n face_1_n;
 
-    mFaceIndex = 0;
+    
     mOffset = 0;
 
     for (int i = 0; i < mElements.size(); i++)
@@ -359,6 +361,38 @@ bool CreateGeometricRepresentationVisitor::visitIfcFace(ifc2x3::IfcFace* value)
     rpValue->setBounds(faceBound_1_n);
 
     return result;
+}
+
+
+bool CreateGeometricRepresentationVisitor::visitIfcFaceOuterBound(ifc2x3::IfcFaceOuterBound* value)
+{
+    bool result = true;
+    Step::RefPtr<ifc2x3::IfcFaceOuterBound> rpValue = value;
+
+    Step::RefPtr<ifc2x3::IfcPolyLoop> polyloop;
+    Step::Boolean boolean = Step::Boolean::BTrue;
+
+    Step::RefPtr<ifc2x3::IfcCompositeCurve> compositeCurve;
+
+    if (typeLoop[indexTypeLoop] == "Polyline")
+    {
+        polyloop = mDataSet->createIfcPolyLoop().get();
+        rpValue->setBound(polyloop);
+        rpValue->setOrientation(boolean);
+        result &= polyloop->acceptVisitor(this);
+    }
+    else if (typeLoop[indexTypeLoop] == "CompositeCurve")
+    {
+        compositeCurve = mDataSet->createIfcCompositeCurve().get();
+        rpValue->setBound(compositeCurve);
+        rpValue->setOrientation(boolean);
+        result &= compositeCurve->acceptVisitor(this);
+    }
+
+    indexTypeLoop++;
+
+    return result;
+
 }
 
 bool CreateGeometricRepresentationVisitor::visitIfcSweptAreaSolid(ifc2x3::IfcSweptAreaSolid* value)
@@ -498,6 +532,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcCompositeCurve(ifc2x3::IfcCom
 
     indexFace = 0;
     indexListTrimmedCurve = 0;
+    indexListCircle = 0;
     auto& face = mListFaceCompositeCurve[mFaceIndex];
 
     for (indexCompositeCurvePoly = 0; indexCompositeCurvePoly < face.listTypeCompositeCurveSegment.size(); indexCompositeCurvePoly++)
@@ -529,6 +564,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcCompositeCurveSegment(ifc2x3:
     {
         Step::RefPtr<ifc2x3::IfcPolyline> polyline = mDataSet->createIfcPolyline();
         result &= polyline->acceptVisitor(this);
+        rpValue->setParentCurve(polyline);
     }
     else if (typeSegment == "trimmedCurve")
     {
@@ -536,6 +572,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcCompositeCurveSegment(ifc2x3:
         result &= trimmedCurve->acceptVisitor(this);
         rpValue->setParentCurve(trimmedCurve);
         indexListTrimmedCurve++;
+        indexListCircle++;
     }
     //}
 
@@ -557,96 +594,97 @@ bool CreateGeometricRepresentationVisitor::visitIfcTrimmedCurve(ifc2x3::IfcTrimm
     result &= circle->acceptVisitor(this);
 
     auto& currentFace = mListFaceCompositeCurve[mFaceIndex];
+    /*ifc2x3::IfcParameterValue paramValue1 = currentFace.listTrimmedCurve.at(indexListTrimmedCurve).trim1;
+    ifc2x3::IfcParameterValue paramValue2 = currentFace.listTrimmedCurve.at(indexListTrimmedCurve).trim2;
+
+    
+    listTrimming.resize(2);
+
+    listTrimming[0]->setIfcParameterValue(paramValue1);
+    listTrimming[1]->setIfcParameterValue(paramValue2);*/
+
+    Step::RefPtr<ifc2x3::IfcTrimmingSelect> trimming1;
+    ifc2x3::Set_IfcTrimmingSelect_1_2 trim1;
+
+    rpValue->setTrim1(trim1);
+
+
+    ifc2x3::Set_IfcTrimmingSelect_1_2 trim2 = currentFace.listTrimmedCurve.at(indexListTrimmedCurve).trim2;
 
     rpValue->setBasisCurve(circle);
-    rpValue->setTrim1(currentFace.listTrimmedCurve.at(indexListTrimmedCurve).trim1);
-    rpValue->setTrim1(currentFace.listTrimmedCurve.at(indexListTrimmedCurve).trim2);
+    
+    rpValue->setTrim2(trim2);
     rpValue->setSenseAgreement(currentFace.listTrimmedCurve.at(indexListTrimmedCurve).senseAgreement);
     rpValue->setMasterRepresentation(currentFace.listTrimmedCurve.at(indexListTrimmedCurve).preference);
 
+
     return result;
 
 }
 
-bool CreateGeometricRepresentationVisitor::visitIfcFaceOuterBound(ifc2x3::IfcFaceOuterBound* value)
+bool CreateGeometricRepresentationVisitor::visitIfcTrimmingSelect(ifc2x3::IfcTrimmingSelect* value)
 {
     bool result = true;
-    Step::RefPtr<ifc2x3::IfcFaceOuterBound> rpValue = value;
-
-    Step::RefPtr<ifc2x3::IfcPolyLoop> polyloop;
-    Step::Boolean boolean = Step::Boolean::BTrue;
-
-    Step::RefPtr<ifc2x3::IfcCompositeCurve> compositeCurve;
-
-    if (typeLoop[indexTypeLoop] == "Polyline")
-    {
-        polyloop = mDataSet->createIfcPolyLoop().get();
-        rpValue->setBound(polyloop);
-        rpValue->setOrientation(boolean);
-        result &= polyloop->acceptVisitor(this);
-    }
-    else if (typeLoop[indexTypeLoop] == "CompositeCurve")
-    {
-        compositeCurve = mDataSet->createIfcCompositeCurve().get();
-        rpValue->setBound(compositeCurve);
-        rpValue->setOrientation(boolean);
-        result &= compositeCurve->acceptVisitor(this);
-    }
+    Step::RefPtr<ifc2x3::IfcTrimmingSelect> rpValue = value;
     
-    indexTypeLoop++;
+    auto& currentFace = mListFaceCompositeCurve[mFaceIndex];
+    ifc2x3::IfcParameterValue paramValue1 = currentFace.listTrimmedCurve.at(indexListTrimmedCurve).trim1;
+    ifc2x3::IfcParameterValue paramValue2 = currentFace.listTrimmedCurve.at(indexListTrimmedCurve).trim2;
+
+    rpValue->setIfcParameterValue(paramValue1);
+
+
 
     return result;
 
 }
 
-bool CreateGeometricRepresentationVisitor::visitIfcPolyline2D(ifc2x3::IfcPolyline* value)
-{
-    bool result = true;
-    Step::RefPtr< ifc2x3::IfcPolyline > rpValue = value;
-
-    for (unsigned int i = 0; i < m2DPolyline.size() / 2; i++) {
-        Step::RefPtr< ifc2x3::IfcCartesianPoint > p = mDataSet->createIfcCartesianPoint();
-        p->getCoordinates().push_back(m2DPolyline[2 * i]);
-        p->getCoordinates().push_back(m2DPolyline[2 * i + 1]);
-        rpValue->getPoints().push_back(p.get());
-    }
-
-    // Set Points: The points defining the polyline
-    if (mPolyloopMustBeClosed &&
-        (*rpValue->getPoints().begin())->getCoordinates() != (*rpValue->getPoints().rbegin())->getCoordinates()) {
-        rpValue->getPoints().push_back(*rpValue->getPoints().begin());
-    }
-
-    return result;
-}
-
-bool CreateGeometricRepresentationVisitor::visitIfcPolyline3D(ifc2x3::IfcPolyline* value)
+bool CreateGeometricRepresentationVisitor::visitIfcPolyline(ifc2x3::IfcPolyline* value)
 {
     bool result = true;
     Step::RefPtr< ifc2x3::IfcPolyline > rpValue = value;
     int indexPoly = 0;
 
-    /*for (unsigned int i = mOffset * mListNbPointsPolylineCompositeCurveSegment[index]; i < m3DPolyline.size() / 3; i++) {
-        Step::RefPtr< ifc2x3::IfcCartesianPoint > p = mDataSet->createIfcCartesianPoint();
-        p->getCoordinates().push_back(m3DPolyline[3 * i]);
-        p->getCoordinates().push_back(m3DPolyline[3 * i + 1]);
-        p->getCoordinates().push_back(m3DPolyline[3 * i + 2]);
-        rpValue->getPoints().push_back(p.get());
-    }*/
-
-    while (mListFaceCompositeCurve[mFaceIndex].listTypeCompositeCurveSegment.at(indexListCompositeCurveSegment) == "polyline")
+    if (mListFaceCompositeCurve.size() > 0)
     {
+        while (mListFaceCompositeCurve[mFaceIndex].listTypeCompositeCurveSegment.at(indexCompositeCurvePoly) == "polyline")
+        {
+            Step::RefPtr< ifc2x3::IfcCartesianPoint > p = mDataSet->createIfcCartesianPoint();
+            p->getCoordinates().push_back(m3DPolyline[3 * indexPoly]);
+            p->getCoordinates().push_back(m3DPolyline[3 * indexPoly + 1]);
+            p->getCoordinates().push_back(m3DPolyline[3 * indexPoly + 2]);
+            rpValue->getPoints().push_back(p.get());
+
+            indexCompositeCurvePoly++;
+            indexPoly++;
+
+            if (indexCompositeCurvePoly == mListFaceCompositeCurve[mFaceIndex].listTypeCompositeCurveSegment.size())
+            {
+                indexCompositeCurvePoly++;
+                break;
+            }
+        }
         Step::RefPtr< ifc2x3::IfcCartesianPoint > p = mDataSet->createIfcCartesianPoint();
         p->getCoordinates().push_back(m3DPolyline[3 * indexPoly]);
         p->getCoordinates().push_back(m3DPolyline[3 * indexPoly + 1]);
         p->getCoordinates().push_back(m3DPolyline[3 * indexPoly + 2]);
         rpValue->getPoints().push_back(p.get());
 
-        indexListCompositeCurveSegment++;
+        indexCompositeCurvePoly--;
+
         indexPoly++;
     }
+    else
+    {
+        for (unsigned int i = 0; i < m2DPolyline.size() / 2; i++) {
+            Step::RefPtr< ifc2x3::IfcCartesianPoint > p = mDataSet->createIfcCartesianPoint();
+            p->getCoordinates().push_back(m2DPolyline[2 * i]);
+            p->getCoordinates().push_back(m2DPolyline[2 * i + 1]);
+            rpValue->getPoints().push_back(p.get());
+        }
+    }
 
-    indexCompositeCurvePoly++;
+    //indexCompositeCurvePoly++;
 
     // Set Points: The points defining the polyline
     if (mPolyloopMustBeClosed &&
@@ -774,29 +812,48 @@ bool CreateGeometricRepresentationVisitor::visitIfcCircle(ifc2x3::IfcCircle* val
     bool result = true;
     Step::RefPtr<ifc2x3::IfcCircle> rpValue = value;
 
-    Step::RefPtr<ifc2x3::IfcAxis2Placement2D> axis = mDataSet->createIfcAxis2Placement2D();
-    ifc2x3::IfcPositiveLengthMeasure rayon = 1;
+    Step::RefPtr<ifc2x3::IfcAxis2Placement3D> axis = mDataSet->createIfcAxis2Placement3D();
 
     axis->acceptVisitor(this);
 
     rpValue->setPosition(axis);
-    rpValue->setRadius(mListFaceCompositeCurve[mFaceIndex].listCircle.at(indexListCompositeCurveSegment).rayon);
+    rpValue->setRadius(mListFaceCompositeCurve[mFaceIndex].listCircle.at(indexListCircle).rayon);
 
     return result;
 }
 
-bool CreateGeometricRepresentationVisitor::visitIfcAxis2Placement2D(ifc2x3::IfcAxis2Placement2D* value)
+bool CreateGeometricRepresentationVisitor::visitIfcAxis2Placement3D(ifc2x3::IfcAxis2Placement3D* value)
 {
     bool result = true;
-    Step::RefPtr<ifc2x3::IfcAxis2Placement2D> rpValue = value;
+    Step::RefPtr<ifc2x3::IfcAxis2Placement3D> rpValue = value;
 
     Step::RefPtr<ifc2x3::IfcCartesianPoint> p = mDataSet->createIfcCartesianPoint();
     Step::RefPtr<ifc2x3::IfcDirection> d = mDataSet->createIfcDirection();
 
-    p->getCoordinates().push_back(mListFaceCompositeCurve[mFaceIndex].listCircle[indexListCompositeCurveSegment].centre.x);//ajouter valeur
-    p->getCoordinates().push_back(mListFaceCompositeCurve[mFaceIndex].listCircle[indexListCompositeCurveSegment].centre.y);//ajouter valeur
-    p->getCoordinates().push_back(mListFaceCompositeCurve[mFaceIndex].listCircle[indexListCompositeCurveSegment].centre.z);//ajouter valeur
-    rpValue->setLocation(p.get());
+    if (mListFaceCompositeCurve.size() != 0)
+    {
+        if (mListFaceCompositeCurve[mFaceIndex].listCircle.size() != 0)
+        {
+            p->getCoordinates().push_back(mListFaceCompositeCurve[mFaceIndex].listCircle[indexListCircle].centre.x);//ajouter valeur
+            p->getCoordinates().push_back(mListFaceCompositeCurve[mFaceIndex].listCircle[indexListCircle].centre.y);//ajouter valeur
+            p->getCoordinates().push_back(mListFaceCompositeCurve[mFaceIndex].listCircle[indexListCircle].centre.z);//ajouter valeur
+            rpValue->setLocation(p.get());
+        }
+        else
+        {
+            p->getCoordinates().push_back(mPosition[0]);
+            p->getCoordinates().push_back(mPosition[1]);
+            p->getCoordinates().push_back(mPosition[2]);
+            rpValue->setLocation(p.get());
+        }
+    }    
+    else
+    {
+        p->getCoordinates().push_back(mPosition[0]);
+        p->getCoordinates().push_back(mPosition[1]);
+        p->getCoordinates().push_back(mPosition[2]);
+        rpValue->setLocation(p.get());
+    }
 
     d->getDirectionRatios().push_back(0.0);//ajouter valeur
     d->getDirectionRatios().push_back(0.0);//ajouter valeur
