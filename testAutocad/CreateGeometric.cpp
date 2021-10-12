@@ -799,13 +799,15 @@ bool CreateGeometricRepresentationVisitor::visitIfcCircle(ifc2x3::IfcCircle* val
     bool result = true;
     Step::RefPtr<ifc2x3::IfcCircle> rpValue = value;
 
+    Step::RefPtr< ifc2x3::IfcAxis2Placement > axis2Placement = new ifc2x3::IfcAxis2Placement();
     Step::RefPtr<ifc2x3::IfcAxis2Placement3D> axis = mDataSet->createIfcAxis2Placement3D();
 
     mLocationType = LOCAL_PLACEMENT;
     result &= axis->acceptVisitor(this);
     mLocationType = UNDEF_LOC;
 
-    rpValue->setPosition(axis.get());
+    axis2Placement->setIfcAxis2Placement3D(axis.get());
+    rpValue->setPosition(axis2Placement);
 
     rpValue->setRadius(mListFaceCompositeCurve[mFaceIndex].listCircle.at(indexListCircle).rayon);
 
@@ -845,10 +847,10 @@ bool CreateGeometricRepresentationVisitor::visitIfcAxis2Placement3D(ifc2x3::IfcA
         rpValue->setLocation(p.get());
     }
 
-    d->getDirectionRatios().push_back(0.0);//ajouter valeur
-    d->getDirectionRatios().push_back(0.0);//ajouter valeur
-    d->getDirectionRatios().push_back(0.0);//ajouter valeur
-    rpValue->setRefDirection(d.get());
+    //d->getDirectionRatios().push_back(0.0);//ajouter valeur
+    //d->getDirectionRatios().push_back(0.0);//ajouter valeur
+    //d->getDirectionRatios().push_back(0.0);//ajouter valeur
+    //rpValue->setRefDirection(d.get());
 
     return result;
 }
