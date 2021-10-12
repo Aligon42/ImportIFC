@@ -153,8 +153,6 @@ protected:
 	bool vertexE = false;
 
 	std::vector<std::string> mListTypeCompositeCurveSegment;
-	int indexListCompositeCurveSegment = 0;
-	int indexCompositeCurvePoly = 0;
 	std::vector<int> mListNbPointsPolylineCompositeCurveSegment;
 	std::vector<CompositeCurveSegmentEx> mListCompositeCurveSegmentTrim;
 	std::vector<TrimmedCurveEx> mListTrimmedCurve;
@@ -164,10 +162,13 @@ protected:
 	Circle mCircle;
 
 	std::vector<FaceParCompositeCurve> mListFaceCompositeCurve;
+	int indexListCompositeCurveSegment = 0;
+	int indexCompositeCurvePoly = 0;
 	int indexFace;
+	int indexTypeLoop;
+	int indexListTrimmedCurve = 0;
 
 	std::vector<std::string> typeLoop;
-	int indexTypeLoop;
 
 
 	//  		4  3
