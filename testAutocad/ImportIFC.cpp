@@ -725,13 +725,13 @@ void test()
     ads_name selection;
     int nbEntity_set;
 
-    std::string A = "_A";
+    std::string A = "A";
     auto A_set = GetWCM(A.c_str());
 
     int selectionSet = acedSSGet(A_set, NULL, NULL, NULL, selection);
     acedSSLength(selection, &nbEntity_set);
 
-    //acedCommandS(RTSTR, L"_scale", RTSTR, L"_ALL", RTSTR, L"", RT3DPOINT, origin, RTREAL, scale_set, RTNONE);
+    acedCommandS(RTSTR, L"_scale", RTSTR, L"_ALL", RTSTR, L"", RT3DPOINT, origin, RTREAL, scale_set, RTNONE);
 
     listVoid.clear();
     listStyle.clear();

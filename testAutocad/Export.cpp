@@ -291,6 +291,7 @@ void ExportIFC()
     Step::RefPtr< ifc2x3::IfcUnit > unitSelect = new ifc2x3::IfcUnit();
     Step::RefPtr< ifc2x3::IfcSIUnit > unit = expressDataSet->createIfcSIUnit();
     unit->setUnitType(ifc2x3::IfcUnitEnum_LENGTHUNIT);
+    unit->setPrefix(ifc2x3::IfcSIPrefix_MILLI);
     unit->setName(ifc2x3::IfcSIUnitName_METRE);
     unitSelect->setIfcNamedUnit(unit.get());
     projectUnits->getUnits().insert(unitSelect);
