@@ -83,7 +83,6 @@ public:
 	virtual bool visitIfcCompositeCurve(ifc2x3::IfcCompositeCurve* value);
 	virtual bool visitIfcCompositeCurveSegment(ifc2x3::IfcCompositeCurveSegment* value);
 	virtual bool visitIfcTrimmedCurve(ifc2x3::IfcTrimmedCurve* value);
-	virtual bool visitIfcTrimmingSelect(ifc2x3::IfcTrimmingSelect* value);
 	virtual bool visitIfcPolyline(ifc2x3::IfcPolyline* value);
 	virtual bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value);
 	virtual bool visitIfcEdgeLoop(ifc2x3::IfcEdgeLoop* value);
@@ -181,17 +180,3 @@ protected:
 };
 
 #endif // ** CREATEGEOMETRICREPRESENTATIONVISITOR_H_ ** //
-
-
-Step::RefPtr<ifc2x3::IfcFaceOuterBound> faceOuterBound;
-ifc2x3::Set_IfcFaceBound_1_n faceBound_1_n;
-
-for (size_t i = 0; i < 1; i++)
-{
-	faceOuterBound = mDataSet->createIfcFaceOuterBound();
-	result &= faceOuterBound->acceptVisitor(this);
-	faceBound_1_n.emplace(faceOuterBound);
-}
-
-indexListCompositeCurveSegment = 0;
-rpValue->setBounds(faceBound_1_n);

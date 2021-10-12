@@ -603,36 +603,23 @@ bool CreateGeometricRepresentationVisitor::visitIfcTrimmedCurve(ifc2x3::IfcTrimm
     listTrimming[0]->setIfcParameterValue(paramValue1);
     listTrimming[1]->setIfcParameterValue(paramValue2);*/
 
-    Step::RefPtr<ifc2x3::IfcTrimmingSelect> trimming1;
-    ifc2x3::Set_IfcTrimmingSelect_1_2 trim1;
+    Step::RefPtr<ifc2x3::IfcTrimmingSelect> trimming1 = new ifc2x3::IfcTrimmingSelect;
+    Step::RefPtr<ifc2x3::IfcTrimmingSelect> trimming2 = new ifc2x3::IfcTrimmingSelect;
+    ifc2x3::Set_IfcTrimmingSelect_1_2 trim1, trim2;
+
+    trimming1->setIfcParameterValue(currentFace.listTrimmedCurve.at(indexListTrimmedCurve).trim1);
+    trimming2->setIfcParameterValue(currentFace.listTrimmedCurve.at(indexListTrimmedCurve).trim2);
+
+    trim1.emplace(trimming1);
+    trim2.emplace(trimming2);
 
     rpValue->setTrim1(trim1);
-
-
-    ifc2x3::Set_IfcTrimmingSelect_1_2 trim2 = currentFace.listTrimmedCurve.at(indexListTrimmedCurve).trim2;
+    rpValue->setTrim2(trim2);
 
     rpValue->setBasisCurve(circle);
-    
-    rpValue->setTrim2(trim2);
+
     rpValue->setSenseAgreement(currentFace.listTrimmedCurve.at(indexListTrimmedCurve).senseAgreement);
     rpValue->setMasterRepresentation(currentFace.listTrimmedCurve.at(indexListTrimmedCurve).preference);
-
-
-    return result;
-
-}
-
-bool CreateGeometricRepresentationVisitor::visitIfcTrimmingSelect(ifc2x3::IfcTrimmingSelect* value)
-{
-    bool result = true;
-    Step::RefPtr<ifc2x3::IfcTrimmingSelect> rpValue = value;
-    
-    auto& currentFace = mListFaceCompositeCurve[mFaceIndex];
-    ifc2x3::IfcParameterValue paramValue1 = currentFace.listTrimmedCurve.at(indexListTrimmedCurve).trim1;
-    ifc2x3::IfcParameterValue paramValue2 = currentFace.listTrimmedCurve.at(indexListTrimmedCurve).trim2;
-
-    rpValue->setIfcParameterValue(paramValue1);
-
 
 
     return result;
@@ -814,9 +801,12 @@ bool CreateGeometricRepresentationVisitor::visitIfcCircle(ifc2x3::IfcCircle* val
 
     Step::RefPtr<ifc2x3::IfcAxis2Placement3D> axis = mDataSet->createIfcAxis2Placement3D();
 
-    axis->acceptVisitor(this);
+    mLocationType = LOCAL_PLACEMENT;
+    result &= axis->acceptVisitor(this);
+    mLocationType = UNDEF_LOC;
 
-    rpValue->setPosition(axis);
+    rpValue->setPosition(axis.get());
+
     rpValue->setRadius(mListFaceCompositeCurve[mFaceIndex].listCircle.at(indexListCircle).rayon);
 
     return result;
