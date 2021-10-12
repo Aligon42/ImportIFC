@@ -497,6 +497,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcCompositeCurve(ifc2x3::IfcCom
     Step::Logical logical = Step::Logical::LFalse;
 
     indexFace = 0;
+    indexListTrimmedCurve = 0;
     auto& face = mListFaceCompositeCurve[mFaceIndex];
 
     for (indexCompositeCurvePoly = 0; indexCompositeCurvePoly < face.listTypeCompositeCurveSegment.size(); indexCompositeCurvePoly++)
@@ -534,6 +535,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcCompositeCurveSegment(ifc2x3:
         Step::RefPtr<ifc2x3::IfcTrimmedCurve> trimmedCurve = mDataSet->createIfcTrimmedCurve();
         result &= trimmedCurve->acceptVisitor(this);
         rpValue->setParentCurve(trimmedCurve);
+        indexListTrimmedCurve++;
     }
     //}
 
@@ -557,10 +559,10 @@ bool CreateGeometricRepresentationVisitor::visitIfcTrimmedCurve(ifc2x3::IfcTrimm
     auto& currentFace = mListFaceCompositeCurve[mFaceIndex];
 
     rpValue->setBasisCurve(circle);
-    rpValue->setTrim1(currentFace.listTrimmedCurve.at(indexCompositeCurvePoly).trim1);
-    rpValue->setTrim1(currentFace.listTrimmedCurve.at(indexCompositeCurvePoly).trim2);
-    rpValue->setSenseAgreement(currentFace.listTrimmedCurve.at(indexCompositeCurvePoly).senseAgreement);
-    rpValue->setMasterRepresentation(currentFace.listTrimmedCurve.at(indexCompositeCurvePoly).preference);
+    rpValue->setTrim1(currentFace.listTrimmedCurve.at(indexListTrimmedCurve).trim1);
+    rpValue->setTrim1(currentFace.listTrimmedCurve.at(indexListTrimmedCurve).trim2);
+    rpValue->setSenseAgreement(currentFace.listTrimmedCurve.at(indexListTrimmedCurve).senseAgreement);
+    rpValue->setMasterRepresentation(currentFace.listTrimmedCurve.at(indexListTrimmedCurve).preference);
 
     return result;
 
