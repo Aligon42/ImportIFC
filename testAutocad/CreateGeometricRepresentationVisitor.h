@@ -17,24 +17,76 @@
 #include "dbplanesurf.h"
 #include "AcApDMgr.h"
 
-struct CompositeCurveSegmentEx
+struct Face
 {
-	ifc2x3::IfcTransitionCode transition;
-	Step::Boolean sameSense;
+	std::string TypeFace;
+
+	Face(const std::string& type) : TypeFace(type) {}
 };
 
-struct TrimmedCurveEx
+struct Point2D
 {
-	double trim1;
-	double trim2;
-	Step::Boolean senseAgreement;
-	ifc2x3::IfcTrimmingPreference preference;
+	double X, Y;
+
+	Point2D(double x, double y)
+		: X(x), Y(y) {}
+};
+
+struct Point3D
+{
+	double X, Y, Z;
+
+	Point3D(double x, double y, double z) 
+		: X(x), Y(y), Z(z) {}
+};
+
+struct PolylineEx : public Face
+{
+	std::vector<Point3D> Points;
+
+	PolylineEx() : Face("polyline") {}
+};
+
+struct CompositeCurveSegmentEx
+{
+	std::string TypeSegment;
+	ifc2x3::IfcTransitionCode Transition;
+	Step::Boolean SameSense;
+
+	CompositeCurveSegmentEx() {}
+	CompositeCurveSegmentEx(const std::string& type) 
+		: TypeSegment(type) {}
+};
+
+struct CompositeCurve : public Face
+{
+	std::vector<CompositeCurveSegmentEx*> CompositeCurveSegments;
+
+	CompositeCurve() : Face("compositeCurve") {}
+};
+
+struct CompositeCurveSegmentPolyline : CompositeCurveSegmentEx
+{
+	std::vector<Point3D> Points;
+
+	CompositeCurveSegmentPolyline() : CompositeCurveSegmentEx("polyline") {}
 };
 
 struct Circle
 {
-	AcGePoint3d centre;
-	ifc2x3::IfcPositiveLengthMeasure rayon;
+	AcGePoint3d Centre;
+	ifc2x3::IfcPositiveLengthMeasure Rayon;
+};
+
+struct TrimmedCurveEx : CompositeCurveSegmentEx
+{
+	Circle Circle;
+	double Trim1;
+	double Trim2;
+	Step::Boolean SenseAgreement;
+	ifc2x3::IfcTrimmingPreference Preference;
+
+	TrimmedCurveEx() : CompositeCurveSegmentEx("trimmedCurve") {}
 };
 
 struct FaceParCompositeCurve
@@ -44,9 +96,6 @@ struct FaceParCompositeCurve
 	std::vector<Circle> listCircle;
 	std::vector<std::string> listTypeCompositeCurveSegment;
 };
-
-
-
 
 class CreateGeometricRepresentationVisitor : public ifc2x3::InheritVisitor
 {
@@ -114,29 +163,7 @@ public:
 	void setExtrusionDepth(double depth) { mExtrusionDepth = depth; }
 	void init();
 
-	inline void setElement(const std::vector<int>& elements) { mElements = elements; }
-
-	inline void setCompositeCurveSegment(CompositeCurveSegmentEx& compositeCurveSegment, TrimmedCurveEx& trimmedCurve, Circle& circle)
-	{
-		mCompositeCurveSegment.sameSense = compositeCurveSegment.sameSense; mCompositeCurveSegment.transition = compositeCurveSegment.transition; mTrimmedCurve = trimmedCurve; mCircle = circle;
-	}
-
-	inline void setListCompositeCurveSegmentTrim(std::vector<CompositeCurveSegmentEx>& listCompositeCurveSegment) { mListCompositeCurveSegmentTrim = listCompositeCurveSegment; }
-
-	inline void setListTrimmedCurve(std::vector<TrimmedCurveEx>& listTrimmedCurve) { mListTrimmedCurve = listTrimmedCurve; }
-
-	inline void setListCCircle(std::vector<Circle>& listCircle) { mListCircle = listCircle; }
-
-	inline void setListTypeCompositeCurveSegment(std::vector<std::string>& listTypeCompositeCurveSegment) { mListTypeCompositeCurveSegment = listTypeCompositeCurveSegment; }
-
-	inline void setListNbPointsPolylineCompositeCurveSegment(std::vector<int>& listNbPointsPolylineCompositeCurveSegment) { mListNbPointsPolylineCompositeCurveSegment = listNbPointsPolylineCompositeCurveSegment; }
-
-	inline void setFaceParCompositeCurve(std::vector<FaceParCompositeCurve>& listFaceCompositeCurve)
-	{
-		mListFaceCompositeCurve = listFaceCompositeCurve;
-	}
-
-	inline void ajoutTypeLoop_type(const std::string& type) { typeLoop.push_back(type); }
+	inline void AjoutFace(const std::vector<Face*>& faces) { mFaces = faces; }
 
 protected:
 	GeometryType mGeomType;
@@ -153,41 +180,14 @@ protected:
 	double mExtrusionDepth;
 	bool mUpdateGeometry;
 	Step::RefPtr< ifc2x3::IfcPolyline > mPolyline;
-	int mOffset = 0;
-
-	std::vector<int> mElements;
-	int mFaceIndex = 0;
-	int indexPoly = 0;
 
 	bool vertexS = false;
 	bool vertexE = false;
 
-	std::vector<std::string> mListTypeCompositeCurveSegment;
-	std::vector<int> mListNbPointsPolylineCompositeCurveSegment;
-	std::vector<CompositeCurveSegmentEx> mListCompositeCurveSegmentTrim;
-	std::vector<TrimmedCurveEx> mListTrimmedCurve;
-	std::vector<Circle> mListCircle;
-	CompositeCurveSegmentEx mCompositeCurveSegment;
-	TrimmedCurveEx mTrimmedCurve;
-	Circle mCircle;
-
-	std::vector<FaceParCompositeCurve> mListFaceCompositeCurve;
-	int indexListCompositeCurveSegment = 0;
-	int indexCompositeCurvePoly = 0;
-	int indexFace;
-	int indexTypeLoop;
-	int indexListTrimmedCurve = 0;
-	int indexListCircle = 0;
-
-	std::vector<std::string> typeLoop;
-
-
-	//  		4  3
-	//		 |  |  |
-	int test[8][8][8];
-
-	// triple tableau
-	// tableau: 4, 4, 4, 8, 9, 
+	std::vector<Face*> mFaces;
+	int mCurrentFaceIndex = 0;
+	int mCurrentCompositeCurveIndex = 0;
+	bool mIsCompositeCurve = false;
 };
 
 #endif // ** CREATEGEOMETRICREPRESENTATIONVISITOR_H_ ** //

@@ -402,13 +402,6 @@ void ExportIFC()
             AcString calque;
             pCloneSolid->layer(calque);
 
-            
-
-            std::vector<int> nbPoints;
-            nbPoints.resize(faceArray.length());
-
-            int count = 0;
-
             AcString::Encoding encoding = AcString::Encoding::Utf8;
             int iso = calque.match("ISO", encoding);
             int pla = calque.match("PLA", encoding);
@@ -416,8 +409,6 @@ void ExportIFC()
 
             Step::RefPtr<ifc2x3::IfcCovering> objectCovering;
             Step::RefPtr<ifc2x3::IfcPlate> objectPlate;
-
-            //Step::RefPtr<ifc2x3::IfcVertexPoint> vertex;
 
             bool isPlate = false;
 
@@ -439,150 +430,91 @@ void ExportIFC()
             {
                 objectCovering = expressDataSet->createIfcCovering();
             }
-            //object = expressDataSet->createIfcCovering();
 
             points.clear();
             cwrv.init();
 
-            std::vector<FaceParCompositeCurve> listFaceCompositeCurve;
-
-            std::vector<int> listNbPointsPolyline;
+            std::vector<Face*> listFaces;
 
             for (int k = 0; k < faceArray.length(); k++)
             {
-                AcGePoint3dArray listePoints;
-
-                AcDbFace* pCloneFace = (AcDbFace*)faceArray.at(k);
-                pCloneFace->getGripPoints(listePoints, snapModes, geomlds);
-
                 Acad::ErrorStatus es;
                 AcDbVoidPtrArray polylineArray;
-
+                AcGePoint3dArray listePoints;
+                AcGePoint3dArray listePointsPolyline;
+                AcDbFace* pCloneFace = (AcDbFace*)faceArray.at(k);
+                pCloneFace->getGripPoints(listePoints, snapModes, geomlds);
                 pCloneFace->explode(polylineArray);
 
-                int pointsCount = listePoints.length();
-                nbPoints[k] = pointsCount;
-
                 double angle;
-
-                //OBJET POUR UNE FACE EN COMPOSITECURVE
-                FaceParCompositeCurve faceCompositeCurve;
-                std::vector<CompositeCurveSegmentEx> listCompositeCurveSegmentTrim;
-                std::vector<TrimmedCurveEx> listTrimmedCurve;
-                std::vector<Circle> listCircle;
-                std::vector<std::string> listTypeCompositeCurveSegment;
-
                 bool isCompositeCurve = false;
 
-                AcGePoint3dArray listePointsPolyline;
+                Face* face = nullptr;
 
-                for (int t = 0; t < polylineArray.length(); t++)//décomposer les faces pour avoir des polylines afin de verifier si c'est des arcs ou des droites 
+                for (int t = 0; t < polylineArray.length(); t++)
                 {
                     AcDbArc* pCloneArc = (AcDbArc*)polylineArray.at(t);
-                    AcDbPolyline* pClonePolyline = (AcDbPolyline*)polylineArray.at(t);
-
-                    // CERCLE
-                    Circle circle;
-
-                    // TRIMMEDCURVE
-                    TrimmedCurveEx trimmedCurve;
-
-                    //COMPOSITECURVESEGMENT
-                    CompositeCurveSegmentEx compositeCurveSegment;
-
-                    listePointsPolyline.removeAll();
-                    pClonePolyline->getGripPoints(listePointsPolyline, snapModes, geomlds);
 
                     angle = pCloneArc->totalAngle();
+                    isCompositeCurve = angle > 0;
 
-                    if (angle == 0)
-                    {
-                        listTypeCompositeCurveSegment.push_back("polyline");
-                        
-                    }
-                    if (angle != 0)
-                    {
-
-                        //set circle 
-                        circle.centre = pCloneArc->center();
-                        circle.rayon = pCloneArc->radius();
-
-                        //set trimmedCurve (#112767)
-                        trimmedCurve.trim1 = (Utils::RadianToDegree(pCloneArc->startAngle()));
-                        trimmedCurve.trim2 = (Utils::RadianToDegree(pCloneArc->endAngle()));
-                        trimmedCurve.preference = ifc2x3::IfcTrimmingPreference::IfcTrimmingPreference_PARAMETER;
-                        trimmedCurve.senseAgreement = Step::Boolean::BFalse; //à récup
-
-                        //set compositeCurveSegment
-                        compositeCurveSegment.transition = ifc2x3::IfcTransitionCode::IfcTransitionCode_CONTINUOUS;
-                        compositeCurveSegment.sameSense = Step::Boolean::BTrue; //à récup
-                        cwrv.setCompositeCurveSegment(compositeCurveSegment, trimmedCurve, circle);
-
-                        listTypeCompositeCurveSegment.push_back("trimmedCurve");
-                        listCompositeCurveSegmentTrim.push_back(compositeCurveSegment);
-                        listTrimmedCurve.push_back(trimmedCurve);
-                        listCircle.push_back(circle);
-
-                        isCompositeCurve = true;
-                    }
+                    if (isCompositeCurve) break;
                 }
 
-                if (isCompositeCurve == true)
+                if (isCompositeCurve)
                 {
-                    points.clear();
-                    cwrv.ajoutTypeLoop_type("CompositeCurve");
-                    int index = 0;
-                    int nbPointsPolyline = 1;
-                    bool poly = false;
+                    face = new CompositeCurve();
 
-                    for (int i = 0; i < listTypeCompositeCurveSegment.size() - index; i++)
+                    for (int t = 0; t < polylineArray.length(); t++) //décomposer les faces pour avoir des polylines afin de verifier si c'est des arcs ou des droites 
                     {
-                        while (listTypeCompositeCurveSegment.at(index) == "polyline")
+                        AcDbArc* pCloneArc = (AcDbArc*)polylineArray.at(t);
+                        AcDbPolyline* pClonePolyline = (AcDbPolyline*)polylineArray.at(t);
+
+                        listePointsPolyline.removeAll();
+                        pClonePolyline->getGripPoints(listePointsPolyline, snapModes, geomlds);
+
+                        angle = pCloneArc->totalAngle();
+
+                        if (angle == 0)
                         {
-                            for (int i = 0; i < nbPoints[k]; i++)
+                            auto polyline = new CompositeCurveSegmentPolyline();
+
+                            for (size_t j = 0; j < 2; j++)
                             {
-                                AcGePoint3d point = (AcGePoint3d)listePoints.at(i);
-                                points.push_back((roundoff(point[0], 3)) * 0.001);
-                                points.push_back((roundoff(point[1], 3)) * 0.001);
-                                points.push_back((roundoff(point[2], 3)) * 0.001);
+                                polyline->Points.push_back({ listePointsPolyline[j].x * 0.001, listePointsPolyline[j].y * 0.001, listePointsPolyline[j].z * 0.001 });
                             }
 
-                            nbPointsPolyline++;
-                            index++;
-                            poly = true;
-
-                            if (index == listTypeCompositeCurveSegment.size())
-                            {
-                                
-                                break;
-                            }
-                        }       
-
-                        if (index == listTypeCompositeCurveSegment.size())
-                        {
-                            break;
+                            CompositeCurve* curve = static_cast<CompositeCurve*>(face);
+                            curve->CompositeCurveSegments.push_back(polyline);
                         }
-
-                        if (poly == true)
+                        else if (angle != 0)
                         {
-                            listNbPointsPolyline.push_back(nbPointsPolyline);
-                        }
+                            CompositeCurve* curve = static_cast<CompositeCurve*>(face);
+                            TrimmedCurveEx* trimmedCurve = new TrimmedCurveEx;
 
-                        if (listTypeCompositeCurveSegment.at(index) == "trimmedCurve")
-                        {
-                            nbPointsPolyline = 0;
-                            index++;
-                            poly = false;
+                            //set circle 
+                            trimmedCurve->Circle.Centre = pCloneArc->center();
+                            trimmedCurve->Circle.Rayon = pCloneArc->radius();
+
+                            //set trimmedCurve (#112767)
+                            trimmedCurve->Trim1 = (Utils::RadianToDegree(pCloneArc->startAngle()));
+                            trimmedCurve->Trim2 = (Utils::RadianToDegree(pCloneArc->endAngle()));
+                            trimmedCurve->Preference = ifc2x3::IfcTrimmingPreference::IfcTrimmingPreference_PARAMETER;
+                            trimmedCurve->SenseAgreement = Step::Boolean::BFalse; //à récup
+
+                            //set compositeCurveSegment
+                            trimmedCurve->Transition = ifc2x3::IfcTransitionCode::IfcTransitionCode_CONTINUOUS;
+                            trimmedCurve->SameSense = Step::Boolean::BTrue; //à récup
+
+                            curve->CompositeCurveSegments.push_back(trimmedCurve);
                         }
                     }
-
-                    
                 }
-                else 
+                else if (!isCompositeCurve)
                 {
-                    points.clear();
-                    cwrv.ajoutTypeLoop_type("Polyline");
-                    for (int l = 0; l < nbPoints[k]; l++)
+                    PolylineEx* polyline = new PolylineEx();
+
+                    for (int l = 0; l < listePoints.length(); l++)
                     {
                         AcGePoint3d point = listePoints.at(l);
 
@@ -617,39 +549,24 @@ void ExportIFC()
                             objectCovering->setPredefinedType(ifc2x3::IfcCoveringTypeEnum_CLADDING);
                         }
 
-                        // Create representation
-                        // Polyloop #1
-                        points.push_back(point[0] * 0.001);
-                        points.push_back(point[1] * 0.001);
-                        points.push_back(point[2] * 0.001);
+                        polyline->Points.push_back({ point[0] * 0.001, point[1] * 0.001, point[2] * 0.001 });
                     }
 
+                    face = polyline;
                 }
 
-                cwrv.set3DPolyline(points);
-                cwrv.setPolyloop(points);
-
-                faceCompositeCurve.listCircle = listCircle;
-                faceCompositeCurve.listCompositeCurveSegmentTrim = listCompositeCurveSegmentTrim;
-                faceCompositeCurve.listTrimmedCurve = listTrimmedCurve;
-                faceCompositeCurve.listTypeCompositeCurveSegment = listTypeCompositeCurveSegment;
-
-                listFaceCompositeCurve.push_back(faceCompositeCurve);
-
-                pCloneFace->erase();
-                pCloneFace->close();
+                listFaces.push_back(face);
             }
 
-            cwrv.setFaceParCompositeCurve(listFaceCompositeCurve);
-            cwrv.setListNbPointsPolylineCompositeCurveSegment(listNbPointsPolyline);
+            cwrv.AjoutFace(listFaces);
 
             position.clear();
             placement.clear();
-            cwrv.setElement(nbPoints);            
             position.push_back(0.0);
             position.push_back(0.0);
             position.push_back(0.0);
-            cwrv.setPosition(position);            
+            cwrv.setPosition(position); 
+
             if (iso > 0)
             {
                 if (!objectCovering->acceptVisitor(&cwrv)) {
@@ -678,32 +595,19 @@ void ExportIFC()
                 }
                 linkByContainedInSpatial(groundFloor.get(), objectCovering.get());
             }
-            
-            pCloneSolid->erase();
-            pCloneSolid->close();
         }
-
-
-        pCloneBlock->erase();
-        pCloneBlock->close();
     }
 
+    // On crée le fichier seulement si il y avait un moins un objet
+    if (nbBlock > 0)
+    {
+        // ** Write the file        
+        ifc2x3::SPFWriter writer(expressDataSet.get());
+        std::ofstream filestream("TestExport.ifc", std::ofstream::out);
 
+        bool status = writer.write(filestream);
+        filestream.close();
 
-    // ** Write the file        
-    ifc2x3::SPFWriter writer(expressDataSet.get());
-
-    TCHAR NPath[MAX_PATH];
-    GetCurrentDirectory(MAX_PATH, NPath);
-    std::wstring curPath(NPath);
-
-    std::string path(curPath.begin(), curPath.end());
-
-    std::ofstream filestream(path + "\\TestExport.ifc", std::ofstream::out);
-
-    bool status = writer.write(filestream);
-    filestream.close();
-
-    acedAlert(_T("EXPORT DONE"));
-
+        acedAlert(_T("EXPORT DONE"));
+    }
 }
