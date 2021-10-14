@@ -576,6 +576,7 @@ void ExportIFC()
                         }
                     }
 
+                    cwrv.set3DPolyline(points);
                     
                 }
                 else 
@@ -624,10 +625,13 @@ void ExportIFC()
                         points.push_back(point[2] * 0.001);
                     }
 
+                    cwrv.setPolyloop(points);
+
                 }
 
-                cwrv.set3DPolyline(points);
-                cwrv.setPolyloop(points);
+
+                
+               
 
                 faceCompositeCurve.listCircle = listCircle;
                 faceCompositeCurve.listCompositeCurveSegmentTrim = listCompositeCurveSegmentTrim;
