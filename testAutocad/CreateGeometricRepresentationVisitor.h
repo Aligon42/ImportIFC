@@ -96,8 +96,18 @@ public:
 	virtual bool visitIfcPropertySet(ifc2x3::IfcPropertySet* value);
 
 	void set2DPolyline(std::vector<double>& poly) { m2DPolyline = poly; mUpdateGeometry = true; }
-	void set3DPolyline(std::vector<double>& poly) { m3DPolyline = poly; mUpdateGeometry = true; }
-	void setPolyloop(std::vector<double>& poly) { mPolyloop = poly; mUpdateGeometry = true; }
+	void set3DPolyline(std::vector<double>& poly) {
+		for (int i = 0; i < poly.size(); i++)
+		{
+			m3DPolyline.push_back(poly[i]);
+		} mUpdateGeometry = true; }
+	void setPolyloop(std::vector<double>& poly) {
+		for (int i = 0; i < poly.size(); i++)
+		{
+			mPolyloop.push_back(poly[i]);
+		} 
+		mUpdateGeometry = true;
+	}
 	void setPosition(std::vector<double>& vec) { mPosition = vec; }
 	void setLocalPlacement(std::vector<double>& vec) { mLocalPlacement = vec; }
 	void setExtrusionDirection(std::vector<double>& vec) { mExtrusionDirection = vec; }
@@ -147,6 +157,7 @@ protected:
 
 	std::vector<int> mElements;
 	int mFaceIndex = 0;
+	int indexPoly = 0;
 
 	bool vertexS = false;
 	bool vertexE = false;

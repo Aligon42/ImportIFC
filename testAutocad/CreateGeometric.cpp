@@ -178,6 +178,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcProduct(ifc2x3::IfcProduct* v
     Step::RefPtr< ifc2x3::IfcProduct > rpValue = value;
 
     mFaceIndex = 0;
+    indexPoly = 0;
 
     // Set ObjectPlacement: Placement of the product in space, the placement can either
     // be absolute (relative to the world coordinate system), relative (relative to the
@@ -349,9 +350,11 @@ bool CreateGeometricRepresentationVisitor::visitIfcFace(ifc2x3::IfcFace* value)
 
     Step::RefPtr<ifc2x3::IfcFaceOuterBound> faceOuterBound;
     ifc2x3::Set_IfcFaceBound_1_n faceBound_1_n;
+
     
     for (size_t i = 0; i < 1; i++)
     {
+
         faceOuterBound = mDataSet->createIfcFaceOuterBound();
         result &= faceOuterBound->acceptVisitor(this);
         faceBound_1_n.emplace(faceOuterBound);
@@ -630,7 +633,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcPolyline(ifc2x3::IfcPolyline*
 {
     bool result = true;
     Step::RefPtr< ifc2x3::IfcPolyline > rpValue = value;
-    int indexPoly = 0;
+    
 
     if (mListFaceCompositeCurve.size() > 0)
     {
@@ -640,7 +643,10 @@ bool CreateGeometricRepresentationVisitor::visitIfcPolyline(ifc2x3::IfcPolyline*
             p->getCoordinates().push_back(m3DPolyline[3 * indexPoly]);
             p->getCoordinates().push_back(m3DPolyline[3 * indexPoly + 1]);
             p->getCoordinates().push_back(m3DPolyline[3 * indexPoly + 2]);
+            //acutPrintf(_T("P%i : %f, %f, %f\n"), indexPoly, m3DPolyline[3 * indexPoly], m3DPolyline[3 * indexPoly + 1], m3DPolyline[3 * indexPoly + 2]);
             rpValue->getPoints().push_back(p.get());
+
+            
 
             indexCompositeCurvePoly++;
             indexPoly++;
@@ -656,6 +662,13 @@ bool CreateGeometricRepresentationVisitor::visitIfcPolyline(ifc2x3::IfcPolyline*
         p->getCoordinates().push_back(m3DPolyline[3 * indexPoly + 1]);
         p->getCoordinates().push_back(m3DPolyline[3 * indexPoly + 2]);
         rpValue->getPoints().push_back(p.get());
+
+        /*for (int i = 0; i < m3DPolyline.size(); i++)
+        {
+            acutPrintf(_T("P%i : %f, %f, %f\n"), i, m3DPolyline[3 * i], m3DPolyline[3 * i + 1], m3DPolyline[3 * i + 2]);
+
+            if (i == 50) { break; }
+        }*/
 
         indexCompositeCurvePoly--;
 
@@ -688,20 +701,21 @@ bool CreateGeometricRepresentationVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop*
     Step::RefPtr<ifc2x3::IfcPolyLoop> rpValue = value;
 
     int internalCount = 0;
-    for (unsigned int i = mOffset * mElements[mFaceIndex]; i < mPolyloop.size() / 3; i++)
+    for (unsigned int i = 0; i < mElements[mFaceIndex]; i++)
     {
-        if (internalCount == mElements[mFaceIndex]) break;
+        //if (internalCount == mElements[mFaceIndex]) break;
 
         Step::RefPtr<ifc2x3::IfcCartesianPoint> p = mDataSet->createIfcCartesianPoint();
-        p->getCoordinates().push_back(mPolyloop[3 * i]);
-        p->getCoordinates().push_back(mPolyloop[3 * i + 1]);
-        p->getCoordinates().push_back(mPolyloop[3 * i + 2]);
+        p->getCoordinates().push_back(mPolyloop[3 * mOffset]);
+        p->getCoordinates().push_back(mPolyloop[3 * mOffset + 1]);
+        p->getCoordinates().push_back(mPolyloop[3 * mOffset + 2]);
         rpValue->getPolygon().push_back(p.get());
 
-        internalCount++;
+        //internalCount++;
+        mOffset++;
     }
 
-    mOffset++;
+    
 
     if (mPolyloopMustBeClosed &&
         (*rpValue->getPolygon().begin())->getCoordinates() != (*rpValue->getPolygon().rbegin())->getCoordinates()) {
@@ -874,7 +888,6 @@ bool CreateGeometricRepresentationVisitor::visitIfcPropertySet(ifc2x3::IfcProper
     Step::RefPtr< ifc2x3::IfcPropertySet > rpValue = value;
 
     rpValue->setDescription("");
-
 
     return result;
 }

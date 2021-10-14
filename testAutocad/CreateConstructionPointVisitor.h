@@ -291,6 +291,7 @@ private:
     //face
     bool orientationFace;
     std::vector<int> nbArgFace;
+    std::vector<std::string> typeFace;
 
     //Box
     Box box;
@@ -300,6 +301,7 @@ private:
     std::vector<int> keyMappedItem;
     std::vector<std::string> nameItemsMap;
     std::vector<int> keyShapeMap;
+
 
     
 
@@ -426,6 +428,7 @@ public:
     Vec3 SwitchIfcDirectionToVecteur3D(ifc2x3::IfcDirection* value, Vec3& outVecteur);
     void transformPoints(const Matrix4& transform);
 
+    std::vector<std::string> getTypeFace() const;
     
     bool getEXA() const;
     bool getPETA() const;

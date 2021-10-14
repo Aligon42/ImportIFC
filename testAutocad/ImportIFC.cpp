@@ -301,6 +301,8 @@ void test()
 
         Box box = visitor1.getBox();
 
+        std::vector<std::string> typeFace = visitor1.getTypeFace();
+
         std::vector<Rectangle_profilDef> RectangleProfilDefBool = visitor1.getRectangleprofilDefBool();
 
         site.acceptVisitor(&placementVisitor);
@@ -354,7 +356,7 @@ void test()
             {
                 std::vector<int> ListNbArg = visitor1.getListNbArgFace();
                 bool orientation = visitor1.getOrientatationFace();
-                createFaceSolid(entity, keyProfilDef, points1, ListNbArg, orientation, transformFace, transform1, transformation, listStyle, isMappedItem, transformationOperator3D, transformation2D, scale);
+                createFaceSolid(entity, keyProfilDef, points1, ListNbArg, orientation, transformFace, transform1, transformation, listStyle, isMappedItem, transformationOperator3D, transformation2D, scale, typeFace);
             }
             else if (nameItems[i] == "IfcBoundingBox")
             {
@@ -467,6 +469,8 @@ void test()
 
         Box box = visitor1.getBox();
 
+        std::vector<std::string> typeFace = visitor1.getTypeFace();
+
         std::vector<Rectangle_profilDef> RectangleProfilDefBool = visitor1.getRectangleprofilDefBool();
 
         buildingElement.acceptVisitor(&placementVisitor);
@@ -546,7 +550,8 @@ void test()
                 {
                     std::vector<int> ListNbArg = visitor1.getListNbArgFace();
                     bool orientation = visitor1.getOrientatationFace();
-                    createFaceSolid(entity, keyProfilDef, points1, listNbArgFace, orientation, transformFace, transform1, transformation, listStyle, isMappedItemMethode, transformationOperator3D, transformation2D, scale);
+
+                    createFaceSolid(entity, keyProfilDef, points1, listNbArgFace, orientation, transformFace, transform1, transformation, listStyle, isMappedItemMethode, transformationOperator3D, transformation2D, scale, typeFace);
                 }
                 else if (nameItems[i] == "IfcBoundingBox" && !isMappedItemMethode)
                 {
@@ -584,7 +589,7 @@ void test()
                             
                             std::vector<int> ListNbArg = visitor1.getListNbArgFace();
                             bool orientation = visitor1.getOrientatationFace();
-                            createFaceSolid(entity, keyProfilDef, map.points1Map, map.listNbArgFaceMap, orientation, map.transformFaceMap, transform1, transformation, listStyle, isMappedItemMethode, map.transformationOperator3DMap, transformation2D, map.scale);
+                            createFaceSolid(entity, keyProfilDef, map.points1Map, map.listNbArgFaceMap, orientation, map.transformFaceMap, transform1, transformation, listStyle, isMappedItemMethode, map.transformationOperator3DMap, transformation2D, map.scale, typeFace);
                         }
                         else if (map.nameItemsMap[0] == "IfcBoundingBox")
                         {
@@ -741,6 +746,7 @@ void test()
 
 void dessinProfilDef(int key, std::string& NameProfilDef, std::string& entity, Vec3& VecteurExtrusion, float hauteurExtrusion, Matrix4& transform1, Matrix4& transformation, Matrix4& transformation2D, CreateConstructionPointVisitor& visitor1, std::list<Vec3>& points1, Matrix4& transformFace, std::vector<std::string>& nameItems, int keyItem, std::vector<int>& keyItems, std::string& outerCurveName, std::vector<int>& ListNbArg, std::list<Matrix4>& listPlan, std::list<Matrix4>& listLocationPolygonal, std::vector<Step::Boolean>& AgreementHalf, std::vector<Step::Boolean>& AgreementPolygonal, std::vector<std::string>& listEntityHalf, std::vector<std::string>& listEntityPolygonal, std::vector<ObjectVoid>& listVoid, CompositeCurveSegment& _compositeCurveSegment, int nbPolylineComposite, int nbCompositeCurve, int i, std::map<int, Style>& vectorStyle, bool isMappedItem, Matrix4& transformationOperator3D, double scale, std::vector<Vec3>& VecteurExtrusionBool, std::vector<float>& hauteurExtrusionBool, std::vector<Matrix4>& transformationBoolExtrud, std::vector<std::string>& NameProfilDefBool, std::vector<Rectangle_profilDef>& RectangleProfilDefBool)
 {
+    std::vector<std::string> typeFace = visitor1.getTypeFace();
    
     if (NameProfilDef == "IfcIShapeProfileDef")
     {
@@ -841,7 +847,7 @@ void dessinProfilDef(int key, std::string& NameProfilDef, std::string& entity, V
         transform1 *= transformation;
         std::vector<int> ListNbArg = visitor1.getListNbArgFace();
         bool orientation = visitor1.getOrientatationFace();
-        createFaceSolid(entity, keyItem, points1, ListNbArg, orientation, transformFace, transform1, transformation, vectorStyle, isMappedItem, transformationOperator3D, transformation2D, scale);
+        createFaceSolid(entity, keyItem, points1, ListNbArg, orientation, transformFace, transform1, transformation, vectorStyle, isMappedItem, transformationOperator3D, transformation2D, scale, typeFace);
     }
     else if (nameItems[i] == "IfcExtrudedAreaSolid")
     {

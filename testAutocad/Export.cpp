@@ -474,6 +474,8 @@ void ExportIFC()
 
                 bool isCompositeCurve = false;
 
+                AcGePoint3dArray listePointsPolyline;
+
                 for (int t = 0; t < polylineArray.length(); t++)//décomposer les faces pour avoir des polylines afin de verifier si c'est des arcs ou des droites 
                 {
                     AcDbArc* pCloneArc = (AcDbArc*)polylineArray.at(t);
@@ -488,28 +490,17 @@ void ExportIFC()
                     //COMPOSITECURVESEGMENT
                     CompositeCurveSegmentEx compositeCurveSegment;
 
-                    AcGePoint3dArray listePointsPolyline;
+                    listePointsPolyline.removeAll();
+                    pClonePolyline->getGripPoints(listePointsPolyline, snapModes, geomlds);
 
                     angle = pCloneArc->totalAngle();
 
                     if (angle == 0)
                     {
-                        
-                        pClonePolyline->getStretchPoints(listePointsPolyline);
-
-                        for (int i = 0; i < listePointsPolyline.length(); i++)
-                        {
-                            AcGePoint3d point = (AcGePoint3d)listePointsPolyline.at(i);
-                            points.push_back((roundoff(point[0], 3)) * 0.001);
-                            points.push_back((roundoff(point[1], 3)) * 0.001);
-                            points.push_back((roundoff(point[2], 3)) * 0.001);
-                        }
-
-                        cwrv.set3DPolyline(points);
                         listTypeCompositeCurveSegment.push_back("polyline");
                         
                     }
-                    else
+                    if (angle != 0)
                     {
 
                         //set circle 
@@ -538,6 +529,7 @@ void ExportIFC()
 
                 if (isCompositeCurve == true)
                 {
+                    points.clear();
                     cwrv.ajoutTypeLoop_type("CompositeCurve");
                     int index = 0;
                     int nbPointsPolyline = 1;
@@ -547,6 +539,14 @@ void ExportIFC()
                     {
                         while (listTypeCompositeCurveSegment.at(index) == "polyline")
                         {
+                            for (int i = 0; i < nbPoints[k]; i++)
+                            {
+                                AcGePoint3d point = (AcGePoint3d)listePoints.at(i);
+                                points.push_back((roundoff(point[0], 3)) * 0.001);
+                                points.push_back((roundoff(point[1], 3)) * 0.001);
+                                points.push_back((roundoff(point[2], 3)) * 0.001);
+                            }
+
                             nbPointsPolyline++;
                             index++;
                             poly = true;
@@ -623,7 +623,11 @@ void ExportIFC()
                         points.push_back(point[1] * 0.001);
                         points.push_back(point[2] * 0.001);
                     }
+
                 }
+
+                cwrv.set3DPolyline(points);
+                cwrv.setPolyloop(points);
 
                 faceCompositeCurve.listCircle = listCircle;
                 faceCompositeCurve.listCompositeCurveSegmentTrim = listCompositeCurveSegmentTrim;
@@ -641,8 +645,7 @@ void ExportIFC()
 
             position.clear();
             placement.clear();
-            cwrv.setElement(nbPoints);
-            cwrv.setPolyloop(points);
+            cwrv.setElement(nbPoints);            
             position.push_back(0.0);
             position.push_back(0.0);
             position.push_back(0.0);

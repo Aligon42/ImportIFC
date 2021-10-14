@@ -1295,6 +1295,8 @@ bool CreateConstructionPointVisitor::visitIfcFaceOuterBound(ifc2x3::IfcFaceOuter
 {
     auto t1 = value->getBound();
 
+    typeFace.push_back((t1->getClassType()).getName());
+
     if (value->testBound())
     {
         orientationFace = value->getOrientation();
@@ -1431,6 +1433,11 @@ bool CreateConstructionPointVisitor::getFEMTO() const
 bool CreateConstructionPointVisitor::getATTO() const
 {
     return ATTO;
+}
+
+std::vector<std::string> CreateConstructionPointVisitor::getTypeFace() const
+{
+    return typeFace;
 }
 
 

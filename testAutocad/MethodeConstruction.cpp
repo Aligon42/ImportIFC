@@ -6239,7 +6239,7 @@ void createBoundingBox(Box& box, std::string& entity, int keyItems, std::map<int
 
 }
 
-void createFaceSolid(std::string& entity, int keyItems, std::list<Vec3>& points1, std::vector<int>& ListNbArg, bool orientation, Matrix4& transformFace, Matrix4& transform1, Matrix4& transformation, std::map<int, Style>& vectorStyle, bool isMappedItem, Matrix4& transformationOperator3D, Matrix4& transformation2D, double scale)
+void createFaceSolid(std::string& entity, int keyItems, std::list<Vec3>& points1, std::vector<int>& ListNbArg, bool orientation, Matrix4& transformFace, Matrix4& transform1, Matrix4& transformation, std::map<int, Style>& vectorStyle, bool isMappedItem, Matrix4& transformationOperator3D, Matrix4& transformation2D, double scale, std::vector<std::string> typeFace)
 {
 	/*Style style;
 	for (int p = 0; p < vectorStyle.size(); p++)

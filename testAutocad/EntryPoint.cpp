@@ -96,7 +96,7 @@ acrxEntryPoint(AcRx::AppMsgCode msg, void* pkt)
         acedRegFunc(ajusterBlocAvecContour, 2);
         initApp();
         initAppEx();
-        acutPrintf(_T("Chargement des fonctions arx"));
+        //acutPrintf(_T("Chargement des fonctions arx"));
         
         break;
     case AcRx::kUnloadAppMsg:
@@ -104,7 +104,7 @@ acrxEntryPoint(AcRx::AppMsgCode msg, void* pkt)
         acedUndef(_T("_ajusterBlocAvecContour"), 2);
         unloadApp();
         unloadAppEx();
-        acutPrintf(_T("Déchargement des fonctions arx"));
+        //acutPrintf(_T("Déchargement des fonctions arx"));
        
         break;
     default:
