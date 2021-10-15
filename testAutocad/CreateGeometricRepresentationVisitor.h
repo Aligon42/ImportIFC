@@ -22,6 +22,7 @@ struct Face
 	std::string TypeFace;
 
 	Face(const std::string& type) : TypeFace(type) {}
+	virtual ~Face() {}
 };
 
 struct Point2D
@@ -45,6 +46,7 @@ struct PolylineEx : public Face
 	std::vector<Point3D> Points;
 
 	PolylineEx() : Face("polyline") {}
+	~PolylineEx() {}
 };
 
 struct CompositeCurveSegmentEx
@@ -60,9 +62,10 @@ struct CompositeCurveSegmentEx
 
 struct CompositeCurve : public Face
 {
-	std::vector<CompositeCurveSegmentEx*> CompositeCurveSegments;
+	std::vector<std::shared_ptr<CompositeCurveSegmentEx>> CompositeCurveSegments;
 
 	CompositeCurve() : Face("compositeCurve") {}
+	~CompositeCurve();
 };
 
 struct CompositeCurveSegmentPolyline : CompositeCurveSegmentEx
@@ -87,14 +90,6 @@ struct TrimmedCurveEx : CompositeCurveSegmentEx
 	ifc2x3::IfcTrimmingPreference Preference;
 
 	TrimmedCurveEx() : CompositeCurveSegmentEx("trimmedCurve") {}
-};
-
-struct FaceParCompositeCurve
-{
-	std::vector<CompositeCurveSegmentEx> listCompositeCurveSegmentTrim;
-	std::vector<TrimmedCurveEx> listTrimmedCurve;
-	std::vector<Circle> listCircle;
-	std::vector<std::string> listTypeCompositeCurveSegment;
 };
 
 class CreateGeometricRepresentationVisitor : public ifc2x3::InheritVisitor
@@ -163,7 +158,7 @@ public:
 	void setExtrusionDepth(double depth) { mExtrusionDepth = depth; }
 	void init();
 
-	inline void AjoutFace(const std::vector<Face*>& faces) { mFaces = faces; }
+	inline void AjoutFace(const std::vector<std::shared_ptr<Face>>& faces) { mFaces = faces; }
 
 protected:
 	GeometryType mGeomType;
@@ -184,7 +179,7 @@ protected:
 	bool vertexS = false;
 	bool vertexE = false;
 
-	std::vector<Face*> mFaces;
+	std::vector<std::shared_ptr<Face>> mFaces;
 	int mCurrentFaceIndex = 0;
 	int mCurrentCompositeCurveIndex = 0;
 	bool mIsCompositeCurve = false;

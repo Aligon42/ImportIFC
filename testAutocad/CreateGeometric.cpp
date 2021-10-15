@@ -21,6 +21,12 @@
 #include <ifc2x3/DefinedTypes.h>
 #include <ifc2x3/IfcAxis2Placement.h>
 
+CompositeCurve::~CompositeCurve()
+{
+    CompositeCurveSegments.clear();
+    std::vector<std::shared_ptr<CompositeCurveSegmentEx>>().swap(CompositeCurveSegments);
+}
+
 CreateGeometricRepresentationVisitor::CreateGeometricRepresentationVisitor(ifc2x3::ExpressDataSet* eds)
 {
     mDataSet = eds;
@@ -48,6 +54,9 @@ void CreateGeometricRepresentationVisitor::init()
     mExtrusionDirection.push_back(1.0);
     mExtrusionDepth = 3.0;
     mUpdateGeometry = false;
+
+    mFaces.clear();
+    std::vector<std::shared_ptr<Face>>().swap(mFaces);
 }
 
 bool CreateGeometricRepresentationVisitor::visitIfcBuildingElementPart(ifc2x3::IfcBuildingElementPart* value)
@@ -512,7 +521,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcCompositeCurve(ifc2x3::IfcCom
     Step::RefPtr<ifc2x3::IfcCompositeCurveSegment> compositeCurveSegment;
     Step::Logical logical = Step::Logical::LFalse;
 
-    CompositeCurve* compositeCurve = static_cast<CompositeCurve*>(mFaces[mCurrentFaceIndex]);
+    CompositeCurve* compositeCurve = static_cast<CompositeCurve*>(mFaces[mCurrentFaceIndex].get());
 
     mIsCompositeCurve = true;
 
@@ -537,7 +546,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcCompositeCurveSegment(ifc2x3:
     auto transitionCode = ifc2x3::IfcTransitionCode_CONTINUOUS;
     Step::Boolean sameSense = Step::Boolean::BTrue;
 
-    auto segment = ((CompositeCurve*)mFaces[mCurrentFaceIndex])->CompositeCurveSegments[mCurrentCompositeCurveIndex];
+    auto segment = ((CompositeCurve*)mFaces[mCurrentFaceIndex].get())->CompositeCurveSegments[mCurrentCompositeCurveIndex];
 
     if (segment->TypeSegment == "polyline")
     {
@@ -556,7 +565,6 @@ bool CreateGeometricRepresentationVisitor::visitIfcCompositeCurveSegment(ifc2x3:
     rpValue->setSameSense(sameSense);
 
     return result;
-
 }
 
 bool CreateGeometricRepresentationVisitor::visitIfcTrimmedCurve(ifc2x3::IfcTrimmedCurve* value)
@@ -567,7 +575,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcTrimmedCurve(ifc2x3::IfcTrimm
 
     result &= circle->acceptVisitor(this);
 
-    auto* trimmedCurve = (TrimmedCurveEx*)((CompositeCurve*)mFaces[mCurrentFaceIndex])->CompositeCurveSegments[mCurrentCompositeCurveIndex];
+    auto* trimmedCurve = (TrimmedCurveEx*)((CompositeCurve*)mFaces[mCurrentFaceIndex].get())->CompositeCurveSegments[mCurrentCompositeCurveIndex].get();
 
     Step::RefPtr<ifc2x3::IfcTrimmingSelect> trimming1 = new ifc2x3::IfcTrimmingSelect;
     Step::RefPtr<ifc2x3::IfcTrimmingSelect> trimming2 = new ifc2x3::IfcTrimmingSelect;
@@ -597,7 +605,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcPolyline(ifc2x3::IfcPolyline*
 
     if (mIsCompositeCurve)
     {
-        CompositeCurveSegmentPolyline* polyline = (CompositeCurveSegmentPolyline*)((CompositeCurve*)mFaces[mCurrentFaceIndex])->CompositeCurveSegments[mCurrentCompositeCurveIndex];
+        CompositeCurveSegmentPolyline* polyline = (CompositeCurveSegmentPolyline*)((CompositeCurve*)mFaces[mCurrentFaceIndex].get())->CompositeCurveSegments[mCurrentCompositeCurveIndex].get();
 
         for (auto& point : polyline->Points)
         {
@@ -633,7 +641,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop*
     bool result = true;
     Step::RefPtr<ifc2x3::IfcPolyLoop> rpValue = value;
 
-    PolylineEx* polyline = (PolylineEx*)mFaces[mCurrentFaceIndex];
+    PolylineEx* polyline = (PolylineEx*)mFaces[mCurrentFaceIndex].get();
 
     for (auto& point : polyline->Points)
     {
@@ -744,7 +752,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcCircle(ifc2x3::IfcCircle* val
     Step::RefPtr< ifc2x3::IfcAxis2Placement > axis2Placement = new ifc2x3::IfcAxis2Placement();
     Step::RefPtr<ifc2x3::IfcAxis2Placement3D> axis = mDataSet->createIfcAxis2Placement3D();
 
-    auto& circle = ((TrimmedCurveEx*)((CompositeCurve*)mFaces[mCurrentFaceIndex])->CompositeCurveSegments[mCurrentCompositeCurveIndex])->Circle;
+    auto& circle = ((TrimmedCurveEx*)((CompositeCurve*)mFaces[mCurrentFaceIndex].get())->CompositeCurveSegments[mCurrentCompositeCurveIndex].get())->Circle;
 
     mLocationType = LOCAL_PLACEMENT;
     result &= axis->acceptVisitor(this);
@@ -768,7 +776,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcAxis2Placement3D(ifc2x3::IfcA
 
     if (mIsCompositeCurve)
     {
-        auto& circle = ((TrimmedCurveEx*)((CompositeCurve*)mFaces[mCurrentFaceIndex])->CompositeCurveSegments[mCurrentCompositeCurveIndex])->Circle;
+        auto& circle = ((TrimmedCurveEx*)((CompositeCurve*)mFaces[mCurrentFaceIndex].get())->CompositeCurveSegments[mCurrentCompositeCurveIndex].get())->Circle;
 
         p->getCoordinates().push_back(circle.Centre.x);
         p->getCoordinates().push_back(circle.Centre.y);
