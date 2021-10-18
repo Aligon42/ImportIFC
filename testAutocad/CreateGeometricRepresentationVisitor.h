@@ -38,6 +38,8 @@ struct Point3D
 
 	Point3D(double x, double y, double z) 
 		: X(x), Y(y), Z(z) {}
+
+	Point3D() {}
 };
 
 struct PolylineEx : public Face
@@ -89,6 +91,44 @@ struct TrimmedCurveEx : CompositeCurveSegmentEx
 	TrimmedCurveEx() : CompositeCurveSegmentEx("trimmedCurve") {}
 };
 
+struct Vertex
+{
+	AcGePoint3d VertexGeometry;
+};
+
+struct Edge
+{
+	Vertex EdgeStart;
+	Vertex EdgeEnd;
+	std::string TypeEdge;
+
+	Edge(const std::string& type) : TypeEdge(type) {}
+};
+
+struct EdgeLoop : public Face
+{
+	std::vector<Edge*> EdgeList;
+
+	EdgeLoop() : Face("edgeLoop") {}
+};
+
+struct EdgeCurve : Edge
+{
+	Circle Circle;
+	Step::Boolean SameSense;
+
+	EdgeCurve() : Edge("edgeCurve") {}
+};
+
+//struct OrientedEdge : Edge
+//{
+//	Step::Boolean Orientation;
+//	
+//};
+
+
+
+
 struct FaceParCompositeCurve
 {
 	std::vector<CompositeCurveSegmentEx> listCompositeCurveSegmentTrim;
@@ -135,6 +175,7 @@ public:
 	virtual bool visitIfcPolyline(ifc2x3::IfcPolyline* value);
 	virtual bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value);
 	virtual bool visitIfcEdgeLoop(ifc2x3::IfcEdgeLoop* value);
+	bool visitIfcEdge(ifc2x3::IfcEdge* value);
 	virtual bool visitIfcOrientedEdge(ifc2x3::IfcOrientedEdge* value);
 	virtual bool visitIfcEdgeCurve(ifc2x3::IfcEdgeCurve* value);
 	virtual bool visitIfcVertexPoint(ifc2x3::IfcVertexPoint* value);
@@ -165,6 +206,9 @@ public:
 
 	inline void AjoutFace(const std::vector<Face*>& faces) { mFaces = faces; }
 
+	inline void setNbEdge(int nbEdge) { mNbEdge = nbEdge; }
+	inline void AjoutEdge(const std::vector<EdgeLoop*>& edges) { mEdges = edges; }
+
 protected:
 	GeometryType mGeomType;
 	LocationType mLocationType;
@@ -188,6 +232,11 @@ protected:
 	int mCurrentFaceIndex = 0;
 	int mCurrentCompositeCurveIndex = 0;
 	bool mIsCompositeCurve = false;
+
+	int mNbEdge;
+	int mCurrentEdge = 0;
+	std::vector<EdgeLoop*> mEdges;
+	bool mIsEdgeCurve = false;
 };
 
 #endif // ** CREATEGEOMETRICREPRESENTATIONVISITOR_H_ ** //

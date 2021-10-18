@@ -385,9 +385,9 @@ void ExportIFC()
         //TEST SCALE
         //pEntBlock->setLinetypeScale(1000);
 
-        AcDbBlockReference* pCloneBlock = (AcDbBlockReference*)pEntBlock->clone();
-        solidArray.removeAll();
-        pCloneBlock->explode(solidArray);
+        //AcDbBlockReference* pCloneBlock = (AcDbBlockReference*)pEntBlock->clone();
+        
+        pEntBlock->explode(solidArray);
 
         for (int i = 0; i < solidArray.length(); i++)
         {
@@ -446,7 +446,11 @@ void ExportIFC()
                 pCloneFace->getGripPoints(listePoints, snapModes, geomlds);
                 pCloneFace->explode(polylineArray);
 
+                cwrv.setNbEdge(polylineArray.length());
+
                 double angle;
+                Step::RefPtr <ifc2x3::IfcCartesianPoint> EdgeStart;
+                Step::RefPtr <ifc2x3::IfcCartesianPoint> EdgeEnd;
                 bool isCompositeCurve = false;
 
                 Face* face = nullptr;
@@ -463,7 +467,7 @@ void ExportIFC()
 
                 if (isCompositeCurve)
                 {
-                    face = new CompositeCurve();
+                    face = new EdgeLoop();
 
                     for (int t = 0; t < polylineArray.length(); t++) //décomposer les faces pour avoir des polylines afin de verifier si c'est des arcs ou des droites 
                     {
@@ -477,36 +481,66 @@ void ExportIFC()
 
                         if (angle == 0)
                         {
-                            auto polyline = new CompositeCurveSegmentPolyline();
+                            //auto polyline = new CompositeCurveSegmentPolyline();
+                            EdgeLoop* edgeLoop = static_cast<EdgeLoop*>(face);
 
-                            for (size_t j = 0; j < 2; j++)
+                            /*for (size_t j = 0; j < 2; j++)
                             {
                                 polyline->Points.push_back({ listePointsPolyline[j].x * 0.001, listePointsPolyline[j].y * 0.001, listePointsPolyline[j].z * 0.001 });
-                            }
+                            }*/
 
-                            CompositeCurve* curve = static_cast<CompositeCurve*>(face);
-                            curve->CompositeCurveSegments.push_back(polyline);
+                            Edge* edge = new Edge("edge");
+                            Vertex EdgeS;
+                            Vertex EdgeE;
+                            pCloneArc->getStartPoint(EdgeS.VertexGeometry);
+                            pCloneArc->getEndPoint(EdgeE.VertexGeometry);
+
+                            edge->EdgeStart = EdgeS;
+                            edge->EdgeEnd = EdgeE;
+                            edge->TypeEdge = "edge";
+                            
+                            
+                            edgeLoop->EdgeList.push_back(edge);
+
+                           /* CompositeCurve* curve = static_cast<CompositeCurve*>(face);
+                            curve->CompositeCurveSegments.push_back(polyline);*/
                         }
                         else if (angle != 0)
                         {
-                            CompositeCurve* curve = static_cast<CompositeCurve*>(face);
-                            TrimmedCurveEx* trimmedCurve = new TrimmedCurveEx;
+                            //CompositeCurve* curve = static_cast<CompositeCurve*>(face);
+                            //TrimmedCurveEx* trimmedCurve = new TrimmedCurveEx;
 
-                            //set circle 
-                            trimmedCurve->Circle.Centre = pCloneArc->center();
-                            trimmedCurve->Circle.Rayon = pCloneArc->radius();
+                            EdgeLoop* edgeLoop = static_cast<EdgeLoop*>(face);
+                            EdgeCurve* edgeCurve = new EdgeCurve();
+                            Vertex EdgeS;
+                            Vertex EdgeE;
+                            pCloneArc->getStartPoint(EdgeS.VertexGeometry);
+                            pCloneArc->getEndPoint(EdgeE.VertexGeometry);
 
-                            //set trimmedCurve (#112767)
-                            trimmedCurve->Trim1 = (Utils::RadianToDegree(pCloneArc->startAngle()));
-                            trimmedCurve->Trim2 = (Utils::RadianToDegree(pCloneArc->endAngle()));
-                            trimmedCurve->Preference = ifc2x3::IfcTrimmingPreference::IfcTrimmingPreference_PARAMETER;
-                            trimmedCurve->SenseAgreement = Step::Boolean::BFalse; //à récup
+                            edgeCurve->EdgeStart = EdgeS;
+                            edgeCurve->EdgeEnd = EdgeE;
+                            edgeCurve->Circle.Centre = pCloneArc->center();
+                            edgeCurve->Circle.Rayon = pCloneArc->radius();
+                            edgeCurve->SameSense = Step::Boolean::BFalse; //à récup
+                            edgeCurve->TypeEdge = "edgeCurve";
 
-                            //set compositeCurveSegment
-                            trimmedCurve->Transition = ifc2x3::IfcTransitionCode::IfcTransitionCode_CONTINUOUS;
-                            trimmedCurve->SameSense = Step::Boolean::BTrue; //à récup
+                            edgeLoop->EdgeList.push_back(edgeCurve);
 
-                            curve->CompositeCurveSegments.push_back(trimmedCurve);
+                            ////set circle 
+                            //trimmedCurve->Circle.Centre = pCloneArc->center();
+                            //trimmedCurve->Circle.Rayon = pCloneArc->radius();
+
+                            ////set trimmedCurve (#112767)
+                            //trimmedCurve->Trim1 = (Utils::RadianToDegree(pCloneArc->startAngle()));
+                            //trimmedCurve->Trim2 = (Utils::RadianToDegree(pCloneArc->endAngle()));
+                            //trimmedCurve->Preference = ifc2x3::IfcTrimmingPreference::IfcTrimmingPreference_PARAMETER;
+                            //trimmedCurve->SenseAgreement = Step::Boolean::BFalse; //à récup
+
+                            ////set compositeCurveSegment
+                            //trimmedCurve->Transition = ifc2x3::IfcTransitionCode::IfcTransitionCode_CONTINUOUS;
+                            //trimmedCurve->SameSense = Step::Boolean::BTrue; //à récup
+
+                            //curve->CompositeCurveSegments.push_back(trimmedCurve);
                         }
                     }
                 }
@@ -596,6 +630,8 @@ void ExportIFC()
                 linkByContainedInSpatial(groundFloor.get(), objectCovering.get());
             }
         }
+
+        solidArray.removeAll();
     }
 
     // On crée le fichier seulement si il y avait un moins un objet
