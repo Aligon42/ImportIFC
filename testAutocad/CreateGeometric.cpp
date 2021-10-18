@@ -21,6 +21,12 @@
 #include <ifc2x3/DefinedTypes.h>
 #include <ifc2x3/IfcAxis2Placement.h>
 
+CompositeCurve::~CompositeCurve()
+{
+    CompositeCurveSegments.clear();
+    std::vector<std::shared_ptr<CompositeCurveSegmentEx>>().swap(CompositeCurveSegments);
+}
+
 CreateGeometricRepresentationVisitor::CreateGeometricRepresentationVisitor(ifc2x3::ExpressDataSet* eds)
 {
     mDataSet = eds;
@@ -48,6 +54,9 @@ void CreateGeometricRepresentationVisitor::init()
     mExtrusionDirection.push_back(1.0);
     mExtrusionDepth = 3.0;
     mUpdateGeometry = false;
+
+    mFaces.clear();
+    std::vector<std::shared_ptr<Face>>().swap(mFaces);
 }
 
 bool CreateGeometricRepresentationVisitor::visitIfcBuildingElementPart(ifc2x3::IfcBuildingElementPart* value)
@@ -520,7 +529,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcCompositeCurve(ifc2x3::IfcCom
     Step::RefPtr<ifc2x3::IfcCompositeCurveSegment> compositeCurveSegment;
     Step::Logical logical = Step::Logical::LFalse;
 
-    CompositeCurve* compositeCurve = static_cast<CompositeCurve*>(mFaces[mCurrentFaceIndex]);
+    CompositeCurve* compositeCurve = static_cast<CompositeCurve*>(mFaces[mCurrentFaceIndex].get());
 
     mIsCompositeCurve = true;
 
@@ -545,7 +554,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcCompositeCurveSegment(ifc2x3:
     auto transitionCode = ifc2x3::IfcTransitionCode_CONTINUOUS;
     Step::Boolean sameSense = Step::Boolean::BTrue;
 
-    auto segment = ((CompositeCurve*)mFaces[mCurrentFaceIndex])->CompositeCurveSegments[mCurrentCompositeCurveIndex];
+    auto segment = ((CompositeCurve*)mFaces[mCurrentFaceIndex].get())->CompositeCurveSegments[mCurrentCompositeCurveIndex];
 
     if (segment->TypeSegment == "polyline")
     {
@@ -564,7 +573,6 @@ bool CreateGeometricRepresentationVisitor::visitIfcCompositeCurveSegment(ifc2x3:
     rpValue->setSameSense(sameSense);
 
     return result;
-
 }
 
 bool CreateGeometricRepresentationVisitor::visitIfcTrimmedCurve(ifc2x3::IfcTrimmedCurve* value)
@@ -575,7 +583,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcTrimmedCurve(ifc2x3::IfcTrimm
 
     result &= circle->acceptVisitor(this);
 
-    auto* trimmedCurve = (TrimmedCurveEx*)((CompositeCurve*)mFaces[mCurrentFaceIndex])->CompositeCurveSegments[mCurrentCompositeCurveIndex];
+    auto* trimmedCurve = (TrimmedCurveEx*)((CompositeCurve*)mFaces[mCurrentFaceIndex].get())->CompositeCurveSegments[mCurrentCompositeCurveIndex].get();
 
     Step::RefPtr<ifc2x3::IfcTrimmingSelect> trimming1 = new ifc2x3::IfcTrimmingSelect;
     Step::RefPtr<ifc2x3::IfcTrimmingSelect> trimming2 = new ifc2x3::IfcTrimmingSelect;
@@ -605,7 +613,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcPolyline(ifc2x3::IfcPolyline*
 
     if (mIsCompositeCurve)
     {
-        CompositeCurveSegmentPolyline* polyline = (CompositeCurveSegmentPolyline*)((CompositeCurve*)mFaces[mCurrentFaceIndex])->CompositeCurveSegments[mCurrentCompositeCurveIndex];
+        CompositeCurveSegmentPolyline* polyline = (CompositeCurveSegmentPolyline*)((CompositeCurve*)mFaces[mCurrentFaceIndex].get())->CompositeCurveSegments[mCurrentCompositeCurveIndex].get();
 
         for (auto& point : polyline->Points)
         {
@@ -641,7 +649,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcPolyLoop(ifc2x3::IfcPolyLoop*
     bool result = true;
     Step::RefPtr<ifc2x3::IfcPolyLoop> rpValue = value;
 
-    PolylineEx* polyline = (PolylineEx*)mFaces[mCurrentFaceIndex];
+    PolylineEx* polyline = (PolylineEx*)mFaces[mCurrentFaceIndex].get();
 
     for (auto& point : polyline->Points)
     {
@@ -671,7 +679,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcEdgeLoop(ifc2x3::IfcEdgeLoop*
     std::vector<Step::RefPtr<ifc2x3::IfcOrientedEdge>>::const_iterator orientedEdgeIT;
     ifc2x3::List_IfcOrientedEdge_1_n orientedEdge_1_n;
 
-    auto edges = ((EdgeLoop*)mFaces[mCurrentFaceIndex])->EdgeList;
+    auto edges = ((EdgeLoop*)mFaces[mCurrentFaceIndex].get())->EdgeList;
 
     for (mCurrentEdge = 0; mCurrentEdge < edges.size(); mCurrentEdge++)
     {
@@ -706,7 +714,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcEdge(ifc2x3::IfcEdge* value)
 
     Step::RefPtr<ifc2x3::IfcVertexPoint> vertexE = mDataSet->createIfcVertexPoint();
     Step::RefPtr<ifc2x3::IfcCartesianPoint> pointEnd = mDataSet->createIfcCartesianPoint();
-    auto edgeEnd = ((EdgeLoop*)mFaces[mCurrentFaceIndex])->EdgeList[mCurrentEdge]->EdgeEnd;
+    auto edgeEnd = ((EdgeLoop*)mFaces[mCurrentFaceIndex].get())->EdgeList[mCurrentEdge]->EdgeEnd;
     pointEnd->getCoordinates().push_back(edgeEnd.VertexGeometry.x);
     pointEnd->getCoordinates().push_back(edgeEnd.VertexGeometry.y);
     pointEnd->getCoordinates().push_back(edgeEnd.VertexGeometry.z);
@@ -714,7 +722,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcEdge(ifc2x3::IfcEdge* value)
 
     Step::RefPtr<ifc2x3::IfcVertexPoint> vertexS = mDataSet->createIfcVertexPoint();
     Step::RefPtr<ifc2x3::IfcCartesianPoint> pointStart = mDataSet->createIfcCartesianPoint();
-    auto edgeStart = ((EdgeLoop*)mFaces[mCurrentFaceIndex])->EdgeList[mCurrentEdge]->EdgeStart;
+    auto edgeStart = ((EdgeLoop*)mFaces[mCurrentFaceIndex].get())->EdgeList[mCurrentEdge]->EdgeStart;
     pointStart->getCoordinates().push_back(edgeStart.VertexGeometry.x);
     pointStart->getCoordinates().push_back(edgeStart.VertexGeometry.y);
     pointStart->getCoordinates().push_back(edgeStart.VertexGeometry.z);
@@ -748,7 +756,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcEdgeCurve(ifc2x3::IfcEdgeCurv
 
     Step::RefPtr<ifc2x3::IfcVertexPoint> vertexE = mDataSet->createIfcVertexPoint();
     Step::RefPtr<ifc2x3::IfcCartesianPoint> pointEnd = mDataSet->createIfcCartesianPoint();
-    auto edgeEnd = ((EdgeLoop*)mFaces[mCurrentFaceIndex])->EdgeList[mCurrentEdge]->EdgeEnd;
+    auto edgeEnd = ((EdgeLoop*)mFaces[mCurrentFaceIndex].get())->EdgeList[mCurrentEdge]->EdgeEnd;
     pointEnd->getCoordinates().push_back(edgeEnd.VertexGeometry.x);
     pointEnd->getCoordinates().push_back(edgeEnd.VertexGeometry.y);
     pointEnd->getCoordinates().push_back(edgeEnd.VertexGeometry.z);
@@ -756,7 +764,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcEdgeCurve(ifc2x3::IfcEdgeCurv
 
     Step::RefPtr<ifc2x3::IfcVertexPoint> vertexS = mDataSet->createIfcVertexPoint();
     Step::RefPtr<ifc2x3::IfcCartesianPoint> pointStart = mDataSet->createIfcCartesianPoint();
-    auto edgeStart = ((EdgeLoop*)mFaces[mCurrentFaceIndex])->EdgeList[mCurrentEdge]->EdgeStart;
+    auto edgeStart = ((EdgeLoop*)mFaces[mCurrentFaceIndex].get())->EdgeList[mCurrentEdge]->EdgeStart;
     pointStart->getCoordinates().push_back(edgeStart.VertexGeometry.x);
     pointStart->getCoordinates().push_back(edgeStart.VertexGeometry.y);
     pointStart->getCoordinates().push_back(edgeStart.VertexGeometry.z);
@@ -768,7 +776,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcEdgeCurve(ifc2x3::IfcEdgeCurv
     rpValue->setEdgeGeometry(circle);
     rpValue->setEdgeEnd(vertexE);
     rpValue->setEdgeStart(vertexS);
-    rpValue->setSameSense(((EdgeCurve*)((EdgeLoop*)mFaces[mCurrentFaceIndex])->EdgeList[mCurrentEdge])->SameSense);
+    rpValue->setSameSense(((EdgeCurve*)((EdgeLoop*)mFaces[mCurrentFaceIndex].get())->EdgeList[mCurrentEdge].get())->SameSense);
 
 
 
@@ -799,7 +807,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcCircle(ifc2x3::IfcCircle* val
     Step::RefPtr< ifc2x3::IfcAxis2Placement > axis2Placement = new ifc2x3::IfcAxis2Placement();
     Step::RefPtr<ifc2x3::IfcAxis2Placement3D> axis = mDataSet->createIfcAxis2Placement3D();
 
-    auto& circle = ((EdgeCurve*)((EdgeLoop*)mFaces[mCurrentFaceIndex])->EdgeList[mCurrentEdge])->Circle;
+    auto& circle = ((EdgeCurve*)((EdgeLoop*)mFaces[mCurrentFaceIndex].get())->EdgeList[mCurrentEdge].get())->Circle;
 
     mLocationType = LOCAL_PLACEMENT;
     result &= axis->acceptVisitor(this);
@@ -823,7 +831,7 @@ bool CreateGeometricRepresentationVisitor::visitIfcAxis2Placement3D(ifc2x3::IfcA
 
     if (mIsEdgeCurve)
     {
-        auto& circle = ((EdgeCurve*)((EdgeLoop*)mFaces[mCurrentFaceIndex])->EdgeList[mCurrentEdge])->Circle;
+        auto& circle = ((EdgeCurve*)((EdgeLoop*)mFaces[mCurrentFaceIndex].get())->EdgeList[mCurrentEdge].get())->Circle;
 
         p->getCoordinates().push_back(circle.Centre.x);
         p->getCoordinates().push_back(circle.Centre.y);

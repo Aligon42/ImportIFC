@@ -22,6 +22,7 @@ struct Face
 	std::string TypeFace;
 
 	Face(const std::string& type) : TypeFace(type) {}
+	virtual ~Face() {}
 };
 
 struct Point2D
@@ -47,6 +48,7 @@ struct PolylineEx : public Face
 	std::vector<Point3D> Points;
 
 	PolylineEx() : Face("polyline") {}
+	~PolylineEx() {}
 };
 
 struct CompositeCurveSegmentEx
@@ -62,9 +64,10 @@ struct CompositeCurveSegmentEx
 
 struct CompositeCurve : public Face
 {
-	std::vector<CompositeCurveSegmentEx*> CompositeCurveSegments;
+	std::vector<std::shared_ptr<CompositeCurveSegmentEx>> CompositeCurveSegments;
 
 	CompositeCurve() : Face("compositeCurve") {}
+	~CompositeCurve();
 };
 
 struct CompositeCurveSegmentPolyline : CompositeCurveSegmentEx
@@ -103,11 +106,12 @@ struct Edge
 	std::string TypeEdge;
 
 	Edge(const std::string& type) : TypeEdge(type) {}
+	Edge() : TypeEdge("edge") {}
 };
 
 struct EdgeLoop : public Face
 {
-	std::vector<Edge*> EdgeList;
+	std::vector<std::shared_ptr<Edge>> EdgeList;
 
 	EdgeLoop() : Face("edgeLoop") {}
 };
@@ -204,7 +208,7 @@ public:
 	void setExtrusionDepth(double depth) { mExtrusionDepth = depth; }
 	void init();
 
-	inline void AjoutFace(const std::vector<Face*>& faces) { mFaces = faces; }
+	inline void AjoutFace(const std::vector<std::shared_ptr<Face>>& faces) { mFaces = faces; }
 
 	inline void setNbEdge(int nbEdge) { mNbEdge = nbEdge; }
 	inline void AjoutEdge(const std::vector<EdgeLoop*>& edges) { mEdges = edges; }
@@ -228,7 +232,7 @@ protected:
 	bool vertexS = false;
 	bool vertexE = false;
 
-	std::vector<Face*> mFaces;
+	std::vector<std::shared_ptr<Face>> mFaces;
 	int mCurrentFaceIndex = 0;
 	int mCurrentCompositeCurveIndex = 0;
 	bool mIsCompositeCurve = false;
