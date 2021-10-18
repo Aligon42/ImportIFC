@@ -25,6 +25,20 @@ struct Face
 	virtual ~Face() {}
 };
 
+struct RepresentationItem
+{
+	std::string TypeItem;
+
+	RepresentationItem(const std::string& type) : TypeItem(type) {}
+};
+
+struct FacetedRepresentation : RepresentationItem
+{
+	std::vector<std::shared_ptr<Face>> Faces;
+
+	FacetedRepresentation() : RepresentationItem("facetedBRep") {}
+};
+
 struct Point2D
 {
 	double X, Y;
@@ -62,11 +76,11 @@ struct CompositeCurveSegmentEx
 		: TypeSegment(type) {}
 };
 
-struct CompositeCurve : public Face
+struct CompositeCurve : public RepresentationItem
 {
 	std::vector<std::shared_ptr<CompositeCurveSegmentEx>> CompositeCurveSegments;
 
-	CompositeCurve() : Face("compositeCurve") {}
+	CompositeCurve() : RepresentationItem("compositeCurve") {}
 	~CompositeCurve();
 };
 
@@ -130,9 +144,6 @@ struct EdgeCurve : Edge
 //	
 //};
 
-
-
-
 struct FaceParCompositeCurve
 {
 	std::vector<CompositeCurveSegmentEx> listCompositeCurveSegmentTrim;
@@ -178,11 +189,11 @@ public:
 	virtual bool visitIfcTrimmedCurve(ifc2x3::IfcTrimmedCurve* value);
 	virtual bool visitIfcPolyline(ifc2x3::IfcPolyline* value);
 	virtual bool visitIfcPolyLoop(ifc2x3::IfcPolyLoop* value);
-	virtual bool visitIfcEdgeLoop(ifc2x3::IfcEdgeLoop* value);
-	bool visitIfcEdge(ifc2x3::IfcEdge* value);
+	/*virtual bool visitIfcEdgeLoop(ifc2x3::IfcEdgeLoop* value);
+	virtual bool visitIfcEdge(ifc2x3::IfcEdge* value);
 	virtual bool visitIfcOrientedEdge(ifc2x3::IfcOrientedEdge* value);
 	virtual bool visitIfcEdgeCurve(ifc2x3::IfcEdgeCurve* value);
-	virtual bool visitIfcVertexPoint(ifc2x3::IfcVertexPoint* value);
+	virtual bool visitIfcVertexPoint(ifc2x3::IfcVertexPoint* value);*/
 	virtual bool visitIfcCircle(ifc2x3::IfcCircle* value);
 	virtual bool visitIfcAxis2Placement3D(ifc2x3::IfcAxis2Placement3D* value);
 
@@ -208,10 +219,15 @@ public:
 	void setExtrusionDepth(double depth) { mExtrusionDepth = depth; }
 	void init();
 
-	inline void AjoutFace(const std::vector<std::shared_ptr<Face>>& faces) { mFaces = faces; }
+	inline void SetItems(const std::vector<std::shared_ptr<RepresentationItem>>& items) { mItems = items; }
 
 	inline void setNbEdge(int nbEdge) { mNbEdge = nbEdge; }
 	inline void AjoutEdge(const std::vector<EdgeLoop*>& edges) { mEdges = edges; }
+
+	inline void setIsFaceCourbe(bool isFaceCourbe) { mIsFaceCourbe = isFaceCourbe; }
+
+	inline void setIsCompositeCurve(bool isCompositeCurve) { mIsCompositeCurve = isCompositeCurve; }
+
 
 protected:
 	GeometryType mGeomType;
@@ -232,15 +248,19 @@ protected:
 	bool vertexS = false;
 	bool vertexE = false;
 
-	std::vector<std::shared_ptr<Face>> mFaces;
-	int mCurrentFaceIndex = 0;
+	std::vector<std::shared_ptr<RepresentationItem>> mItems;
+	int mCurrentItemIndex = 0;
 	int mCurrentCompositeCurveIndex = 0;
 	bool mIsCompositeCurve = false;
+
+	int mCurrentFaceIndex = 0;
 
 	int mNbEdge;
 	int mCurrentEdge = 0;
 	std::vector<EdgeLoop*> mEdges;
 	bool mIsEdgeCurve = false;
+
+	bool mIsFaceCourbe = false;
 };
 
 #endif // ** CREATEGEOMETRICREPRESENTATIONVISITOR_H_ ** //

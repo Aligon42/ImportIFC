@@ -405,6 +405,8 @@ void ExportIFC()
 					int iso = calque.match("ISO", encoding);
 					int pla = calque.match("PLA", encoding);
 					int sup = calque.match("SUP", encoding);
+					int costiere = calque.match("Costière", encoding);
+					int ep = calque.match("Eps", encoding);
 
 					Step::RefPtr<ifc2x3::IfcCovering> objectCovering;
 					Step::RefPtr<ifc2x3::IfcPlate> objectPlate;
@@ -415,12 +417,7 @@ void ExportIFC()
 					{
 						objectCovering = expressDataSet->createIfcCovering();
 					}
-					else if (pla > 0)
-					{
-						objectPlate = expressDataSet->createIfcPlate();
-						isPlate = true;
-					}
-					else if (sup > 0)
+					else if (pla > 0 || sup > 0 || costiere > 0 || ep > 0)
 					{
 						objectPlate = expressDataSet->createIfcPlate();
 						isPlate = true;
@@ -433,7 +430,9 @@ void ExportIFC()
 					points.clear();
 					cwrv.init();
 
-					std::vector<std::shared_ptr<Face>> listFaces;
+					std::vector<std::shared_ptr<RepresentationItem>> representations;
+					std::shared_ptr<FacetedRepresentation> faces = std::make_shared<FacetedRepresentation>();
+					std::vector<std::shared_ptr<CompositeCurve>> compositeCurves;
 
 					for (int k = 0; k < faceArray.length(); k++)
 					{
@@ -445,7 +444,6 @@ void ExportIFC()
 						Step::RefPtr <ifc2x3::IfcCartesianPoint> EdgeStart;
 						Step::RefPtr <ifc2x3::IfcCartesianPoint> EdgeEnd;
 						bool isCompositeCurve = false;
-						std::shared_ptr<Face> face;
 
 						AcDbVoidPtrArray polylineArray;
 						pCloneFace->explode(polylineArray);
@@ -504,14 +502,17 @@ void ExportIFC()
 								polyline->Points.push_back({ point[0] * 0.001, point[1] * 0.001, point[2] * 0.001 });
 							}
 
-							face = polyline;
-
 							for (size_t a = 0; a < polylineArray.length(); a++)
 								delete (AcDbEntity*)polylineArray.at(a);
+
+							faces->Faces.push_back(polyline);
 						}
 						else // Face avec courbe					
 						{
-							std::shared_ptr<EdgeLoop> edgeLoop = std::make_shared<EdgeLoop>();
+							std::shared_ptr<CompositeCurve> curve = std::make_shared<CompositeCurve>();
+							bool isFaceCourbe = true;
+							//cwrv.setIsFaceCourbe(isFaceCourbe);
+							
 
 							for (size_t a = 0; a < polylineArray.length(); a++)
 							{
@@ -525,7 +526,7 @@ void ExportIFC()
 								{
 									AcDbLine* line = (AcDbLine*)polylineArray.at(a);
 
-									auto polyline = std::make_shared<Edge>();
+									auto polyline = std::make_shared<CompositeCurveSegmentPolyline>();
 
 									AcGePoint3dArray points;
 									points.setLogicalLength(2);
@@ -533,10 +534,10 @@ void ExportIFC()
 									line->getStartPoint(points[0]);
 									line->getEndPoint(points[1]);
 
-									polyline->EdgeStart.VertexGeometry = { points[0].x * 0.001, points[0].y * 0.001, points[0].z * 0.001 };
-									polyline->EdgeEnd.VertexGeometry = { points[1].x * 0.001, points[1].y * 0.001, points[1].z * 0.001 };
+									polyline->Points.push_back({ points[0].x * 0.001, points[0].y * 0.001, points[0].z * 0.001 });
+									polyline->Points.push_back({ points[1].x * 0.001, points[1].y * 0.001, points[1].z * 0.001 });
 
-									edgeLoop->EdgeList.push_back(polyline);
+									curve->CompositeCurveSegments.push_back(polyline);
 
 									line->close();
 
@@ -544,42 +545,40 @@ void ExportIFC()
 								}
 								else if (name == std::wstring(L"AcDbArc"))
 								{
-									//face = std::make_shared<CompositeCurve>();
-
 									AcDbArc* pCloneArc = (AcDbArc*)polylineArray.at(a);
 
-									auto edgeCurve = std::make_shared<EdgeCurve>();
-									Vertex EdgeS;
-									Vertex EdgeE;
-									pCloneArc->getStartPoint(EdgeS.VertexGeometry);
-									pCloneArc->getEndPoint(EdgeE.VertexGeometry);
+									//auto edgeCurve = std::make_shared<EdgeCurve>();
+									//Vertex EdgeS;
+									//Vertex EdgeE;
+									//pCloneArc->getStartPoint(EdgeS.VertexGeometry);
+									//pCloneArc->getEndPoint(EdgeE.VertexGeometry);
 
-									edgeCurve->EdgeStart = EdgeS;
-									edgeCurve->EdgeEnd = EdgeE;
-									edgeCurve->Circle.Centre = pCloneArc->center();
-									edgeCurve->Circle.Rayon = pCloneArc->radius();
-									edgeCurve->SameSense = Step::Boolean::BFalse; //à récup
-									edgeCurve->TypeEdge = "edgeCurve";
+									//edgeCurve->EdgeStart = EdgeS;
+									//edgeCurve->EdgeEnd = EdgeE;
+									//edgeCurve->Circle.Centre = pCloneArc->center();
+									//edgeCurve->Circle.Rayon = pCloneArc->radius();
+									//edgeCurve->SameSense = Step::Boolean::BFalse; //à récup
+									//edgeCurve->TypeEdge = "edgeCurve";
 
-									edgeLoop->EdgeList.push_back(edgeCurve);
+									//edgeLoop->EdgeList.push_back(edgeCurve);
 
-									//std::shared_ptr<TrimmedCurveEx> trimmedCurve = std::make_shared<TrimmedCurveEx>();
+									std::shared_ptr<TrimmedCurveEx> trimmedCurve = std::make_shared<TrimmedCurveEx>();
 
 									//set circle 
-									//trimmedCurve->Circle.Centre = pCloneArc->center();
-									//trimmedCurve->Circle.Rayon = pCloneArc->radius();
+									trimmedCurve->Circle.Centre = pCloneArc->center();
+									trimmedCurve->Circle.Rayon = pCloneArc->radius();
 
-									////set trimmedCurve (#112767)
-									//trimmedCurve->Trim1 = (Utils::RadianToDegree(pCloneArc->startAngle()));
-									//trimmedCurve->Trim2 = (Utils::RadianToDegree(pCloneArc->endAngle()));
-									//trimmedCurve->Preference = ifc2x3::IfcTrimmingPreference::IfcTrimmingPreference_PARAMETER;
-									//trimmedCurve->SenseAgreement = Step::Boolean::BFalse; //à récup
+									//set trimmedCurve (#112767)
+									trimmedCurve->Trim1 = (Utils::RadianToDegree(pCloneArc->startAngle()));
+									trimmedCurve->Trim2 = (Utils::RadianToDegree(pCloneArc->endAngle()));
+									trimmedCurve->Preference = ifc2x3::IfcTrimmingPreference::IfcTrimmingPreference_PARAMETER;
+									trimmedCurve->SenseAgreement = Step::Boolean::BFalse; //à récup
 
-									////set compositeCurveSegment
-									//trimmedCurve->Transition = ifc2x3::IfcTransitionCode::IfcTransitionCode_CONTINUOUS;
-									//trimmedCurve->SameSense = Step::Boolean::BTrue; //à récup
+									//set compositeCurveSegment
+									trimmedCurve->Transition = ifc2x3::IfcTransitionCode::IfcTransitionCode_CONTINUOUS;
+									trimmedCurve->SameSense = Step::Boolean::BTrue; //à récup
 
-									// curve->CompositeCurveSegments.push_back(trimmedCurve);
+									 curve->CompositeCurveSegments.push_back(trimmedCurve);
 
 									pCloneArc->close();
 
@@ -591,16 +590,19 @@ void ExportIFC()
 								}
 							}
 
-							face = edgeLoop;
+							compositeCurves.push_back(curve);
 						}
 
-						listFaces.push_back(face);
+						//listFaces.push_back(face);
 						pCloneFace->close();
 
 						delete (AcDbFace*)faceArray.at(k);
 					}
 
-					cwrv.AjoutFace(listFaces);
+					representations.push_back(faces);
+					representations.insert(representations.end(), compositeCurves.begin(), compositeCurves.end());
+
+					cwrv.SetItems(representations);
 
 					position.clear();
 					placement.clear();
@@ -638,8 +640,8 @@ void ExportIFC()
 						linkByContainedInSpatial(groundFloor.get(), objectCovering.get());
 					}
 
-					listFaces.clear();
-					std::vector<std::shared_ptr<Face>>().swap(listFaces);
+					representations.clear();
+					std::vector<std::shared_ptr<RepresentationItem>>().swap(representations);
 
 					pCloneSolid->close();
 
